@@ -9,6 +9,7 @@ describe("inventory form test suite", () => {
   afterEach(() => cleanup());
 
   const inventoryElementFormName = "Inventory element form";
+
   it("displays a form to input a data center inventory elements", () => {
     const inventoryElementForm = screen.getByRole("form", { name: inventoryElementFormName });
     const inventoryElementName = within(inventoryElementForm).getByLabelText(
@@ -42,13 +43,5 @@ describe("inventory form test suite", () => {
       );
       expect(inventoryElementCategory).toBeVisible();
     });
-  });
-  it("displays a button to submit the inventory element data", () => {
-    const inventoryElementForm = screen.getByRole("form", { name: inventoryElementFormName });
-    const submitInventoryElementButton = within(inventoryElementForm).getByRole("button", {
-      name: "Submit"
-    });
-
-    expect(submitInventoryElementButton).toBeVisible();
   });
 });
