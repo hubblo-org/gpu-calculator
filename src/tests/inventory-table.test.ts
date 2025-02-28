@@ -3,9 +3,12 @@ import { InventoryCategories, getInventoryCategorySpelling } from "$lib/types/en
 import type { DataCenterInventoryElement } from "$lib/types/pcr-cloud";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { userEvent } from "@testing-library/user-event";
 
 const coolingCategory = getInventoryCategorySpelling(InventoryCategories.Cooling).lowercase;
-const energyBackupCategory = getInventoryCategorySpelling(InventoryCategories.EnergyBackup).lowercase;
+const energyBackupCategory = getInventoryCategorySpelling(
+  InventoryCategories.EnergyBackup
+).lowercase;
 describe("inventory table test suite", () => {
   const inventoryElements: DataCenterInventoryElement[] = [
     { name: "Drycoolers", category: coolingCategory, quantity: 50, lifespan: 35 },
@@ -53,5 +56,22 @@ describe("inventory table test suite", () => {
       expect(inventoryElementQuantity).toBeVisible();
       expect(inventoryElementLifespan).toBeVisible();
     });
+  });
+  it("removes a row from table when clicking on the row removal button", async () => {
+    const user = userEvent.setup();
+    const inventoryElementsTable = screen.getByRole("table", {
+      name: "Data center inventory elements"
+    });
+    const dryCoolerRow = within(inventoryElementsTable).getByRole("row", { name: /Drycoolers/ });
+    const rowRemovalButton = within(dryCoolerRow).getByRole("button", {
+      name: "Remove inventory element"
+    });
+    await user.click(rowRemovalButton);
+    expect(dryCoolerRow).not.toBeVisible();
+    const inventoryElementsTableNameHeader = within(inventoryElementsTable).getByRole(
+      "columnheader",
+      { name: "Name" }
+    );
+    expect(inventoryElementsTableNameHeader).toBeVisible();
   });
 });
