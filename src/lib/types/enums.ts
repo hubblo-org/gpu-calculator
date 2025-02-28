@@ -34,3 +34,10 @@ export enum ElectricalTechnicalResilienceTiers {
   ConcurrentlyMaintainable = "Tier 3",
   FaultTolerant = "Tier 4"
 }
+
+export enum CoolingSystems {
+  AirCooling = "Air cooling",
+  WaterCooling = "Water cooling",
+  LiquidCooling = "Liquid cooling",
+  FreeCooling = "Free cooling"
+}

@@ -1,5 +1,5 @@
 import BuildingForm from "$lib/components/BuildingForm.svelte";
-import { ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
+import { CoolingSystems, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
@@ -51,13 +51,29 @@ describe("building form test suite", () => {
     });
     const electricalTechnicalResilienceSelection = within(
       buildingCharacteristicsForm
-    ).getByLabelText("Electrical Technical Resilience", {exact: false});
+    ).getByLabelText("Electrical Technical Resilience", { exact: false });
     const tiers = Object.values(ElectricalTechnicalResilienceTiers);
     tiers.forEach((tier) => {
       const tierOption = within(electricalTechnicalResilienceSelection).getByRole("option", {
         name: tier
       });
       expect(tierOption).toBeVisible();
+    });
+  });
+  it("displays each cooling system as options to select from", () => {
+    const buildingCharacteristicsForm = screen.getByRole("form", {
+      name: "Building characteristics form"
+    });
+    const coolingSystemSelection = within(buildingCharacteristicsForm).getByLabelText(
+      "Cooling system type",
+      { exact: false }
+    );
+    const coolingSystems = Object.values(CoolingSystems);
+    coolingSystems.forEach((coolingSystem) => {
+      const coolingSystemOption = within(coolingSystemSelection).getByRole("option", {
+        name: coolingSystem
+      });
+      expect(coolingSystemOption).toBeVisible();
     });
   });
 });

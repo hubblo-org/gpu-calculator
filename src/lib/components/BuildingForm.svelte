@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
+  import { ElectricalTechnicalResilienceTiers, CoolingSystems } from "$lib/types/enums";
 
   const resilienceTiers = Object.values(ElectricalTechnicalResilienceTiers);
+  const coolingSystems = Object.values(CoolingSystems);
 </script>
 
 <form aria-label="Building characteristics form">
@@ -83,7 +84,11 @@
   </div>
   <div class="row-input">
     <label for="building-cooling-system"> Cooling system type </label>
-    <select id="building-cooling-system"></select>
+    <select id="building-cooling-system">
+      {#each coolingSystems as coolingSystem}
+        <option value={coolingSystem}>{coolingSystem}</option>
+      {/each}
+    </select>
   </div>
   <div class="row-input">
     <label for="building-location"> Location </label>
