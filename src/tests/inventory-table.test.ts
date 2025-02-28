@@ -1,15 +1,17 @@
 import InventoryTable from "$lib/components/InventoryTable.svelte";
-import { InventoryCategories } from "$lib/types/enums";
+import { InventoryCategories, getInventoryCategorySpelling } from "$lib/types/enums";
 import type { DataCenterInventoryElement } from "$lib/types/pcr-cloud";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
+const coolingCategory = getInventoryCategorySpelling(InventoryCategories.Cooling).lowercase;
+const energyBackupCategory = getInventoryCategorySpelling(InventoryCategories.EnergyBackup).lowercase;
 describe("inventory table test suite", () => {
   const inventoryElements: DataCenterInventoryElement[] = [
-    { name: "Drycoolers", category: InventoryCategories.Cooling, quantity: 50, lifespan: 35 },
+    { name: "Drycoolers", category: coolingCategory, quantity: 50, lifespan: 35 },
     {
       name: "Backup diesel generator",
-      category: InventoryCategories.EnergyBackup,
+      category: energyBackupCategory,
       quantity: 3,
       lifespan: 45
     }

@@ -1,4 +1,5 @@
 import InventoryForm from "$lib/components/InventoryForm.svelte";
+import { InventoryCategories, getInventoryCategorySpelling } from "$lib/types/enums";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
@@ -35,8 +36,16 @@ describe("inventory form test suite", () => {
     const inventoryElementCategorySelection = screen.getByLabelText(
       "Category of inventory element"
     );
-    const categories = ["Building", "Cooling", "Energy", "Energy backup", "Maintenance", "Water"];
-    categories.forEach((category) => {
+    const inventoryCategoryValues = Object.values(InventoryCategories);
+    const inventoryCategories = inventoryCategoryValues
+      .filter((inventoryCat) => !isNaN(Number(inventoryCat)))
+      .map((inventoryCat) => {
+        const spelling = getInventoryCategorySpelling(
+          inventoryCat as InventoryCategories
+        ).uppercase;
+        return spelling;
+      });
+    inventoryCategories.forEach((category) => {
       const inventoryElementCategory = within(inventoryElementCategorySelection).getByRole(
         "option",
         { name: category }

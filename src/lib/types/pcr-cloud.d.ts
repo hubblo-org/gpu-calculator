@@ -29,4 +29,8 @@ export declare type DataCenterBuilding = {
   partitionSurface: number;
 };
 
+export declare type InventoryCategorySpellings = {
+  lowercase: string;
+  uppercase: string;
+}
 declare module "pcr-cloud";
