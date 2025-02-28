@@ -27,3 +27,10 @@ export function getInventoryCategorySpelling(
       return { lowercase: "water", uppercase: "Water" };
   }
 }
+
+export enum ElectricalTechnicalResilienceTiers {
+  BasicCapacity = "Tier 1",
+  RedudantCapacityComponents = "Tier 2",
+  ConcurrentlyMaintainable = "Tier 3",
+  FaultTolerant = "Tier 4"
+}

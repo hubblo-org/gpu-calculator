@@ -1,4 +1,5 @@
 import BuildingForm from "$lib/components/BuildingForm.svelte";
+import { ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
@@ -43,6 +44,20 @@ describe("building form test suite", () => {
       });
       expect(characteristicInput).toBeVisible();
     });
-
+  });
+  it("displays each electrical technical resilience tiers as options to select from", () => {
+    const buildingCharacteristicsForm = screen.getByRole("form", {
+      name: "Building characteristics form"
+    });
+    const electricalTechnicalResilienceSelection = within(
+      buildingCharacteristicsForm
+    ).getByLabelText("Electrical Technical Resilience", {exact: false});
+    const tiers = Object.values(ElectricalTechnicalResilienceTiers);
+    tiers.forEach((tier) => {
+      const tierOption = within(electricalTechnicalResilienceSelection).getByRole("option", {
+        name: tier
+      });
+      expect(tierOption).toBeVisible();
+    });
   });
 });
