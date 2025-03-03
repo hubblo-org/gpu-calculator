@@ -1,4 +1,5 @@
 import BuildingForm from "$lib/components/BuildingForm.svelte";
+import { formatBuildingCharacteristicName } from "$lib/inventory";
 import { CoolingSystems, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import userEvent from "@testing-library/user-event";
@@ -169,46 +170,48 @@ describe("building form test suite", () => {
     );
 
     await user.type(buildingLifespan, buildingInventory.lifespan.toString());
-    await user.type(buildingTotalSurface, buildingInventory.total_surface.toString());
-    await user.type(
-      buildingTechnicalRooms,
-      buildingInventory.technical_rooms_surface_area.toString()
-    );
+    await user.type(buildingTotalSurface, buildingInventory.totalSurface.toString());
+    await user.type(buildingTechnicalRooms, buildingInventory.technicalRoomSurface.toString());
     await user.type(
       buildingMaximumElectricalPower,
-      buildingInventory.maximum_usable_electrical_power.toString()
+      buildingInventory.maximumUsableElectricalPower.toString()
     );
-    await user.type(buildingTotalEnergy, buildingInventory.total_energy_one_year_kwh.toString());
-    await user.type(buildingLoadFactor, buildingInventory.data_center_load_factor.toString());
-    await user.type(buildingPUE, buildingInventory.pue.toString());
-    await user.type(buildingWUE, buildingInventory.wue.toString());
-    await user.type(buildingERF, buildingInventory.erf.toString());
-    await user.type(buildingREF, buildingInventory.ref.toString());
-    await user.selectOptions(
-      buildingResilience,
-      buildingInventory.electrical_and_technical_resilience
-    );
-    await user.selectOptions(buildingCoolingSystem, buildingInventory.type_of_cooling_system);
+    await user.type(buildingTotalEnergy, buildingInventory.yearlyTotalEnergy.toString());
+    await user.type(buildingLoadFactor, buildingInventory.dataCenterLoadFactor.toString());
+    await user.type(buildingPUE, buildingInventory.powerUsageEffectiveness.toString());
+    await user.type(buildingWUE, buildingInventory.waterUsageEffectiveness.toString());
+    await user.type(buildingERF, buildingInventory.energyReuseFactor.toString());
+    await user.type(buildingREF, buildingInventory.renewableEnergyFactor.toString());
+    await user.selectOptions(buildingResilience, buildingInventory.electricalTechnicalResilience);
+    await user.selectOptions(buildingCoolingSystem, buildingInventory.coolingSystemType);
     await user.type(buildingLocation, buildingInventory.location);
-    await user.type(buildingStudyDuration, buildingInventory.duration_of_the_study.toString());
-    await user.type(buildingConcreteVolume, buildingInventory.concrete_volume.toString());
-    await user.type(buildingSteelMass, buildingInventory.steel_mass.toString());
+    await user.type(buildingStudyDuration, buildingInventory.studyDuration.toString());
+    await user.type(buildingConcreteVolume, buildingInventory.concreteVolume.toString());
+    await user.type(buildingSteelMass, buildingInventory.steelMass.toString());
     await user.type(
       buildingDesignedFloorSurface,
-      buildingInventory.designed_floor_assembly_surface.toString()
+      buildingInventory.designedFloorAssemblySurface.toString()
     );
     await user.type(
       buildingSuspendedCeilingSurface,
-      buildingInventory.suspended_ceiling_surface.toString()
+      buildingInventory.suspendedCeilingSurface.toString()
     );
-    await user.type(buildingLifts, buildingInventory.number_of_lifts.toString());
-    await user.type(buildingFreightLifts, buildingInventory.number_of_freight_lifts.toString());
-    await user.type(buildingPartitionSurface, buildingInventory.partition_surface.toString());
+    await user.type(buildingLifts, buildingInventory.lifts.toString());
+    await user.type(buildingFreightLifts, buildingInventory.freightLifts.toString());
+    await user.type(buildingPartitionSurface, buildingInventory.partitionSurface.toString());
     await user.click(buildingFormSubmitButton);
 
+    const buildingKeys = Object.keys(buildingInventory);
+    console.log(buildingKeys);
+    const formattedBuildingKeys = buildingKeys.map((key) => {
+      const formattedKey = formatBuildingCharacteristicName(key);
+      return formattedKey;
+    });
+    console.log(formattedBuildingKeys);
     const buildingInventoryCharacteristics = Object.values(buildingInventory);
-    buildingInventoryCharacteristics.forEach((characteristic) => {
-      const characteristics = screen.getAllByText(characteristic);
+    buildingInventoryCharacteristics.forEach((characteristic, index) => {
+      const stringValue = `Building ${formattedBuildingKeys[index]} : ${characteristic}`;
+      const characteristics = screen.getAllByText(stringValue);
       characteristics.forEach((htmlElement) => expect(htmlElement).toBeVisible());
     });
     expect(buildingCharacteristicsForm).not.toBeVisible();

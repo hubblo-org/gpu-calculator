@@ -1,7 +1,12 @@
 <script lang="ts">
   import { fail } from "@sveltejs/kit";
   import { ElectricalTechnicalResilienceTiers, CoolingSystems } from "$lib/types/enums";
-  import { validateInt, validateFloat, validateString } from "$lib/inventory";
+  import {
+    formatBuildingCharacteristicName,
+    validateInt,
+    validateFloat,
+    validateString
+  } from "$lib/inventory";
   import type { DataCenterBuilding } from "$lib/types/pcr-cloud";
 
   const resilienceTiers = Object.values(ElectricalTechnicalResilienceTiers);
@@ -11,36 +16,36 @@
 
   function submitBuildingInventory() {
     try {
-      const buildingLifespan = validateInt(
+      const buildingLifespan = 
         document.getElementById("building-lifespan") as HTMLInputElement
-      );
-      const buildingTotalSurface = validateFloat(
+      ;
+      const buildingTotalSurface = 
         document.getElementById("building-total-surface") as HTMLInputElement
-      );
-      const buildingTechnicalRoomsSurface = validateFloat(
+      ;
+      const buildingTechnicalRoomsSurface = 
         document.getElementById("building-technical-rooms-surface") as HTMLInputElement
-      );
-      const buildingMaximumUsableElectricalPower = validateInt(
+      ;
+      const buildingMaximumUsableElectricalPower = 
         document.getElementById("building-maximum-usable-electrical-power") as HTMLInputElement
-      );
-      const buildingYearlyTotalEnergy = validateInt(
+      ;
+      const buildingYearlyTotalEnergy = 
         document.getElementById("building-yearly-total-energy") as HTMLInputElement
-      );
-      const buildingLoadFactor = validateFloat(
+      ;
+      const buildingLoadFactor = 
         document.getElementById("building-load-factor") as HTMLInputElement
-      );
-      const buildingPUE = validateFloat(
+      ;
+      const buildingPUE = 
         document.getElementById("building-power-usage-effectiveness") as HTMLInputElement
-      );
-      const buildingWUE = validateFloat(
+      ;
+      const buildingWUE = 
         document.getElementById("building-water-usage-effectiveness") as HTMLInputElement
-      );
-      const buildingERF = validateFloat(
+      ;
+      const buildingERF = 
         document.getElementById("building-energy-reuse-factor") as HTMLInputElement
-      );
-      const buildingREF = validateFloat(
+      ;
+      const buildingREF = 
         document.getElementById("building-renewable-energy-factor") as HTMLInputElement
-      );
+      ;
       const buildingResilience = document.getElementById(
         "building-electrical-technical-resilience"
       ) as HTMLInputElement;
@@ -48,53 +53,53 @@
         "building-cooling-system"
       ) as HTMLInputElement;
       const buildingLocation = document.getElementById("building-location") as HTMLInputElement;
-      const buildingStudyDuration = validateInt(
+      const buildingStudyDuration = 
         document.getElementById("building-study-duration") as HTMLInputElement
-      );
-      const buildingConcreteVolume = validateFloat(
+      ;
+      const buildingConcreteVolume = 
         document.getElementById("building-concrete-volume") as HTMLInputElement
-      );
-      const buildingSteelMass = validateFloat(
+      ;
+      const buildingSteelMass =
         document.getElementById("building-steel-mass") as HTMLInputElement
-      );
-      const buildingDesignedFloorSurface = validateFloat(
+      ;
+      const buildingDesignedFloorSurface = 
         document.getElementById("building-designed-floor-assembly-surface") as HTMLInputElement
-      );
-      const buildingSuspendedCeilingSurface = validateFloat(
+      ;
+      const buildingSuspendedCeilingSurface = 
         document.getElementById("building-suspended-ceiling-surface") as HTMLInputElement
-      );
-      const buildingLifts = validateInt(
+      ;
+      const buildingLifts = 
         document.getElementById("building-lifts") as HTMLInputElement
-      );
-      const buildingFreightLifts = validateInt(
+      ;
+      const buildingFreightLifts = 
         document.getElementById("building-freight-lifts") as HTMLInputElement
-      );
-      const buildingPartitionSurface = validateFloat(
+      ;
+      const buildingPartitionSurface = 
         document.getElementById("building-partition-surface") as HTMLInputElement
-      );
+      ;
 
       const buildingInventory: DataCenterBuilding = {
-        lifespan: buildingLifespan,
-        totalSurface: buildingTotalSurface,
-        technicalRoomSurface: buildingTechnicalRoomsSurface,
-        yearlyTotalEnergy: buildingYearlyTotalEnergy,
-        maximumUsableElectricalPower: buildingMaximumUsableElectricalPower,
-        dataCenterLoadFactory: buildingLoadFactor,
-        powerUsageEffectiveness: buildingPUE,
-        waterUsageEffectiveness: buildingWUE,
-        energyReuseFactor: buildingERF,
-        renewableEnergyFactor: buildingREF,
+        lifespan: validateInt(buildingLifespan.value),
+        totalSurface: validateFloat(buildingTotalSurface.value),
+        technicalRoomSurface: validateFloat(buildingTechnicalRoomsSurface.value),
+        yearlyTotalEnergy: validateInt(buildingYearlyTotalEnergy.value),
+        maximumUsableElectricalPower: validateInt(buildingMaximumUsableElectricalPower.value),
+        dataCenterLoadFactor: validateFloat(buildingLoadFactor.value),
+        powerUsageEffectiveness: validateFloat(buildingPUE.value),
+        waterUsageEffectiveness: validateFloat(buildingWUE.value),
+        energyReuseFactor: validateFloat(buildingERF.value),
+        renewableEnergyFactor: validateFloat(buildingREF.value),
         electricalTechnicalResilience: buildingResilience.value,
         coolingSystemType: buildingCoolingSystem.value,
         location: validateString(buildingLocation.value),
-        studyDuration: buildingStudyDuration,
-        concreteVolume: buildingConcreteVolume,
-        steelMass: buildingSteelMass,
-        designedFloorAssemblySurface: buildingDesignedFloorSurface,
-        suspendedCeilingSurface: buildingSuspendedCeilingSurface,
-        lifts: buildingLifts,
-        freightLifts: buildingFreightLifts,
-        partitionSurface: buildingPartitionSurface
+        studyDuration: validateInt(buildingStudyDuration.value),
+        concreteVolume: validateFloat(buildingConcreteVolume.value),
+        steelMass: validateFloat(buildingSteelMass.value),
+        designedFloorAssemblySurface: validateFloat(buildingDesignedFloorSurface.value),
+        suspendedCeilingSurface: validateFloat(buildingSuspendedCeilingSurface.value),
+        lifts: validateInt(buildingLifts.value),
+        freightLifts: validateInt(buildingFreightLifts.value),
+        partitionSurface: validateFloat(buildingPartitionSurface.value)
       };
       submittedBuildingInventory = buildingInventory;
     } catch (error) {
@@ -233,7 +238,10 @@
 {/if}
 
 {#if submittedBuildingInventory}
-  {#each Object.values(submittedBuildingInventory) as inventoryValue}<p>{inventoryValue}</p>{/each}
+  {#each Object.entries(submittedBuildingInventory) as [inventoryElementName, inventoryElementValue]}<p
+    >
+      Building {formatBuildingCharacteristicName(inventoryElementName)} : {inventoryElementValue}
+    </p>{/each}
 {/if}
 
 <style>

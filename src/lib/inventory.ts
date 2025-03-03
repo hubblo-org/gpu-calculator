@@ -1,7 +1,11 @@
 import type { DataCenterInventoryElement } from "./types/pcr-cloud";
 import { InventoryCategories } from "./types/enums";
 
-export function validateString(elementValue: string) {
+export function formatBuildingCharacteristicName(buildingCharacteristicName: string) {
+  return buildingCharacteristicName.replace(/([A-Z])/g, " $1").trim();
+}
+
+export function validateString(elementValue: string): string {
   const numberRegEx = /[0-9]/g;
   if (elementValue.match(numberRegEx)) {
     throw new Error("Contains invalid character");
@@ -11,34 +15,36 @@ export function validateString(elementValue: string) {
     return elementValue;
   }
 }
-export function validateNumber(element: HTMLInputElement) {
-  const maybeValidNumber = Number(element.value);
+export function validateNumber(elementValue: string) {
+  const maybeValidNumber = Number(elementValue);
 
   if (isNaN(maybeValidNumber)) {
     console.log("Not a Number");
     return false;
   } else {
-    return Number(element.value);
+    return Number(elementValue);
   }
 }
 
-export function validateFloat(element: HTMLInputElement) {
-  const validatedNumber = validateNumber(element);
+export function validateFloat(elementValue: string): number {
+  const validatedNumber = validateNumber(elementValue);
   if (validatedNumber === 0) {
     return 0;
-  }
-  if (validatedNumber) {
-    const convertedToFloat = parseFloat(element.value);
+  } else if (validatedNumber) {
+    const convertedToFloat = parseFloat(elementValue);
     return convertedToFloat;
+  } else {
+    throw new Error("Not convertible to float");
   }
 }
 
-export function validateInt(element: HTMLInputElement) {
-  console.log(element.value);
-  const validatedNumber = validateNumber(element);
+export function validateInt(elementValue: string): number {
+  const validatedNumber = validateNumber(elementValue);
   if (validatedNumber) {
-    const convertedToInteger = parseInt(element.value);
+    const convertedToInteger = parseInt(elementValue);
     return convertedToInteger;
+  } else {
+    throw new Error("Not convertible to integer");
   }
 }
 
