@@ -11,7 +11,7 @@ export declare type DataCenterBuilding = {
   technicalRoomSurface: number;
   yearlyTotalEnergy: number;
   maximumUsableElectricalPower: number;
-  dataCenterLoadFactory: number;
+  dataCenterLoadFactor: number;
   powerUsageEffectiveness: number;
   waterUsageEffectiveness: number;
   energyReuseFactor: number;
