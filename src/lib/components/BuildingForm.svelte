@@ -16,36 +16,34 @@
 
   function submitBuildingInventory() {
     try {
-      const buildingLifespan = 
-        document.getElementById("building-lifespan") as HTMLInputElement
-      ;
-      const buildingTotalSurface = 
-        document.getElementById("building-total-surface") as HTMLInputElement
-      ;
-      const buildingTechnicalRoomsSurface = 
-        document.getElementById("building-technical-rooms-surface") as HTMLInputElement
-      ;
-      const buildingMaximumUsableElectricalPower = 
-        document.getElementById("building-maximum-usable-electrical-power") as HTMLInputElement
-      ;
-      const buildingYearlyTotalEnergy = 
-        document.getElementById("building-yearly-total-energy") as HTMLInputElement
-      ;
-      const buildingLoadFactor = 
-        document.getElementById("building-load-factor") as HTMLInputElement
-      ;
-      const buildingPUE = 
-        document.getElementById("building-power-usage-effectiveness") as HTMLInputElement
-      ;
-      const buildingWUE = 
-        document.getElementById("building-water-usage-effectiveness") as HTMLInputElement
-      ;
-      const buildingERF = 
-        document.getElementById("building-energy-reuse-factor") as HTMLInputElement
-      ;
-      const buildingREF = 
-        document.getElementById("building-renewable-energy-factor") as HTMLInputElement
-      ;
+      const buildingLifespan = document.getElementById("building-lifespan") as HTMLInputElement;
+      const buildingTotalSurface = document.getElementById(
+        "building-total-surface"
+      ) as HTMLInputElement;
+      const buildingTechnicalRoomsSurface = document.getElementById(
+        "building-technical-rooms-surface"
+      ) as HTMLInputElement;
+      const buildingMaximumUsableElectricalPower = document.getElementById(
+        "building-maximum-usable-electrical-power"
+      ) as HTMLInputElement;
+      const buildingYearlyTotalEnergy = document.getElementById(
+        "building-yearly-total-energy"
+      ) as HTMLInputElement;
+      const buildingLoadFactor = document.getElementById(
+        "building-load-factor"
+      ) as HTMLInputElement;
+      const buildingPUE = document.getElementById(
+        "building-power-usage-effectiveness"
+      ) as HTMLInputElement;
+      const buildingWUE = document.getElementById(
+        "building-water-usage-effectiveness"
+      ) as HTMLInputElement;
+      const buildingERF = document.getElementById(
+        "building-energy-reuse-factor"
+      ) as HTMLInputElement;
+      const buildingREF = document.getElementById(
+        "building-renewable-energy-factor"
+      ) as HTMLInputElement;
       const buildingResilience = document.getElementById(
         "building-electrical-technical-resilience"
       ) as HTMLInputElement;
@@ -53,31 +51,26 @@
         "building-cooling-system"
       ) as HTMLInputElement;
       const buildingLocation = document.getElementById("building-location") as HTMLInputElement;
-      const buildingStudyDuration = 
-        document.getElementById("building-study-duration") as HTMLInputElement
-      ;
-      const buildingConcreteVolume = 
-        document.getElementById("building-concrete-volume") as HTMLInputElement
-      ;
-      const buildingSteelMass =
-        document.getElementById("building-steel-mass") as HTMLInputElement
-      ;
-      const buildingDesignedFloorSurface = 
-        document.getElementById("building-designed-floor-assembly-surface") as HTMLInputElement
-      ;
-      const buildingSuspendedCeilingSurface = 
-        document.getElementById("building-suspended-ceiling-surface") as HTMLInputElement
-      ;
-      const buildingLifts = 
-        document.getElementById("building-lifts") as HTMLInputElement
-      ;
-      const buildingFreightLifts = 
-        document.getElementById("building-freight-lifts") as HTMLInputElement
-      ;
-      const buildingPartitionSurface = 
-        document.getElementById("building-partition-surface") as HTMLInputElement
-      ;
-
+      const buildingStudyDuration = document.getElementById(
+        "building-study-duration"
+      ) as HTMLInputElement;
+      const buildingConcreteVolume = document.getElementById(
+        "building-concrete-volume"
+      ) as HTMLInputElement;
+      const buildingSteelMass = document.getElementById("building-steel-mass") as HTMLInputElement;
+      const buildingDesignedFloorSurface = document.getElementById(
+        "building-designed-floor-assembly-surface"
+      ) as HTMLInputElement;
+      const buildingSuspendedCeilingSurface = document.getElementById(
+        "building-suspended-ceiling-surface"
+      ) as HTMLInputElement;
+      const buildingLifts = document.getElementById("building-lifts") as HTMLInputElement;
+      const buildingFreightLifts = document.getElementById(
+        "building-freight-lifts"
+      ) as HTMLInputElement;
+      const buildingPartitionSurface = document.getElementById(
+        "building-partition-surface"
+      ) as HTMLInputElement;
       const buildingInventory: DataCenterBuilding = {
         lifespan: validateInt(buildingLifespan.value),
         totalSurface: validateFloat(buildingTotalSurface.value),
@@ -238,10 +231,17 @@
 {/if}
 
 {#if submittedBuildingInventory}
-  {#each Object.entries(submittedBuildingInventory) as [inventoryElementName, inventoryElementValue]}<p
-    >
-      Building {formatBuildingCharacteristicName(inventoryElementName)} : {inventoryElementValue}
-    </p>{/each}
+  <table>
+    <caption> Data center building details </caption>
+    <tbody>
+      {#each Object.entries(submittedBuildingInventory) as [inventoryElementName, inventoryElementValue]}
+        <tr
+          ><th scope="row">Building {formatBuildingCharacteristicName(inventoryElementName)} </th>
+          <td>{inventoryElementValue}</td></tr
+        >
+      {/each}
+    </tbody>
+  </table>
 {/if}
 
 <style>

@@ -62,8 +62,8 @@ export function addInventoryElement(inventory: DataCenterInventoryElement[]) {
     "inventory-element-lifespan"
   ) as HTMLInputElement;
 
-  const validatedQuantity = validateInt(inventoryElementQuantity);
-  const validatedLifespan = validateInt(inventoryElementLifespan);
+  const validatedQuantity = validateInt(inventoryElementQuantity.value);
+  const validatedLifespan = validateInt(inventoryElementLifespan.value);
 
   if (!validatedQuantity || !validatedLifespan) {
     return;

@@ -202,17 +202,23 @@ describe("building form test suite", () => {
     await user.click(buildingFormSubmitButton);
 
     const buildingKeys = Object.keys(buildingInventory);
-    console.log(buildingKeys);
     const formattedBuildingKeys = buildingKeys.map((key) => {
       const formattedKey = formatBuildingCharacteristicName(key);
       return formattedKey;
     });
-    console.log(formattedBuildingKeys);
     const buildingInventoryCharacteristics = Object.values(buildingInventory);
+
+    const buildingDetailsTable = screen.getByRole("table", {
+      name: "Data center building details"
+    });
+
     buildingInventoryCharacteristics.forEach((characteristic, index) => {
-      const stringValue = `Building ${formattedBuildingKeys[index]} : ${characteristic}`;
-      const characteristics = screen.getAllByText(stringValue);
-      characteristics.forEach((htmlElement) => expect(htmlElement).toBeVisible());
+      const rowName = `Building ${formattedBuildingKeys[index]} ${characteristic.toString()}`;
+      const buildingDetailrow = within(buildingDetailsTable).getByRole("row", {
+        name: rowName
+      });
+      const buildingCharacteristicCell = within(buildingDetailrow).getByRole("cell", { name: characteristic.toString() });
+      expect(buildingCharacteristicCell).toBeVisible();
     });
     expect(buildingCharacteristicsForm).not.toBeVisible();
   });
