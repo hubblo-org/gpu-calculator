@@ -41,3 +41,36 @@ export enum CoolingSystems {
   LiquidCooling = "Liquid cooling",
   FreeCooling = "Free cooling"
 }
+
+export enum ImpactCriterias {
+  AbioticDepletionPotentialElements = "ADPe",
+  AbioticDepletionPotentialFossilFuels = "ADPf",
+  AcidificationPotential = "AP",
+  ComparativeToxicityUnitsForEcosystems = "CTUe",
+  ComparativeToxicityUnitsForHumans = "CTUh",
+  ComparativeToxicityUnitsForHumansCarcinogenic = "CTUh_c",
+  ComparativeToxicityUnitsForHumansNonCarcinogenic = "CTUh_nc",
+  EutrophicationPotentialFreshWater = "EPF",
+  EutrophicationPotentialMarine = "EPM",
+  EutrophicationPotentialTerrestrial = "EPT",
+  GlobalWarmingPotential = "GWP",
+  GlobalWarmingPotentialBiogenic = "GWPb",
+  GlobalWarmingPotentialFossil = "GWPf",
+  GlobalWarmingPotentialLandUse = "GWPlu",
+  IonisingRadiation = "IR",
+  LandUse = "LU",
+  MaterialInputPerServiceUnit = "MIPS",
+  OzoneDepletionPotential = "ODP",
+  ParticulateMatter = "PM",
+  PhotochemicalOzoneFormationPotential = "POCP",
+  TotalPrimaryEnergy = "TPE",
+  WaterUse = "WU"
+}
+
+export enum LifeCycleSteps {
+  Extraction = "Extraction",
+  Manufacturing = "Manufacturing",
+  Transportation = "Transportation",
+  Use = "Use",
+  EndOfLife = "End of life"
+}

@@ -18,12 +18,6 @@
     }
   ]);
 
-  /* function removeRow(inventory: DataCenterInventoryElement[], inventoryName: string) {
-    const isElementWithInventoryName = (element: DataCenterInventoryElement) =>
-      element.name === inventoryName;
-    const rowIndex = inventory.findIndex(isElementWithInventoryName);
-    inventory.splice(rowIndex, 1);
-  } */
 </script>
 
 {#snippet removeRowButton(inventoryElementName: string)}
