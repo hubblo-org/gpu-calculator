@@ -1,4 +1,5 @@
 import InventoryTable from "$lib/components/InventoryTable.svelte";
+import InventoryTableTest from "./inventory-table.test.svelte";
 import { InventoryCategories, getInventoryCategorySpelling } from "$lib/types/enums";
 import type { DataCenterInventoryElement } from "$lib/types/pcr-cloud";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
@@ -9,7 +10,8 @@ const coolingCategory = getInventoryCategorySpelling(InventoryCategories.Cooling
 const energyBackupCategory = getInventoryCategorySpelling(
   InventoryCategories.EnergyBackup
 ).lowercase;
-describe("inventory table test suite", () => {
+
+describe("inventory table static elements test suite", () => {
   const inventoryElements: DataCenterInventoryElement[] = [
     { name: "Drycoolers", category: coolingCategory, quantity: 50, lifespan: 35 },
     {
@@ -20,7 +22,11 @@ describe("inventory table test suite", () => {
     }
   ];
   beforeEach(() => {
-    render(InventoryTable, { props: { inventoryElements: inventoryElements } });
+    render(InventoryTable, {
+      props: {
+        inventoryElements: inventoryElements
+      }
+    });
   });
   afterEach(() => cleanup());
 
@@ -57,8 +63,13 @@ describe("inventory table test suite", () => {
       expect(inventoryElementLifespan).toBeVisible();
     });
   });
+});
+
+describe("inventory table dynamic elements test suite", () => {
   it("removes a row from table when clicking on the row removal button", async () => {
+    render(InventoryTableTest);
     const user = userEvent.setup();
+
     const inventoryElementsTable = screen.getByRole("table", {
       name: "Data center inventory elements"
     });
@@ -66,8 +77,14 @@ describe("inventory table test suite", () => {
     const rowRemovalButton = within(dryCoolerRow).getByRole("button", {
       name: "Remove inventory element"
     });
+
     await user.click(rowRemovalButton);
-    expect(dryCoolerRow).not.toBeVisible();
+
+    const removedDryCoolerRow = within(inventoryElementsTable).queryByRole("rowheader", {
+      name: /Drycoolers/
+    });
+    expect(removedDryCoolerRow).not.toBeInTheDocument();
+
     const inventoryElementsTableNameHeader = within(inventoryElementsTable).getByRole(
       "columnheader",
       { name: "Name" }

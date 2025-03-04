@@ -1,20 +1,12 @@
 <script lang="ts">
   import type { DataCenterInventoryElement } from "$lib/types/pcr-cloud";
+  import type { Snippet } from "svelte";
   interface Props {
     inventoryElements: DataCenterInventoryElement[];
+    removeRowButton: Snippet<[string]>;
   }
-  const { inventoryElements }: Props = $props();
-  function removeRow(inventoryName: string) {
-    const inventoryTable = document.getElementById("data-center-inventory") as HTMLTableElement;
-    const isElementWithInventoryName = (element: DataCenterInventoryElement) =>
-      element.name === inventoryName;
-    const rowIndex = inventoryElements.findIndex(isElementWithInventoryName);
-    if (rowIndex === 0) {
-      inventoryTable.deleteRow(rowIndex + 1);
-    } else {
-      inventoryTable.deleteRow(rowIndex);
-    }
-  }
+  const { inventoryElements, removeRowButton }: Props = $props();
+
 </script>
 
 <table id="data-center-inventory">
@@ -32,10 +24,7 @@
         ><th scope="row">{inventoryElement.name}</th><td>{inventoryElement.category}</td><td
           >{inventoryElement.quantity}</td
         ><td>{inventoryElement.lifespan}</td><td
-          ><button
-            onclick={() => removeRow(inventoryElement.name)}
-            aria-label="Remove inventory element">x</button
-          ></td
+          >{@render removeRowButton?.(inventoryElement.name)}</td
         ></tr
       ></tbody
     >

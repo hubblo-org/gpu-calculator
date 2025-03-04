@@ -1,6 +1,13 @@
 import type { DataCenterInventoryElement } from "./types/pcr-cloud";
 import { InventoryCategories } from "./types/enums";
 
+export function removeRow(inventory: DataCenterInventoryElement[], inventoryName: string) {
+  const isElementWithInventoryName = (element: DataCenterInventoryElement) =>
+    element.name === inventoryName;
+  const rowIndex = inventory.findIndex(isElementWithInventoryName);
+  inventory.splice(rowIndex, 1);
+}
+
 export function formatBuildingCharacteristicName(buildingCharacteristicName: string) {
   return buildingCharacteristicName.replace(/([A-Z])/g, " $1").trim();
 }
