@@ -15,7 +15,10 @@
   const values = $derived(Object.values(results.impacts));
   const impactFactors: Bar[] = $derived(
     keys.map((key, index) => {
-      const value: Bar = { impact_criteria: key, amount: Math.round(values[index]) };
+      const value: Bar = {
+        impact_criteria: `${key}\n (${values[index].unit})`,
+        amount: Math.round(values[index].value)
+      };
       return value;
     })
   );
@@ -39,12 +42,13 @@
         marginLeft: 200,
         y: { grid: true },
         marks: [
-          Plot.ruleY([0]),
-          Plot.barY(impactFactors, {
-            x: "impact_criteria",
-            y: "amount",
+          Plot.ruleX([0]),
+          Plot.axisX({ tickSpacing: 100 }),
+          Plot.barX(impactFactors, {
+            x: "amount",
+            y: "impact_criteria",
             fill: "amount",
-            sort: { x: "y" }
+            sort: { y: "x", order: "descending" }
           })
         ]
       });
@@ -57,7 +61,6 @@
   });
 </script>
 
-<p>{resultsIndex}</p>
 <div id="impactFactorsPlot"></div>
-<p>{results.scope} {results.amount} {results.unit}</p>
+<p>Selected scope: {results.scope}. Product : {results.amount} {results.unit}.</p>
 <button onclick={() => updatePlot()}>Next scope</button>

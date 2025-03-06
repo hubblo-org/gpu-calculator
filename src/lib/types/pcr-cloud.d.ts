@@ -37,29 +37,34 @@ export declare type DataCenterInventoryElementWithImpactFactors = {
   WU: number;
 };
 
-export declare type ImpactCriterias = {
-  ADPe: number;
-  ADPf: number;
-  AP: number;
-  CTUe: number;
-  CTUh: number;
-  CTUh_c: number;
-  CTUh_nc: number;
-  EPF: number;
-  EPM: number;
-  EPT: number;
-  GWP: number;
-  GWPb: number;
-  GWPf: number;
-  GWPlu: number;
-  IR: number;
-  LU: number;
-  MIPS: number;
-  ODP: number;
-  PM: number;
-  POCP: number;
-  TPE: number;
-  WU: number;
+export declare type ImpactFactor = {
+  value: number;
+  unit: string;
+};
+
+export declare type ImpactFactors = {
+  ADPe: ImpactFactor;
+  ADPf: ImpactFactor;
+  AP: ImpactFactor;
+  CTUe: ImpactFactor;
+  CTUh: ImpactFactor;
+  CTUh_c: ImpactFactor;
+  CTUh_nc: ImpactFactor;
+  EPF: ImpactFactor;
+  EPM: ImpactFactor;
+  EPT: ImpactFactor;
+  GWP: ImpactFactor;
+  GWPb: ImpactFactor;
+  GWPf: ImpactFactor;
+  GWPlu: ImpactFactor;
+  IR: ImpactFactor;
+  LU: ImpactFactor;
+  MIPS: ImpactFactor;
+  ODP: ImpactFactor;
+  PM: ImpactFactor;
+  POCP: ImpactFactor;
+  TPE: ImpactFactor;
+  WU: ImpactFactor;
 };
 
 export declare type DataCenterBuilding = {
@@ -95,7 +100,7 @@ export declare type FunctionalUnitResultsRow = {
   amount: number;
   unit: string;
   scope: string;
-  impacts: ImpactCriterias;
+  impacts: ImpactFactors;
 };
 
 declare module "pcr-cloud";
