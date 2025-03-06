@@ -1,8 +1,10 @@
 import MaterialImpacts from "./materials_impacts.json";
 import MaterialInventory from "./materials_inventory.json";
+import Fu1Results from "./uf1-results.json";
 import type {
   DataCenterInventoryElement,
-  DataCenterInventoryElementWithImpactFactors
+  DataCenterInventoryElementWithImpactFactors,
+  FunctionalUnitResultsRow
 } from "$lib/types/pcr-cloud";
 
 export const firstInventoryElement = MaterialInventory[0];
@@ -136,3 +138,36 @@ export const coolingInventoryElementsImpactsFactors: DataCenterInventoryElementW
     };
     return inventoryElementImpacts;
   });
+
+export const functionalUnitOneResults: FunctionalUnitResultsRow[] = Fu1Results.map((result) => {
+  const row: FunctionalUnitResultsRow = {
+    amount: result.amount,
+    unit: result.unit,
+    scope: result.c,
+    impacts: {
+      ADPe: result.adpe,
+      ADPf: result.adpf,
+      AP: result.ap,
+      CTUe: result.ctue,
+      CTUh: result.ctuh_c,
+      CTUh_c: result.ctuh_c,
+      CTUh_nc: result.ctuh_n,
+      EPF: result.epf,
+      EPM: result.epm,
+      EPT: result.ept,
+      GWP: result.gwp,
+      GWPb: result.gwpb,
+      GWPf: result.gwpf,
+      GWPlu: result.gwplu,
+      IR: result.ir,
+      LU: result.lu,
+      MIPS: result.mips,
+      ODP: result.odp,
+      PM: result.pm,
+      POCP: result.pocp,
+      TPE: result.tpe,
+      WU: result.wu
+    }
+  };
+  return row;
+});

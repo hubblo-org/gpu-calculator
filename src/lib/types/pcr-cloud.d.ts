@@ -37,6 +37,31 @@ export declare type DataCenterInventoryElementWithImpactFactors = {
   WU: number;
 };
 
+export declare type ImpactCriterias = {
+  ADPe: number;
+  ADPf: number;
+  AP: number;
+  CTUe: number;
+  CTUh: number;
+  CTUh_c: number;
+  CTUh_nc: number;
+  EPF: number;
+  EPM: number;
+  EPT: number;
+  GWP: number;
+  GWPb: number;
+  GWPf: number;
+  GWPlu: number;
+  IR: number;
+  LU: number;
+  MIPS: number;
+  ODP: number;
+  PM: number;
+  POCP: number;
+  TPE: number;
+  WU: number;
+};
+
 export declare type DataCenterBuilding = {
   lifespan: number;
   totalSurface: number;
@@ -65,4 +90,12 @@ export declare type InventoryCategorySpellings = {
   lowercase: string;
   uppercase: string;
 };
+
+export declare type FunctionalUnitResultsRow = {
+  amount: number;
+  unit: string;
+  scope: string;
+  impacts: ImpactCriterias;
+};
+
 declare module "pcr-cloud";
