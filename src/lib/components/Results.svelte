@@ -1,36 +1,23 @@
 <script lang="ts">
   import { functionalUnitOneResults } from "../../mocks/dc-data";
-  import { renderBarPlot, updateBarPlot } from "$lib/plots";
-  import { onMount } from "svelte";
+  import ResultsAllImpactFactors from "./ResultsAllImpactFactors.svelte";
+  import ResultsPerImpactFactor from "./ResultsPerImpactFactor.svelte";
 
-  interface ImpactFactor  {
-    impact_criteria: string;
-    amount: number;
-  }
-
-  let resultsIndex: number = $state(0);
-  const results = $derived(functionalUnitOneResults[resultsIndex]);
-
-  const impactFactors: ImpactFactor[] = $derived.by(() => {
-    const impactCriteriasNames = Object.keys(results.impacts);
-    const impactFactorsValues = Object.values(results.impacts);
-    const impactFactors = impactCriteriasNames.map((key, index) => {
-      const impactFactor: ImpactFactor = {
-        impact_criteria: `${key}\n (${impactFactorsValues[index].unit})`,
-        amount: Math.round(impactFactorsValues[index].value)
-      };
-      return impactFactor;
-    });
-    return impactFactors;
-  });
-
-  onMount(() => {
-    renderBarPlot(impactFactors);
-  });
+  const visualizationSelections = [
+    { id: 0, selection: "All impact factors per scope" },
+    { id: 1, selection: "Per impact factor" }
+  ];
+  let selectedVisualizationName = $state(visualizationSelections[0].selection);
 </script>
 
-<div id="impactFactorsPlot"></div>
-<p>Selected scope: {results.scope}. Product : {results.amount} {results.unit}.</p>
-<button onclick={() => updateBarPlot(resultsIndex, functionalUnitOneResults, impactFactors)}
-  >Next scope</button
+{#if selectedVisualizationName === "All impact factors per scope"}
+  <ResultsAllImpactFactors results={functionalUnitOneResults} />
+{/if}
+{#if selectedVisualizationName === "Per impact factor"}
+  <ResultsPerImpactFactor results={functionalUnitOneResults} />
+{/if}
+<select bind:value={selectedVisualizationName}
+  >{#each visualizationSelections as visualizationSelection}<option
+      value={visualizationSelection.selection}>{visualizationSelection.selection}</option
+    >{/each}</select
 >
