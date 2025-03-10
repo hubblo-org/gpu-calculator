@@ -5,8 +5,10 @@ node_modules
 .vercel
 .netlify
 .wrangler
+.observablehq
 /.svelte-kit
 /build
+/dist
 
 # OS
 .DS_Store
@@ -23,3 +25,4 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 src/mocks/*.json
+
