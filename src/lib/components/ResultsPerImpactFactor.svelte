@@ -37,14 +37,12 @@
   onMount(() => {
     renderHorizontalBarPlot(impactFactors, axes.x, axes.y);
   });
-
-  function updateImpactFactorsPlot() {
-    renderHorizontalBarPlot(impactFactors, axes.x, axes.y);
-  }
 </script>
 
 <div id="impactFactorsPlot"></div>
 <p>Selected impact criteria: {selectedImpactCriteria}. Impact unit: {selectedImpactFactorUnit}</p>
-<select bind:value={selectedImpactCriteria} onchange={() => updateImpactFactorsPlot()}
+<select
+  bind:value={selectedImpactCriteria}
+  onchange={() => renderHorizontalBarPlot(impactFactors, axes.x, axes.y)}
   >{#each impactCriterias as impactCriteria}<option>{impactCriteria}</option>{/each}</select
 >
