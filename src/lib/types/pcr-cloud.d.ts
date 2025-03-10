@@ -103,4 +103,9 @@ export declare type FunctionalUnitResultsRow = {
   impacts: ImpactFactors;
 };
 
+export declare type FunctionalUnitResultsRowWithLifeCycle = FunctionalUnitResultsRow & {
+  life_cycle_step?: string;
+  category?: string;
+};
+
 declare module "pcr-cloud";
