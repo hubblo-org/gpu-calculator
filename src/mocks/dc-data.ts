@@ -175,29 +175,29 @@ export const functionalUnitOneResults: FunctionalUnitResultsRow[] = Fu1Results.m
 
 const lifeCycleRegex = /(?<=lc_step=)(.*)(?=})/;
 
-function formatToLifeCycle(result_c: string) {
+export function formatToLifeCycle(result_c: string) {
   let match = lifeCycleRegex.exec(result_c);
   if (match) {
     return match[0].split(",")[0];
   } else {
-    return "not_relevant";
+    return "full_life_cycle";
   }
 }
 
-function formatCategory(result_c: string) {
-  let match = lifeCycleRegex.exec(result_c);
+const categoryRegex = /(?<=category=)(.*)(?=})/;
+export function formatCategory(result_c: string) {
+  let match = categoryRegex.exec(result_c);
   if (match) {
-    const category = match[0].split(",")[1];
-    if (category) {
-      return category.split("=")[1];
-    } else {
-      return "not_relevant";
-    }
+    const unformattedString = match[0];
+    const category = unformattedString.split(",")[0];
+    return category;
+  } else {
+    return "all_categories";
   }
 }
 
 export const functionalUnitOneResultsWithLc: FunctionalUnitResultsRowWithLifeCycle[] =
-  Fu1Results.map((result) => {
+  Fu1Results.filter((result) => result.a != "material").map((result) => {
     const row: FunctionalUnitResultsRowWithLifeCycle = {
       amount: result.amount,
       unit: result.unit,
