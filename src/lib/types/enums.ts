@@ -56,6 +56,8 @@ export enum ImpactCriterias {
   WaterUse
 }
 
+export declare type IC = keyof typeof ImpactCriterias;
+
 export function getInventoryCategorySpelling(
   inventoryCategories: InventoryCategories
 ): InventoryCategorySpellings {
@@ -143,7 +145,7 @@ export function getImpactCriteria(impactCriterias: ImpactCriterias): ImpactCrite
 export function getAllImpactCriterias(): ImpactCriteria[] {
   const impactCriterias = Object.keys(ImpactCriterias).filter((key) => isNaN(Number(key)));
   const impactCriteriasValues = impactCriterias.map((impactCriteria) => {
-    const value = getImpactCriteria(ImpactCriterias[impactCriteria]);
+    const value = getImpactCriteria(ImpactCriterias[impactCriteria as IC]);
     return value;
   });
   return impactCriteriasValues;
@@ -153,7 +155,7 @@ export function getImpactCriteriasByField(field: keyof ImpactCriteria): string[]
   const impactCriterias = Object.keys(ImpactCriterias).filter((key) => isNaN(Number(key)));
 
   const impactCriteriasValues = impactCriterias.map((impactCriteria) => {
-    const value = getImpactCriteria(ImpactCriterias[impactCriteria])[field];
+    const value = getImpactCriteria(ImpactCriterias[impactCriteria as IC])[field];
     return value;
   });
   return impactCriteriasValues;

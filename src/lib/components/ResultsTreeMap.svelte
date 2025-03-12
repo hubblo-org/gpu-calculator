@@ -1,13 +1,7 @@
 <script lang="ts">
-  import type {
-    FunctionalUnitResultsRowWithLifeCycle,
-    ImpactFactors
-  } from "$lib/types/pcr-cloud";
-  import {
-    ImpactCriterias,
-    getAllImpactCriterias,
-    getImpactCriteria,
-  } from "$lib/types/enums";
+  import type { FunctionalUnitResultsRowWithLifeCycle, ImpactFactors } from "$lib/types/pcr-cloud";
+  import type { IC } from "$lib/types/enums";
+  import { ImpactCriterias, getAllImpactCriterias, getImpactCriteria } from "$lib/types/enums";
   import * as d3 from "d3";
 
   interface Props {
@@ -145,11 +139,12 @@
 <select
   bind:value={selectedImpactCriteria.name}
   onchange={() =>
-    (selectedImpactCriteria = getImpactCriteria(ImpactCriterias[selectedImpactCriteria.name.replaceAll(" ", "")]))}
+    (selectedImpactCriteria = getImpactCriteria(
+      ImpactCriterias[selectedImpactCriteria.name.replaceAll(" ", "") as IC]
+    ))}
 >
   >{#each impactCriterias as impactCriteria}
-    <option value={impactCriteria.name}>{impactCriteria.acronym}</option
-    >{/each}</select
+    <option value={impactCriteria.name}>{impactCriteria.acronym}</option>{/each}</select
 >
 
 <style>

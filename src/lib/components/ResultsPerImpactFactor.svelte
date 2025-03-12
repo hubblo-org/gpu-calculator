@@ -4,11 +4,8 @@
     ImpactCriteria,
     ImpactFactors
   } from "$lib/types/pcr-cloud";
-  import {
-    ImpactCriterias,
-    getImpactCriteria,
-    getAllImpactCriterias,
-  } from "$lib/types/enums";
+  import type { IC } from "$lib/types/enums";
+  import { ImpactCriterias, getImpactCriteria, getAllImpactCriterias } from "$lib/types/enums";
   import { renderHorizontalBarPlot, assignAxes } from "$lib/plots";
   import { onMount } from "svelte";
 
@@ -60,7 +57,7 @@
   bind:value={selectedImpactCriteria.name}
   onchange={() =>
     (selectedImpactCriteria = getImpactCriteria(
-      ImpactCriterias[selectedImpactCriteria.name.replaceAll(" ", "")]
+      ImpactCriterias[selectedImpactCriteria.name.replaceAll(" ", "") as IC]
     ))}
   >{#each impactCriterias as impactCriteria}<option value={impactCriteria.name}
       >{impactCriteria.acronym}</option
