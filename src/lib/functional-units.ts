@@ -1,4 +1,3 @@
-import { ImpactCriterias } from "./types/enums";
 import type {
   DataCenterInventoryElement,
   DataCenterInventoryElementWithImpactFactors
@@ -9,10 +8,11 @@ export function computeElementImpactFactorForLifespan(
   elementQuantity: number,
   elementLifespan: number,
   studyDuration: number,
-  impactCriteria: ImpactCriterias
+  impactCriteria: keyof DataCenterInventoryElementWithImpactFactors 
 ) {
   const elementImpactValue = elementImpactFactors[impactCriteria];
-  const elementImpactFactorForLifespan = elementImpactValue * elementQuantity * (studyDuration / elementLifespan);
+  const elementImpactFactorForLifespan =
+    elementImpactValue * elementQuantity * (studyDuration / elementLifespan);
   return elementImpactFactorForLifespan;
 }
 
@@ -20,7 +20,7 @@ export function computeCategoryTotalImpactFactor(
   elements: DataCenterInventoryElement[],
   elementsImpactFactors: DataCenterInventoryElementWithImpactFactors[],
   studyDuration: number,
-  impactCriteria: ImpactCriterias
+  impactCriteria: keyof DataCenterInventoryElementWithImpactFactors,
 ) {
   const totalElementsImpacts = elements.map((element) => {
     const elementQuantity = element.quantity;
