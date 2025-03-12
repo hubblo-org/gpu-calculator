@@ -1,6 +1,14 @@
 <script lang="ts">
-  import type { FunctionalUnitResultsRow } from "$lib/types/pcr-cloud";
-  import { ImpactCriterias } from "$lib/types/enums";
+  import type {
+    FunctionalUnitResultsRow,
+    ImpactCriteria,
+    ImpactFactors
+  } from "$lib/types/pcr-cloud";
+  import {
+    ImpactCriterias,
+    getImpactCriteria,
+    getAllImpactCriterias,
+  } from "$lib/types/enums";
   import { renderHorizontalBarPlot, assignAxes } from "$lib/plots";
   import { onMount } from "svelte";
 
@@ -14,35 +22,47 @@
 
   const { results }: Props = $props();
 
-  let selectedImpactCriteria: ImpactCriterias = $state(ImpactCriterias.AcidificationPotential);
+  let selectedImpactCriteria: ImpactCriteria = $state(
+    getImpactCriteria(ImpactCriterias.AcidificationPotential)
+  );
 
-  const impactCriterias = Object.values(ImpactCriterias);
+  const impactCriterias = getAllImpactCriterias();
   const scopes = results.map((result) => result.scope);
   const resultsImpacts = results.map((result) => result.impacts);
-  const selectedImpactFactors = $derived(
-    resultsImpacts.map((impactFactor) => impactFactor[selectedImpactCriteria])
-  );
-  const selectedImpactFactorUnit = $derived(selectedImpactFactors[0].unit);
-  const impactFactors = $derived(
-    selectedImpactFactors.map((impactFactor, index) => {
+  const selectedImpactFactors = $derived.by(() => {
+    const selectedCriteriaImpactFactors = resultsImpacts.map(
+      (impactFactor) => impactFactor[selectedImpactCriteria.acronym as keyof ImpactFactors]
+    );
+
+    const selection = selectedCriteriaImpactFactors.map((impactFactor, index) => {
       const result: ImpactFactorWithScope = { scope: scopes[index], amount: impactFactor.value };
       return result;
-    })
-  );
-
-  const axes = $derived.by(() => {
-    return assignAxes(impactFactors[0]);
+    });
+    return selection;
   });
 
+  const axes = $derived(assignAxes(selectedImpactFactors[0]));
+
   onMount(() => {
-    renderHorizontalBarPlot(impactFactors, axes.x, axes.y);
+    renderHorizontalBarPlot(selectedImpactFactors, axes.x, axes.y);
+  });
+
+  $effect(() => {
+    renderHorizontalBarPlot(selectedImpactFactors, axes.x, axes.y);
   });
 </script>
 
 <div id="impactFactorsPlot"></div>
-<p>Selected impact criteria: {selectedImpactCriteria}. Impact unit: {selectedImpactFactorUnit}</p>
+<p>
+  Selected impact criteria: {selectedImpactCriteria.name}. Impact unit: {selectedImpactCriteria.unit}
+</p>
 <select
-  bind:value={selectedImpactCriteria}
-  onchange={() => renderHorizontalBarPlot(impactFactors, axes.x, axes.y)}
-  >{#each impactCriterias as impactCriteria}<option>{impactCriteria}</option>{/each}</select
+  bind:value={selectedImpactCriteria.name}
+  onchange={() =>
+    (selectedImpactCriteria = getImpactCriteria(
+      ImpactCriterias[selectedImpactCriteria.name.replaceAll(" ", "")]
+    ))}
+  >{#each impactCriterias as impactCriteria}<option value={impactCriteria.name}
+      >{impactCriteria.acronym}</option
+    >{/each}</select
 >
