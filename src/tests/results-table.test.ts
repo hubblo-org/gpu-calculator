@@ -2,7 +2,7 @@ import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { functionalUnitOneResults } from "../mocks/dc-data";
 import ResultsTable from "$lib/components/ResultsTable.svelte";
-import { ImpactCriterias } from "$lib/types/enums";
+import { getImpactCriteria, getImpactCriteriasByField, ImpactCriterias } from "$lib/types/enums";
 
 describe("results table test suite", () => {
   beforeEach(() => {
@@ -25,8 +25,8 @@ describe("results table test suite", () => {
     expect(amountColumn).toBeVisible();
     expect(unitColumn).toBeVisible();
     expect(scopeColumn).toBeVisible();
-    const impactCriterias = Object.values(ImpactCriterias);
-    impactCriterias.forEach((criteria) => {
+    const impactCriteriasAcronyms = getImpactCriteriasByField("acronym");
+    impactCriteriasAcronyms.forEach((criteria) => {
       const criteriaColumn = within(functionalUnitResultsTable).getByRole("columnheader", {
         name: criteria
       });

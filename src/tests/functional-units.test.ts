@@ -10,8 +10,10 @@ import {
   computeElementImpactFactorForLifespan,
   computeCategoryTotalImpactFactor
 } from "$lib/functional-units";
-import { ImpactCriterias } from "$lib/types/enums";
+import { getImpactCriteria, ImpactCriterias } from "$lib/types/enums";
+import type { DataCenterInventoryElementWithImpactFactors } from "$lib/types/pcr-cloud";
 
+const gwpAcronym = getImpactCriteria(ImpactCriterias.GlobalWarmingPotential).acronym as keyof DataCenterInventoryElementWithImpactFactors;
 describe("impact factors computation test suite", () => {
   it("computes the total global warming potential impact factor for an inventory element, for each life cycle step", () => {
     const firstInventoryElementQuantity = firstInventoryElement.quantity;
@@ -31,7 +33,7 @@ describe("impact factors computation test suite", () => {
             firstInventoryElementQuantity,
             firstInventoryElementLifespan,
             studyDuration,
-            ImpactCriterias.GlobalWarmingPotential
+            gwpAcronym
           );
           expect(totalGwp).toEqual(expectedTotalGwp);
         }
@@ -45,7 +47,7 @@ describe("impact factors computation test suite", () => {
       coolingInventoryElements,
       coolingInventoryElementsImpactsFactors,
       studyDuration,
-      ImpactCriterias.GlobalWarmingPotential
+      gwpAcronym
     );
     expect(totalCoolingGwp).toEqual(expectedTotalCoolingGwp);
   });

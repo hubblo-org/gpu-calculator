@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { ImpactCriterias } from "$lib/types/enums";
+  import { getImpactCriteriasByField } from "$lib/types/enums";
   import type { FunctionalUnitResultsRow } from "$lib/types/pcr-cloud";
 
   interface Props {
     results: FunctionalUnitResultsRow[];
   }
   const { results }: Props = $props();
-  const impactCriterias = Object.values(ImpactCriterias);
+  const impactCriteriasAcronyms = getImpactCriteriasByField("acronym");
 </script>
 
 <table>
@@ -15,7 +15,7 @@
       ><th scope="col">Amount</th>
       <th scope="col">Unit</th>
       <th scope="col">Scope</th>
-      {#each impactCriterias as impactCriteria}<th scope="col">{impactCriteria}</th>{/each}
+      {#each impactCriteriasAcronyms as impactCriteria}<th scope="col">{impactCriteria}</th>{/each}
     </tr></thead
   ><tbody
     >{#each results as row}<tr

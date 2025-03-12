@@ -1,4 +1,4 @@
-import type { InventoryCategorySpellings } from "./pcr-cloud";
+import type { ImpactCriteria, InventoryCategorySpellings } from "./pcr-cloud";
 
 export enum InventoryCategories {
   Building,
@@ -7,6 +7,53 @@ export enum InventoryCategories {
   EnergyBackup,
   Maintenance,
   Water
+}
+
+export enum LifeCycleSteps {
+  Extraction = "Extraction",
+  Manufacturing = "Manufacturing",
+  Transportation = "Transportation",
+  Use = "Use",
+  EndOfLife = "End of life"
+}
+
+export enum ElectricalTechnicalResilienceTiers {
+  BasicCapacity = "Tier 1",
+  RedudantCapacityComponents = "Tier 2",
+  ConcurrentlyMaintainable = "Tier 3",
+  FaultTolerant = "Tier 4"
+}
+
+export enum CoolingSystems {
+  AirCooling = "Air cooling",
+  WaterCooling = "Water cooling",
+  LiquidCooling = "Liquid cooling",
+  FreeCooling = "Free cooling"
+}
+
+export enum ImpactCriterias {
+  AbioticDepletionPotentialElements,
+  AbioticDepletionPotentialFossilFuels,
+  AcidificationPotential,
+  ComparativeToxicityUnitsForEcosystems,
+  ComparativeToxicityUnitsForHumans,
+  ComparativeToxicityUnitsForHumansCarcinogenic,
+  ComparativeToxicityUnitsForHumansNonCarcinogenic,
+  EutrophicationPotentialFreshWater,
+  EutrophicationPotentialMarine,
+  EutrophicationPotentialTerrestrial,
+  GlobalWarmingPotential,
+  GlobalWarmingPotentialBiogenic,
+  GlobalWarmingPotentialFossil,
+  GlobalWarmingPotentialLandUse,
+  IonisingRadiation,
+  LandUse,
+  MaterialInputPerServiceUnit,
+  OzoneDepletionPotential,
+  ParticulateMatter,
+  PhotochemicalOzoneFormationPotential,
+  TotalPrimaryEnergy,
+  WaterUse
 }
 
 export function getInventoryCategorySpelling(
@@ -28,49 +75,86 @@ export function getInventoryCategorySpelling(
   }
 }
 
-export enum ElectricalTechnicalResilienceTiers {
-  BasicCapacity = "Tier 1",
-  RedudantCapacityComponents = "Tier 2",
-  ConcurrentlyMaintainable = "Tier 3",
-  FaultTolerant = "Tier 4"
+export function getImpactCriteria(impactCriterias: ImpactCriterias): ImpactCriteria {
+  switch (impactCriterias) {
+    case ImpactCriterias.AbioticDepletionPotentialElements:
+      return { name: "Abiotic Depletion Potential Elements", acronym: "ADPe", unit: "kg Sb-Eq" };
+    case ImpactCriterias.AbioticDepletionPotentialFossilFuels:
+      return {
+        name: "Abiotic Depletion Potential Fossil Fuels",
+        acronym: "ADPf",
+        unit: "MJ, net calorific value"
+      };
+    case ImpactCriterias.AcidificationPotential:
+      return { name: "Acidification Potential", acronym: "AP", unit: "mol H+-Eq" };
+    case ImpactCriterias.ComparativeToxicityUnitsForEcosystems:
+      return { acronym: "CTUe", name: "Comparative Toxicity Units For Ecosystems", unit: "CTUe" };
+    case ImpactCriterias.ComparativeToxicityUnitsForHumans:
+      return { acronym: "CTUh", name: "Comparative Toxicity Units For Humans", unit: "CTUh" };
+    case ImpactCriterias.ComparativeToxicityUnitsForHumansCarcinogenic:
+      return {
+        acronym: "CTUh_c",
+        name: "Comparative Toxicity Units For Humans Carcinogenic",
+        unit: "CTUh"
+      };
+    case ImpactCriterias.ComparativeToxicityUnitsForHumansNonCarcinogenic:
+      return {
+        acronym: "CTUh_nc",
+        name: "Comparative Toxicity Units For Humans Non Carcinogenic",
+        unit: "CTUh"
+      };
+    case ImpactCriterias.EutrophicationPotentialFreshWater:
+      return { acronym: "EPF", name: "Eutrophication Potential Fresh Water", unit: "kg P-Eq" };
+    case ImpactCriterias.EutrophicationPotentialMarine:
+      return { acronym: "EPM", name: "Eutrophication Potential Marine", unit: "kg N-Eq" };
+    case ImpactCriterias.EutrophicationPotentialTerrestrial:
+      return { acronym: "EPT", name: "Eutrophication Potential Terrestrial", unit: "mol N-Eq" };
+    case ImpactCriterias.GlobalWarmingPotential:
+      return { acronym: "GWP", name: "Global Warming Potential", unit: "kg CO2-Eq" };
+    case ImpactCriterias.GlobalWarmingPotentialBiogenic:
+      return { acronym: "GWPb", name: "Global Warming Potential Biogenic", unit: "kg CO2-Eq" };
+    case ImpactCriterias.GlobalWarmingPotentialFossil:
+      return { acronym: "GWPf", name: "Global WarmingPotentialFossil", unit: "kg C02-Eq" };
+    case ImpactCriterias.GlobalWarmingPotentialLandUse:
+      return { acronym: "GWPlu", name: "Global Warming Potential LandUse", unit: "kg CO2-Eq" };
+    case ImpactCriterias.IonisingRadiation:
+      return { acronym: "IR", name: "Ionising Radiation", unit: "kBq U235-Eq" };
+    case ImpactCriterias.LandUse:
+      return { acronym: "LU", name: "Land Use", unit: "u" };
+    case ImpactCriterias.MaterialInputPerServiceUnit:
+      return { acronym: "MIPS", name: "Material Input Per Service Unit", unit: "kg" };
+    case ImpactCriterias.OzoneDepletionPotential:
+      return { acronym: "ODP", name: "Ozone Depletion Potential", unit: "kg CFC-11-Eq" };
+    case ImpactCriterias.ParticulateMatter:
+      return { acronym: "PM", name: "Particulate Matter", unit: "disease incidence" };
+    case ImpactCriterias.PhotochemicalOzoneFormationPotential:
+      return {
+        acronym: "POCP",
+        name: "Photochemical Ozone Formation Potential",
+        unit: "kg NMVOC-Eq"
+      };
+    case ImpactCriterias.TotalPrimaryEnergy:
+      return { acronym: "TPE", name: "Total Primary Energy", unit: "MJ, net calorific value" };
+    case ImpactCriterias.WaterUse:
+      return { acronym: "WU", name: "Water Use", unit: "m3 world eq. deprived" };
+  }
 }
 
-export enum CoolingSystems {
-  AirCooling = "Air cooling",
-  WaterCooling = "Water cooling",
-  LiquidCooling = "Liquid cooling",
-  FreeCooling = "Free cooling"
+export function getAllImpactCriterias(): ImpactCriteria[] {
+  const impactCriterias = Object.keys(ImpactCriterias).filter((key) => isNaN(Number(key)));
+  const impactCriteriasValues = impactCriterias.map((impactCriteria) => {
+    const value = getImpactCriteria(ImpactCriterias[impactCriteria]);
+    return value;
+  });
+  return impactCriteriasValues;
 }
 
-export enum ImpactCriterias {
-  AbioticDepletionPotentialElements = "ADPe",
-  AbioticDepletionPotentialFossilFuels = "ADPf",
-  AcidificationPotential = "AP",
-  ComparativeToxicityUnitsForEcosystems = "CTUe",
-  ComparativeToxicityUnitsForHumans = "CTUh",
-  ComparativeToxicityUnitsForHumansCarcinogenic = "CTUh_c",
-  ComparativeToxicityUnitsForHumansNonCarcinogenic = "CTUh_nc",
-  EutrophicationPotentialFreshWater = "EPF",
-  EutrophicationPotentialMarine = "EPM",
-  EutrophicationPotentialTerrestrial = "EPT",
-  GlobalWarmingPotential = "GWP",
-  GlobalWarmingPotentialBiogenic = "GWPb",
-  GlobalWarmingPotentialFossil = "GWPf",
-  GlobalWarmingPotentialLandUse = "GWPlu",
-  IonisingRadiation = "IR",
-  LandUse = "LU",
-  MaterialInputPerServiceUnit = "MIPS",
-  OzoneDepletionPotential = "ODP",
-  ParticulateMatter = "PM",
-  PhotochemicalOzoneFormationPotential = "POCP",
-  TotalPrimaryEnergy = "TPE",
-  WaterUse = "WU"
-}
+export function getImpactCriteriasByField(field: keyof ImpactCriteria): string[] {
+  const impactCriterias = Object.keys(ImpactCriterias).filter((key) => isNaN(Number(key)));
 
-export enum LifeCycleSteps {
-  Extraction = "Extraction",
-  Manufacturing = "Manufacturing",
-  Transportation = "Transportation",
-  Use = "Use",
-  EndOfLife = "End of life"
+  const impactCriteriasValues = impactCriterias.map((impactCriteria) => {
+    const value = getImpactCriteria(ImpactCriterias[impactCriteria])[field];
+    return value;
+  });
+  return impactCriteriasValues;
 }

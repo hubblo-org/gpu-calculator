@@ -1,9 +1,12 @@
 import InventoryTableWithImpacts from "$lib/components/InventoryTableWithImpacts.svelte";
-import { ImpactCriterias } from "$lib/types/enums";
+import { getImpactCriteriasByField } from "$lib/types/enums";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import MaterialImpacts from "../mocks/materials_impacts.json";
-import type { DataCenterInventoryElementWithImpactFactors } from "$lib/types/pcr-cloud";
+import type {
+  DataCenterInventoryElementWithImpactFactors,
+  ImpactCriteria
+} from "$lib/types/pcr-cloud";
 
 const firstElement = MaterialImpacts[0];
 
@@ -51,8 +54,9 @@ describe("inventory with impacts test suite", () => {
       name: "Data center elements inventory with impact factors"
     });
     const inventoryColumns = ["Name", "Category", "Mass", "Source", "Life-cycle step"];
-    const impactCriterias = Object.values(ImpactCriterias);
-    impactCriterias.forEach((criteria) => inventoryColumns.push(criteria.toString()));
+    const impactCriteriasAcronyms = getImpactCriteriasByField("acronym");
+    impactCriteriasAcronyms.forEach((acronym) => inventoryColumns.push(acronym));
+
     inventoryColumns.forEach((inventoryColumn) => {
       const column = within(inventoryElementsWithImpactsTable).getByRole("columnheader", {
         name: inventoryColumn.toString()
@@ -69,7 +73,6 @@ describe("inventory with impacts test suite", () => {
       { name: inventoryElement.name }
     );
     expect(inventoryElementRowHeader).toBeVisible();
-    screen.debug();
 
     // Do not want to query element name as a cell
     const inventoryElementValues = Object.values(inventoryElement).filter(
