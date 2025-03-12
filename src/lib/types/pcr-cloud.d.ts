@@ -96,6 +96,12 @@ export declare type InventoryCategorySpellings = {
   uppercase: string;
 };
 
+export declare type ImpactCriteria = {
+  name: string;
+  acronym: string;
+  unit: string;
+};
+
 export declare type FunctionalUnitResultsRow = {
   amount: number;
   unit: string;

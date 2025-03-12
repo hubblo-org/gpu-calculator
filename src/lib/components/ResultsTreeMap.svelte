@@ -1,5 +1,13 @@
 <script lang="ts">
-  import type { FunctionalUnitResultsRowWithLifeCycle, ImpactFactors } from "$lib/types/pcr-cloud";
+  import type {
+    FunctionalUnitResultsRowWithLifeCycle,
+    ImpactFactors
+  } from "$lib/types/pcr-cloud";
+  import {
+    ImpactCriterias,
+    getAllImpactCriterias,
+    getImpactCriteria,
+  } from "$lib/types/enums";
   import * as d3 from "d3";
 
   interface Props {
@@ -8,59 +16,52 @@
 
   interface ImpactFactorWithCategory {
     name: string;
-    value: ImpactFactors;
+    value: Leaf;
   }
 
-  interface ImpactFactorsWithLC {
+  interface ImpactFactorsWithLifeCycle {
     name: string;
-    value?: number;
     children: ImpactFactorWithCategory[];
   }
 
   interface DataCenterImpactFactors {
     name: string;
-    value?: number;
-    children: ImpactFactorsWithLC[];
+    children: ImpactFactorsWithLifeCycle[];
+  }
+
+  interface Leaf {
+    name: string;
+    value: number;
   }
 
   const { results }: Props = $props();
 
   const lifeCycleSteps = ["manufacturing", "transport", "use", "end-of-life"];
 
-  const selectedCriteria = $state("AP");
+  let selectedImpactCriteria = $state(getImpactCriteria(ImpactCriterias.AcidificationPotential));
 
-  const totalImpactValue = $derived.by(() => {
-    return results.filter((result) => result.life_cycle_step === "full_life_cycle")[0].impacts[
-      selectedCriteria
-    ].value;
-  });
+  const impactCriterias = getAllImpactCriterias();
 
   const dcData: DataCenterImpactFactors = $derived.by(() => {
+    const selectedCriteriaAcronym = selectedImpactCriteria.acronym as keyof ImpactFactors;
     return {
       name: "dc_data",
-      value: totalImpactValue,
       children: lifeCycleSteps.map((lifeCycle) => {
         const resultsByLifeCycle = results.filter((result) => result.life_cycle_step === lifeCycle);
         const resultsImpacts = resultsByLifeCycle.map((result) => {
-          const resultImpacts = {
-            name: result.category,
-            value: result.impacts[selectedCriteria].value
+          const leaf: Leaf = {
+            name: result.category!,
+            value: result.impacts[selectedCriteriaAcronym].value
           };
-          return resultImpacts;
+          return leaf;
         });
-        const allCategoriesTotalValue = resultsImpacts.filter(
-          (impactFactors) => impactFactors.name === "all_categories"
-        )[0].value;
         return {
           name: lifeCycle,
-          value: allCategoriesTotalValue,
           children: resultsImpacts.filter((impactFactors) => impactFactors.name != "all_categories")
         };
       })
     };
   });
-
-  $inspect(dcData);
 
   const width = 1154;
   const height = 1154;
@@ -88,18 +89,26 @@
     return r;
   });
 
-  $inspect(root);
-
   function getFirstDepthParent(leaf: any): any {
     return leaf.depth > 1 ? getFirstDepthParent(leaf.parent) : leaf;
   }
 </script>
 
+<p>
+  {selectedImpactCriteria.name} ({selectedImpactCriteria.acronym}), in {selectedImpactCriteria.unit}
+</p>
+
+<div id="treemap-legend">
+  {#each color.domain() as lifeCycleStep}
+    <p style="--color: {color(lifeCycleStep)}">{lifeCycleStep}</p>
+  {/each}
+</div>
+
 <div id="treemap">
   <svg {width} {height} viewBox="0 0 {width} {height}">
     {#each root.leaves() as leaf, leafIndex}
       {@const nodes = leaf.data.name.split(/(?=[A-Z][a-z])|\s+/g).concat(format(leaf.data.value))}
-      <g transform="translate({leaf.x0}, {leaf.x1})">
+      <g transform="translate({leaf.x0}, {leaf.y0})">
         <title>
           {`${leaf
             .ancestors()
@@ -132,3 +141,36 @@
     {/each}
   </svg>
 </div>
+
+<select
+  bind:value={selectedImpactCriteria.name}
+  onchange={() =>
+    (selectedImpactCriteria = getImpactCriteria(ImpactCriterias[selectedImpactCriteria.name.replaceAll(" ", "")]))}
+>
+  >{#each impactCriterias as impactCriteria}
+    <option value={impactCriteria.name}>{impactCriteria.acronym}</option
+    >{/each}</select
+>
+
+<style>
+  #treemap-legend {
+    display: flex;
+    align-items: center;
+    min-height: 33px;
+    margin-left: 15px;
+    font: 10px sans-serif;
+  }
+  #treemap-legend p {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 5px;
+    height: 15px;
+  }
+  #treemap-legend p::before {
+    content: "";
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    background: var(--color);
+  }
+</style>
