@@ -1,6 +1,7 @@
 import type {
   DataCenterInventoryElement,
-  DataCenterInventoryElementWithImpactFactors
+  DataCenterInventoryElementWithImpactFactors,
+  IF,
 } from "./types/pcr-cloud";
 
 export function computeElementImpactFactorForLifespan(
@@ -8,9 +9,9 @@ export function computeElementImpactFactorForLifespan(
   elementQuantity: number,
   elementLifespan: number,
   studyDuration: number,
-  impactCriteria: keyof DataCenterInventoryElementWithImpactFactors 
+  impactCriteria: IF 
 ) {
-  const elementImpactValue = elementImpactFactors[impactCriteria];
+  const elementImpactValue = elementImpactFactors.impacts[impactCriteria].value;
   const elementImpactFactorForLifespan =
     elementImpactValue * elementQuantity * (studyDuration / elementLifespan);
   return elementImpactFactorForLifespan;
@@ -20,7 +21,7 @@ export function computeCategoryTotalImpactFactor(
   elements: DataCenterInventoryElement[],
   elementsImpactFactors: DataCenterInventoryElementWithImpactFactors[],
   studyDuration: number,
-  impactCriteria: keyof DataCenterInventoryElementWithImpactFactors,
+  impactCriteria: IF 
 ) {
   const totalElementsImpacts = elements.map((element) => {
     const elementQuantity = element.quantity;

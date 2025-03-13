@@ -13,28 +13,7 @@ export declare type DataCenterInventoryElementWithImpactFactors = {
   mass: number;
   source: string;
   lifeCycleStep: string;
-  ADPe: number;
-  ADPf: number;
-  AP: number;
-  CTUe: number;
-  CTUh: number;
-  CTUh_c: number;
-  CTUh_nc: number;
-  EPF: number;
-  EPM: number;
-  EPT: number;
-  GWP: number;
-  GWPb: number;
-  GWPf: number;
-  GWPlu: number;
-  IR: number;
-  LU: number;
-  MIPS: number;
-  ODP: number;
-  PM: number;
-  POCP: number;
-  TPE: number;
-  WU: number;
+  impacts: ImpactFactors;
 };
 
 export declare type ImpactFactor = {
@@ -66,6 +45,7 @@ export declare type ImpactFactors = {
   TPE: ImpactFactor;
   WU: ImpactFactor;
 };
+export declare type IF = keyof ImpactFactors;
 
 export declare type DataCenterBuilding = {
   lifespan: number;
@@ -104,6 +84,7 @@ export declare type ImpactCriteria = {
 
 export declare type FunctionalUnitResultsRow = {
   amount: number;
+  name: string;
   unit: string;
   scope: string;
   impacts: ImpactFactors;
