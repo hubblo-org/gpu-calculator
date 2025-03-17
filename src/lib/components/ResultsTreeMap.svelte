@@ -57,8 +57,8 @@
     };
   });
 
-  const width = 1154;
-  const height = 1154;
+  const width = 1200;
+  const height = 700;
 
   const color = $derived(
     d3.scaleOrdinal(
@@ -66,7 +66,7 @@
       d3.schemeTableau10
     )
   );
-  const format = d3.format(",d");
+  const format = d3.format(",r");
   const tile = d3.treemapBinary;
   const root = $derived.by(() => {
     const r = d3
@@ -86,8 +86,12 @@
   function getFirstDepthParent(leaf: any): any {
     return leaf.depth > 1 ? getFirstDepthParent(leaf.parent) : leaf;
   }
+
+  const productResults = results[0];
+  const product = `${productResults.amount} ${productResults.unit}`;
 </script>
 
+<p>Product : {product}.</p>
 <p>
   {selectedImpactCriteria.name} ({selectedImpactCriteria.acronym}), in {selectedImpactCriteria.unit}
 </p>
