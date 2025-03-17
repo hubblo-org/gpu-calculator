@@ -4,7 +4,7 @@
     ImpactCriteria,
     ImpactFactors
   } from "$lib/types/pcr-cloud";
-  import type { IC } from "$lib/types/enums";
+  import type { IC } from "$lib/types/enums";
   import { ImpactCriterias, getImpactCriteria, getAllImpactCriterias } from "$lib/types/enums";
   import { renderHorizontalBarPlot, assignAxes } from "$lib/plots";
   import { onMount } from "svelte";
@@ -24,8 +24,10 @@
   );
 
   const impactCriterias = getAllImpactCriterias();
-  const scopes = results.map((result) => result.scope);
-  const resultsImpacts = results.map((result) => result.impacts);
+  const scopes = results
+    .filter((result) => result.name != "material")
+    .map((result) => result.scope);
+  const resultsImpacts = results.filter((result) => result.name != "material").map((result) => result.impacts);
   const selectedImpactFactors = $derived.by(() => {
     const selectedCriteriaImpactFactors = resultsImpacts.map(
       (impactFactor) => impactFactor[selectedImpactCriteria.acronym as keyof ImpactFactors]
