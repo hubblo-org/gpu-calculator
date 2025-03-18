@@ -4,21 +4,26 @@
   import ResultsPerImpactFactor from "./ResultsPerImpactFactor.svelte";
   import ResultsTreeMap from "./ResultsTreeMap.svelte";
   import ResultsParallelLines from "./ResultsParallelLines.svelte";
+  import ResultsPercentages from "./ResultsPercentages.svelte";
 
   const visualizationSelections = [
-    { id: 0, selection: "All impact factors per scope" },
+    { id: 0, selection: "All impact factors per scope, absolute values" },
     { id: 1, selection: "Per impact factor" },
-    { id: 2, selection: "Treemap" },
-    { id: 3, selection: "Parallel lines" }
+    { id: 2, selection: "All impact criterias for whole study, percentages" },
+    { id: 3, selection: "Treemap" },
+    { id: 4, selection: "Parallel lines" }
   ];
   let selectedVisualizationName = $state(visualizationSelections[0].selection);
 </script>
 
-{#if selectedVisualizationName === "All impact factors per scope"}
+{#if selectedVisualizationName === "All impact factors per scope, absolute values"}
   <ResultsAllImpactFactors results={functionalUnitOneResults} />
 {/if}
 {#if selectedVisualizationName === "Per impact factor"}
   <ResultsPerImpactFactor results={functionalUnitOneResults} />
+{/if}
+{#if selectedVisualizationName === "All impact criterias for whole study, percentages"}
+  <ResultsPercentages results={functionalUnitOneResultsWithLc} />
 {/if}
 {#if selectedVisualizationName === "Treemap"}
   <ResultsTreeMap results={functionalUnitOneResultsWithLc} />
