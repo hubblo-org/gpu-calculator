@@ -52,7 +52,7 @@
   }
 </script>
 
-<div id="impactFactorsPlot"></div>
+<div id="impact-factors-plot"></div>
 <p>
   Selected scope: {displayedResults.scope}. Product : {displayedResults.amount}
   {displayedResults.unit}.
