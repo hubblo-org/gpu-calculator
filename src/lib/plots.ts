@@ -27,27 +27,43 @@ export function assignAxes(impactFactor: ImpactFactor | ImpactFactorWithScope) {
 export function renderHorizontalBarPlot(
   impactFactors: ImpactFactor[] | ImpactFactorWithScope[],
   xLabel: string,
-  yLabel: string
+  yLabel: string,
+  lollipop: boolean
 ) {
-  let div = document.querySelector("#impactFactorsPlot");
+  let div = document.querySelector("#impact-factors-plot");
   div?.firstChild?.remove();
   if (div) {
+    const lollipopMarks = [
+      Plot.ruleX([0]),
+      Plot.axisX({ tickSpacing: 100 }),
+      Plot.ruleY(impactFactors, {
+        x: xLabel,
+        y: yLabel,
+        fill: xLabel,
+        tip: { format: { y: (d) => `${d.replace("\n", " ")}` }, lineWidth: 100 },
+        strokeWidth: 2,
+        sort: { y: "x", order: "descending" }
+      }),
+      Plot.dot(impactFactors, { x: xLabel, y: yLabel, fill: xLabel, r: 4 })
+    ];
+
+    const barMarks = [
+      Plot.ruleX([0]),
+      Plot.axisX({ tickSpacing: 100 }),
+      Plot.barX(impactFactors, {
+        x: xLabel,
+        y: yLabel,
+        fill: xLabel,
+        tip: { format: { y: (d) => `${d.replace("\n", " ")}` }, lineWidth: 100 },
+        sort: { y: "x", order: "descending" }
+      })
+    ];
     const resultsBarPlot = Plot.plot({
       width: 1600,
       height: 800,
       marginLeft: 400,
       y: { grid: true },
-      marks: [
-        Plot.ruleX([0]),
-        Plot.axisX({ tickSpacing: 100 }),
-        Plot.barX(impactFactors, {
-          x: xLabel,
-          y: yLabel,
-          fill: xLabel,
-          tip: { format: { y: (d) => `${d.replace("\n", " ")}` }, lineWidth: 100 },
-          sort: { y: "x", order: "descending" }
-        })
-      ]
+      marks: lollipop ? lollipopMarks : barMarks
     });
     div.append(resultsBarPlot);
   }

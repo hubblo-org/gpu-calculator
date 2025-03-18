@@ -19,6 +19,8 @@
 
   const { results }: Props = $props();
 
+  let lollipop = $state(false);
+
   let selectedImpactCriteria: ImpactCriteria = $state(
     getImpactCriteria(ImpactCriterias.AcidificationPotential)
   );
@@ -27,7 +29,9 @@
   const scopes = results
     .filter((result) => result.name != "material")
     .map((result) => result.scope);
-  const resultsImpacts = results.filter((result) => result.name != "material").map((result) => result.impacts);
+  const resultsImpacts = results
+    .filter((result) => result.name != "material")
+    .map((result) => result.impacts);
   const selectedImpactFactors = $derived.by(() => {
     const selectedCriteriaImpactFactors = resultsImpacts.map(
       (impactFactor) => impactFactor[selectedImpactCriteria.acronym as keyof ImpactFactors]
@@ -43,18 +47,25 @@
   const axes = $derived(assignAxes(selectedImpactFactors[0]));
 
   onMount(() => {
-    renderHorizontalBarPlot(selectedImpactFactors, axes.x, axes.y);
+    renderHorizontalBarPlot(selectedImpactFactors, axes.x, axes.y, lollipop);
   });
 
   $effect(() => {
-    renderHorizontalBarPlot(selectedImpactFactors, axes.x, axes.y);
+    renderHorizontalBarPlot(selectedImpactFactors, axes.x, axes.y, lollipop);
   });
 </script>
 
-<div id="impactFactorsPlot"></div>
+<div id="impact-factors-plot"></div>
 <p>
   Selected impact criteria: {selectedImpactCriteria.name}. Impact unit: {selectedImpactCriteria.unit}
 </p>
+<div id="wrapper">
+  <div id="plot-display">
+    <input type="checkbox" bind:checked={lollipop} id="lollipop" /><label for="lollipop"
+      >Lollipop</label
+    >
+  </div>
+</div>
 <select
   bind:value={selectedImpactCriteria.name}
   onchange={() =>
@@ -65,3 +76,9 @@
       >{impactCriteria.acronym}</option
     >{/each}</select
 >
+
+<style>
+  #wrapper {
+    display: flex;
+  }
+</style>
