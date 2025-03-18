@@ -93,6 +93,7 @@ export declare type FunctionalUnitResultsRow = {
 export declare type FunctionalUnitResultsRowWithLifeCycle = FunctionalUnitResultsRow & {
   life_cycle_step?: string;
   category?: string;
+  source?: string;
 };
 
 declare module "pcr-cloud";

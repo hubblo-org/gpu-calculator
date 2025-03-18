@@ -378,6 +378,7 @@ export const functionalUnitOneResultsWithLc: FunctionalUnitResultsRowWithLifeCyc
     const row: FunctionalUnitResultsRowWithLifeCycle = {
       amount: result.amount,
       unit: result.unit,
+      source: result.a,
       scope: result.c,
       life_cycle_step: formatToLifeCycle(result.c),
       category: formatCategory(result.c),
