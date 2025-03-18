@@ -67,7 +67,7 @@
     )
   );
   const format = d3.format(",r");
-  const tile = d3.treemapBinary;
+  const tile = d3.treemapSquarify;
   const root = $derived.by(() => {
     const r = d3
       .treemap<DataCenterImpactFactors>()
