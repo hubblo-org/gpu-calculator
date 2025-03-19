@@ -39,12 +39,12 @@ export function renderHorizontalBarPlot(
       Plot.ruleY(impactFactors, {
         x: xLabel,
         y: yLabel,
-        fill: xLabel,
+        stroke: xLabel,
         tip: { format: { y: (d) => `${d.replace("\n", " ")}` }, lineWidth: 100 },
-        strokeWidth: 2,
+        strokeWidth: 5,
         sort: { y: "x", order: "descending" }
       }),
-      Plot.dot(impactFactors, { x: xLabel, y: yLabel, fill: xLabel, r: 4 })
+      Plot.dot(impactFactors, { x: xLabel, y: yLabel, fill: xLabel, r: 10 })
     ];
 
     const barMarks = [
