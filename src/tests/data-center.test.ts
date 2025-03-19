@@ -1,8 +1,14 @@
 import DataCenter from "$lib/components/DataCenter.svelte";
-import { Countries, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
+import {
+  Countries,
+  ElectricalTechnicalResilienceTiers,
+  getAllImpactCriterias,
+  LifeCycleSteps
+} from "$lib/types/enums";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
+const dataCenterDescription = "A data center";
 const dataCenterImpactFactorsCaption =
   "Data center impact factors absolute values, per impact criteria";
 
@@ -16,6 +22,15 @@ const dataCenterMainCharacteristicsLabels = [
   "Location",
   "Steel mass"
 ];
+
+const mainImpactCriterias = getAllImpactCriterias().filter(
+  (impactCriteria) =>
+    impactCriteria.acronym === "GWP" ||
+    impactCriteria.acronym === "MIPS" ||
+    impactCriteria.acronym === "WU"
+);
+
+const lifeCycleSteps = Object.values(LifeCycleSteps);
 
 describe("data center component static elements test suite", () => {
   beforeEach(() => render(DataCenter));
@@ -37,6 +52,11 @@ describe("data center component static elements test suite", () => {
       );
       expect(characteristicInput).toBeVisible();
     });
+  });
+
+  it("should display an image that gives an idea of the data center scope", () => {
+    const dataCenterImage = screen.getByRole("img", { name: dataCenterDescription });
+    expect(dataCenterImage).toBeVisible();
   });
   it("should allow to select between the different electrical technical resilience tiers", () => {
     const resilienceTiers = Object.values(ElectricalTechnicalResilienceTiers);
@@ -73,7 +93,7 @@ describe("data center component static elements test suite", () => {
     });
     expect(dataCenterImpactFactorsSection).toBeVisible();
   });
-  it("should display a table with the data center impact factors absolute values, per impact criteria", () => {
+  it("should display a table with the data center impact factors absolute values", () => {
     const dataCenterImpactFactorsSection = screen.getByRole("region", {
       name: /Data center impact factors/
     });
@@ -81,6 +101,30 @@ describe("data center component static elements test suite", () => {
       name: dataCenterImpactFactorsCaption
     });
     expect(dataCenterImpactFactorsTable).toBeVisible();
+  });
+  it("should display impact criterias and life cycle steps as columns for the data center impact factors table", () => {
+    const dataCenterImpactFactorsSection = screen.getByRole("region", {
+      name: /Data center impact factors/
+    });
+    const dataCenterImpactFactorsTable = within(dataCenterImpactFactorsSection).getByRole("table", {
+      name: dataCenterImpactFactorsCaption
+    });
+    const lifeCycleColumn = within(dataCenterImpactFactorsTable).getByRole("columnheader", {
+      name: "Life cycle step"
+    });
+    expect(lifeCycleColumn).toBeVisible();
+    mainImpactCriterias.forEach((impactCriteria) => {
+      const column = within(dataCenterImpactFactorsTable).getByRole("columnheader", {
+        name: impactCriteria.acronym
+      });
+      expect(column).toBeVisible();
+    });
+    lifeCycleSteps.forEach((lifeCycleStep) => {
+      const rowColumn = within(dataCenterImpactFactorsTable).getByRole("rowheader", {
+        name: lifeCycleStep
+      });
+      expect(rowColumn).toBeVisible();
+    });
   });
   it("should display a button allowing to switch the display of the impact factors graphical representation", () => {
     const dataCenterImpactFactorsSection = screen.getByRole("region", {

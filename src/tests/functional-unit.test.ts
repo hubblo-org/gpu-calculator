@@ -1,10 +1,20 @@
 import FunctionalUnit from "$lib/components/FunctionalUnit.svelte";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { getAllImpactCriterias } from "$lib/types/enums";
+import { LifeCycleSteps } from "$lib/types/enums";
 
 const serverRackDescription = "A server rack";
 const resultsAbsoluteValuesCaption =
   "Totals for the functional unit per impact criteria, as absolute values";
+
+const mainImpactCriterias = getAllImpactCriterias().filter(
+  (impactCriteria) =>
+    impactCriteria.acronym === "GWP" ||
+    impactCriteria.acronym === "MIPS" ||
+    impactCriteria.acronym === "WU"
+);
+const lifeCycleSteps = Object.values(LifeCycleSteps);
 
 describe("functional unit component static elements test suite", () => {
   beforeEach(() => {
@@ -47,5 +57,30 @@ describe("functional unit component static elements test suite", () => {
       { name: resultsAbsoluteValuesCaption }
     );
     expect(resultsAbsoluteValuesTable).toBeVisible();
+  });
+  it("should display impact criterias and life cycle steps as columns for the data center impact factors table", () => {
+    const functionalUnitResultsGraphSection = screen.getByRole("region", {
+      name: /Functional unit results/
+    });
+    const resultsAbsoluteValuesTable = within(functionalUnitResultsGraphSection).getByRole(
+      "table",
+      { name: resultsAbsoluteValuesCaption }
+    );
+    const lifeCycleColumn = within(resultsAbsoluteValuesTable).getByRole("columnheader", {
+      name: "Life cycle step"
+    });
+    expect(lifeCycleColumn).toBeVisible();
+    mainImpactCriterias.forEach((impactCriteria) => {
+      const column = within(resultsAbsoluteValuesTable).getByRole("columnheader", {
+        name: impactCriteria.acronym
+      });
+      expect(column).toBeVisible();
+    });
+    lifeCycleSteps.forEach((lifeCycleStep) => {
+      const rowColumn = within(resultsAbsoluteValuesTable).getByRole("rowheader", {
+        name: lifeCycleStep
+      });
+      expect(rowColumn).toBeVisible();
+    });
   });
 });
