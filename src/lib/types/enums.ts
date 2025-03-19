@@ -1,5 +1,9 @@
 import type { ImpactCriteria, InventoryCategorySpellings } from "./pcr-cloud";
 
+export enum Countries {
+  FRA = "France",
+  GBR = "United Kingdom"
+}
 export enum InventoryCategories {
   Building,
   Cooling,
