@@ -8,7 +8,7 @@
     results: FunctionalUnitResultsRowWithLifeCycle[];
   }
 
-  const { source, results = functionalUnitOneResultsWithLc  }: Props = $props();
+  const { source, results = functionalUnitOneResultsWithLc }: Props = $props();
   const mainImpactCriterias = getAllImpactCriterias().filter(
     (impactCriteria) =>
       impactCriteria.acronym === "GWP" ||
@@ -33,6 +33,8 @@
     return obj;
   });
 
+  let selectedGraph = $state("bar-plot");
+
   function setSectionTexts() {
     if (source === "data-center") {
       return {
@@ -49,12 +51,20 @@
     }
   }
 
+  function switchDisplay() {
+    if (selectedGraph === "bar-plot") {
+      selectedGraph = "treemap";
+    } else {
+      selectedGraph = "bar-plot";
+    }
+  }
+
   const sectionTexts = setSectionTexts();
 </script>
 
 <section aria-labelledby={sectionTexts.heading_id}>
   <h2 id={sectionTexts.heading_id}>{sectionTexts.section_label}</h2>
-  <button>Switch graph display</button>
+  <button onclick={switchDisplay}>Switch graph display</button>
   <table>
     <caption>{sectionTexts.table_caption}</caption><thead
       ><tr
@@ -69,16 +79,12 @@
             >{result.WU}</td
           ></tr
         >{/each}
-      <!--
-      {#each lifeCycleSteps as lifeCycleStep}<tr
-          ><th scope="row">{lifeCycleStep}</th>
-          {#each resultsWithMainCriterias as result}
-            <td>{result.GWP}</td>
-            <td>{result.MIPS}</td>
-            <td>{result.WU}</td>
-          {/each}
-        </tr>
-      {/each} -->
     </tbody>
   </table>
+  {#if selectedGraph === "treemap"}
+    <select aria-label="Select an impact criteria"
+      >{#each mainImpactCriterias as impactCriteria}<option>{impactCriteria.acronym}</option
+        >{/each}</select
+    >
+  {/if}
 </section>

@@ -3,6 +3,7 @@ import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { getAllImpactCriterias } from "$lib/types/enums";
 import { functionalUnitOneResultsWithLc } from "../mocks/dc-data";
+import userEvent from "@testing-library/user-event";
 
 const resultsAbsoluteValuesCaption =
   "Totals for the functional unit per impact criteria, as absolute values";
@@ -40,7 +41,34 @@ describe("absolute values table component test suite", () => {
     });
     expect(switchDisplayButton).toBeVisible();
   });
+  it("should display a selection of impact criterias to choose from for the treemap representation of data after selecting the treemap view", async () => {
+    const user = userEvent.setup();
+    const dataCenterImpactFactorsSection = screen.getByRole("region", {
+      name: /Data center impact factors/
+    });
+
+    const switchDisplayButton = within(dataCenterImpactFactorsSection).getByRole("button", {
+      name: "Switch graph display"
+    });
+    expect(
+      within(dataCenterImpactFactorsSection).queryByLabelText("Select an impact criteria")
+    ).not.toBeInTheDocument();
+
+    await user.click(switchDisplayButton);
+
+    const impactCriteriasSelection = within(dataCenterImpactFactorsSection).getByLabelText(
+      "Select an impact criteria"
+    );
+    expect(impactCriteriasSelection).toBeVisible();
+    mainImpactCriterias.forEach((impactCriteria) => {
+      const option = within(impactCriteriasSelection).getByRole("option", {
+        name: impactCriteria.acronym
+      });
+      expect(option).toBeVisible();
+    });
+  });
 });
+
 describe("absolute values for data center impact factors table component test suite", () => {
   beforeEach(() =>
     render(ImpactFactorsSection, { props: { source: "data-center", results: filteredResults } })
