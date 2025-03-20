@@ -1,7 +1,8 @@
 import ImpactFactorsSection from "$lib/components/ImpactFactorsSection.svelte";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { getAllImpactCriterias, LifeCycleSteps } from "$lib/types/enums";
+import { getAllImpactCriterias } from "$lib/types/enums";
+import { functionalUnitOneResultsWithLc } from "../mocks/dc-data";
 
 const resultsAbsoluteValuesCaption =
   "Totals for the functional unit per impact criteria, as absolute values";
@@ -16,10 +17,19 @@ const mainImpactCriterias = getAllImpactCriterias().filter(
     impactCriteria.acronym === "WU"
 );
 
-const lifeCycleSteps = Object.values(LifeCycleSteps);
+const filteredResults = functionalUnitOneResultsWithLc.filter(
+  (result) =>
+    result.life_cycle_step != "full_life_cycle" &&
+    (result.source === "datacenter_building_fn_except_usage" ||
+      result.source === "datacenter_building_fn_usage")
+);
+
+const lifeCycleSteps = filteredResults.map((result) => result.life_cycle_step);
 
 describe("absolute values table component test suite", () => {
-  beforeEach(() => render(ImpactFactorsSection, { props: { source: "data-center" } }));
+  beforeEach(() =>
+    render(ImpactFactorsSection, { props: { source: "data-center", results: filteredResults } })
+  );
 
   it("should display a button allowing to switch the display of the impact factors graphical representation", () => {
     const dataCenterImpactFactorsSection = screen.getByRole("region", {
@@ -32,7 +42,9 @@ describe("absolute values table component test suite", () => {
   });
 });
 describe("absolute values for data center impact factors table component test suite", () => {
-  beforeEach(() => render(ImpactFactorsSection, { props: { source: "data-center" } }));
+  beforeEach(() =>
+    render(ImpactFactorsSection, { props: { source: "data-center", results: filteredResults } })
+  );
   afterEach(() => cleanup());
 
   it("should have a section for displaying a graphical representation of the data center impact factors", () => {
@@ -77,7 +89,9 @@ describe("absolute values for data center impact factors table component test su
 });
 
 describe("absolute values table component for functional unit test suite", () => {
-  beforeEach(() => render(ImpactFactorsSection, { props: { source: "functional-unit" } }));
+  beforeEach(() =>
+    render(ImpactFactorsSection, { props: { source: "functional-unit", results: filteredResults } })
+  );
   afterEach(() => cleanup());
 
   it("should display a section with a graphical representation of the functional unit results", () => {
@@ -119,6 +133,23 @@ describe("absolute values table component for functional unit test suite", () =>
         name: lifeCycleStep
       });
       expect(rowColumn).toBeVisible();
+    });
+  });
+  it("should display the functional unit results absolute values for the main impact criterias", () => {
+    const functionalUnitResultsGraphSection = screen.getByRole("region", {
+      name: /Functional unit results/
+    });
+    const resultsImpactFactorsTable = within(functionalUnitResultsGraphSection).getByRole("table", {
+      name: resultsAbsoluteValuesCaption
+    });
+
+    filteredResults.forEach((result) => {
+      mainImpactCriterias.forEach((impactCriteria) => {
+        const valueCell = within(resultsImpactFactorsTable).getByRole("cell", {
+          name: result.impacts[impactCriteria.acronym].value
+        });
+        expect(valueCell).toBeVisible();
+      });
     });
   });
 });

@@ -1,18 +1,37 @@
 <script lang="ts">
-  import { getAllImpactCriterias, LifeCycleSteps } from "$lib/types/enums";
+  import { getAllImpactCriterias } from "$lib/types/enums";
+  import type { FunctionalUnitResultsRowWithLifeCycle } from "$lib/types/pcr-cloud";
+  import { functionalUnitOneResultsWithLc } from "../../mocks/dc-data";
 
   interface Props {
     source: string;
+    results: FunctionalUnitResultsRowWithLifeCycle[];
   }
 
-  const { source }: Props = $props();
+  const { source, results = functionalUnitOneResultsWithLc  }: Props = $props();
   const mainImpactCriterias = getAllImpactCriterias().filter(
     (impactCriteria) =>
       impactCriteria.acronym === "GWP" ||
       impactCriteria.acronym === "MIPS" ||
       impactCriteria.acronym === "WU"
   );
-  const lifeCycleSteps = Object.values(LifeCycleSteps);
+
+  interface Result {
+    lc_step: string;
+    GWP: number;
+    MIPS: number;
+    WU: number;
+  }
+
+  const resultsWithMainCriterias: Result[] = results!.map((result) => {
+    const obj: Result = {
+      lc_step: result.life_cycle_step,
+      GWP: result.impacts.GWP.value,
+      MIPS: result.impacts.MIPS.value,
+      WU: result.impacts.WU.value
+    };
+    return obj;
+  });
 
   function setSectionTexts() {
     if (source === "data-center") {
@@ -45,8 +64,21 @@
       ></thead
     >
     <tbody>
-      {#each lifeCycleSteps as lifeCycleStep}<tr><th scope="row">{lifeCycleStep}</th></tr
-        >{/each}</tbody
-    >
+      {#each resultsWithMainCriterias as result}<tr
+          ><th scope="row">{result.lc_step}</th><td>{result.GWP}</td><td>{result.MIPS}</td><td
+            >{result.WU}</td
+          ></tr
+        >{/each}
+      <!--
+      {#each lifeCycleSteps as lifeCycleStep}<tr
+          ><th scope="row">{lifeCycleStep}</th>
+          {#each resultsWithMainCriterias as result}
+            <td>{result.GWP}</td>
+            <td>{result.MIPS}</td>
+            <td>{result.WU}</td>
+          {/each}
+        </tr>
+      {/each} -->
+    </tbody>
   </table>
 </section>

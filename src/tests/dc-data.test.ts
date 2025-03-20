@@ -19,7 +19,7 @@ describe("functional unit one data structure test suite", () => {
       lc_step: formatToLifeCycle(selectedRow.c),
       category: formatCategory(selectedRow.c)
     };
-    expect(useElectricityRow.lc_step).toEqual("use");
+    expect(useElectricityRow.lc_step).toEqual("Use");
     expect(useElectricityRow.category).toEqual("electricity");
 
     const anotherRow = Fu1Results[23];
@@ -27,7 +27,7 @@ describe("functional unit one data structure test suite", () => {
       lc_step: formatToLifeCycle(anotherRow.c),
       category: formatCategory(anotherRow.c)
     };
-    expect(materialBuildingEndOfLiveRow.lc_step).toEqual("end-of-life");
+    expect(materialBuildingEndOfLiveRow.lc_step).toEqual("End-of-life");
     expect(materialBuildingEndOfLiveRow.category).toEqual("building");
   });
 });

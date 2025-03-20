@@ -355,7 +355,9 @@ const lifeCycleRegex = /(?<=lc_step=)(.*)(?=})/;
 export function formatToLifeCycle(result_c: string) {
   let match = lifeCycleRegex.exec(result_c);
   if (match) {
-    return match[0].split(",")[0];
+    const unformattedLifeCycle = match[0].split(",")[0];
+    const lifeCycle = String(unformattedLifeCycle).charAt(0).toUpperCase() + String(unformattedLifeCycle).slice(1);
+    return lifeCycle;
   } else {
     return "full_life_cycle";
   }
