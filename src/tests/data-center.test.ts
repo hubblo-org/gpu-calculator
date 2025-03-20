@@ -1,17 +1,10 @@
 import DataCenter from "$lib/components/DataCenter.svelte";
-import {
-  Countries,
-  ElectricalTechnicalResilienceTiers,
-  getAllImpactCriterias,
-  LifeCycleSteps
-} from "$lib/types/enums";
+import { Countries, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import userEvent from "@testing-library/user-event";
 
 const dataCenterDescription = "A data center";
-const dataCenterImpactFactorsCaption =
-  "Data center impact factors absolute values, per impact criteria";
 const displayDataCenterCharacteristicsButtonDescription =
   "Display the data center secondary characteristics";
 const hideDataCenterCharacteristicsButtonDescription =
@@ -43,15 +36,6 @@ const dataCenterSecondaryCharacteristicsLabels = [
   "Number of freight lifts",
   "Partition surface"
 ];
-
-const mainImpactCriterias = getAllImpactCriterias().filter(
-  (impactCriteria) =>
-    impactCriteria.acronym === "GWP" ||
-    impactCriteria.acronym === "MIPS" ||
-    impactCriteria.acronym === "WU"
-);
-
-const lifeCycleSteps = Object.values(LifeCycleSteps);
 
 describe("data center component static elements test suite", () => {
   beforeEach(() => render(DataCenter));
@@ -149,53 +133,5 @@ describe("data center component static elements test suite", () => {
       const countryOption = within(countriesSelection).getByRole("option", { name: country });
       expect(countryOption).toBeVisible();
     });
-  });
-  it("should have a section for displaying a graphical representation of the data center impact factors", () => {
-    const dataCenterImpactFactorsSection = screen.getByRole("region", {
-      name: /Data center impact factors/
-    });
-    expect(dataCenterImpactFactorsSection).toBeVisible();
-  });
-  it("should display a table with the data center impact factors absolute values", () => {
-    const dataCenterImpactFactorsSection = screen.getByRole("region", {
-      name: /Data center impact factors/
-    });
-    const dataCenterImpactFactorsTable = within(dataCenterImpactFactorsSection).getByRole("table", {
-      name: dataCenterImpactFactorsCaption
-    });
-    expect(dataCenterImpactFactorsTable).toBeVisible();
-  });
-  it("should display impact criterias and life cycle steps as columns for the data center impact factors table", () => {
-    const dataCenterImpactFactorsSection = screen.getByRole("region", {
-      name: /Data center impact factors/
-    });
-    const dataCenterImpactFactorsTable = within(dataCenterImpactFactorsSection).getByRole("table", {
-      name: dataCenterImpactFactorsCaption
-    });
-    const lifeCycleColumn = within(dataCenterImpactFactorsTable).getByRole("columnheader", {
-      name: "Life cycle step"
-    });
-    expect(lifeCycleColumn).toBeVisible();
-    mainImpactCriterias.forEach((impactCriteria) => {
-      const column = within(dataCenterImpactFactorsTable).getByRole("columnheader", {
-        name: impactCriteria.acronym
-      });
-      expect(column).toBeVisible();
-    });
-    lifeCycleSteps.forEach((lifeCycleStep) => {
-      const rowColumn = within(dataCenterImpactFactorsTable).getByRole("rowheader", {
-        name: lifeCycleStep
-      });
-      expect(rowColumn).toBeVisible();
-    });
-  });
-  it("should display a button allowing to switch the display of the impact factors graphical representation", () => {
-    const dataCenterImpactFactorsSection = screen.getByRole("region", {
-      name: /Data center impact factors/
-    });
-    const switchDisplayButton = within(dataCenterImpactFactorsSection).getByRole("button", {
-      name: "Switch display"
-    });
-    expect(switchDisplayButton).toBeVisible();
   });
 });

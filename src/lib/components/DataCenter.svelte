@@ -1,34 +1,22 @@
 <script lang="ts">
-  import {
-    Countries,
-    ElectricalTechnicalResilienceTiers,
-    getAllImpactCriterias,
-    LifeCycleSteps
-  } from "$lib/types/enums";
+  import { Countries, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
+  import ImpactFactorsSection from "./ImpactFactorsSection.svelte";
 
   let secondaryCharacteristicsAreVisible = $state(false);
-  let displaySecondaryCharacteristicsButtonLabel = $state(
+  let secondaryCharacteristicsButtonLabel = $state(
     "Display the data center secondary characteristics"
   );
 
   const electricalTechnicalResilienceTiers = Object.values(ElectricalTechnicalResilienceTiers);
   const countriesNames = Object.values(Countries);
-  const mainImpactCriterias = getAllImpactCriterias().filter(
-    (impactCriteria) =>
-      impactCriteria.acronym === "GWP" ||
-      impactCriteria.acronym === "MIPS" ||
-      impactCriteria.acronym === "WU"
-  );
-  const lifeCycleSteps = Object.values(LifeCycleSteps);
 
   function handleSecondaryCharacteristicsVisibility() {
     if (secondaryCharacteristicsAreVisible) {
       secondaryCharacteristicsAreVisible = false;
-      displaySecondaryCharacteristicsButtonLabel =
-        "Display the data center secondary characteristics";
+      secondaryCharacteristicsButtonLabel = "Display the data center secondary characteristics";
     } else {
       secondaryCharacteristicsAreVisible = true;
-      displaySecondaryCharacteristicsButtonLabel = "Hide the data center secondary characteristics";
+      secondaryCharacteristicsButtonLabel = "Hide the data center secondary characteristics";
     }
   }
 </script>
@@ -77,7 +65,7 @@
       </div>
 
       <button
-        aria-label={displaySecondaryCharacteristicsButtonLabel}
+        aria-label={secondaryCharacteristicsButtonLabel}
         onclick={handleSecondaryCharacteristicsVisibility}>-></button
       >
       {#if secondaryCharacteristicsAreVisible}
@@ -147,23 +135,7 @@
   </section>
 </div>
 
-<section aria-labelledby="data-center-impact-factors">
-  <h2 id="data-center-impact-factors">Data center impact factors</h2>
-  <button>Switch display</button>
-  <table>
-    <caption>Data center impact factors absolute values, per impact criteria</caption><thead
-      ><tr
-        ><th>Life cycle step</th>{#each mainImpactCriterias as impactCriteria}<th
-            >{impactCriteria.acronym}</th
-          >{/each}</tr
-      ></thead
-    >
-    <tbody>
-      {#each lifeCycleSteps as lifeCycleStep}<tr><th scope="row">{lifeCycleStep}</th></tr
-        >{/each}</tbody
-    >
-  </table>
-</section>
+  <ImpactFactorsSection source="data-center" />
 
 <style>
   #data-center {
