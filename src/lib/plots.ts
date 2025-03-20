@@ -1,7 +1,5 @@
 import * as Plot from "@observablehq/plot";
-import * as d3 from "d3";
 import type { ImpactFactors } from "./types/pcr-cloud";
-import type { ImpactCriterias } from "./types/enums";
 
 interface ImpactFactor {
   impact_criteria: string;
@@ -11,6 +9,12 @@ interface ImpactFactor {
 interface ImpactFactorWithScope {
   scope: string;
   amount: number;
+}
+
+interface ImpactFactorWithLifeCycle {
+  impact_criteria: string;
+  life_cycle_step: string;
+  share: number;
 }
 
 interface Axes {
@@ -68,6 +72,38 @@ export function renderHorizontalBarPlot(
     div.append(resultsBarPlot);
   }
 }
+
+export function renderStackedBarPlot(
+  impactFactors: ImpactFactorWithLifeCycle[],
+  domains: string[],
+  xLabel: string,
+  yLabel: string,
+  domainColor: string
+) {
+  let div = document.querySelector("#impact-factors-plot");
+  div?.firstChild?.remove();
+  if (div) {
+    const resultsBarPlot = Plot.plot({
+      width: 1600,
+      height: 800,
+      marginLeft: 100,
+      color: { legend: true, domain: domains },
+      x: { percent: true },
+      marks: [
+        Plot.barX(impactFactors, {
+          x: xLabel,
+          y: yLabel,
+          fill: domainColor,
+          order: domains,
+          offset: "normalize",
+          tip: true
+        })
+      ]
+    });
+    div.append(resultsBarPlot);
+  }
+}
+
 
 interface ImpactFactorWithCategory {
   category: string;
