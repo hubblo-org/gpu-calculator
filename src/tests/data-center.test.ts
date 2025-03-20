@@ -7,10 +7,15 @@ import {
 } from "$lib/types/enums";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import userEvent from "@testing-library/user-event";
 
 const dataCenterDescription = "A data center";
 const dataCenterImpactFactorsCaption =
   "Data center impact factors absolute values, per impact criteria";
+const displayDataCenterCharacteristicsButtonDescription =
+  "Display the data center secondary characteristics";
+const hideDataCenterCharacteristicsButtonDescription =
+  "Hide the data center secondary characteristics";
 
 const dataCenterMainCharacteristicsLabels = [
   "Building total surface",
@@ -21,6 +26,22 @@ const dataCenterMainCharacteristicsLabels = [
   "Electrical Technical Resilience",
   "Location",
   "Steel mass"
+];
+
+const dataCenterSecondaryCharacteristicsLabels = [
+  "Building lifespan",
+  "Technical rooms surface area",
+  "Maximum usable electrical power",
+  "Load factor",
+  "Energy Reuse Factor",
+  "Renewable Energy Factor",
+  "Cooling system type",
+  "Study duration",
+  "Designed floor assembly surface",
+  "Suspended ceiling surface",
+  "Number of lifts",
+  "Number of freight lifts",
+  "Partition surface"
 ];
 
 const mainImpactCriterias = getAllImpactCriterias().filter(
@@ -51,6 +72,48 @@ describe("data center component static elements test suite", () => {
         { exact: false }
       );
       expect(characteristicInput).toBeVisible();
+    });
+  });
+
+  it("should display or hide the secondary data center characteristics after the user interacted with an element for that purpose", async () => {
+    const user = userEvent.setup();
+
+    const dataCenterCharacteristicsSection = screen.getByRole("region", {
+      name: /Data center characteristics/
+    });
+    dataCenterSecondaryCharacteristicsLabels.forEach((characteristicLabel) => {
+      const characteristicInput = within(dataCenterCharacteristicsSection).queryByLabelText(
+        characteristicLabel,
+        { exact: false }
+      );
+      expect(characteristicInput).not.toBeInTheDocument();
+    });
+
+    const displaySecondaryCharacteristicsButton = within(
+      dataCenterCharacteristicsSection
+    ).getByRole("button", { name: displayDataCenterCharacteristicsButtonDescription });
+    await user.click(displaySecondaryCharacteristicsButton);
+
+    dataCenterSecondaryCharacteristicsLabels.forEach((characteristicLabel) => {
+      const characteristicInput = within(dataCenterCharacteristicsSection).getByLabelText(
+        characteristicLabel,
+        { exact: false }
+      );
+      expect(characteristicInput).toBeVisible();
+    });
+
+    const hideSecondaryCharacteristicsButton = within(dataCenterCharacteristicsSection).getByRole(
+      "button",
+      { name: hideDataCenterCharacteristicsButtonDescription }
+    );
+    await user.click(hideSecondaryCharacteristicsButton);
+
+    dataCenterSecondaryCharacteristicsLabels.forEach((characteristicLabel) => {
+      const characteristicInput = within(dataCenterCharacteristicsSection).queryByLabelText(
+        characteristicLabel,
+        { exact: false }
+      );
+      expect(characteristicInput).not.toBeInTheDocument();
     });
   });
 

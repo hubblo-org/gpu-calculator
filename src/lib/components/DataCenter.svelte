@@ -6,6 +6,11 @@
     LifeCycleSteps
   } from "$lib/types/enums";
 
+  let secondaryCharacteristicsAreVisible = $state(false);
+  let displaySecondaryCharacteristicsButtonLabel = $state(
+    "Display the data center secondary characteristics"
+  );
+
   const electricalTechnicalResilienceTiers = Object.values(ElectricalTechnicalResilienceTiers);
   const countriesNames = Object.values(Countries);
   const mainImpactCriterias = getAllImpactCriterias().filter(
@@ -15,6 +20,17 @@
       impactCriteria.acronym === "WU"
   );
   const lifeCycleSteps = Object.values(LifeCycleSteps);
+
+  function handleSecondaryCharacteristicsVisibility() {
+    if (secondaryCharacteristicsAreVisible) {
+      secondaryCharacteristicsAreVisible = false;
+      displaySecondaryCharacteristicsButtonLabel =
+        "Display the data center secondary characteristics";
+    } else {
+      secondaryCharacteristicsAreVisible = true;
+      displaySecondaryCharacteristicsButtonLabel = "Hide the data center secondary characteristics";
+    }
+  }
 </script>
 
 <div id="data-center-characteristics-wrapper">
@@ -59,6 +75,74 @@
           >{#each countriesNames as country}<option>{country}</option>{/each}</select
         >
       </div>
+
+      <button
+        aria-label={displaySecondaryCharacteristicsButtonLabel}
+        onclick={handleSecondaryCharacteristicsVisibility}>-></button
+      >
+      {#if secondaryCharacteristicsAreVisible}
+        <div id="data-center-secondary-characteristics">
+          <label for="building-lifespan">Building lifespan, in years</label>
+          <input type="number" id="building-lifespan" required />
+
+          <label for="building-technical-rooms-surface"
+            >Technical rooms surface area, in square meters</label
+          >
+          <input type="number" id="building-technical-rooms-surface" step="0.01" required />
+          <label for="building-maximum-usable-electrical-power"
+            >Maximum usable electrical power, in kilowatts</label
+          >
+          <input type="number" id="building-maximum-usable-electrical-power" required />
+
+          <label for="building-load-factor"> Load factor </label>
+          <input type="number" id="building-load-factor" step="0.1" required />
+
+          <label for="building-energy-reuse-factor"> Energy Reuse Factor (ERF) </label>
+          <input
+            type="number"
+            id="building-energy-reuse-factor"
+            min="0"
+            max="3"
+            step="0.01"
+            required
+          />
+
+          <label for="building-renewable-energy-factor"> Renewable Energy Factor (REF) </label>
+          <input
+            type="number"
+            id="building-renewable-energy-factor"
+            min="0"
+            max="3"
+            step="0.01"
+            required
+          />
+
+          <label for="building-cooling-system"> Cooling system type </label>
+          <select id="building-cooling-system"> </select>
+
+          <label for="building-study-duration"> Study duration, in days </label>
+          <input type="number" id="building-study-duration" required />
+
+          <label for="building-designed-floor-assembly-surface">
+            Designed floor assembly surface, in square meters
+          </label>
+          <input type="number" id="building-designed-floor-assembly-surface" step="0.01" required />
+
+          <label for="building-suspended-ceiling-surface">
+            Suspended ceiling surface, in square meters
+          </label>
+          <input type="number" id="building-suspended-ceiling-surface" step="0.01" required />
+
+          <label for="building-lifts"> Number of lifts </label>
+          <input type="number" id="building-lifts" required />
+
+          <label for="building-freight-lifts"> Number of freight lifts </label>
+          <input type="number" id="building-freight-lifts" required />
+
+          <label for="building-partition-surface"> Partition surface, in square meters </label>
+          <input type="number" id="building-partition-surface" step="0.01" required />
+        </div>
+      {/if}
     </div>
   </section>
 </div>
