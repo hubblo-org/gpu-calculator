@@ -48,27 +48,31 @@ export declare type ImpactFactors = {
 export declare type IF = keyof ImpactFactors;
 
 export declare type DataCenterBuilding = {
-  lifespan: number;
-  totalSurface: number;
-  technicalRoomSurface: number;
-  yearlyTotalEnergy: number;
-  maximumUsableElectricalPower: number;
-  dataCenterLoadFactor: number;
-  powerUsageEffectiveness: number;
-  waterUsageEffectiveness: number;
-  energyReuseFactor: number;
-  renewableEnergyFactor: number;
-  electricalTechnicalResilience: string;
-  coolingSystemType: string;
-  location: string;
-  studyDuration: number;
-  concreteVolume: number;
-  steelMass: number;
-  designedFloorAssemblySurface: number;
-  suspendedCeilingSurface: number;
-  lifts: number;
-  freightLifts: number;
-  partitionSurface: number;
+  lifespan: DataCenterCharacteristic;
+  totalSurface: DataCenterCharacteristic;
+  technicalRoomSurface: DataCenterCharacteristic;
+  yearlyTotalEnergy: DataCenterCharacteristic;
+  maximumUsableElectricalPower: DataCenterCharacteristic;
+  dataCenterLoadFactor: DataCenterCharacteristic;
+  powerUsageEffectiveness: DataCenterCharacteristic;
+  waterUsageEffectiveness: DataCenterCharacteristic;
+  energyReuseFactor: DataCenterCharacteristic;
+  renewableEnergyFactor: DataCenterCharacteristic;
+  electricalTechnicalResilience: DataCenterCharacteristic;
+  coolingSystemType: DataCenterCharacteristic;
+  location: DataCenterCharacteristic;
+  concreteVolume: DataCenterCharacteristic;
+  steelMass: DataCenterCharacteristic;
+  designedFloorAssemblySurface: DataCenterCharacteristic;
+  suspendedCeilingSurface: DataCenterCharacteristic;
+  lifts: DataCenterCharacteristic;
+  freightLifts: DataCenterCharacteristic;
+  partitionSurface: DataCenterCharacteristic;
+};
+
+export declare type DataCenterCharacteristic = {
+  label: string;
+  value: string | number;
 };
 
 export declare type InventoryCategorySpellings = {

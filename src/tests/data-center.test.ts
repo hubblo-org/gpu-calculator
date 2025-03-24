@@ -1,4 +1,6 @@
 import DataCenter from "$lib/components/DataCenter.svelte";
+import type { DataCenterBuilding } from "$lib/types/pcr-cloud";
+import { dataCenterCharacteristics } from "../mocks/dc-data";
 import { Countries, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -29,7 +31,6 @@ const dataCenterSecondaryCharacteristicsLabels = [
   "Energy Reuse Factor",
   "Renewable Energy Factor",
   "Cooling system type",
-  "Study duration",
   "Designed floor assembly surface",
   "Suspended ceiling surface",
   "Number of lifts",
@@ -38,14 +39,16 @@ const dataCenterSecondaryCharacteristicsLabels = [
 ];
 
 describe("data center component static elements test suite", () => {
-  beforeEach(() => render(DataCenter));
+  beforeEach(() => render(DataCenter, { props: { dataCenter: dataCenterCharacteristics } }));
   afterEach(() => cleanup());
+
   it("should have a section for displaying the data center characteristics", () => {
     const dataCenterCharacteristicsSection = screen.getByRole("region", {
       name: /Data center characteristics/
     });
     expect(dataCenterCharacteristicsSection).toBeVisible();
   });
+
   it("should display the main data center characteristics, that can be modified by the user", () => {
     const dataCenterCharacteristicsSection = screen.getByRole("region", {
       name: /Data center characteristics/
@@ -57,6 +60,33 @@ describe("data center component static elements test suite", () => {
       );
       expect(characteristicInput).toBeVisible();
     });
+  });
+
+  it("should display placeholder values for all data center characteristic inputs", async () => {
+    const user = userEvent.setup();
+
+    const dataCenterCharacteristicsSection = screen.getByRole("region", {
+      name: /Data center characteristics/
+    });
+    const displaySecondaryCharacteristicsButton = within(
+      dataCenterCharacteristicsSection
+    ).getByRole("button", { name: displayDataCenterCharacteristicsButtonDescription });
+    await user.click(displaySecondaryCharacteristicsButton);
+
+    Object.values(dataCenterCharacteristics)
+      .filter((characteristic) => {
+        return (
+          characteristic.label != "Electrical Technical Resilience" ||
+          characteristic.label != "Location"
+        );
+      })
+      .forEach((characteristic) => {
+        const characteristicInput = within(dataCenterCharacteristicsSection).getByLabelText(
+          characteristic.label,
+          { exact: false }
+        );
+        expect(characteristicInput).toHaveAttribute("placeholder", `${characteristic.value}`);
+      });
   });
 
   it("should display or hide the secondary data center characteristics after the user interacted with an element for that purpose", async () => {

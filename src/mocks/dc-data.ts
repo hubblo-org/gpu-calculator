@@ -1,7 +1,9 @@
 import MaterialImpacts from "./materials_impacts.json";
 import MaterialInventory from "./materials_inventory.json";
 import Fu1Results from "./uf1-results.json";
+import dataCenterInventory from "./building_inventory.json";
 import type {
+  DataCenterBuilding,
   DataCenterInventoryElement,
   DataCenterInventoryElementWithImpactFactors,
   FunctionalUnitResultsRow,
@@ -9,6 +11,58 @@ import type {
 } from "$lib/types/pcr-cloud";
 import { getAllImpactCriterias, getImpactCriteria, ImpactCriterias } from "$lib/types/enums";
 
+export const dataCenterCharacteristics: DataCenterBuilding = {
+  energyReuseFactor: { label: "Energy Reuse Factor", value: dataCenterInventory.energyReuseFactor },
+  electricalTechnicalResilience: {
+    label: "Electrical Technical Resilience",
+    value: dataCenterInventory.electricalTechnicalResilience
+  },
+  renewableEnergyFactor: {
+    label: "Renewable Energy Factor",
+    value: dataCenterInventory.renewableEnergyFactor
+  },
+  suspendedCeilingSurface: {
+    label: "Suspended ceiling surface",
+    value: dataCenterInventory.suspendedCeilingSurface
+  },
+  lifts: { label: "Number of lifts", value: dataCenterInventory.lifts },
+  location: { label: "Location", value: dataCenterInventory.location },
+  freightLifts: { label: "Number of freight lifts", value: dataCenterInventory.freightLifts },
+  maximumUsableElectricalPower: {
+    label: "Maximum usable electrical power",
+    value: dataCenterInventory.maximumUsableElectricalPower
+  },
+  coolingSystemType: { label: "Cooling system type", value: dataCenterInventory.coolingSystemType },
+  dataCenterLoadFactor: { label: "Load factor", value: dataCenterInventory.dataCenterLoadFactor },
+  designedFloorAssemblySurface: {
+    label: "Designed floor assembly surface",
+    value: dataCenterInventory.designedFloorAssemblySurface
+  },
+  partitionSurface: { label: "Partition surface", value: dataCenterInventory.partitionSurface },
+  lifespan: { label: "Building lifespan", value: dataCenterInventory.lifespan },
+  technicalRoomSurface: {
+    label: "Technical rooms surface area",
+    value: dataCenterInventory.technicalRoomSurface
+  },
+  totalSurface: {
+    label: "Building total surface",
+    value: dataCenterInventory.totalSurface
+  },
+  yearlyTotalEnergy: {
+    label: "Total energy for one year",
+    value: dataCenterInventory.yearlyTotalEnergy
+  },
+  powerUsageEffectiveness: {
+    label: "Power Usage Effectiveness",
+    value: dataCenterInventory.powerUsageEffectiveness
+  },
+  waterUsageEffectiveness: {
+    label: "Water Usage Effectiveness",
+    value: dataCenterInventory.waterUsageEffectiveness
+  },
+  concreteVolume: { label: "Concrete volume", value: dataCenterInventory.concreteVolume },
+  steelMass: { label: "Steel mass", value: dataCenterInventory.steelMass }
+};
 export const firstInventoryElement = MaterialInventory[0];
 const inventoryElementWithImpactFactors = MaterialImpacts.filter(
   (elementWithImpacts) => elementWithImpacts.id === firstInventoryElement.id
@@ -356,7 +410,8 @@ export function formatToLifeCycle(result_c: string) {
   let match = lifeCycleRegex.exec(result_c);
   if (match) {
     const unformattedLifeCycle = match[0].split(",")[0];
-    const lifeCycle = String(unformattedLifeCycle).charAt(0).toUpperCase() + String(unformattedLifeCycle).slice(1);
+    const lifeCycle =
+      String(unformattedLifeCycle).charAt(0).toUpperCase() + String(unformattedLifeCycle).slice(1);
     return lifeCycle;
   } else {
     return "full_life_cycle";
