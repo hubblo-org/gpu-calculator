@@ -10,8 +10,8 @@ interface Leaf {
   value: number;
 }
 
-function getFirstDepthParent(leaf: any): any {
-  return leaf.depth > 1 ? getFirstDepthParent(leaf.parent) : leaf;
+function getFirstDepthParent(node: d3.HierarchyRectangularNode<Node>): d3.HierarchyRectangularNode<Node> {
+  return node.depth > 1 ? getFirstDepthParent(node.parent!) : node;
 }
 
 export function renderTreemap(tree: Node, width: number, height: number) {
