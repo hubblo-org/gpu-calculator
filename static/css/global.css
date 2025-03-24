@@ -1,0 +1,13 @@
+  #treemap-legend span {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 5px;
+    height: 15px;
+  }
+  #treemap-legend span::before {
+    content: "";
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    background: var(--color);
+  }
