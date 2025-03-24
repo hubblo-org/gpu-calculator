@@ -1,18 +1,8 @@
 import * as d3 from "d3";
 
-interface ImpactFactorWithCategory {
+interface Node {
   name: string;
-  value: Leaf;
-}
-
-interface ImpactFactorsWithLifeCycle {
-  name: string;
-  children: ImpactFactorWithCategory[];
-}
-
-interface DataCenterImpactFactors {
-  name: string;
-  children: ImpactFactorsWithLifeCycle[];
+  children?: Node[] | Leaf[];
 }
 
 interface Leaf {
@@ -24,97 +14,99 @@ function getFirstDepthParent(leaf: any): any {
   return leaf.depth > 1 ? getFirstDepthParent(leaf.parent) : leaf;
 }
 
-export function renderTreemap(
-  impactFactors: DataCenterImpactFactors,
-  width: number,
-  height: number
-) {
+export function renderTreemap(tree: Node, width: number, height: number) {
   const color = d3.scaleOrdinal(
-    impactFactors.children.map((d) => d.name),
+    tree.children!.map((d) => d.name),
     d3.schemeTableau10
   );
 
   const numberFormat = d3.format(",r");
   const tile = d3.treemapSquarify;
-  const root = d3
-    .treemap<DataCenterImpactFactors>()
-    .tile(tile)
-    .size([width, height])
-    .padding(1)
-    .round(true)(
+  const root = d3.treemap<Node>().tile(tile).size([width, height]).padding(1).round(true)(
     d3
-      .hierarchy(impactFactors)
-      .sum((d) => d.value)
-      .sort((a, b) => b.data.value - a.data.value)
+      .hierarchy(tree)
+      .sum((d) => (d as d3.HierarchyNode<Node>).value!)
+      .sort(
+        (a, b) =>
+          (b.data as d3.HierarchyPointNode<Node>).value! -
+          (a.data as d3.HierarchyPointNode<Node>).value!
+      )
   );
 
-  const treemapLegend = document.getElementById("treemap-legend");
-  if (treemapLegend) {
-    treemapLegend.innerHTML = "";
+  const treemapLegend = d3
+    .select("#treemap-legend")
+    .attr(
+      "style",
+      "display: flex; align-items: center; min-height: 32px; margin-left: 15px; font: 10px sans-serif;"
+    );
+  if (!treemapLegend.empty()) {
+    treemapLegend.selectChildren("span").remove();
     color.domain().forEach((domain) => {
-      const paragraph = document.createElement("p");
-      paragraph.setAttribute("id", "treemap-legend");
-      paragraph.setAttribute("style", `--color: ${color(domain)}`);
-      paragraph.innerHTML = domain;
-      treemapLegend.append(paragraph);
+      treemapLegend
+        .append("span")
+        .attr("style", `--color: ${color(domain)};`)
+        .text(domain);
     });
+  } else {
+    console.error("No element to attach the treemap legend to!");
   }
 
-  const treemap = document.getElementById("treemap");
-  if (treemap) {
-    treemap.firstChild?.remove();
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("id", "svg-treemap");
-    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-    svg.setAttribute("width", `${width}`);
-    svg.setAttribute("height", `${height}`);
+  const treemap = d3.select("#treemap");
+  if (!treemap.empty()) {
+    treemap.selectChild("svg").remove();
+    const svg = d3
+      .select("#treemap")
+      .append("svg")
+      .attr("id", "svg-treemap")
+      .attr("viewbox", `0 0 ${width} ${height}`)
+      .attr("width", `${width}`)
+      .attr("height", `${height}`)
+      .attr("style", "max-width: 100%; height: auto; font: 10px sans-serif;");
 
     root.leaves().forEach((leaf, leafIndex) => {
       const nodes = leaf.data.name
         .split(/(?=[A-Z][a-z])|\s+/g)
-        .concat(numberFormat(leaf.data.value));
+        .concat(numberFormat((leaf.data as d3.HierarchyPointNode<Node>).value!));
 
-      const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-      g.setAttribute("id", `g-${leafIndex}`);
-      g.setAttribute("transform", `translate(${leaf.x0}, ${leaf.y0})`);
+      svg
+        .append("g")
+        .attr("id", `g-${leafIndex}`)
+        .attr("transform", `translate(${leaf.x0}, ${leaf.y0})`)
+        .append("title")
+        .text(
+          `${leaf
+            .ancestors()
+            .reverse()
+            .map((leaf) => leaf.data.name)
+            .join(".")}\n${numberFormat(leaf.value!)}`
+        );
 
-      const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
-      title.innerHTML = `${leaf
-        .ancestors()
-        .reverse()
-        .map((leaf) => leaf.data.name)
-        .join(".")}\n${numberFormat(leaf.value!)}`;
+      const g = d3.select(`#g-${leafIndex}`);
 
-      const rectangle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-      rectangle.setAttribute("id", `rect-${leafIndex}`);
-      rectangle.setAttribute("fill", `${color(getFirstDepthParent(leaf).data.name)}`);
-      rectangle.setAttribute("fill-opacity", "0.6");
-      rectangle.setAttribute("width", `${leaf.x1 - leaf.x0}`);
-      rectangle.setAttribute("height", `${leaf.y1 - leaf.y0}`);
+      g.append("rect")
+        .attr("id", `rect-${leafIndex}`)
+        .attr("fill", `${color(getFirstDepthParent(leaf).data.name)}`)
+        .attr("fill-opacity", 0.6)
+        .attr("width", leaf.x1 - leaf.x0)
+        .attr("height", leaf.y1 - leaf.y0);
 
-      const clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
-      clipPath.setAttribute("id", `clip-${leafIndex}`);
-      clipPath.innerHTML = `<use href='#rect-${leafIndex}' />`;
+      g.append("clipPath")
+        .attr("id", `clip-${leafIndex}`)
+        .append("use")
+        .attr("href", `#rect-${leafIndex}`);
 
-      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      text.setAttribute("id", `text-${leafIndex}`);
-      text.setAttribute("clip-path", `url(#clip-${leafIndex})`);
+      g.append("text").attr("id", `text-${leafIndex}`).attr("clip-path", `url(#clip-${leafIndex}`);
+      const text = d3.select(`#text-${leafIndex}`);
 
       nodes.forEach((node, nodeIndex) => {
-        const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
-        tspan.setAttribute("x", "3");
-        tspan.setAttribute("y", `${(nodes.length - 1) * 0.3 + 1.1 + nodeIndex * 0.9}em`);
-        tspan.setAttribute("fill-opacity", `${nodeIndex === nodes.length - 1 ? 0.7 : null}`);
-        tspan.innerHTML = node;
-        text.append(tspan);
+        text
+          .append("tspan")
+          .attr("x", 3)
+          .attr("y", `${(nodes.length - 1) * 0.3 + 1.1 + nodeIndex * 0.9}em`)
+          .text(node);
       });
-
-      g.append(title);
-      g.append(rectangle);
-      g.append(clipPath);
-      g.append(text);
-      svg.append(g);
     });
-    treemap.append(svg);
+  } else {
+    console.error("No element to attach the treemap to!");
   }
 }
