@@ -5,7 +5,8 @@
   import {
     genNullImpact,
     inventoryElementImpactFactors,
-    inventoryWithImpact
+    inventoryWithImpact,
+    dataCenterCharacteristics
   } from "../../mocks/dc-data";
   import ResultsPercentages from "./ResultsPercentages.svelte";
   import type {
@@ -23,7 +24,8 @@
     dataCenter: DataCenterBuilding;
   }
 
-  const { dataCenter }: Props = $props();
+  const dataCenter = dataCenterCharacteristics;
+  //const { dataCenter }: Props = $props();
 
   let secondaryCharacteristicsAreVisible = $state(false);
   let secondaryCharacteristicsButtonLabel = $state(
