@@ -89,8 +89,6 @@ export declare type ImpactCriteria = {
 export declare type FunctionalUnitResultsRow = {
   amount: number;
   name: string;
-  unit: string;
-  scope: string;
   impacts: ImpactFactors;
 };
 

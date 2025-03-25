@@ -2,6 +2,22 @@
   import { Countries, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
   import type { DataCenterBuilding } from "$lib/types/pcr-cloud";
   import ImpactFactorsSection from "./ImpactFactorsSection.svelte";
+  import {
+    genNullImpact,
+    inventoryElementImpactFactors,
+    inventoryWithImpact
+  } from "../../mocks/dc-data";
+  import ResultsPercentages from "./ResultsPercentages.svelte";
+  import type {
+    FunctionalUnitResultsRowWithLifeCycle,
+    FunctionalUnitResultsRow,
+    ImpactFactor,
+    ImpactFactors,
+    DataCenterInventoryElementWithImpactFactors
+  } from "$lib/types/pcr-cloud";
+  import BuildingForm from "./BuildingForm.svelte";
+  import ResultsPerImpactFactor from "./ResultsPerImpactFactor.svelte";
+  import ResultsVerticalPercentages from "./ResultsVerticalPercentages.svelte";
 
   interface Props {
     dataCenter: DataCenterBuilding;
@@ -16,6 +32,95 @@
 
   const electricalTechnicalResilienceTiers = Object.values(ElectricalTechnicalResilienceTiers);
   const countriesNames = Object.values(Countries);
+
+  function sumImpacts(impacts1: ImpactFactors, impacts2: ImpactFactors) {
+    var res: ImpactFactors = {
+      ADPe: { value: impacts1.ADPe.value + impacts2.ADPe.value, unit: impacts1.ADPe.unit },
+      ADPf: { value: impacts1.ADPf.value + impacts2.ADPf.value, unit: impacts1.ADPf.unit },
+      AP: { value: impacts1.AP.value + impacts2.AP.value, unit: impacts1.AP.unit },
+      CTUe: { value: impacts1.CTUe.value + impacts2.CTUe.value, unit: impacts1.CTUe.unit },
+      CTUh: { value: impacts1.CTUh.value + impacts2.CTUh.value, unit: impacts1.CTUh.unit },
+      CTUh_c: { value: impacts1.CTUh_c.value + impacts2.CTUh_c.value, unit: impacts1.CTUh_c.unit },
+      CTUh_nc: {
+        value: impacts1.CTUh_nc.value + impacts2.CTUh_nc.value,
+        unit: impacts1.CTUh_nc.unit
+      },
+      EPF: { value: impacts1.EPF.value + impacts2.EPF.value, unit: impacts1.EPF.unit },
+      EPM: { value: impacts1.EPM.value + impacts2.EPM.value, unit: impacts1.EPM.unit },
+      EPT: { value: impacts1.EPT.value + impacts2.EPT.value, unit: impacts1.EPT.unit },
+      GWP: { value: impacts1.GWP.value + impacts2.GWP.value, unit: impacts1.GWP.unit },
+      GWPb: { value: impacts1.GWPb.value + impacts2.GWPb.value, unit: impacts1.GWPb.unit },
+      GWPf: { value: impacts1.GWPf.value + impacts2.GWPf.value, unit: impacts1.GWPf.unit },
+      GWPlu: { value: impacts1.GWPlu.value + impacts2.GWPlu.value, unit: impacts1.GWPlu.unit },
+      IR: { value: impacts1.IR.value + impacts2.IR.value, unit: impacts1.IR.unit },
+      LU: { value: impacts1.LU.value + impacts2.LU.value, unit: impacts1.LU.unit },
+      MIPS: { value: impacts1.MIPS.value + impacts2.MIPS.value, unit: impacts1.MIPS.unit },
+      ODP: { value: impacts1.ODP.value + impacts2.ODP.value, unit: impacts1.ODP.unit },
+      PM: { value: impacts1.PM.value + impacts2.PM.value, unit: impacts1.PM.unit },
+      POCP: { value: impacts1.POCP.value + impacts2.POCP.value, unit: impacts1.POCP.unit },
+      TPE: { value: impacts1.TPE.value + impacts2.TPE.value, unit: impacts1.TPE.unit },
+      WU: { value: impacts1.WU.value + impacts2.WU.value, unit: impacts1.WU.unit }
+    };
+    return res;
+  }
+
+  /// Casts Data Centre inventory in FunctionalUnitResults
+  function build_impact(inventory_with_impact: DataCenterInventoryElementWithImpactFactors[]) {
+    /// With lifecycle only
+    var res: FunctionalUnitResultsRowWithLifeCycle[] = [];
+    var initManuf = genNullImpact();
+    initManuf.life_cycle_step = "manufacturing";
+    initManuf.name = "Combined manufacturing impact of all equipments in the Data Centre";
+    var initUse = genNullImpact();
+    initUse.name = "Combined use impact of all equipments in the Data Centre";
+    initUse.life_cycle_step = "use";
+    var initTransport = genNullImpact();
+    initTransport.name = "Combined transport impact of all equipments in the Data Centre";
+    initTransport.life_cycle_step = "transport";
+    var initEOL = genNullImpact();
+    initEOL.name = "Combined end-of-life impact of all equipments in the Data Centre";
+    initEOL.life_cycle_step = "end-of-life";
+    res.push(initEOL);
+    res.push(initUse);
+    res.push(initTransport);
+    res.push(initManuf);
+
+    for (var i = 0; i < inventory_with_impact.length; i++) {
+      // if lifecycle step is usage
+      if (inventory_with_impact[i].lifeCycleStep === "use") {
+        // if manuf, transport or eol
+      } else if (inventory_with_impact[i].lifeCycleStep != "full_life_cycle") {
+        for (var j = 0; j < res.length; j++) {
+          console.log(
+            "res j lifecyclestep = " +
+              res[j].life_cycle_step +
+              " inventory_with_impact i lifecyclestep = " +
+              inventory_with_impact[i].lifeCycleStep
+          );
+          if (
+            res[j].life_cycle_step == inventory_with_impact[i].lifeCycleStep ||
+            (res[j].life_cycle_step == "eol" &&
+              inventory_with_impact[i].lifeCycleStep == "end-of-life")
+          ) {
+            console.log("updating at index " + j);
+            res[j].amount += 1;
+            res[j].impacts = sumImpacts(res[j].impacts, inventory_with_impact[i].impacts);
+          }
+        }
+        // if full lifecycle
+      } else {
+        console.log("life cycle step has an issue");
+      }
+    }
+    // else
+    console.log("result:");
+    console.log(res);
+    return res;
+  }
+
+  const results = build_impact(inventoryWithImpact);
+  console.log("results / inventory:");
+  console.log(results);
 
   function handleSecondaryCharacteristicsVisibility() {
     if (secondaryCharacteristicsAreVisible) {
@@ -171,6 +276,8 @@
     </div>
   </section>
 </div>
+
+<ResultsVerticalPercentages {results} />
 
 <ImpactFactorsSection source="data-center" />
 

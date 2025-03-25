@@ -41,11 +41,11 @@
         height: 800,
         marginLeft: 100,
         color: { legend: true, domain: lifeCycleSteps },
-        x: { percent: true },
+        y: { percent: true },
         marks: [
-          Plot.barX(resultsCriteriasPerLifeCycle, {
-            x: "share",
-            y: "impact_criteria",
+          Plot.barY(resultsCriteriasPerLifeCycle, {
+            y: "share",
+            x: "impact_criteria",
             fill: "lc_step",
             order: lifeCycleSteps,
             offset: "normalize",
