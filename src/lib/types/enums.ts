@@ -78,7 +78,7 @@ export function getFunctionalUnitParameters(
         service:
           "Provide the Information Technology (IT) hosting services for operation of the IT equipment",
         product: "IT equipment with a rated electrical power of 1 kilowatt",
-        studyDuration: "One month"
+        studyDuration: "One year"
       };
   }
 }
