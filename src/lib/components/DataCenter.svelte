@@ -24,8 +24,7 @@
     dataCenter: DataCenterBuilding;
   }
 
-  const dataCenter = dataCenterCharacteristics;
-  //const { dataCenter }: Props = $props();
+  const { dataCenter }: Props = $props();
 
   let secondaryCharacteristicsAreVisible = $state(false);
   let secondaryCharacteristicsButtonLabel = $state(
@@ -206,12 +205,19 @@
           <label for="building-maximum-usable-electrical-power"
             >Maximum usable electrical power, in kilowatts</label
           >
-          <input type="number" id="building-maximum-usable-electrical-power" />
+          <input
+            type="number"
+            id="building-maximum-usable-electrical-power"
+            placeholder={dataCenter.maximumUsableElectricalPower.value}
+          />
 
-          <label for="building-load-factor" placeholder={dataCenter.dataCenterLoadFactor.value}>
-            Load factor
-          </label>
-          <input type="number" id="building-load-factor" step="0.1" />
+          <label for="building-load-factor"> Load factor </label>
+          <input
+            type="number"
+            id="building-load-factor"
+            step="0.1"
+            placeholder={dataCenter.dataCenterLoadFactor.value}
+          />
 
           <label for="building-energy-reuse-factor"> Energy Reuse Factor (ERF) </label>
           <input

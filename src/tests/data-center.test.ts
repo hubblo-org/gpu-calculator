@@ -1,5 +1,5 @@
 import DataCenter from "$lib/components/DataCenter.svelte";
-import type { DataCenterBuilding } from "$lib/types/pcr-cloud";
+import type { DataCenterCharacteristic } from "$lib/types/pcr-cloud";
 import { dataCenterCharacteristics } from "../mocks/dc-data";
 import { Countries, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
@@ -38,6 +38,17 @@ const dataCenterSecondaryCharacteristicsLabels = [
   "Partition surface"
 ];
 
+function filterByLabel(value: DataCenterCharacteristic) {
+  if (
+    value.label === "Electrical Technical Resilience" ||
+    value.label === "Location" ||
+    value.label === "Cooling system type"
+  ) {
+    return false;
+  }
+  return true;
+}
+
 describe("data center component static elements test suite", () => {
   beforeEach(() => render(DataCenter, { props: { dataCenter: dataCenterCharacteristics } }));
   afterEach(() => cleanup());
@@ -74,12 +85,7 @@ describe("data center component static elements test suite", () => {
     await user.click(displaySecondaryCharacteristicsButton);
 
     Object.values(dataCenterCharacteristics)
-      .filter((characteristic) => {
-        return (
-          characteristic.label != "Electrical Technical Resilience" ||
-          characteristic.label != "Location"
-        );
-      })
+      .filter(filterByLabel)
       .forEach((characteristic) => {
         const characteristicInput = within(dataCenterCharacteristicsSection).getByLabelText(
           characteristic.label,
