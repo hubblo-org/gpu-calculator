@@ -6,11 +6,14 @@
   const parameters = $derived(getFunctionalUnitParameters(selectedFunctionalUnit));
 </script>
 
-<div id="wrapper">
-  <div id="functional-unit-parameters-wrapper">
-    <img src="/server-rack.svg" id="server-rack" alt="A server rack" />
+<div class="wrapper">
+  <div>
     <section aria-labelledby="functional-unit-parameters">
-      <h2 id="functional-unit-parameters">Functional unit parameters</h2>
+      <div class="section-header">
+        <img src="/server-rack.svg" id="server-rack" alt="A server rack" />
+        <h2 id="functional-unit-parameters">Functional unit parameters</h2>
+      </div>
+      <h3>{parameters.title}</h3>
       <p>
         Service: {parameters.service}
       </p>
@@ -23,18 +26,8 @@
 </div>
 
 <style>
-  section {
-    display: flex;
-  }
-  #functional-unit-parameters-wrapper {
-    display: flex;
-  }
   #server-rack {
     width: 80px;
     height: 80px;
-  }
-  #wrapper {
-    display: flex;
-    flex-direction: column;
   }
 </style>

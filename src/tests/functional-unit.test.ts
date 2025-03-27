@@ -4,10 +4,11 @@ import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 const serverRackDescription = "A server rack";
+const firstFunctionalUnit = "Functional Unit 1";
 const firstFunctionalUnitRenderedService =
-  "Provide the Information Technology (IT) hosting services for operation of the IT equipment";
-const firstFunctionalUnitScope = "IT equipment with a rated electrical power of 1 kilowatt";
-const firstFunctionalUnitStudyDuration = "One month";
+  "Provide hosting services for operation of the IT equipment.";
+const firstFunctionalUnitScope = "For one kilowatt of commercialised IT power.";
+const firstFunctionalUnitStudyDuration = "One year.";
 const firstFunctionalUnitParameters = [
   firstFunctionalUnitRenderedService,
   firstFunctionalUnitScope,
@@ -46,6 +47,7 @@ describe("functional unit component static elements test suite", () => {
 describe("functional unit enum test suite", () => {
   it("should return the first functional unit parameters", () => {
     const parameters = getFunctionalUnitParameters(FunctionalUnits.First);
+    expect(parameters.title).toEqual(firstFunctionalUnit);
     expect(parameters.service).toEqual(firstFunctionalUnitRenderedService);
     expect(parameters.product).toEqual(firstFunctionalUnitScope);
     expect(parameters.studyDuration).toEqual(firstFunctionalUnitStudyDuration);

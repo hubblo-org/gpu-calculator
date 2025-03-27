@@ -75,10 +75,11 @@ export function getFunctionalUnitParameters(
   switch (functionalUnit) {
     case FunctionalUnits.First:
       return {
+        title: "Functional Unit 1",
         service:
-          "Provide the Information Technology (IT) hosting services for operation of the IT equipment",
-        product: "IT equipment with a rated electrical power of 1 kilowatt",
-        studyDuration: "One year"
+          "Provide hosting services for operation of the IT equipment.",
+        product: "For one kilowatt of commercialised IT power.",
+        studyDuration: "One year."
       };
   }
 }
