@@ -5,7 +5,7 @@
 
   interface Props {
     source: string;
-    results: FunctionalUnitResultsRowWithLifeCycle[];
+    results?: FunctionalUnitResultsRowWithLifeCycle[];
   }
 
   const { source, results = functionalUnitOneResultsWithLc }: Props = $props();
