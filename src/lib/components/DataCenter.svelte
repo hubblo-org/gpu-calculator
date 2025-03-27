@@ -89,8 +89,6 @@
     for (var i = 0; i < inventory_with_impact.length; i++) {
       // if lifecycle step is usage
       if (inventory_with_impact[i].lifeCycleStep === "use") {
-        // if manuf, transport or eol
-      } else if (inventory_with_impact[i].lifeCycleStep != "full_life_cycle") {
         for (var j = 0; j < res.length; j++) {
           console.log(
             "res j lifecyclestep = " +
@@ -98,6 +96,20 @@
               " inventory_with_impact i lifecyclestep = " +
               inventory_with_impact[i].lifeCycleStep
           );
+          if (res[j].life_cycle_step == inventory_with_impact[i].lifeCycleStep) {
+            res[j].amount += 1;
+            res[j].impacts = sumImpacts(res[j].impacts, inventory_with_impact[i].impacts);
+          }
+        }
+        // if manuf, transport or eol
+      } else if (inventory_with_impact[i].lifeCycleStep != "full_life_cycle") {
+        for (var j = 0; j < res.length; j++) {
+          //console.log(
+          //  "res j lifecyclestep = " +
+          //    res[j].life_cycle_step +
+          //    " inventory_with_impact i lifecyclestep = " +
+          //    inventory_with_impact[i].lifeCycleStep
+          //);
           if (
             res[j].life_cycle_step == inventory_with_impact[i].lifeCycleStep ||
             (res[j].life_cycle_step == "eol" &&
