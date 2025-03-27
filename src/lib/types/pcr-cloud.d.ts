@@ -18,6 +18,12 @@ export declare type DataCenterInventoryElementWithImpactFactors = {
   impacts: ImpactFactors;
 };
 
+export declare type FunctionalUnitParameters = {
+  service: string;
+  product: string;
+  studyDuration: string;
+};
+
 export declare type ImpactFactor = {
   value: number;
   unit: string;

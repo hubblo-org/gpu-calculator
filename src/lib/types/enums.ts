@@ -1,5 +1,12 @@
-import type { ImpactCriteria, InventoryCategorySpellings } from "./pcr-cloud";
+import type {
+  FunctionalUnitParameters,
+  ImpactCriteria,
+  InventoryCategorySpellings
+} from "./pcr-cloud";
 
+export enum FunctionalUnits {
+  First
+}
 export enum Countries {
   FRA = "France",
   GBR = "United Kingdom"
@@ -61,6 +68,20 @@ export enum ImpactCriterias {
 }
 
 export declare type IC = keyof typeof ImpactCriterias;
+
+export function getFunctionalUnitParameters(
+  functionalUnit: FunctionalUnits
+): FunctionalUnitParameters {
+  switch (functionalUnit) {
+    case FunctionalUnits.First:
+      return {
+        service:
+          "Provide the Information Technology (IT) hosting services for operation of the IT equipment",
+        product: "IT equipment with a rated electrical power of 1 kilowatt",
+        studyDuration: "One month"
+      };
+  }
+}
 
 export function getInventoryCategorySpelling(
   inventoryCategories: InventoryCategories

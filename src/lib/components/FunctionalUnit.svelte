@@ -1,5 +1,9 @@
 <script lang="ts">
   import ImpactFactorsSection from "./ImpactFactorsSection.svelte";
+  import { getFunctionalUnitParameters, FunctionalUnits } from "$lib/types/enums";
+
+  let selectedFunctionalUnit = $state(FunctionalUnits.First);
+  const parameters = $derived(getFunctionalUnitParameters(selectedFunctionalUnit));
 </script>
 
 <div id="wrapper">
@@ -7,6 +11,11 @@
     <img src="/server-rack.svg" id="server-rack" alt="A server rack" />
     <section aria-labelledby="functional-unit-parameters">
       <h2 id="functional-unit-parameters">Functional unit parameters</h2>
+      <p>
+        Service: {parameters.service}
+      </p>
+      <p>Product: {parameters.product}</p>
+      <p>Study duration: {parameters.studyDuration}</p>
     </section>
   </div>
 
