@@ -1,13 +1,156 @@
-  #treemap-legend span {
-    display: inline-flex;
-    align-items: center;
-    margin-right: 5px;
-    height: 15px;
-  }
-  #treemap-legend span::before {
-    content: "";
-    width: 15px;
-    height: 15px;
-    margin-right: 5px;
-    background: var(--color);
-  }
+:root {
+	--gray-100: #c2c2c9;
+	--blue-100: #e5f0fa;
+	--blue-200: #0066cc;
+	--color-white-100: hsla(0, 0%, 100%, 1);
+	--color-white: var(--color-white-100);
+	--color-gray-100: hsla(240, 6%, 98%, 1);
+	--color-gray-200: hsla(240, 6%, 87%, 1);
+	--color-gray-300: hsla(240, 6%, 76%, 1);
+	--color-gray-400: hsla(240, 6%, 65%, 1);
+	--color-gray-500: hsla(240, 6%, 54%, 1);
+	--color-gray-600: hsla(240, 8%, 43%, 1);
+	--color-gray-700: hsla(240, 8%, 32%, 1);
+	--color-gray-800: hsla(240, 8%, 21%, 1);
+	--color-gray-900: hsla(240, 8%, 10%, 1);
+	--color-black: hsla(240, 8%, 5%, 1);
+	--color-primary-h: 210;
+	--color-primary-s: 100%;
+	--color-primary-l: 40%;
+	--color-primary-10: hsla(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l), .1);
+	--color-primary-20: hsla(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l), .2);
+	--color-primary-40: hsla(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l), .4);
+	--color-primary-50: hsla(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l), .5);
+	--color-primary-100: hsla(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l), 1);
+	--color-primary: var(--color-primary-100);
+	--color-secondary-h: 50;
+	--color-secondary-s: 100%;
+	--color-secondary-l: 60%;
+	--color-secondary-30: hsla(var(--color-secondary-h), var(--color-secondary-s), var(--color-secondary-l), .3);
+	--color-secondary-50: hsla(var(--color-secondary-h), var(--color-secondary-s), var(--color-secondary-l), .5);
+	--color-secondary-60: hsla(var(--color-secondary-h), var(--color-secondary-s), var(--color-secondary-l), .6);
+	--color-secondary-100: hsla(var(--color-secondary-h), var(--color-secondary-s), var(--color-secondary-l), 1);
+	--color-secondary: var(--color-secondary-100);
+	--color-background: var(--color-white);
+	--color-text: var(--color-gray-800);
+	--color-headings: var(--color-black);
+	--color-disabled: var(--color-gray-400);
+	--main-font-family: "Lexend";
+	--main-font-weight: 400;
+	--main-font-style: normal;
+	--fallback-font-family: "Noto";
+	--text-xl: clamp(1.25rem, 1.125rem + .556vw, 1.5rem);
+
+	--text-md: 1rem;
+	--leading-none: 1;
+	--rounded-xl: var(--text-xl);
+}
+
+@font-face {
+	font-family: "Lexend";
+	src: url("/fonts/Lexend-Regular.ttf");
+}
+
+body {
+	font-family: var(--main-font-family), var(--fallback-font-family);
+	font-weight: 400;
+	font-style: normal;
+}
+
+button {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	padding: .75em 1em 0.8em;
+	min-height: 2rem;
+	text-align: center;
+	text-decoration: none;
+	font-size: var(--text-md);
+	line-height: var(--leading-none);
+	font-weight: 500;
+	border-radius: var(--rounded-xl);
+	cursor: pointer;
+	background-color: var(--background, var(--color-primary-100));
+	color: var(--color, var(--color-white));
+	transition: background var(--timing) var(--easing), color var(--timing) var(--easing);
+	user-select: none;
+}
+
+section {
+	display: flex;
+	flex-direction: column;
+	overflow-x: auto;
+}
+
+section button {
+	margin-top: 12px;
+}
+
+header,
+section,
+label,
+.wrapper {
+	padding: 12px;
+	margin-top: 12px;
+	margin-bottom: 12px;
+	border: 1px solid var(--gray-100);
+}
+
+header,
+section {
+	background-color: var(--blue-100);
+}
+
+caption {
+	border: 3px solid black;
+}
+
+th {
+	border: 2px solid black;
+}
+
+td {
+	border: 1px solid black;
+}
+
+.btn-sm {
+	max-height: 2.25em;
+	font-size: var(--text-sm);
+}
+
+.btn-primary,
+.btn-primary-100 {
+	--background: var(--color-primary-100);
+	--color: var(--color-white);
+}
+
+.section-header {
+	display: flex
+}
+
+.section-header h2 {
+	padding-left: 24px;
+
+
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
+
+#treemap-legend span {
+	display: inline-flex;
+	align-items: center;
+	margin-right: 5px;
+	height: 15px;
+}
+
+#treemap-legend span::before {
+	content: "";
+	width: 15px;
+	height: 15px;
+	margin-right: 5px;
+	background: var(--color);
+}
