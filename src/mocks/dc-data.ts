@@ -260,9 +260,14 @@ export function genNullImpact() {
 
 export const inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[] =
   MaterialImpacts.map((element) => {
+    const elementDetails = MaterialInventory.filter(
+      (inventoryElement) => element.material_name === inventoryElement.id
+    )[0];
     const inventoryElement = {
       name: element.material_name,
       category: element.category,
+      quantity: elementDetails?.quantity,
+      lifespan: elementDetails?.lifespan,
       mass: element.mass,
       source: element.source,
       lifeCycleStep: element.lc_step,

@@ -11,6 +11,8 @@ export declare type DataCenterInventoryElementWithImpactFactors = {
   name: string;
   category: string;
   mass: number;
+  quantity?: number;
+  lifespan?: number;
   source: string;
   lifeCycleStep: string;
   impacts: ImpactFactors;
