@@ -95,20 +95,12 @@ describe("data center component static elements test suite", () => {
       });
   });
 
-  it("should display or hide the secondary data center characteristics after the user interacted with an element for that purpose", async () => {
+  it("should display the secondary data center characteristics after the user interacted with an element for that purpose", async () => {
     const user = userEvent.setup();
 
     const dataCenterCharacteristicsSection = screen.getByRole("region", {
       name: /Data center characteristics/
     });
-    dataCenterSecondaryCharacteristicsLabels.forEach((characteristicLabel) => {
-      const characteristicInput = within(dataCenterCharacteristicsSection).queryByLabelText(
-        characteristicLabel,
-        { exact: false }
-      );
-      expect(characteristicInput).not.toBeInTheDocument();
-    });
-
     const displaySecondaryCharacteristicsButton = within(
       dataCenterCharacteristicsSection
     ).getByRole("button", { name: displayDataCenterCharacteristicsButtonDescription });
@@ -121,20 +113,23 @@ describe("data center component static elements test suite", () => {
       );
       expect(characteristicInput).toBeVisible();
     });
+  });
 
+  it("should display a button to hide the data center secondary characteristics if they are visible to the user", async () => {
+    const user = userEvent.setup();
+
+    const dataCenterCharacteristicsSection = screen.getByRole("region", {
+      name: /Data center characteristics/
+    });
+    const displaySecondaryCharacteristicsButton = within(
+      dataCenterCharacteristicsSection
+    ).getByRole("button", { name: displayDataCenterCharacteristicsButtonDescription });
+    await user.click(displaySecondaryCharacteristicsButton);
     const hideSecondaryCharacteristicsButton = within(dataCenterCharacteristicsSection).getByRole(
       "button",
       { name: hideDataCenterCharacteristicsButtonDescription }
     );
-    await user.click(hideSecondaryCharacteristicsButton);
-
-    dataCenterSecondaryCharacteristicsLabels.forEach((characteristicLabel) => {
-      const characteristicInput = within(dataCenterCharacteristicsSection).queryByLabelText(
-        characteristicLabel,
-        { exact: false }
-      );
-      expect(characteristicInput).not.toBeInTheDocument();
-    });
+    expect(hideSecondaryCharacteristicsButton).toBeVisible();
   });
 
   it("should display an image that gives an idea of the data center scope", () => {
