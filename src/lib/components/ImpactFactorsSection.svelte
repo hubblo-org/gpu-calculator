@@ -64,7 +64,6 @@
 
 <section aria-labelledby={sectionTexts.heading_id}>
   <h2 id={sectionTexts.heading_id}>{sectionTexts.section_label}</h2>
-  <button onclick={switchDisplay}>Switch graph display</button>
   <table>
     <caption>{sectionTexts.table_caption}</caption><thead
       ><tr
@@ -87,4 +86,6 @@
         >{/each}</select
     >
   {/if}
+
+  <button onclick={switchDisplay}>Switch graph display</button>
 </section>
