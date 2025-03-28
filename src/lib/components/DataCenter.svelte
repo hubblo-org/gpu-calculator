@@ -188,16 +188,6 @@
       >{#each countriesNames as country}<option>{country}</option>{/each}</select
     >
 
-    <button
-      aria-label={secondaryCharacteristicsButtonLabel}
-      onclick={handleSecondaryCharacteristicsVisibility}
-      >{#if secondaryCharacteristicsAreVisible}
-        Hide secondary characteristics
-      {:else}
-        Show secondary characteristics
-      {/if}</button
-    >
-
     {#if secondaryCharacteristicsAreVisible}
       <div transition:fade id="secondary-characteristics">
         <label for="building-lifespan">Building lifespan, in years</label>
@@ -291,6 +281,17 @@
         />
       </div>
     {/if}
+
+    <button
+      aria-label={secondaryCharacteristicsButtonLabel}
+      class="btn btn-sm btn-primary"
+      onclick={handleSecondaryCharacteristicsVisibility}
+      >{#if secondaryCharacteristicsAreVisible}
+        Hide secondary characteristics
+      {:else}
+        Show secondary characteristics
+      {/if}</button
+    >
   </section>
 </div>
 

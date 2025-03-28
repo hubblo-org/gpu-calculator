@@ -87,5 +87,5 @@
     >
   {/if}
 
-  <button onclick={switchDisplay}>Switch graph display</button>
+  <button class="btn btn-sm btn-primary" onclick={switchDisplay}>Switch graph display</button>
 </section>
