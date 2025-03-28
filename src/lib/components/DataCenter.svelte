@@ -36,39 +36,202 @@
   const countriesNames = Object.values(Countries);
   const coolingSystemTypes = Object.values(CoolingSystems);
 
-  function sumImpacts(impacts1: ImpactFactors, impacts2: ImpactFactors) {
+  function computeImpact(
+    impact1: number,
+    quantity_impact2: number,
+    impact2: number,
+    reference_years: number,
+    lifespan: number
+  ) {
+    if (isNaN(impact1)) {
+      impact1 = 0;
+    }
+    console.log(
+      "impact1=" +
+        impact1 +
+        " quantity=" +
+        quantity_impact2 +
+        " impact2=" +
+        impact2 +
+        " refyears=" +
+        reference_years +
+        " lifespan"
+    );
+    return ((impact1 + quantity_impact2 * impact2) * reference_years) / lifespan;
+  }
+
+  function addImpacts(
+    impacts1: ImpactFactors,
+    quantity: number,
+    impacts2: ImpactFactors,
+    ref_years: number,
+    lifespan: number
+  ) {
     var res: ImpactFactors = {
-      ADPe: { value: impacts1.ADPe.value + impacts2.ADPe.value, unit: impacts1.ADPe.unit },
-      ADPf: { value: impacts1.ADPf.value + impacts2.ADPf.value, unit: impacts1.ADPf.unit },
-      AP: { value: impacts1.AP.value + impacts2.AP.value, unit: impacts1.AP.unit },
-      CTUe: { value: impacts1.CTUe.value + impacts2.CTUe.value, unit: impacts1.CTUe.unit },
-      CTUh: { value: impacts1.CTUh.value + impacts2.CTUh.value, unit: impacts1.CTUh.unit },
-      CTUh_c: { value: impacts1.CTUh_c.value + impacts2.CTUh_c.value, unit: impacts1.CTUh_c.unit },
+      ADPe: {
+        value: computeImpact(
+          impacts1.ADPe.value,
+          quantity,
+          impacts2.ADPe.value,
+          ref_years,
+          lifespan
+        ),
+        unit: impacts1.ADPe.unit
+      },
+      ADPf: {
+        value: computeImpact(
+          impacts1.ADPf.value,
+          quantity,
+          impacts2.ADPf.value,
+          ref_years,
+          lifespan
+        ),
+        unit: impacts1.ADPf.unit
+      },
+      AP: {
+        value: computeImpact(impacts1.AP.value, quantity, impacts2.AP.value, ref_years, lifespan),
+        unit: impacts1.AP.unit
+      },
+      CTUe: {
+        value: computeImpact(
+          impacts1.CTUe.value,
+          quantity,
+          impacts2.CTUe.value,
+          ref_years,
+          lifespan
+        ),
+        unit: impacts1.CTUe.unit
+      },
+      CTUh: {
+        value: computeImpact(
+          impacts1.CTUh.value,
+          quantity,
+          impacts2.CTUh.value,
+          ref_years,
+          lifespan
+        ),
+        unit: impacts1.CTUh.unit
+      },
+      CTUh_c: {
+        value: computeImpact(
+          impacts1.CTUh_c.value,
+          quantity,
+          impacts2.CTUh_c.value,
+          ref_years,
+          lifespan
+        ),
+        unit: impacts1.CTUh_c.unit
+      },
       CTUh_nc: {
-        value: impacts1.CTUh_nc.value + impacts2.CTUh_nc.value,
+        value: computeImpact(
+          impacts1.CTUh_nc.value,
+          quantity,
+          impacts2.CTUh_nc.value,
+          ref_years,
+          lifespan
+        ),
         unit: impacts1.CTUh_nc.unit
       },
-      EPF: { value: impacts1.EPF.value + impacts2.EPF.value, unit: impacts1.EPF.unit },
-      EPM: { value: impacts1.EPM.value + impacts2.EPM.value, unit: impacts1.EPM.unit },
-      EPT: { value: impacts1.EPT.value + impacts2.EPT.value, unit: impacts1.EPT.unit },
-      GWP: { value: impacts1.GWP.value + impacts2.GWP.value, unit: impacts1.GWP.unit },
-      GWPb: { value: impacts1.GWPb.value + impacts2.GWPb.value, unit: impacts1.GWPb.unit },
-      GWPf: { value: impacts1.GWPf.value + impacts2.GWPf.value, unit: impacts1.GWPf.unit },
-      GWPlu: { value: impacts1.GWPlu.value + impacts2.GWPlu.value, unit: impacts1.GWPlu.unit },
-      IR: { value: impacts1.IR.value + impacts2.IR.value, unit: impacts1.IR.unit },
-      LU: { value: impacts1.LU.value + impacts2.LU.value, unit: impacts1.LU.unit },
-      MIPS: { value: impacts1.MIPS.value + impacts2.MIPS.value, unit: impacts1.MIPS.unit },
-      ODP: { value: impacts1.ODP.value + impacts2.ODP.value, unit: impacts1.ODP.unit },
-      PM: { value: impacts1.PM.value + impacts2.PM.value, unit: impacts1.PM.unit },
-      POCP: { value: impacts1.POCP.value + impacts2.POCP.value, unit: impacts1.POCP.unit },
-      TPE: { value: impacts1.TPE.value + impacts2.TPE.value, unit: impacts1.TPE.unit },
-      WU: { value: impacts1.WU.value + impacts2.WU.value, unit: impacts1.WU.unit }
+      EPF: {
+        value: computeImpact(impacts1.EPF.value, quantity, impacts2.EPF.value, ref_years, lifespan),
+        unit: impacts1.EPF.unit
+      },
+      EPM: {
+        value: computeImpact(impacts1.EPM.value, quantity, impacts2.EPM.value, ref_years, lifespan),
+        unit: impacts1.EPM.unit
+      },
+      EPT: {
+        value: computeImpact(impacts1.EPT.value, quantity, impacts2.EPT.value, ref_years, lifespan),
+        unit: impacts1.EPT.unit
+      },
+      GWP: {
+        value: computeImpact(impacts1.GWP.value, quantity, impacts2.GWP.value, ref_years, lifespan),
+        unit: impacts1.GWP.unit
+      },
+      GWPb: {
+        value: computeImpact(
+          impacts1.GWPb.value,
+          quantity,
+          impacts2.GWPb.value,
+          ref_years,
+          lifespan
+        ),
+        unit: impacts1.GWPb.unit
+      },
+      GWPf: {
+        value: computeImpact(
+          impacts1.GWPf.value,
+          quantity,
+          impacts2.GWPf.value,
+          ref_years,
+          lifespan
+        ),
+        unit: impacts1.GWPf.unit
+      },
+      GWPlu: {
+        value: computeImpact(
+          impacts1.GWPlu.value,
+          quantity,
+          impacts2.GWPlu.value,
+          ref_years,
+          lifespan
+        ),
+        unit: impacts1.GWPlu.unit
+      },
+      IR: {
+        value: computeImpact(impacts1.IR.value, quantity, impacts2.IR.value, ref_years, lifespan),
+        unit: impacts1.IR.unit
+      },
+      LU: {
+        value: computeImpact(impacts1.LU.value, quantity, impacts2.LU.value, ref_years, lifespan),
+        unit: impacts1.LU.unit
+      },
+      MIPS: {
+        value: computeImpact(
+          impacts1.MIPS.value,
+          quantity,
+          impacts2.MIPS.value,
+          ref_years,
+          lifespan
+        ),
+        unit: impacts1.MIPS.unit
+      },
+      ODP: {
+        value: computeImpact(impacts1.ODP.value, quantity, impacts2.ODP.value, ref_years, lifespan),
+        unit: impacts1.ODP.unit
+      },
+      PM: {
+        value: computeImpact(impacts1.PM.value, quantity, impacts2.PM.value, ref_years, lifespan),
+        unit: impacts1.PM.unit
+      },
+      POCP: {
+        value: computeImpact(
+          impacts1.POCP.value,
+          quantity,
+          impacts2.POCP.value,
+          ref_years,
+          lifespan
+        ),
+        unit: impacts1.POCP.unit
+      },
+      TPE: {
+        value: computeImpact(impacts1.TPE.value, quantity, impacts2.TPE.value, ref_years, lifespan),
+        unit: impacts1.TPE.unit
+      },
+      WU: {
+        value: computeImpact(impacts1.WU.value, quantity, impacts2.WU.value, ref_years, lifespan),
+        unit: impacts1.WU.unit
+      }
     };
     return res;
   }
 
   /// Casts Data Centre inventory in FunctionalUnitResults
-  function build_impact(inventory_with_impact: DataCenterInventoryElementWithImpactFactors[]) {
+  function build_impact_per_lifecycle_step(
+    inventory_with_impact: DataCenterInventoryElementWithImpactFactors[]
+  ) {
+    var ref_hours = 8760; // hours = 1 year
+    var ref_years = 1;
     /// With lifecycle only
     var res: FunctionalUnitResultsRowWithLifeCycle[] = [];
     var initManuf = genNullImpact();
@@ -92,15 +255,21 @@
       // if lifecycle step is usage
       if (inventory_with_impact[i].lifeCycleStep === "use") {
         for (var j = 0; j < res.length; j++) {
-          console.log(
-            "res j lifecyclestep = " +
-              res[j].life_cycle_step +
-              " inventory_with_impact i lifecyclestep = " +
-              inventory_with_impact[i].lifeCycleStep
-          );
           if (res[j].life_cycle_step == inventory_with_impact[i].lifeCycleStep) {
+            console.log(
+              "USE res j lifecyclestep = " +
+                res[j].life_cycle_step +
+                " inventory_with_impact i lifecyclestep = " +
+                inventory_with_impact[i].lifeCycleStep
+            );
             res[j].amount += 1;
-            res[j].impacts = sumImpacts(res[j].impacts, inventory_with_impact[i].impacts);
+            res[j].impacts = addImpacts(
+              res[j].impacts,
+              inventory_with_impact[i].quantity,
+              inventory_with_impact[i].impacts,
+              ref_years,
+              inventory_with_impact[i].lifespan
+            );
           }
         }
         // if manuf, transport or eol
@@ -119,7 +288,13 @@
           ) {
             console.log("updating at index " + j);
             res[j].amount += 1;
-            res[j].impacts = sumImpacts(res[j].impacts, inventory_with_impact[i].impacts);
+            res[j].impacts = addImpacts(
+              res[j].impacts,
+              inventory_with_impact[i].quantity,
+              inventory_with_impact[i].impacts,
+              ref_years,
+              inventory_with_impact[i].lifespan
+            );
           }
         }
         // if full lifecycle
@@ -133,7 +308,7 @@
     return res;
   }
 
-  const results = build_impact(inventoryWithImpact);
+  const results = build_impact_per_lifecycle_step(inventoryWithImpact);
   console.log("results / inventory:");
   console.log(results);
 
