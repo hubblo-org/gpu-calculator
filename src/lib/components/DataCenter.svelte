@@ -155,31 +155,35 @@
       <h2 id="data-center-characteristics">Data center characteristics</h2>
     </div>
     <label for="building-total-surface">{dataCenter.totalSurface.label} (square meters):</label
-    ><input type="number" id="building-total-surface" placeholder={dataCenter.totalSurface.value} />
+    ><input
+      type="number"
+      id="building-total-surface"
+      placeholder={dataCenter.totalSurface.value as string}
+    />
     <label for="concrete-volume">{dataCenter.concreteVolume.label} (cubic meters):</label><input
       type="number"
       id="concrete-volume"
-      placeholder={dataCenter.concreteVolume.value}
+      placeholder={dataCenter.concreteVolume.value as string}
     />
     <label for="steel-mass">Steel mass (kilograms):</label><input
       type="number"
       id="steel-mass"
-      placeholder={dataCenter.steelMass.value}
+      placeholder={dataCenter.steelMass.value as string}
     />
     <label for="yearly-total-energy">Total energy for one year (kilowatts):</label><input
       type="number"
       id="yearly-total-energy"
-      placeholder={dataCenter.yearlyTotalEnergy.value}
+      placeholder={dataCenter.yearlyTotalEnergy.value as string}
     />
     <label for="power-usage-effectiveness">Power Usage Effectiveness (PUE):</label><input
       type="number"
       id="power-usage-effectiveness"
-      placeholder={dataCenter.powerUsageEffectiveness.value}
+      placeholder={dataCenter.powerUsageEffectiveness.value as string}
     />
     <label for="water-usage-effectiveness">Water Usage Effectiveness (WUE):</label><input
       type="number"
       id="water-usage-effectiveness"
-      placeholder={dataCenter.waterUsageEffectiveness.value}
+      placeholder={dataCenter.waterUsageEffectiveness.value as string}
     />
     <label for="electrical-technical-resilience">Electrical Technical Resilience tier:</label
     ><select id="electrical-technical-resilience">
@@ -192,7 +196,11 @@
     {#if secondaryCharacteristicsAreVisible}
       <div transition:fade id="secondary-characteristics">
         <label for="building-lifespan">Building lifespan, in years</label>
-        <input type="number" id="building-lifespan" placeholder={dataCenter.lifespan.value} />
+        <input
+          type="number"
+          id="building-lifespan"
+          placeholder={dataCenter.lifespan.value as string}
+        />
 
         <label for="building-technical-rooms-surface"
           >Technical rooms surface area, in square meters</label
@@ -201,7 +209,7 @@
           type="number"
           id="building-technical-rooms-surface"
           step="0.01"
-          placeholder={dataCenter.technicalRoomSurface.value}
+          placeholder={dataCenter.technicalRoomSurface.value as string}
         />
         <label for="building-maximum-usable-electrical-power"
           >Maximum usable electrical power, in kilowatts</label
@@ -209,7 +217,7 @@
         <input
           type="number"
           id="building-maximum-usable-electrical-power"
-          placeholder={dataCenter.maximumUsableElectricalPower.value}
+          placeholder={dataCenter.maximumUsableElectricalPower.value as string}
         />
 
         <label for="building-load-factor"> Load factor </label>
@@ -217,7 +225,7 @@
           type="number"
           id="building-load-factor"
           step="0.1"
-          placeholder={dataCenter.dataCenterLoadFactor.value}
+          placeholder={dataCenter.dataCenterLoadFactor.value as string}
         />
 
         <label for="building-energy-reuse-factor"> Energy Reuse Factor (ERF) </label>
@@ -227,7 +235,7 @@
           min="0"
           max="3"
           step="0.01"
-          placeholder={dataCenter.energyReuseFactor.value}
+          placeholder={dataCenter.energyReuseFactor.value as string}
         />
 
         <label for="building-renewable-energy-factor"> Renewable Energy Factor (REF) </label>
@@ -237,7 +245,7 @@
           min="0"
           max="3"
           step="0.01"
-          placeholder={dataCenter.renewableEnergyFactor.value}
+          placeholder={dataCenter.renewableEnergyFactor.value as string}
         />
 
         <label for="building-cooling-system"> Cooling system type </label>
@@ -253,7 +261,7 @@
           type="number"
           id="building-designed-floor-assembly-surface"
           step="0.01"
-          placeholder={dataCenter.designedFloorAssemblySurface.value}
+          placeholder={dataCenter.designedFloorAssemblySurface.value as string}
         />
 
         <label for="building-suspended-ceiling-surface">
@@ -263,17 +271,17 @@
           type="number"
           id="building-suspended-ceiling-surface"
           step="0.01"
-          placeholder={dataCenter.suspendedCeilingSurface.value}
+          placeholder={dataCenter.suspendedCeilingSurface.value as string}
         />
 
         <label for="building-lifts"> Number of lifts </label>
-        <input type="number" id="building-lifts" placeholder={dataCenter.lifts.value} />
+        <input type="number" id="building-lifts" placeholder={dataCenter.lifts.value as string} />
 
         <label for="building-freight-lifts"> Number of freight lifts </label>
         <input
           type="number"
           id="building-freight-lifts"
-          placeholder={dataCenter.freightLifts.value}
+          placeholder={dataCenter.freightLifts.value as string}
         />
 
         <label for="building-partition-surface"> Partition surface, in square meters </label>
@@ -281,7 +289,7 @@
           type="number"
           id="building-partition-surface"
           step="0.01"
-          placeholder={dataCenter.partitionSurface.value}
+          placeholder={dataCenter.partitionSurface.value as string}
         />
       </div>
     {/if}
