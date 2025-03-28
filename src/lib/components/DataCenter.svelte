@@ -46,17 +46,18 @@
     if (isNaN(impact1)) {
       impact1 = 0;
     }
-    console.log(
-      "impact1=" +
-        impact1 +
-        " quantity=" +
-        quantity_impact2 +
-        " impact2=" +
-        impact2 +
-        " refyears=" +
-        reference_years +
-        " lifespan"
-    );
+    //console.log(
+    //  "impact1=" +
+    //    impact1 +
+    //    " quantity=" +
+    //    quantity_impact2 +
+    //    " impact2=" +
+    //    impact2 +
+    //    " refyears=" +
+    //    reference_years +
+    //    " lifespan=" +
+    //    lifespan
+    //);
     return ((impact1 + quantity_impact2 * impact2) * reference_years) / lifespan;
   }
 
@@ -260,7 +261,11 @@
               "USE res j lifecyclestep = " +
                 res[j].life_cycle_step +
                 " inventory_with_impact i lifecyclestep = " +
-                inventory_with_impact[i].lifeCycleStep
+                inventory_with_impact[i].lifeCycleStep +
+                " quantity=" +
+                inventory_with_impact[i].quantity +
+                " lifespan=" +
+                inventory_with_impact[i].lifespan
             );
             res[j].amount += 1;
             res[j].impacts = addImpacts(

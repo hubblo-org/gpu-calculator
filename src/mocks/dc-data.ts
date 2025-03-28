@@ -266,10 +266,10 @@ export const inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[] 
     const inventoryElement = {
       name: element.material_name,
       category: element.category,
-      quantity: elementDetails?.quantity,
-      lifespan: elementDetails?.lifespan,
       mass: element.mass,
       source: element.source,
+      quantity: elementDetails?.quantity,
+      lifespan: elementDetails?.lifespan,
       lifeCycleStep: element.lc_step,
       impacts: {
         ADPe: {
