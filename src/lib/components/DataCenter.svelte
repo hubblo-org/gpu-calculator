@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import { Countries, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
+  import { CoolingSystems, Countries, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
   import type { DataCenterBuilding } from "$lib/types/pcr-cloud";
   import ImpactFactorsSection from "./ImpactFactorsSection.svelte";
   import {
@@ -34,6 +34,7 @@
 
   const electricalTechnicalResilienceTiers = Object.values(ElectricalTechnicalResilienceTiers);
   const countriesNames = Object.values(Countries);
+  const coolingSystemTypes = Object.values(CoolingSystems);
 
   function sumImpacts(impacts1: ImpactFactors, impacts2: ImpactFactors) {
     var res: ImpactFactors = {
@@ -240,7 +241,10 @@
         />
 
         <label for="building-cooling-system"> Cooling system type </label>
-        <select id="building-cooling-system"> </select>
+        <select bind:value={dataCenter.coolingSystemType.value} id="building-cooling-system">
+          {#each coolingSystemTypes as coolingSystem}
+            <option>{coolingSystem}</option>{/each}
+        </select>
 
         <label for="building-designed-floor-assembly-surface">
           Designed floor assembly surface, in square meters

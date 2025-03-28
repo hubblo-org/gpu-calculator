@@ -1,7 +1,7 @@
 import DataCenter from "$lib/components/DataCenter.svelte";
 import type { DataCenterCharacteristic } from "$lib/types/pcr-cloud";
 import { dataCenterCharacteristics } from "../mocks/dc-data";
-import { Countries, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
+import { CoolingSystems, Countries, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import userEvent from "@testing-library/user-event";
@@ -163,6 +163,31 @@ describe("data center component static elements test suite", () => {
     countriesNames.forEach((country) => {
       const countryOption = within(countriesSelection).getByRole("option", { name: country });
       expect(countryOption).toBeVisible();
+    });
+  });
+  it("should allow to select a cooling system", async () => {
+    const coolingSystemTypes = Object.values(CoolingSystems);
+
+    const user = userEvent.setup();
+
+    const dataCenterCharacteristicsSection = screen.getByRole("region", {
+      name: /Data center characteristics/
+    });
+    const displaySecondaryCharacteristicsButton = within(
+      dataCenterCharacteristicsSection
+    ).getByRole("button", { name: displayDataCenterCharacteristicsButtonDescription });
+    await user.click(displaySecondaryCharacteristicsButton);
+    const coolingSystemsSelection = within(dataCenterCharacteristicsSection).getByLabelText(
+      "Cooling system type",
+      {
+        exact: false
+      }
+    );
+    coolingSystemTypes.forEach((coolingSystem) => {
+      const coolingSystemOption = within(coolingSystemsSelection).getByRole("option", {
+        name: coolingSystem
+      });
+      expect(coolingSystemOption).toBeVisible();
     });
   });
 });
