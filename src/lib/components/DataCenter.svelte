@@ -186,10 +186,15 @@
       placeholder={dataCenter.waterUsageEffectiveness.value as string}
     />
     <label for="electrical-technical-resilience">Electrical Technical Resilience tier:</label
-    ><select id="electrical-technical-resilience">
+    ><select
+      bind:value={dataCenter.electricalTechnicalResilience.value}
+      id="electrical-technical-resilience"
+    >
       {#each electricalTechnicalResilienceTiers as tier}<option>{tier}</option>{/each}
     </select>
-    <label for="location">Location:</label><select id="location"
+    <label for="location">Location:</label><select
+      bind:value={dataCenter.location.value}
+      id="location"
       >{#each countriesNames as country}<option>{country}</option>{/each}</select
     >
 
