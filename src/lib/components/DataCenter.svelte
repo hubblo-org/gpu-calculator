@@ -58,7 +58,22 @@
     //    " lifespan=" +
     //    lifespan
     //);
-    return ((impact1 + quantity_impact2 * impact2) * reference_years) / lifespan;
+    var res = ((impact1 + quantity_impact2 * impact2) * reference_years) / lifespan;
+    if (isNaN(res)) {
+      console.error(
+        "Wrong calculation : impact1=" +
+          impact1 +
+          " impact2=" +
+          impact2 +
+          " quantity=" +
+          quantity_impact2 +
+          " refyears=" +
+          reference_years +
+          " lifespan=" +
+          lifespan
+      );
+    }
+    return res;
   }
 
   function addImpacts(
@@ -257,17 +272,35 @@
       if (inventory_with_impact[i].lifeCycleStep === "use") {
         for (var j = 0; j < res.length; j++) {
           if (res[j].life_cycle_step == inventory_with_impact[i].lifeCycleStep) {
-            console.log(
-              "USE res j lifecyclestep = " +
-                res[j].life_cycle_step +
-                " inventory_with_impact i lifecyclestep = " +
-                inventory_with_impact[i].lifeCycleStep +
-                " quantity=" +
-                inventory_with_impact[i].quantity +
-                " lifespan=" +
-                inventory_with_impact[i].lifespan
-            );
+            if (inventory_with_impact[i].name == "Diesel") {
+              console.log("Diesel !");
+              console.log(
+                "USE res j lifecyclestep = " +
+                  res[j].life_cycle_step +
+                  " inventory_with_impact i lifecyclestep = " +
+                  inventory_with_impact[i].lifeCycleStep +
+                  " quantity=" +
+                  inventory_with_impact[i].quantity +
+                  " lifespan=" +
+                  inventory_with_impact[i].lifespan +
+                  " impacts GWP=" +
+                  inventory_with_impact[i].impacts.GWP.value
+              );
+            }
             res[j].amount += 1;
+            if (
+              isNaN(inventory_with_impact[i].quantity) ||
+              isNaN(inventory_with_impact[i].lifespan)
+            ) {
+              console.error(
+                "name=" +
+                  inventory_with_impact[i].name +
+                  " quantity=" +
+                  inventory_with_impact[i].quantity +
+                  " lifespan=" +
+                  inventory_with_impact[i].lifespan
+              );
+            }
             res[j].impacts = addImpacts(
               res[j].impacts,
               inventory_with_impact[i].quantity,
@@ -275,6 +308,8 @@
               ref_years,
               inventory_with_impact[i].lifespan
             );
+            console.log("res[j].impacts=");
+            console.log(res[j].impacts);
           }
         }
         // if manuf, transport or eol

@@ -261,15 +261,18 @@ export function genNullImpact() {
 export const inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[] =
   MaterialImpacts.map((element) => {
     const elementDetails = MaterialInventory.filter(
-      (inventoryElement) => element.material_name === inventoryElement.id
-    )[0];
+      (inventoryElement) => element.id == inventoryElement.id
+    );
+    if (elementDetails.length == 0) {
+      console.error(element.id);
+    }
     const inventoryElement = {
       name: element.material_name,
       category: element.category,
       mass: element.mass,
       source: element.source,
-      quantity: elementDetails?.quantity,
-      lifespan: elementDetails?.lifespan,
+      quantity: elementDetails[0]?.quantity,
+      lifespan: elementDetails[0]?.lifespan,
       lifeCycleStep: element.lc_step,
       impacts: {
         ADPe: {
