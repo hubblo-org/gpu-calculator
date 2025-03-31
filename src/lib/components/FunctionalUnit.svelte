@@ -6,11 +6,10 @@
   const parameters = $derived(getFunctionalUnitParameters(selectedFunctionalUnit));
 </script>
 
-<div class="wrapper">
   <div>
     <section aria-labelledby="functional-unit-parameters">
       <div class="section-header">
-        <img src="/server-rack.svg" id="server-rack" alt="A server rack" />
+        <img src="/media/server-rack.svg" id="server-rack" alt="A server rack" />
         <h2 id="functional-unit-parameters">Functional unit parameters</h2>
       </div>
       <h3>{parameters.title}</h3>
@@ -23,7 +22,6 @@
   </div>
 
   <ImpactFactorsSection source="functional-unit" />
-</div>
 
 <style>
   #server-rack {
