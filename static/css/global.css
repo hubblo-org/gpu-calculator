@@ -50,6 +50,10 @@
 	--rounded-lg: var(--text-lg);
 	--rounded-xl: var(--text-xl);
 	--rounded-full: 50%;
+	--wrapper-max-width: 80rem;
+	--header-height: 4rem;
+	--space-16: 1rem;
+	--gutter: clamp(24px, 20px + 1.111vw, 32px);
 }
 
 @font-face {
@@ -82,6 +86,11 @@ button {
 	user-select: none;
 }
 
+main {
+
+	position: relative;
+}
+
 section {
 	display: flex;
 	flex-direction: column;
@@ -92,7 +101,8 @@ section button {
 	margin-top: 12px;
 }
 
-select, input {
+select,
+input {
 	background: 0 0;
 	appearance: none;
 	position: relative;
@@ -105,41 +115,56 @@ select, input {
 
 header,
 section,
-label,
 .wrapper {
 	padding: 12px;
 	margin-top: 12px;
 	margin-bottom: 12px;
 	border: 1px solid black;
+	margin-inline: auto;
+	width: 100%;
+	max-width: var(--wrapper-max-width);
+	padding-inline: var(--gutter, 2rem);
+	position: relative;
+	background-color: inherit;
+	color: var(--color-text, inherit);
+	transition: inherit;
+	border-inline: var(--border);
 }
 
 header,
 section {
 	background-color: var(--color-white-100);
 }
+ 
+label {
 
-table {
-  --accent-bg: var(--color-gray-100);
-  border-collapse: collapse;
-  margin: 1.5rem 0;
 }
+table {
+	--accent-bg: var(--color-gray-100);
+	border-collapse: collapse;
+	margin: 1.5rem 0;
+}
+
 td,
 th {
-  border: var(--border);
-  text-align: start;
-  padding: 0.5rem;
+	border: var(--border);
+	text-align: start;
+	padding: 0.5rem;
 }
+
 th {
-  background-color: var(--accent-bg);
-  font-weight: bold;
+	background-color: var(--accent-bg);
+	font-weight: bold;
 }
+
 tr:nth-child(even) {
-  /* Set every other cell slightly darker. Improves readability. */
-  background-color: var(--accent-bg);
+	/* Set every other cell slightly darker. Improves readability. */
+	background-color: var(--accent-bg);
 }
+
 table caption {
-  font-weight: italic;
-  margin-bottom: 0.5rem;
+	font-weight: italic;
+	margin-bottom: 0.5rem;
 }
 
 .btn-sm {
@@ -189,19 +214,19 @@ table caption {
 }
 
 @media (hover: hover) {
-  
-  .btn-primary:hover,
-  .btn-primary-100:hover {
-    --background: color-mix(in srgb, var(--color-primary-100) 80%, black);
-  }
 
-  .btn-primary-10:hover {
-    --background: color-mix(in srgb, var(--color-primary-10) 80%, white);
-  }
+	.btn-primary:hover,
+	.btn-primary-100:hover {
+		--background: color-mix(in srgb, var(--color-primary-100) 80%, black);
+	}
 
-  .btn-secondary:hover,
-  .btn-secondary-30:hover {
-    --background: var(--color-secondary-50);
-  }
+	.btn-primary-10:hover {
+		--background: color-mix(in srgb, var(--color-primary-10) 80%, white);
+	}
+
+	.btn-secondary:hover,
+	.btn-secondary-30:hover {
+		--background: var(--color-secondary-50);
+	}
 
 }
