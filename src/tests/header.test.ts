@@ -11,4 +11,8 @@ describe("header component test suite", () => {
     expect(hubbloLogo).toBeVisible();
     expect(hubbloName).toBeVisible();
   });
+  it("should have a link to the Hubblo website", () => {
+    const hubbloLink = screen.getByRole("link", { name: "Navigate to the Hubblo website" });
+    expect(hubbloLink).toBeVisible();
+  });
 });

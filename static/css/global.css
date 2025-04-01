@@ -61,6 +61,10 @@
 	src: url("/fonts/Lexend-Regular.ttf");
 }
 
+a {
+	text-decoration: none;
+}
+
 body {
 	font-family: var(--main-font-family), var(--fallback-font-family);
 	font-weight: 400;
@@ -135,10 +139,9 @@ header,
 section {
 	background-color: var(--color-white-100);
 }
- 
-label {
 
-}
+label {}
+
 table {
 	--accent-bg: var(--color-gray-100);
 	border-collapse: collapse;
