@@ -33,7 +33,14 @@
     return obj;
   });
 
+  const absoluteValuesTexts = {
+    display: "Display absolute values",
+    hide: "Hide absolute values"
+  };
+
   let selectedGraph = $state("bar-plot");
+  let absoluteValues = $state("hide");
+  let absoluteValuesButtonText = $state(absoluteValuesTexts.display);
 
   function setSectionTexts() {
     if (source === "data-center") {
@@ -51,11 +58,21 @@
     }
   }
 
-  function switchDisplay() {
+  function switchGraphDisplay() {
     if (selectedGraph === "bar-plot") {
       selectedGraph = "treemap";
     } else {
       selectedGraph = "bar-plot";
+    }
+  }
+
+  function switchAbsoluteValuesDisplay() {
+    if (absoluteValues === "display") {
+      absoluteValues = "hide";
+      absoluteValuesButtonText = absoluteValuesTexts.display;
+    } else {
+      absoluteValues = "display";
+      absoluteValuesButtonText = absoluteValuesTexts.hide;
     }
   }
 
@@ -64,22 +81,24 @@
 
 <section aria-labelledby={sectionTexts.heading_id}>
   <h2 id={sectionTexts.heading_id}>{sectionTexts.section_label}</h2>
-  <table>
-    <caption>{sectionTexts.table_caption}</caption><thead
-      ><tr
-        ><th>Life cycle step</th>{#each mainImpactCriterias as impactCriteria}<th
-            >{impactCriteria.acronym}</th
-          >{/each}</tr
-      ></thead
-    >
-    <tbody>
-      {#each resultsWithMainCriterias as result}<tr
-          ><th scope="row">{result.lc_step}</th><td>{result.GWP}</td><td>{result.MIPS}</td><td
-            >{result.WU}</td
-          ></tr
-        >{/each}
-    </tbody>
-  </table>
+  {#if absoluteValues === "display"}
+    <table>
+      <caption>{sectionTexts.table_caption}</caption><thead
+        ><tr
+          ><th>Life cycle step</th>{#each mainImpactCriterias as impactCriteria}<th
+              >{impactCriteria.acronym}</th
+            >{/each}</tr
+        ></thead
+      >
+      <tbody>
+        {#each resultsWithMainCriterias as result}<tr
+            ><th scope="row">{result.lc_step}</th><td>{result.GWP}</td><td>{result.MIPS}</td><td
+              >{result.WU}</td
+            ></tr
+          >{/each}
+      </tbody>
+    </table>
+  {/if}
   {#if selectedGraph === "treemap"}
     <select aria-label="Select an impact criteria"
       >{#each mainImpactCriterias as impactCriteria}<option>{impactCriteria.acronym}</option
@@ -87,5 +106,8 @@
     >
   {/if}
 
-  <button class="btn btn-sm btn-primary" onclick={switchDisplay}>Switch graph display</button>
+  <button class="btn btn-sm btn-primary" onclick={switchAbsoluteValuesDisplay}
+    >{absoluteValuesButtonText}</button
+  >
+  <button class="btn btn-sm btn-primary" onclick={switchGraphDisplay}>Switch graph display</button>
 </section>

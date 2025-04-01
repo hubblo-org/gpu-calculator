@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { getAllImpactCriterias } from "$lib/types/enums";
 import { functionalUnitOneResultsWithLc } from "../mocks/dc-data";
 import userEvent from "@testing-library/user-event";
+import { afterUpdate } from "svelte";
 
 const resultsAbsoluteValuesCaption =
   "Totals for the functional unit per impact criteria, as absolute values";
@@ -27,10 +28,47 @@ const filteredResults = functionalUnitOneResultsWithLc.filter(
 
 const lifeCycleSteps = filteredResults.map((result) => result.life_cycle_step);
 
-describe("absolute values table component test suite", () => {
+describe("impact factors section table test suite", () => {
   beforeEach(() =>
     render(ImpactFactorsSection, { props: { source: "data-center", results: filteredResults } })
   );
+
+  afterEach(() => cleanup());
+
+  it("should display a button to show and hide the absolute values", async () => {
+    const user = userEvent.setup();
+    const dataCenterImpactFactorsSection = screen.getByRole("region", {
+      name: /Data center impact factors/
+    });
+
+    const displayAbsoluteValuesButton = within(dataCenterImpactFactorsSection).getByRole("button", {
+      name: "Display absolute values"
+    });
+    await user.click(displayAbsoluteValuesButton);
+
+    expect(
+      within(dataCenterImpactFactorsSection).getByRole("table", {
+        name: dataCenterImpactFactorsCaption
+      })
+    ).toBeVisible();
+
+    const hideAbsoluteValuesButton = within(dataCenterImpactFactorsSection).getByRole("button", {
+      name: "Hide absolute values"
+    });
+    await user.click(hideAbsoluteValuesButton);
+
+    expect(
+      within(dataCenterImpactFactorsSection).queryByRole("table", {
+        name: dataCenterImpactFactorsCaption
+      })
+    ).not.toBeInTheDocument();
+  });
+});
+describe("impact factors section graphs test suite", () => {
+  beforeEach(() =>
+    render(ImpactFactorsSection, { props: { source: "data-center", results: filteredResults } })
+  );
+  afterEach(() => cleanup());
 
   it("should display a button allowing to switch the display of the impact factors graphical representation", () => {
     const dataCenterImpactFactorsSection = screen.getByRole("region", {
@@ -70,9 +108,12 @@ describe("absolute values table component test suite", () => {
 });
 
 describe("absolute values for data center impact factors table component test suite", () => {
-  beforeEach(() =>
-    render(ImpactFactorsSection, { props: { source: "data-center", results: filteredResults } })
-  );
+  beforeEach(async () => {
+    const user = userEvent.setup();
+    render(ImpactFactorsSection, { props: { source: "data-center", results: filteredResults } });
+    const displayAbsoluteValues = screen.getByRole("button", { name: "Display absolute values" });
+    await user.click(displayAbsoluteValues);
+  });
   afterEach(() => cleanup());
 
   it("should have a section for displaying a graphical representation of the data center impact factors", () => {
@@ -117,10 +158,12 @@ describe("absolute values for data center impact factors table component test su
 });
 
 describe("absolute values table component for functional unit test suite", () => {
-  beforeEach(() =>
-    render(ImpactFactorsSection, { props: { source: "functional-unit", results: filteredResults } })
-  );
-  afterEach(() => cleanup());
+  beforeEach(async () => {
+    const user = userEvent.setup();
+    render(ImpactFactorsSection, { props: { source: "functional-unit", results: filteredResults } });
+    const displayAbsoluteValues = screen.getByRole("button", { name: "Display absolute values" });
+    await user.click(displayAbsoluteValues);
+  });
 
   it("should display a section with a graphical representation of the functional unit results", () => {
     const functionalUnitResultsGraphSection = screen.getByRole("region", {
