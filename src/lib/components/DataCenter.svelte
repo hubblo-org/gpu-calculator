@@ -46,18 +46,7 @@
     if (isNaN(impact1)) {
       impact1 = 0;
     }
-    //console.log(
-    //  "impact1=" +
-    //    impact1 +
-    //    " quantity=" +
-    //    quantity_impact2 +
-    //    " impact2=" +
-    //    impact2 +
-    //    " refyears=" +
-    //    reference_years +
-    //    " lifespan=" +
-    //    lifespan
-    //);
+
     var res = ((impact1 + quantity_impact2 * impact2) * reference_years) / lifespan;
     if (isNaN(res)) {
       console.error(
@@ -242,6 +231,17 @@
     return res;
   }
 
+  console.log("matching: " + "Electricity, " + dataCenter.location.value + " mix");
+  let electricityItem = inventoryWithImpact.filter(
+    (element) => element.name == "Electricity, " + dataCenter.location.value + " mix"
+  )[0];
+  console.log("electricityItem: " + electricityItem);
+
+  // state variables
+  let yearlyTotalEnergy = $state(dataCenter.yearlyTotalEnergy.value);
+  let steelMass = $state(dataCenter.steelMass.value);
+  let concreteVolume = $state(dataCenter.concreteVolume.value);
+
   /// Casts Data Centre inventory in FunctionalUnitResults
   function build_impact_per_lifecycle_step(
     inventory_with_impact: DataCenterInventoryElementWithImpactFactors[]
@@ -262,95 +262,171 @@
     var initEOL = genNullImpact();
     initEOL.name = "Combined end-of-life impact of all equipments in the Data Centre";
     initEOL.life_cycle_step = "end-of-life";
+
+    let editableInventory = {
+      "Concrete volume": concreteVolume,
+      "Number of freight lifts": dataCenter.freightLifts.value as number,
+      "Number of lifts": dataCenter.lifts.value as number,
+      "Steel mass": steelMass,
+      "Suspended ceiling surface": dataCenter.suspendedCeilingSurface.value as number
+    };
+    const keys = Object.keys(editableInventory).filter((key) => isNaN(Number(key)));
+    keys.forEach((key) => {
+      let impacts = inventory_with_impact.filter((element) => element.name == key);
+      console.log("Treating " + key);
+      console.log("impacts: ");
+      console.log(impacts);
+      for (i = 0; i < impacts.length; i++) {
+        if (impacts[i].lifeCycleStep == initUse.life_cycle_step) {
+          initUse.impacts = addImpacts(
+            initUse.impacts,
+            editableInventory[key],
+            impacts[i].impacts,
+            1,
+            impacts[i].lifespan
+          );
+          console.log("Adding impacts of " + key + " to initUse");
+        } else if (impacts[i].lifeCycleStep == initManuf.life_cycle_step) {
+          initManuf.impacts = addImpacts(
+            initManuf.impacts,
+            editableInventory[key],
+            impacts[i].impacts,
+            1,
+            impacts[i].lifespan
+          );
+          console.log("Adding impacts of " + key + " to initManuf");
+        } else if (impacts[i].lifeCycleStep == initTransport.life_cycle_step) {
+          initTransport.impacts = addImpacts(
+            initTransport.impacts,
+            editableInventory[key],
+            impacts[i].impacts,
+            1,
+            impacts[i].lifespan
+          );
+          console.log("Adding impacts of " + key + " to initTransport");
+        } else if (impacts[i].lifeCycleStep == initEOL.life_cycle_step) {
+          initEOL.impacts = addImpacts(
+            initEOL.impacts,
+            editableInventory[key],
+            impacts[i].impacts,
+            1,
+            impacts[i].lifespan
+          );
+          console.log("Adding impacts of " + key + " to initEOL");
+        }
+      }
+    });
+    // Electricity
+    $inspect(yearlyTotalEnergy);
+    initUse.impacts = addImpacts(
+      initUse.impacts,
+      Number(yearlyTotalEnergy),
+      electricityItem.impacts,
+      1,
+      Number(electricityItem.lifespan)
+    );
+    //dataCenter.coolingSystemType
+    //dataCenter.dataCenterLoadFactor
+    //dataCenter.designedFloorAssemblySurface
+    //dataCenter.electricalTechnicalResilience
+    //dataCenter.energyReuseFactor
+    //dataCenter.lifespan
+    //dataCenter.location
+    //dataCenter.maximumUsableElectricalPower
+    //dataCenter.partitionSurface
+    //dataCenter.powerUsageEffectiveness
+    //dataCenter.renewableEnergyFactor
+    //dataCenter.technicalRoomSurface
+    //dataCenter.totalSurface
+    //dataCenter.waterUsageEffectiveness
+
     res.push(initEOL);
     res.push(initUse);
     res.push(initTransport);
     res.push(initManuf);
 
     for (var i = 0; i < inventory_with_impact.length; i++) {
-      // if lifecycle step is usage
-      if (inventory_with_impact[i].lifeCycleStep === "use") {
-        for (var j = 0; j < res.length; j++) {
-          if (res[j].life_cycle_step == inventory_with_impact[i].lifeCycleStep) {
-            if (inventory_with_impact[i].name == "Diesel") {
-              console.log("Diesel !");
-              console.log(
-                "USE res j lifecyclestep = " +
-                  res[j].life_cycle_step +
-                  " inventory_with_impact i lifecyclestep = " +
-                  inventory_with_impact[i].lifeCycleStep +
-                  " quantity=" +
-                  inventory_with_impact[i].quantity +
-                  " lifespan=" +
-                  inventory_with_impact[i].lifespan +
-                  " impacts GWP=" +
-                  inventory_with_impact[i].impacts.GWP.value
+      if (inventory_with_impact[i].name! in editableInventory) {
+        // if lifecycle step is usage
+        if (inventory_with_impact[i].lifeCycleStep === "use") {
+          for (var j = 0; j < res.length; j++) {
+            if (res[j].life_cycle_step == inventory_with_impact[i].lifeCycleStep) {
+              if (inventory_with_impact[i].name == "Diesel") {
+                console.log("Diesel !");
+                console.log(
+                  "USE res j lifecyclestep = " +
+                    res[j].life_cycle_step +
+                    " inventory_with_impact i lifecyclestep = " +
+                    inventory_with_impact[i].lifeCycleStep +
+                    " quantity=" +
+                    inventory_with_impact[i].quantity +
+                    " lifespan=" +
+                    inventory_with_impact[i].lifespan +
+                    " impacts GWP=" +
+                    inventory_with_impact[i].impacts.GWP.value
+                );
+              }
+              res[j].amount += 1;
+              if (
+                isNaN(inventory_with_impact[i].quantity) ||
+                isNaN(inventory_with_impact[i].lifespan)
+              ) {
+                console.error(
+                  "name=" +
+                    inventory_with_impact[i].name +
+                    " quantity=" +
+                    inventory_with_impact[i].quantity +
+                    " lifespan=" +
+                    inventory_with_impact[i].lifespan
+                );
+              }
+              res[j].impacts = addImpacts(
+                res[j].impacts,
+                inventory_with_impact[i].quantity,
+                inventory_with_impact[i].impacts,
+                ref_years,
+                inventory_with_impact[i].lifespan
               );
+              console.log("res[j].impacts=");
+              console.log(res[j].impacts);
             }
-            res[j].amount += 1;
+          }
+          // if manuf, transport or eol
+        } else if (inventory_with_impact[i].lifeCycleStep != "full_life_cycle") {
+          for (var j = 0; j < res.length; j++) {
+            //console.log(
+            //  "res j lifecyclestep = " +
+            //    res[j].life_cycle_step +
+            //    " inventory_with_impact i lifecyclestep = " +
+            //    inventory_with_impact[i].lifeCycleStep
+            //);
             if (
-              isNaN(inventory_with_impact[i].quantity) ||
-              isNaN(inventory_with_impact[i].lifespan)
+              res[j].life_cycle_step == inventory_with_impact[i].lifeCycleStep ||
+              (res[j].life_cycle_step == "eol" &&
+                inventory_with_impact[i].lifeCycleStep == "end-of-life")
             ) {
-              console.error(
-                "name=" +
-                  inventory_with_impact[i].name +
-                  " quantity=" +
-                  inventory_with_impact[i].quantity +
-                  " lifespan=" +
-                  inventory_with_impact[i].lifespan
+              console.log("updating at index " + j);
+              res[j].amount += 1;
+              res[j].impacts = addImpacts(
+                res[j].impacts,
+                inventory_with_impact[i].quantity,
+                inventory_with_impact[i].impacts,
+                ref_years,
+                inventory_with_impact[i].lifespan
               );
             }
-            res[j].impacts = addImpacts(
-              res[j].impacts,
-              inventory_with_impact[i].quantity,
-              inventory_with_impact[i].impacts,
-              ref_years,
-              inventory_with_impact[i].lifespan
-            );
-            console.log("res[j].impacts=");
-            console.log(res[j].impacts);
           }
+          // if full lifecycle
+        } else {
+          console.log("life cycle step has an issue");
         }
-        // if manuf, transport or eol
-      } else if (inventory_with_impact[i].lifeCycleStep != "full_life_cycle") {
-        for (var j = 0; j < res.length; j++) {
-          //console.log(
-          //  "res j lifecyclestep = " +
-          //    res[j].life_cycle_step +
-          //    " inventory_with_impact i lifecyclestep = " +
-          //    inventory_with_impact[i].lifeCycleStep
-          //);
-          if (
-            res[j].life_cycle_step == inventory_with_impact[i].lifeCycleStep ||
-            (res[j].life_cycle_step == "eol" &&
-              inventory_with_impact[i].lifeCycleStep == "end-of-life")
-          ) {
-            console.log("updating at index " + j);
-            res[j].amount += 1;
-            res[j].impacts = addImpacts(
-              res[j].impacts,
-              inventory_with_impact[i].quantity,
-              inventory_with_impact[i].impacts,
-              ref_years,
-              inventory_with_impact[i].lifespan
-            );
-          }
-        }
-        // if full lifecycle
-      } else {
-        console.log("life cycle step has an issue");
       }
     }
-    // else
+
     console.log("result:");
     console.log(res);
     return res;
   }
-
-  const results = build_impact_per_lifecycle_step(inventoryWithImpact);
-  console.log("results / inventory:");
-  console.log(results);
 
   function handleSecondaryCharacteristicsVisibility() {
     if (secondaryCharacteristicsAreVisible) {
@@ -362,9 +438,63 @@
     }
   }
 
+  import { onMount } from "svelte";
+  import * as Plot from "@observablehq/plot";
+  import Results from "./Results.svelte";
+
   var tier = "Tier " + dataCenter.electricalTechnicalResilience.value;
-  console.log("dataCenter:");
-  console.log(dataCenter);
+
+  let results = $derived.by(() => {
+    let res = build_impact_per_lifecycle_step(inventoryWithImpact);
+
+    const filteredResults = res; //.filter((result) => result.life_cycle_step != "full_life_cycle");
+    console.log("filteredResults = " + filteredResults);
+
+    const resultsCriteriasPerLifeCycle = filteredResults
+      .filter((result) => result.life_cycle_step != "full_life_cycle")
+      .flatMap((result) => {
+        const impactCriteriasNames = Object.keys(result.impacts);
+        const sortedImpactCriterias = impactCriteriasNames.map((impactCriteria) => {
+          const object = {
+            impact_criteria: impactCriteria,
+            lc_step: result.life_cycle_step,
+            share: result.impacts[impactCriteria].value
+          };
+          return object;
+        });
+
+        return sortedImpactCriterias;
+      });
+
+    const lifeCycleSteps = ["manufacturing", "transport", "use", "end-of-life"];
+
+    return { per_lifecycle: resultsCriteriasPerLifeCycle, steps: lifeCycleSteps };
+  });
+  function renderStackedBarPlot() {
+    let div = document.querySelector("#impact-factors-plot");
+    div?.firstChild?.remove();
+    if (div) {
+      const resultsBarPlot = Plot.plot({
+        width: 1600,
+        height: 800,
+        marginLeft: 100,
+        color: { legend: true, domain: results["steps"] },
+        y: { percent: true },
+        marks: [
+          Plot.barY(results["per_lifecycle"], {
+            y: "share",
+            x: "impact_criteria",
+            fill: "lc_step",
+            order: results["steps"],
+            offset: "normalize",
+            tip: true
+          })
+        ]
+      });
+      div.append(resultsBarPlot);
+    }
+  }
+  $effect(() => renderStackedBarPlot());
 </script>
 
 <section aria-labelledby="data-center-characteristics">
@@ -386,6 +516,7 @@
         <label for="concrete-volume">{dataCenter.concreteVolume.label} (cubic meters):</label><input
           type="number"
           id="concrete-volume"
+          bind:value={concreteVolume}
           placeholder={dataCenter.concreteVolume.value as string}
         />
       </div>
@@ -395,14 +526,17 @@
         <label for="steel-mass">{dataCenter.steelMass.label} (kilograms):</label><input
           type="number"
           id="steel-mass"
+          bind:value={steelMass}
           placeholder={dataCenter.steelMass.value as string}
         />
       </div>
       <div class="field">
-        <label for="yearly-total-energy">{dataCenter.yearlyTotalEnergy.label} (kilowatts):</label
+        <label for="yearly-total-energy"
+          >{dataCenter.yearlyTotalEnergy.label} (kilowatthours):</label
         ><input
           type="number"
           id="yearly-total-energy"
+          bind:value={yearlyTotalEnergy}
           placeholder={dataCenter.yearlyTotalEnergy.value as string}
         />
       </div>
@@ -487,6 +621,7 @@
           </div>
         </div>
 
+        <!--
         <div class="grid">
           <div class="field">
             <label for="building-energy-reuse-factor">
@@ -496,13 +631,13 @@
               type="number"
               id="building-energy-reuse-factor"
               min="0"
-              max="3"
+              max="310000"
               step="0.01"
               placeholder={dataCenter.energyReuseFactor.value as string}
             />
-          </div>
+          </div>-->
 
-          <div class="field">
+        <!--<div class="field">
             <label for="building-renewable-energy-factor">
               {dataCenter.renewableEnergyFactor.label} (REF)
             </label>
@@ -515,9 +650,9 @@
               placeholder={dataCenter.renewableEnergyFactor.value as string}
             />
           </div>
-        </div>
+        </div>-->
 
-        <div class="grid">
+        <!--<div class="grid">
           <div class="field">
             <label for="building-cooling-system"> {dataCenter.coolingSystemType.label} </label>
             <select bind:value={dataCenter.coolingSystemType.value} id="building-cooling-system">
@@ -537,7 +672,7 @@
               />
             </div>
           </div>
-        </div>
+        </div>-->
 
         <div class="grid">
           <div class="field">
@@ -600,7 +735,7 @@
   </div>
 </section>
 
-<ResultsVerticalPercentages {results} />
+<div id="impact-factors-plot"></div>
 
 <ImpactFactorsSection source="data-center" />
 

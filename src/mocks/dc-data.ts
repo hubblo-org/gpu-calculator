@@ -258,6 +258,14 @@ export function genNullImpact() {
 //  return inventoryElementsImpactFactors;
 //}
 
+//const concreteRawImpacts = MaterialImpacts.filter(
+//  (element) => element.id == "Concrete volume"
+//)[0];
+//
+//export const concreteImpact = {
+//
+//};
+
 export const inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[] =
   MaterialImpacts.map((element) => {
     const elementDetails = MaterialInventory.filter(
