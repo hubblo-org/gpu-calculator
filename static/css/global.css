@@ -119,7 +119,7 @@ section,
 	padding: 12px;
 	margin-top: 12px;
 	margin-bottom: 12px;
-	border: 1px solid black;
+	border: var(--border);
 	margin-inline: auto;
 	width: 100%;
 	max-width: var(--wrapper-max-width);
