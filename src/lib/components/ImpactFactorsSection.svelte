@@ -1,14 +1,23 @@
 <script lang="ts">
+  import { renderStackedBarPlot } from "$lib/plots";
   import { getAllImpactCriterias } from "$lib/types/enums";
-  import type { FunctionalUnitResultsRowWithLifeCycle } from "$lib/types/pcr-cloud";
-  import { functionalUnitOneResultsWithLc } from "../../mocks/dc-data";
 
+  interface Results {
+    per_lifecycle: Result[];
+    steps: string[];
+  }
+  interface Result {
+    impact_criteria: string;
+    lc_step: string | undefined;
+    share: number;
+  }
   interface Props {
     source: string;
-    results?: FunctionalUnitResultsRowWithLifeCycle[];
+    results?: Results;
   }
 
-  const { source, results = functionalUnitOneResultsWithLc }: Props = $props();
+  const { source, results }: Props = $props();
+
   const mainImpactCriterias = getAllImpactCriterias().filter(
     (impactCriteria) =>
       impactCriteria.acronym === "GWP" ||
@@ -16,21 +25,14 @@
       impactCriteria.acronym === "WU"
   );
 
-  interface Result {
-    lc_step: string;
-    GWP: number;
-    MIPS: number;
-    WU: number;
-  }
-
-  const resultsWithMainCriterias: Result[] = results!.map((result) => {
-    const obj: Result = {
-      lc_step: result.life_cycle_step,
-      GWP: result.impacts.GWP.value,
-      MIPS: result.impacts.MIPS.value,
-      WU: result.impacts.WU.value
-    };
-    return obj;
+  const resultsWithMainCriterias: Result[] = $derived.by(() => {
+    const filteredResults = results?.per_lifecycle.filter(
+      (result) =>
+        result.impact_criteria === "GWP" ||
+        result.impact_criteria === "MIPS" ||
+        result.impact_criteria === "WU"
+    );
+    return filteredResults;
   });
 
   const absoluteValuesTexts = {
@@ -77,6 +79,23 @@
   }
 
   const sectionTexts = setSectionTexts();
+  $effect(() => {
+    if (results) {
+      if (selectedGraph === "bar-plot") {
+        renderStackedBarPlot(
+          source,
+          1200,
+          800,
+          resultsWithMainCriterias,
+          results?.steps,
+          "share",
+          "impact_criteria",
+          "lc_step"
+        );
+      } else if (selectedGraph === "treemap") {
+      }
+    }
+  });
 </script>
 
 <section aria-labelledby={sectionTexts.heading_id}>
@@ -89,35 +108,46 @@
   {#if absoluteValues === "display"}
     <table>
       <caption>{sectionTexts.table_caption}</caption><thead
-        ><tr
-          ><th>Life cycle step</th>{#each mainImpactCriterias as impactCriteria}<th
-              >{impactCriteria.acronym}</th
-            >{/each}</tr
-        ></thead
+        ><tr><th>Life cycle step</th><th>Impact criteria</th><th>Value</th></tr></thead
       >
       <tbody>
         {#each resultsWithMainCriterias as result}<tr
-            ><th scope="row">{result.lc_step}</th><td>{result.GWP}</td><td>{result.MIPS}</td><td
-              >{result.WU}</td
+            ><th scope="row">{result.lc_step}</th><td>{result.impact_criteria}</td><td
+              >{result.share}</td
             ></tr
           >{/each}
       </tbody>
     </table>
   {/if}
-  {#if selectedGraph === "treemap"}
-    <select aria-label="Select an impact criteria"
-      >{#each mainImpactCriterias as impactCriteria}<option>{impactCriteria.acronym}</option
-        >{/each}</select
-    >
-  {/if}
+  <div id="graph-display">
+    <div id="impact-factors-plot-{source}"></div>
 
-  <button class="btn btn-sm btn-primary" onclick={switchGraphDisplay}>Switch graph display</button>
+    <div id="criteria-selection">
+      <button class="btn btn-sm btn-primary" onclick={switchGraphDisplay}
+        >Switch graph display</button
+      >
+
+      {#if selectedGraph === "treemap"}
+        <select aria-label="Select an impact criteria"
+          >{#each mainImpactCriterias as impactCriteria}<option>{impactCriteria.acronym}</option
+            >{/each}</select
+        >
+      {/if}
+    </div>
+  </div>
 </section>
 
 <style>
-  #section-heading {
+  #section-heading,
+  #graph-display {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+  }
+  #criteria-selection {
+    display: flex;
+    gap: 12px;
+    flex-direction: column;
+    width: 20%;
   }
 </style>

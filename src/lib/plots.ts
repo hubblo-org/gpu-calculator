@@ -74,25 +74,28 @@ export function renderHorizontalBarPlot(
 }
 
 export function renderStackedBarPlot(
+  source: string,
+  width: number,
+  height: number,
   impactFactors: ImpactFactorWithLifeCycle[],
   domains: string[],
-  xLabel: string,
   yLabel: string,
+  xLabel: string,
   domainColor: string
 ) {
-  let div = document.querySelector("#impact-factors-plot");
+  let div = document.querySelector(`#impact-factors-plot-${source}`);
   div?.firstChild?.remove();
   if (div) {
     const resultsBarPlot = Plot.plot({
-      width: 1600,
-      height: 800,
+      width: width,
+      height: height,
       marginLeft: 100,
       color: { legend: true, domain: domains },
-      x: { percent: true },
+      y: { percent: true },
       marks: [
-        Plot.barX(impactFactors, {
-          x: xLabel,
+        Plot.barY(impactFactors, {
           y: yLabel,
+          x: xLabel,
           fill: domainColor,
           order: domains,
           offset: "normalize",
@@ -103,7 +106,6 @@ export function renderStackedBarPlot(
     div.append(resultsBarPlot);
   }
 }
-
 
 interface ImpactFactorWithCategory {
   category: string;
