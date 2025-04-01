@@ -80,7 +80,12 @@
 </script>
 
 <section aria-labelledby={sectionTexts.heading_id}>
-  <h2 id={sectionTexts.heading_id}>{sectionTexts.section_label}</h2>
+  <div id="section-heading">
+    <h2 id={sectionTexts.heading_id}>{sectionTexts.section_label}</h2>
+    <button class="btn btn-sm btn-primary" onclick={switchAbsoluteValuesDisplay}
+      >{absoluteValuesButtonText}</button
+    >
+  </div>
   {#if absoluteValues === "display"}
     <table>
       <caption>{sectionTexts.table_caption}</caption><thead
@@ -106,8 +111,13 @@
     >
   {/if}
 
-  <button class="btn btn-sm btn-primary" onclick={switchAbsoluteValuesDisplay}
-    >{absoluteValuesButtonText}</button
-  >
   <button class="btn btn-sm btn-primary" onclick={switchGraphDisplay}>Switch graph display</button>
 </section>
+
+<style>
+  #section-heading {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+</style>
