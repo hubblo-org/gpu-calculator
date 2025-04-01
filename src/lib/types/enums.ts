@@ -9,7 +9,9 @@ export enum FunctionalUnits {
 }
 export enum Countries {
   FRA = "France",
-  GBR = "United Kingdom"
+  GBR = "United Kingdom",
+  USA = "United States of America",
+  POL = "Poland"
 }
 export enum InventoryCategories {
   Building,
@@ -76,8 +78,7 @@ export function getFunctionalUnitParameters(
     case FunctionalUnits.First:
       return {
         title: "Functional Unit 1",
-        service:
-          "Provide hosting services for operation of the IT equipment.",
+        service: "Provide hosting services for operation of the IT equipment.",
         product: "For one kilowatt of commercialised IT power.",
         studyDuration: "One year."
       };

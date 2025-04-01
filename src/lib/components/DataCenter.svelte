@@ -361,6 +361,10 @@
       secondaryCharacteristicsButtonLabel = "Hide the data center secondary characteristics";
     }
   }
+
+  var tier = "Tier " + dataCenter.electricalTechnicalResilience.value;
+  console.log("dataCenter:");
+  console.log(dataCenter);
 </script>
 
 <section aria-labelledby="data-center-characteristics">
@@ -422,10 +426,7 @@
     <div class="grid">
       <div class="field">
         <label for="electrical-technical-resilience">Electrical Technical Resilience tier:</label
-        ><select
-          bind:value={dataCenter.electricalTechnicalResilience.value}
-          id="electrical-technical-resilience"
-        >
+        ><select bind:value={tier} id="electrical-technical-resilience">
           {#each electricalTechnicalResilienceTiers as tier}<option>{tier}</option>{/each}
         </select>
       </div>
@@ -438,160 +439,165 @@
       </div>
     </div>
 
-  {#if secondaryCharacteristicsAreVisible}
-    <div transition:fade class="section-main" id="secondary-characteristics">
-      <div class="grid">
-        <div class="field">
-          <label for="building-lifespan">{dataCenter.lifespan.label} (years)</label>
-          <input
-            type="number"
-            id="building-lifespan"
-            placeholder={dataCenter.lifespan.value as string}
-          />
-        </div>
-
-        <div class="field">
-          <label for="building-technical-rooms-surface"
-            >{dataCenter.technicalRoomSurface.label} (square meters)</label
-          >
-          <input
-            type="number"
-            id="building-technical-rooms-surface"
-            step="0.01"
-            placeholder={dataCenter.technicalRoomSurface.value as string}
-          />
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="field">
-          <label for="building-maximum-usable-electrical-power"
-            >{dataCenter.maximumUsableElectricalPower.label} (kilowatts)</label
-          >
-          <input
-            type="number"
-            id="building-maximum-usable-electrical-power"
-            placeholder={dataCenter.maximumUsableElectricalPower.value as string}
-          />
-        </div>
-
-        <div class="field">
-          <label for="building-load-factor"> Load factor </label>
-          <input
-            type="number"
-            id="building-load-factor"
-            step="0.1"
-            placeholder={dataCenter.dataCenterLoadFactor.value as string}
-          />
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="field">
-          <label for="building-energy-reuse-factor">
-            {dataCenter.energyReuseFactor.label} (ERF)
-          </label>
-          <input
-            type="number"
-            id="building-energy-reuse-factor"
-            min="0"
-            max="3"
-            step="0.01"
-            placeholder={dataCenter.energyReuseFactor.value as string}
-          />
-        </div>
-
-        <div class="field">
-          <label for="building-renewable-energy-factor">
-            {dataCenter.renewableEnergyFactor.label} (REF)
-          </label>
-          <input
-            type="number"
-            id="building-renewable-energy-factor"
-            min="0"
-            max="3"
-            step="0.01"
-            placeholder={dataCenter.renewableEnergyFactor.value as string}
-          />
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="field">
-          <label for="building-cooling-system"> {dataCenter.coolingSystemType.label} </label>
-          <select bind:value={dataCenter.coolingSystemType.value} id="building-cooling-system">
-            {#each coolingSystemTypes as coolingSystem}
-              <option>{coolingSystem}</option>{/each}
-          </select>
+    {#if secondaryCharacteristicsAreVisible}
+      <div transition:fade class="section-main" id="secondary-characteristics">
+        <div class="grid">
+          <div class="field">
+            <label for="building-lifespan">{dataCenter.lifespan.label} (years)</label>
+            <input
+              type="number"
+              id="building-lifespan"
+              placeholder={dataCenter.lifespan.value as string}
+            />
+          </div>
 
           <div class="field">
-            <label for="building-designed-floor-assembly-surface">
-              {dataCenter.designedFloorAssemblySurface.label} (square meters)
+            <label for="building-technical-rooms-surface"
+              >{dataCenter.technicalRoomSurface.label} (square meters)</label
+            >
+            <input
+              type="number"
+              id="building-technical-rooms-surface"
+              step="0.01"
+              placeholder={dataCenter.technicalRoomSurface.value as string}
+            />
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="building-maximum-usable-electrical-power"
+              >{dataCenter.maximumUsableElectricalPower.label} (kilowatts)</label
+            >
+            <input
+              type="number"
+              id="building-maximum-usable-electrical-power"
+              placeholder={dataCenter.maximumUsableElectricalPower.value as string}
+            />
+          </div>
+
+          <div class="field">
+            <label for="building-load-factor"> Load factor </label>
+            <input
+              type="number"
+              id="building-load-factor"
+              step="0.1"
+              placeholder={dataCenter.dataCenterLoadFactor.value as string}
+            />
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="building-energy-reuse-factor">
+              {dataCenter.energyReuseFactor.label} (ERF)
             </label>
             <input
               type="number"
-              id="building-designed-floor-assembly-surface"
+              id="building-energy-reuse-factor"
+              min="0"
+              max="3"
               step="0.01"
-              placeholder={dataCenter.designedFloorAssemblySurface.value as string}
+              placeholder={dataCenter.energyReuseFactor.value as string}
+            />
+          </div>
+
+          <div class="field">
+            <label for="building-renewable-energy-factor">
+              {dataCenter.renewableEnergyFactor.label} (REF)
+            </label>
+            <input
+              type="number"
+              id="building-renewable-energy-factor"
+              min="0"
+              max="3"
+              step="0.01"
+              placeholder={dataCenter.renewableEnergyFactor.value as string}
+            />
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="building-cooling-system"> {dataCenter.coolingSystemType.label} </label>
+            <select bind:value={dataCenter.coolingSystemType.value} id="building-cooling-system">
+              {#each coolingSystemTypes as coolingSystem}
+                <option>{coolingSystem}</option>{/each}
+            </select>
+
+            <div class="field">
+              <label for="building-designed-floor-assembly-surface">
+                {dataCenter.designedFloorAssemblySurface.label} (square meters)
+              </label>
+              <input
+                type="number"
+                id="building-designed-floor-assembly-surface"
+                step="0.01"
+                placeholder={dataCenter.designedFloorAssemblySurface.value as string}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="building-suspended-ceiling-surface">
+              {dataCenter.suspendedCeilingSurface.label} (square meters)
+            </label>
+            <input
+              type="number"
+              id="building-suspended-ceiling-surface"
+              step="0.01"
+              placeholder={dataCenter.suspendedCeilingSurface.value as string}
+            />
+          </div>
+
+          <div class="field">
+            <label for="building-lifts"> {dataCenter.lifts.label} </label>
+            <input
+              type="number"
+              id="building-lifts"
+              placeholder={dataCenter.lifts.value as string}
+            />
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="building-freight-lifts"> {dataCenter.freightLifts.label} </label>
+            <input
+              type="number"
+              id="building-freight-lifts"
+              placeholder={dataCenter.freightLifts.value as string}
+            />
+          </div>
+
+          <div class="field">
+            <label for="building-partition-surface">
+              {dataCenter.partitionSurface.label} (square meters)
+            </label>
+            <input
+              type="number"
+              id="building-partition-surface"
+              step="0.01"
+              placeholder={dataCenter.partitionSurface.value as string}
             />
           </div>
         </div>
       </div>
+    {/if}
 
-      <div class="grid">
-        <div class="field">
-          <label for="building-suspended-ceiling-surface">
-            {dataCenter.suspendedCeilingSurface.label} (square meters)
-          </label>
-          <input
-            type="number"
-            id="building-suspended-ceiling-surface"
-            step="0.01"
-            placeholder={dataCenter.suspendedCeilingSurface.value as string}
-          />
-        </div>
-
-        <div class="field">
-          <label for="building-lifts"> {dataCenter.lifts.label} </label>
-          <input type="number" id="building-lifts" placeholder={dataCenter.lifts.value as string} />
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="field">
-          <label for="building-freight-lifts"> {dataCenter.freightLifts.label} </label>
-          <input
-            type="number"
-            id="building-freight-lifts"
-            placeholder={dataCenter.freightLifts.value as string}
-          />
-        </div>
-
-        <div class="field">
-          <label for="building-partition-surface">
-            {dataCenter.partitionSurface.label} (square meters)
-          </label>
-          <input
-            type="number"
-            id="building-partition-surface"
-            step="0.01"
-            placeholder={dataCenter.partitionSurface.value as string}
-          />
-        </div>
-      </div>
-    </div>
-  {/if}
-
-  <button
-    aria-label={secondaryCharacteristicsButtonLabel}
-    class="btn btn-sm btn-primary"
-    onclick={handleSecondaryCharacteristicsVisibility}
-    >{#if secondaryCharacteristicsAreVisible}
-      Hide secondary characteristics
-    {:else}
-      Show secondary characteristics
-    {/if}</button
-  >
+    <button
+      aria-label={secondaryCharacteristicsButtonLabel}
+      class="btn btn-sm btn-primary"
+      onclick={handleSecondaryCharacteristicsVisibility}
+      >{#if secondaryCharacteristicsAreVisible}
+        Hide secondary characteristics
+      {:else}
+        Show secondary characteristics
+      {/if}</button
+    >
+  </div>
 </section>
 
 <ResultsVerticalPercentages {results} />
@@ -602,7 +608,7 @@
   .field {
     display: flex;
     flex-direction: column;
-	  width: 100%;
+    width: 100%;
     gap: 1rem;
   }
   #secondary-characteristics {
