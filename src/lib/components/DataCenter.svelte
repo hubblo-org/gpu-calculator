@@ -505,7 +505,7 @@
   <div class="section-main">
     <div class="grid">
       <div class="field">
-        <label for="building-total-surface">{dataCenter.totalSurface.label} (square meters):</label
+        <label for="building-total-surface">{dataCenter.totalSurface.label} (square meters)</label
         ><input
           type="number"
           id="building-total-surface"
@@ -513,17 +513,15 @@
         />
       </div>
       <div class="field">
-        <label for="concrete-volume">{dataCenter.concreteVolume.label} (cubic meters):</label><input
+        <label for="concrete-volume">{dataCenter.concreteVolume.label} (cubic meters)</label><input
           type="number"
           id="concrete-volume"
           bind:value={concreteVolume}
           placeholder={dataCenter.concreteVolume.value as string}
         />
       </div>
-    </div>
-    <div class="grid">
       <div class="field">
-        <label for="steel-mass">{dataCenter.steelMass.label} (kilograms):</label><input
+        <label for="steel-mass">{dataCenter.steelMass.label} (kilograms)</label><input
           type="number"
           id="steel-mass"
           bind:value={steelMass}
@@ -532,7 +530,7 @@
       </div>
       <div class="field">
         <label for="yearly-total-energy"
-          >{dataCenter.yearlyTotalEnergy.label} (kilowatthours):</label
+          >{dataCenter.yearlyTotalEnergy.label} (kilowatts/hour)</label
         ><input
           type="number"
           id="yearly-total-energy"
@@ -543,29 +541,27 @@
     </div>
     <div class="grid">
       <div class="field">
-        <label for="power-usage-effectiveness">Power Usage Effectiveness (PUE):</label><input
+        <label for="power-usage-effectiveness">Power Usage Effectiveness (PUE)</label><input
           type="number"
           id="power-usage-effectiveness"
           placeholder={dataCenter.powerUsageEffectiveness.value as string}
         />
       </div>
       <div class="field">
-        <label for="water-usage-effectiveness">Water Usage Effectiveness (WUE):</label><input
+        <label for="water-usage-effectiveness">Water Usage Effectiveness (WUE)</label><input
           type="number"
           id="water-usage-effectiveness"
           placeholder={dataCenter.waterUsageEffectiveness.value as string}
         />
       </div>
-    </div>
-    <div class="grid">
       <div class="field">
-        <label for="electrical-technical-resilience">Electrical Technical Resilience tier:</label
+        <label for="electrical-technical-resilience">Electrical Technical Resilience tier</label
         ><select bind:value={tier} id="electrical-technical-resilience">
           {#each electricalTechnicalResilienceTiers as tier}<option>{tier}</option>{/each}
         </select>
       </div>
       <div class="field">
-        <label for="location">Location:</label><select
+        <label for="location">Location</label><select
           bind:value={dataCenter.location.value}
           id="location"
           >{#each countriesNames as country}<option>{country}</option>{/each}</select
@@ -596,9 +592,7 @@
               placeholder={dataCenter.technicalRoomSurface.value as string}
             />
           </div>
-        </div>
 
-        <div class="grid">
           <div class="field">
             <label for="building-maximum-usable-electrical-power"
               >{dataCenter.maximumUsableElectricalPower.label} (kilowatts)</label
@@ -695,9 +689,7 @@
               placeholder={dataCenter.lifts.value as string}
             />
           </div>
-        </div>
 
-        <div class="grid">
           <div class="field">
             <label for="building-freight-lifts"> {dataCenter.freightLifts.label} </label>
             <input
@@ -759,7 +751,7 @@
     .section-main {
       display: flex;
       flex-direction: column;
-      max-width: 50rem;
+      max-width: 80rem;
       justify-content: space-evenly;
       position: relative;
       margin-inline: auto;
