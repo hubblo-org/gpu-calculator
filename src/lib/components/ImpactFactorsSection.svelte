@@ -21,7 +21,7 @@
   const mainImpactCriterias = getAllImpactCriterias().filter(
     (impactCriteria) =>
       impactCriteria.acronym === "GWP" ||
-      impactCriteria.acronym === "MIPS" ||
+      impactCriteria.acronym === "TPE" ||
       impactCriteria.acronym === "WU"
   );
 
@@ -29,7 +29,7 @@
     const filteredResults = results?.per_lifecycle.filter(
       (result) =>
         result.impact_criteria === "GWP" ||
-        result.impact_criteria === "MIPS" ||
+        result.impact_criteria === "TPE" ||
         result.impact_criteria === "WU"
     );
     return filteredResults;
