@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { fade } from "svelte/transition";
+  import { fly, fade } from "svelte/transition";
   import { CoolingSystems, Countries, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
   import type { DataCenterBuilding } from "$lib/types/pcr-cloud";
   import ImpactFactorsSection from "./ImpactFactorsSection.svelte";
@@ -645,6 +645,17 @@
       </div>
     </div>
 
+    {#if !secondaryCharacteristicsAreVisible}
+      <div class="drop-down">
+        <button
+          class="btn-drop-down"
+          aria-label={secondaryCharacteristicsButtonLabel}
+          onclick={handleSecondaryCharacteristicsVisibility}
+        >
+          <div in:fly={{ y: 200 }} out:fade>▼</div>
+        </button><span>{secondaryCharacteristicsButtonLabel}</span>
+      </div>
+    {/if}
     {#if secondaryCharacteristicsAreVisible}
       <div transition:fade class="section-main" id="secondary-characteristics">
         <div class="grid">
@@ -746,63 +757,62 @@
           </div>
         </div>-->
 
-          <div class="grid">
-            <div class="field">
-              <label for="building-suspended-ceiling-surface">
-                {dataCenter.suspendedCeilingSurface.label} (square meters)
-              </label>
-              <input
-                type="number"
-                id="building-suspended-ceiling-surface"
-                step="0.01"
-                placeholder={dataCenter.suspendedCeilingSurface.value as string}
-              />
-            </div>
+          <div class="field">
+            <label for="building-suspended-ceiling-surface">
+              {dataCenter.suspendedCeilingSurface.label} (square meters)
+            </label>
+            <input
+              type="number"
+              id="building-suspended-ceiling-surface"
+              step="0.01"
+              placeholder={dataCenter.suspendedCeilingSurface.value as string}
+            />
+          </div>
 
-            <div class="field">
-              <label for="building-lifts"> {dataCenter.lifts.label} </label>
-              <input
-                type="number"
-                id="building-lifts"
-                placeholder={dataCenter.lifts.value as string}
-              />
-            </div>
+          <div class="field">
+            <label for="building-lifts"> {dataCenter.lifts.label} </label>
+            <input
+              type="number"
+              id="building-lifts"
+              placeholder={dataCenter.lifts.value as string}
+            />
+          </div>
+        </div>
 
-            <div class="field">
-              <label for="building-freight-lifts"> {dataCenter.freightLifts.label} </label>
-              <input
-                type="number"
-                id="building-freight-lifts"
-                placeholder={dataCenter.freightLifts.value as string}
-              />
-            </div>
+        <div class="grid">
+          <div class="field">
+            <label for="building-freight-lifts"> {dataCenter.freightLifts.label} </label>
+            <input
+              type="number"
+              id="building-freight-lifts"
+              placeholder={dataCenter.freightLifts.value as string}
+            />
+          </div>
 
-            <div class="field">
-              <label for="building-partition-surface">
-                {dataCenter.partitionSurface.label} (square meters)
-              </label>
-              <input
-                type="number"
-                id="building-partition-surface"
-                step="0.01"
-                placeholder={dataCenter.partitionSurface.value as string}
-              />
-            </div>
+          <div class="field">
+            <label for="building-partition-surface">
+              {dataCenter.partitionSurface.label} (square meters)
+            </label>
+            <input
+              type="number"
+              id="building-partition-surface"
+              step="0.01"
+              placeholder={dataCenter.partitionSurface.value as string}
+            />
           </div>
         </div>
       </div>
+      <div class="drop-down">
+        <button
+          class="btn-drop-down"
+          aria-label={secondaryCharacteristicsButtonLabel}
+          onclick={handleSecondaryCharacteristicsVisibility}
+        >
+          <div in:fly={{ y: 200 }} out:fade>▲</div>
+        </button>
+        <span> {secondaryCharacteristicsButtonLabel} </span>
+      </div>
     {/if}
-
-    <button
-      aria-label={secondaryCharacteristicsButtonLabel}
-      class="btn btn-sm btn-primary"
-      onclick={handleSecondaryCharacteristicsVisibility}
-      >{#if secondaryCharacteristicsAreVisible}
-        Hide secondary characteristics
-      {:else}
-        Show secondary characteristics
-      {/if}</button
-    >
   </div>
 </section>
 
@@ -832,9 +842,11 @@
 <FunctionalUnit />
 
 <style>
-  #server-rack {
-    width: 80px;
-    height: 80px;
+  section {
+    overflow-y: hidden;
+  }
+  .drop-down span {
+    padding-left: 12px;
   }
   .field {
     display: flex;
@@ -853,9 +865,6 @@
   }
 
   @media (width >= 481px) {
-    .field {
-      width: 800px;
-    }
     label {
       height: 40px;
       width: 100%;
@@ -865,6 +874,14 @@
       height: 50px;
       box-sizing: border-box;
     }
+    .field {
+      width: 800px;
+    }
+    .grid {
+      display: flex;
+      padding-top: 10px;
+      gap: 50px;
+    }
     .section-main {
       display: flex;
       flex-direction: column;
@@ -872,11 +889,6 @@
       justify-content: space-evenly;
       position: relative;
       margin-inline: auto;
-    }
-    .grid {
-      display: flex;
-      padding-top: 10px;
-      gap: 50px;
     }
   }
 </style>

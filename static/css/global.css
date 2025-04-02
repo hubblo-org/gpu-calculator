@@ -71,24 +71,6 @@ body {
 	font-style: normal;
 }
 
-button {
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
-	padding: .75em 1em 0.8em;
-	min-height: 2rem;
-	text-align: center;
-	text-decoration: none;
-	font-size: var(--text-md);
-	line-height: var(--leading-none);
-	font-weight: 500;
-	border-radius: var(--rounded-xl);
-	cursor: pointer;
-	background-color: var(--background, var(--color-primary-100));
-	color: var(--color, var(--color-white));
-	transition: background var(--timing) var(--easing), color var(--timing) var(--easing);
-	user-select: none;
-}
 
 main {
 
@@ -177,8 +159,34 @@ table caption {
 
 .btn-primary,
 .btn-primary-100 {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	padding: .75em 1em 0.8em;
+	min-height: 2rem;
+	text-align: center;
+	text-decoration: none;
+	font-size: var(--text-md);
+	line-height: var(--leading-none);
+	font-weight: 500;
+	border-radius: var(--rounded-xl);
+	cursor: pointer;
+	background-color: var(--background, var(--color-primary-100));
+	color: var(--color, var(--color-white));
+	transition: background var(--timing) var(--easing), color var(--timing) var(--easing);
+	user-select: none;
 	--background: var(--color-primary-100);
 	--color: var(--color-white);
+}
+
+.btn-drop-down {
+	width: 36px;
+	height: 36px;
+	font-size: 1.5rem;
+	border-radius: 50%;
+	background-color: var(--color-secondary-30);
+	border: 0;
+	text-align: center;
 }
 
 .section-header {
