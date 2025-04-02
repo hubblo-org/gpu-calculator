@@ -1,6 +1,6 @@
 <header>
-  <div id="logo">
-    <a href="https://hubblo.org/en" aria-label="Navigate to the Hubblo website">
+  <div id="header-logo">
+    <a class="logo" href="https://hubblo.org/en" aria-label="Navigate to the Hubblo website">
       <img src="/media/logo.svg" alt="Hubblo logo" />
       <span>Hubblo</span>
     </a>
@@ -8,14 +8,6 @@
 </header>
 
 <style>
-  a {
-    display: flex;
-    column-gap: 0.5rem;
-    font-size: 1.4375rem;
-    font-weight: 500;
-    height: var(--space-32);
-    color: var(--color-headings);
-  }
   header {
     position: -webkit-sticky;
     position: sticky;
