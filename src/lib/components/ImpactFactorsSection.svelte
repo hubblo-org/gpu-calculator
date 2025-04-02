@@ -150,4 +150,8 @@
     flex-direction: column;
     width: 20%;
   }
+  #criteria-selection select {
+    appearance: auto;
+    background-color: var(--color-secondary-30);
+  }
 </style>
