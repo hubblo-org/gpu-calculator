@@ -863,6 +863,7 @@
     input,
     select {
       height: 50px;
+      box-sizing: border-box;
     }
     .section-main {
       display: flex;
