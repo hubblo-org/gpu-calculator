@@ -100,7 +100,7 @@
 
 <section aria-labelledby={sectionTexts.heading_id}>
   <div id="section-heading">
-    <h2 id={sectionTexts.heading_id}>{sectionTexts.section_label}</h2>
+    <h3 id={sectionTexts.heading_id}>{sectionTexts.section_label}</h3>
     <button class="btn btn-sm btn-primary" onclick={switchAbsoluteValuesDisplay}
       >{absoluteValuesButtonText}</button
     >

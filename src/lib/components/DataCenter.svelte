@@ -808,7 +808,7 @@
 
 <section>
   <div id="section-heading">
-    <h2>Multi-criteria impacts breakdown</h2>
+    <h3>Multi-criteria impacts breakdown</h3>
   </div>
   <div id="graph-display">
     <div id="impact-factors-plot"></div>
@@ -817,7 +817,7 @@
 
 <section>
   <div id="section-heading">
-    <h2>Treemap impacts breakdown</h2>
+    <h3>Treemap impacts breakdown</h3>
   </div>
   <div id="graph-display">
     <p>
