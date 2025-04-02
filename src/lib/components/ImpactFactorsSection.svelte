@@ -120,7 +120,7 @@
     </table>
   {/if}
   <div id="graph-display">
-    <div id="impact-factors-plot-{source}"></div>
+    <div id="impact-factors-plot-{source}"><img src="/media/logo.svg" /></div>
 
     <div id="criteria-selection">
       <button class="btn btn-sm btn-primary" onclick={switchGraphDisplay}

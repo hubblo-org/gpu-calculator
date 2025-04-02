@@ -122,8 +122,6 @@ section {
 	background-color: var(--color-white-100);
 }
 
-label {}
-
 table {
 	--accent-bg: var(--color-gray-100);
 	border-collapse: collapse;
@@ -191,6 +189,16 @@ table caption {
 
 .section-header {
 	display: flex
+}
+
+.logo {
+	display: flex;
+	column-gap: 0.5rem;
+	font-size: 1.4375rem;
+	font-weight: 500;
+	height: var(--space-32);
+	margin-left: auto;
+	color: var(--color-headings);
 }
 
 .section-header h2 {

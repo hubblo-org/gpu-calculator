@@ -1,4 +1,5 @@
 import * as Plot from "@observablehq/plot";
+import * as d3 from "d3";
 import type { ImpactFactors } from "./types/pcr-cloud";
 
 interface ImpactFactor {
@@ -73,6 +74,18 @@ export function renderHorizontalBarPlot(
   }
 }
 
+function addLogo(nodeId: string) {
+    const logoDiv = d3
+      .select(nodeId)
+      .select("figure")
+      .select("div")
+      .append("div")
+      .attr("class", "logo");
+
+    logoDiv.append("img").attr("src", "/media/logo.svg");
+    logoDiv.append("span").text("Hubblo");
+}
+
 export function renderStackedBarPlot(
   source: string,
   width: number,
@@ -103,7 +116,10 @@ export function renderStackedBarPlot(
         })
       ]
     });
+
     div.append(resultsBarPlot);
+
+    addLogo(`#impact-factors-plot-${source}`);
   }
 }
 
