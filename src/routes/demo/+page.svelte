@@ -9,6 +9,6 @@
 
 <Header />
 <main>
-  <FunctionalUnit />
   <DataCenter dataCenter={dataCenterCharacteristics} />
+  <FunctionalUnit />
 </main>

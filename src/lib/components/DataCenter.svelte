@@ -727,9 +727,14 @@
   </div>
 </section>
 
-<div id="impact-factors-plot"></div>
-
-<ImpactFactorsSection source="data-center" />
+<section>
+  <div id="section-heading">
+    <h2>Multi-criteria impacts breakdown</h2>
+  </div>
+  <div id="graph-display">
+    <div id="impact-factors-plot"></div>
+  </div>
+</section>
 
 <style>
   .field {
