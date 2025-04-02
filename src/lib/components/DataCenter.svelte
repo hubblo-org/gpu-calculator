@@ -735,8 +735,9 @@
   .field {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    gap: 1rem;
+    width: 80%;
+    gap: 16px;
+    margin-top: 12px;
   }
   #secondary-characteristics {
     display: flex;
@@ -748,6 +749,17 @@
   }
 
   @media (width >= 481px) {
+    .field {
+      width: 800px;
+    }
+    label {
+      height: 40px;
+      width: 100%;
+    }
+    input,
+    select {
+      height: 50px;
+    }
     .section-main {
       display: flex;
       flex-direction: column;
