@@ -3,6 +3,7 @@
   import type { IC } from "$lib/types/enums";
   import { ImpactCriterias, getAllImpactCriterias, getImpactCriteria } from "$lib/types/enums";
   import { renderTreemap } from "$lib/treemap";
+  import Results from "./Results.svelte";
 
   interface Props {
     results: FunctionalUnitResultsRowWithLifeCycle[];
@@ -29,10 +30,12 @@
   }
 
   const { results }: Props = $props();
+  console.log("from treemap:");
+  console.log(results);
 
-  const lifeCycleSteps = ["Manufacturing", "Transport", "Use", "End-of-life"];
+  const lifeCycleSteps = ["manufacturing", "transport", "use", "end-of-life"];
 
-  let selectedImpactCriteria = $state(getImpactCriteria(ImpactCriterias.AcidificationPotential));
+  let selectedImpactCriteria = $state(getImpactCriteria(ImpactCriterias.GlobalWarmingPotential));
 
   const impactCriterias = getAllImpactCriterias();
 
@@ -41,11 +44,10 @@
     return {
       name: "dc_data",
       children: lifeCycleSteps.map((lifeCycle) => {
-          
         const resultsByLifeCycle = results.filter((result) => result.life_cycle_step === lifeCycle);
         const resultsImpacts = resultsByLifeCycle.map((result) => {
           const leaf: Leaf = {
-            name: result.category!,
+            name: result.name!,
             value: result.impacts[selectedCriteriaAcronym].value
           };
           return leaf;
@@ -74,11 +76,9 @@
   {selectedImpactCriteria.name} ({selectedImpactCriteria.acronym}), in {selectedImpactCriteria.unit}
 </p>
 
-<div id="treemap-legend">
-</div>
+<div id="treemap-legend"></div>
 
-<div id="treemap">
-</div>
+<div id="treemap"></div>
 
 <select
   bind:value={selectedImpactCriteria.name}

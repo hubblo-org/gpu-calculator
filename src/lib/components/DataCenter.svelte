@@ -3,6 +3,7 @@
   import { CoolingSystems, Countries, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
   import type { DataCenterBuilding } from "$lib/types/pcr-cloud";
   import ImpactFactorsSection from "./ImpactFactorsSection.svelte";
+  import FunctionalUnit from "./FunctionalUnit.svelte";
   import {
     genNullImpact,
     inventoryElementImpactFactors,
@@ -20,6 +21,8 @@
   import BuildingForm from "./BuildingForm.svelte";
   import ResultsPerImpactFactor from "./ResultsPerImpactFactor.svelte";
   import ResultsVerticalPercentages from "./ResultsVerticalPercentages.svelte";
+  import { renderTreemap } from "$lib/treemap";
+  import { ImpactCriterias, getAllImpactCriterias, getImpactCriteria } from "$lib/types/enums";
 
   interface Props {
     dataCenter: DataCenterBuilding;
@@ -241,6 +244,8 @@
   let yearlyTotalEnergy = $state(dataCenter.yearlyTotalEnergy.value);
   let steelMass = $state(dataCenter.steelMass.value);
   let concreteVolume = $state(dataCenter.concreteVolume.value);
+  let totalSurface = $state(dataCenter.totalSurface.value);
+  let datacenterLifespan = $state(dataCenter.lifespan.value);
 
   /// Casts Data Centre inventory in FunctionalUnitResults
   function build_impact_per_lifecycle_step(
@@ -283,34 +288,46 @@
             editableInventory[key],
             impacts[i].impacts,
             1,
-            impacts[i].lifespan
+            Number(impacts[i].lifespan)
           );
           console.log("Adding impacts of " + key + " to initUse");
         } else if (impacts[i].lifeCycleStep == initManuf.life_cycle_step) {
+          let lifespan = impacts[i].lifespan;
+          if (key == "Concrete volume" || key == "Steel mass") {
+            lifespan = Number(datacenterLifespan);
+          }
           initManuf.impacts = addImpacts(
             initManuf.impacts,
             editableInventory[key],
             impacts[i].impacts,
             1,
-            impacts[i].lifespan
+            Number(lifespan)
           );
           console.log("Adding impacts of " + key + " to initManuf");
         } else if (impacts[i].lifeCycleStep == initTransport.life_cycle_step) {
+          let lifespan = impacts[i].lifespan;
+          if (key == "Concrete volume" || key == "Steel mass") {
+            lifespan = Number(datacenterLifespan);
+          }
           initTransport.impacts = addImpacts(
             initTransport.impacts,
             editableInventory[key],
             impacts[i].impacts,
             1,
-            impacts[i].lifespan
+            Number(lifespan)
           );
           console.log("Adding impacts of " + key + " to initTransport");
         } else if (impacts[i].lifeCycleStep == initEOL.life_cycle_step) {
+          let lifespan = impacts[i].lifespan;
+          if (key == "Concrete volume" || key == "Steel mass") {
+            lifespan = Number(datacenterLifespan);
+          }
           initEOL.impacts = addImpacts(
             initEOL.impacts,
             editableInventory[key],
             impacts[i].impacts,
             1,
-            impacts[i].lifespan
+            Number(lifespan)
           );
           console.log("Adding impacts of " + key + " to initEOL");
         }
@@ -325,20 +342,10 @@
       1,
       Number(electricityItem.lifespan)
     );
-    //dataCenter.coolingSystemType
-    //dataCenter.dataCenterLoadFactor
-    //dataCenter.designedFloorAssemblySurface
-    //dataCenter.electricalTechnicalResilience
-    //dataCenter.energyReuseFactor
-    //dataCenter.lifespan
-    //dataCenter.location
-    //dataCenter.maximumUsableElectricalPower
-    //dataCenter.partitionSurface
-    //dataCenter.powerUsageEffectiveness
-    //dataCenter.renewableEnergyFactor
-    //dataCenter.technicalRoomSurface
-    //dataCenter.totalSurface
-    //dataCenter.waterUsageEffectiveness
+    //dataCenter.coolingSystemType, dataCenter.dataCenterLoadFactor, dataCenter.designedFloorAssemblySurface
+    //dataCenter.electricalTechnicalResilience, dataCenter.energyReuseFactor, dataCenter.lifespan, dataCenter.location
+    //dataCenter.maximumUsableElectricalPower, dataCenter.partitionSurface, dataCenter.powerUsageEffectiveness
+    //dataCenter.renewableEnergyFactor, dataCenter.technicalRoomSurface, dataCenter.totalSurface, dataCenter.waterUsageEffectiveness
 
     res.push(initEOL);
     res.push(initUse);
@@ -394,12 +401,6 @@
           // if manuf, transport or eol
         } else if (inventory_with_impact[i].lifeCycleStep != "full_life_cycle") {
           for (var j = 0; j < res.length; j++) {
-            //console.log(
-            //  "res j lifecyclestep = " +
-            //    res[j].life_cycle_step +
-            //    " inventory_with_impact i lifecyclestep = " +
-            //    inventory_with_impact[i].lifeCycleStep
-            //);
             if (
               res[j].life_cycle_step == inventory_with_impact[i].lifeCycleStep ||
               (res[j].life_cycle_step == "eol" &&
@@ -438,6 +439,45 @@
     }
   }
 
+  function build_full_dc_impacts_with_categories_and_lifecycle(
+    inventory_with_impact: DataCenterInventoryElementWithImpactFactors[]
+  ) {
+    //export declare type FunctionalUnitResultsRow = {
+    //  amount: number;
+    //  name: string;
+    //  impacts: ImpactFactors;
+    //};
+    //
+    //export declare type FunctionalUnitResultsRowWithLifeCycle = FunctionalUnitResultsRow & {
+    //  life_cycle_step?: string;
+    //  category?: string;
+    //  source?: string;
+    //};
+    //export declare type DataCenterInventoryElementWithImpactFactors = {
+    //  name: string;
+    //  category: string;
+    //  mass: number;
+    //  quantity?: number;
+    //  lifespan?: number;
+    //  source: string;
+    //  lifeCycleStep: string;
+    //  impacts: ImpactFactors;
+    //};
+    let res: FunctionalUnitResultsRowWithLifeCycle[] = [];
+    inventory_with_impact.forEach((i) => {
+      let tmp: FunctionalUnitResultsRowWithLifeCycle = {
+        amount: 1,
+        impacts: i.impacts,
+        name: i.name,
+        category: i.category,
+        life_cycle_step: i.lifeCycleStep,
+        source: i.source
+      };
+      res.push(tmp);
+    });
+    return res;
+  }
+
   import { onMount } from "svelte";
   import * as Plot from "@observablehq/plot";
   import Results from "./Results.svelte";
@@ -470,6 +510,7 @@
 
     return { per_lifecycle: resultsCriteriasPerLifeCycle, steps: lifeCycleSteps };
   });
+
   function renderStackedBarPlot() {
     let div = document.querySelector("#impact-factors-plot");
     div?.firstChild?.remove();
@@ -495,6 +536,40 @@
     }
   }
   $effect(() => renderStackedBarPlot());
+
+  let resultsForTreemap = build_full_dc_impacts_with_categories_and_lifecycle(inventoryWithImpact);
+
+  import { getFunctionalUnitParameters, FunctionalUnits } from "$lib/types/enums";
+  import ResultsTreeMap from "./ResultsTreeMap.svelte";
+
+  let selectedFunctionalUnit = $state(FunctionalUnits.First);
+  const parameters = $derived(getFunctionalUnitParameters(selectedFunctionalUnit));
+
+  let selectedImpactCriteria = $state(getImpactCriteria(ImpactCriterias.GlobalWarmingPotential));
+
+  const impactCriterias = getAllImpactCriterias();
+
+  //  const selectedCriteriaAcronym = selectedImpactCriteria.acronym as keyof ImpactFactors;
+  //  return {
+  //    name: "dc_data",
+  //    children: lifeCycleSteps.map((lifeCycle) => {
+  //      const resultsByLifeCycle = results.per_lifecycle.filter(
+  //        (element) => element.impact_criteria == lifeCycle
+  //      ); //.filter((result) => result.life_cycle_step === lifeCycle);
+  //      const resultsImpacts = resultsByLifeCycle.map((result) => {
+  //        const leaf: Leaf = {
+  //          name: result.category!,
+  //          value: result.impacts[selectedCriteriaAcronym].value
+  //        };
+  //        return leaf;
+  //      });
+  //      return {
+  //        name: lifeCycle,
+  //        children: resultsImpacts.filter((impactFactors) => impactFactors.name != "all_categories")
+  //      };
+  //    })
+  //  };
+  //});
 </script>
 
 <section aria-labelledby="data-center-characteristics">
@@ -509,6 +584,7 @@
         ><input
           type="number"
           id="building-total-surface"
+          bind:value={totalSurface}
           placeholder={dataCenter.totalSurface.value as string}
         />
       </div>
@@ -577,6 +653,7 @@
             <input
               type="number"
               id="building-lifespan"
+              bind:value={datacenterLifespan}
               placeholder={dataCenter.lifespan.value as string}
             />
           </div>
@@ -593,6 +670,7 @@
             />
           </div>
 
+          <!--<div class="grid">
           <div class="field">
             <label for="building-maximum-usable-electrical-power"
               >{dataCenter.maximumUsableElectricalPower.label} (kilowatts)</label
@@ -613,9 +691,9 @@
               placeholder={dataCenter.dataCenterLoadFactor.value as string}
             />
           </div>
-        </div>
+        </div>-->
 
-        <!--
+          <!--
         <div class="grid">
           <div class="field">
             <label for="building-energy-reuse-factor">
@@ -631,7 +709,7 @@
             />
           </div>-->
 
-        <!--<div class="field">
+          <!--<div class="field">
             <label for="building-renewable-energy-factor">
               {dataCenter.renewableEnergyFactor.label} (REF)
             </label>
@@ -646,7 +724,7 @@
           </div>
         </div>-->
 
-        <!--<div class="grid">
+          <!--<div class="grid">
           <div class="field">
             <label for="building-cooling-system"> {dataCenter.coolingSystemType.label} </label>
             <select bind:value={dataCenter.coolingSystemType.value} id="building-cooling-system">
@@ -668,47 +746,48 @@
           </div>
         </div>-->
 
-        <div class="grid">
-          <div class="field">
-            <label for="building-suspended-ceiling-surface">
-              {dataCenter.suspendedCeilingSurface.label} (square meters)
-            </label>
-            <input
-              type="number"
-              id="building-suspended-ceiling-surface"
-              step="0.01"
-              placeholder={dataCenter.suspendedCeilingSurface.value as string}
-            />
-          </div>
+          <div class="grid">
+            <div class="field">
+              <label for="building-suspended-ceiling-surface">
+                {dataCenter.suspendedCeilingSurface.label} (square meters)
+              </label>
+              <input
+                type="number"
+                id="building-suspended-ceiling-surface"
+                step="0.01"
+                placeholder={dataCenter.suspendedCeilingSurface.value as string}
+              />
+            </div>
 
-          <div class="field">
-            <label for="building-lifts"> {dataCenter.lifts.label} </label>
-            <input
-              type="number"
-              id="building-lifts"
-              placeholder={dataCenter.lifts.value as string}
-            />
-          </div>
+            <div class="field">
+              <label for="building-lifts"> {dataCenter.lifts.label} </label>
+              <input
+                type="number"
+                id="building-lifts"
+                placeholder={dataCenter.lifts.value as string}
+              />
+            </div>
 
-          <div class="field">
-            <label for="building-freight-lifts"> {dataCenter.freightLifts.label} </label>
-            <input
-              type="number"
-              id="building-freight-lifts"
-              placeholder={dataCenter.freightLifts.value as string}
-            />
-          </div>
+            <div class="field">
+              <label for="building-freight-lifts"> {dataCenter.freightLifts.label} </label>
+              <input
+                type="number"
+                id="building-freight-lifts"
+                placeholder={dataCenter.freightLifts.value as string}
+              />
+            </div>
 
-          <div class="field">
-            <label for="building-partition-surface">
-              {dataCenter.partitionSurface.label} (square meters)
-            </label>
-            <input
-              type="number"
-              id="building-partition-surface"
-              step="0.01"
-              placeholder={dataCenter.partitionSurface.value as string}
-            />
+            <div class="field">
+              <label for="building-partition-surface">
+                {dataCenter.partitionSurface.label} (square meters)
+              </label>
+              <input
+                type="number"
+                id="building-partition-surface"
+                step="0.01"
+                placeholder={dataCenter.partitionSurface.value as string}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -736,7 +815,27 @@
   </div>
 </section>
 
+<section>
+  <div id="section-heading">
+    <h2>Treemap impacts breakdown</h2>
+  </div>
+  <div id="graph-display">
+    <p>
+      {selectedImpactCriteria.name} ({selectedImpactCriteria.acronym}), in {selectedImpactCriteria.unit}
+    </p>
+    <ResultsTreeMap results={resultsForTreemap} />
+  </div>
+</section>
+
+<ImpactFactorsSection source="data-center" {results} />
+
+<FunctionalUnit />
+
 <style>
+  #server-rack {
+    width: 80px;
+    height: 80px;
+  }
   .field {
     display: flex;
     flex-direction: column;
