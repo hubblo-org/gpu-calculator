@@ -2,6 +2,7 @@
   import { renderStackedBarPlot } from "$lib/plots";
   import { getAllImpactCriterias, LifeCycleSteps } from "$lib/types/enums";
   import { sortByLifeCycle } from "$lib/inventory";
+  import DropdownButton from "./DropdownButton.svelte";
 
   interface Results {
     per_lifecycle: Result[];
@@ -134,9 +135,14 @@
     </div>
   </div>
 
-  <button class="btn btn-sm btn-primary" onclick={switchAbsoluteValuesDisplay}
-    >{absoluteValuesButtonText}</button
-  >
+  {#if absoluteValues === "hide"}
+    <DropdownButton
+      direction="down"
+      label={absoluteValuesButtonText}
+      visibilityFunction={switchAbsoluteValuesDisplay}
+    />
+  {/if}
+
   {#if absoluteValues === "display"}
     <table>
       <caption>{sectionTexts.table_caption}</caption><thead
@@ -154,6 +160,11 @@
           </tr>{/each}
       </tbody>
     </table>
+    <DropdownButton
+      direction="up"
+      label={absoluteValuesButtonText}
+      visibilityFunction={switchAbsoluteValuesDisplay}
+    />
   {/if}
 </section>
 

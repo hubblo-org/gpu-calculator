@@ -541,6 +541,7 @@
 
   import { getFunctionalUnitParameters, FunctionalUnits } from "$lib/types/enums";
   import ResultsTreeMap from "./ResultsTreeMap.svelte";
+  import DropdownButton from "./DropdownButton.svelte";
 
   let selectedFunctionalUnit = $state(FunctionalUnits.First);
   const parameters = $derived(getFunctionalUnitParameters(selectedFunctionalUnit));
@@ -646,15 +647,11 @@
     </div>
 
     {#if !secondaryCharacteristicsAreVisible}
-      <div class="drop-down">
-        <button
-          class="btn-drop-down"
-          aria-label={secondaryCharacteristicsButtonLabel}
-          onclick={handleSecondaryCharacteristicsVisibility}
-        >
-          <div in:fly={{ y: 200 }} out:fade>▼</div>
-        </button><span>{secondaryCharacteristicsButtonLabel}</span>
-      </div>
+      <DropdownButton
+        direction="down"
+        label={secondaryCharacteristicsButtonLabel}
+        visibilityFunction={handleSecondaryCharacteristicsVisibility}
+      />
     {/if}
     {#if secondaryCharacteristicsAreVisible}
       <div transition:fade class="section-main" id="secondary-characteristics">
@@ -802,16 +799,11 @@
           </div>
         </div>
       </div>
-      <div class="drop-down">
-        <button
-          class="btn-drop-down"
-          aria-label={secondaryCharacteristicsButtonLabel}
-          onclick={handleSecondaryCharacteristicsVisibility}
-        >
-          <div in:fly={{ y: 200 }} out:fade>▲</div>
-        </button>
-        <span> {secondaryCharacteristicsButtonLabel} </span>
-      </div>
+      <DropdownButton
+        direction="up"
+        label={secondaryCharacteristicsButtonLabel}
+        visibilityFunction={handleSecondaryCharacteristicsVisibility}
+      />
     {/if}
   </div>
 </section>
@@ -842,9 +834,6 @@
 <style>
   section {
     overflow-y: hidden;
-  }
-  .drop-down span {
-    padding-left: 12px;
   }
   .field {
     display: flex;
