@@ -42,8 +42,10 @@
       const group = resultsWithMainCriterias?.filter(
         (result) => result.impact_criteria === impactCriteria.acronym
       );
-      const sortedGroup = sortByLifeCycle<Result>(group, "lc_step" as keyof Result);
-      return sortedGroup;
+      if (group) {
+        const sortedGroup = sortByLifeCycle<Result>(group, "lc_step" as keyof Result);
+        return sortedGroup;
+      }
     });
     return groupedResults;
   });
