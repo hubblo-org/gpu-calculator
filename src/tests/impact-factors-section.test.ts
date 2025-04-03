@@ -194,7 +194,7 @@ describe("absolute values table component for functional unit test suite", () =>
     );
     expect(resultsImpactFactorsSection).toBeVisible();
   });
-  it("should display impact criterias and life cycle steps as columns for the data center impact factors table", () => {
+  it("should display impact criteria and life cycle steps as columns for the functional unit impact factors table", () => {
     const functionalUnitResultsGraphSection = screen.getByRole("region", {
       name: /Functional unit results/
     });
@@ -202,21 +202,15 @@ describe("absolute values table component for functional unit test suite", () =>
       "table",
       { name: resultsAbsoluteValuesCaption }
     );
-    const lifeCycleColumn = within(resultsImpactFactorsSection).getByRole("columnheader", {
-      name: "Life cycle step"
+    const impactCriteriaColumn = within(resultsImpactFactorsSection).getByRole("columnheader", {
+      name: "Impact criteria"
     });
-    expect(lifeCycleColumn).toBeVisible();
-    mainImpactCriterias.forEach((impactCriteria) => {
+    expect(impactCriteriaColumn).toBeVisible();
+    lifeCycleSteps.forEach((lifeCycleStep) => {
       const column = within(resultsImpactFactorsSection).getByRole("columnheader", {
-        name: impactCriteria.acronym
+        name: lifeCycleStep 
       });
       expect(column).toBeVisible();
-    });
-    lifeCycleSteps.forEach((lifeCycleStep) => {
-      const rowColumn = within(resultsImpactFactorsSection).getByRole("rowheader", {
-        name: lifeCycleStep
-      });
-      expect(rowColumn).toBeVisible();
     });
   });
   it("should display the functional unit results absolute values for the main impact criterias", () => {
