@@ -75,15 +75,17 @@ export function renderHorizontalBarPlot(
 }
 
 function addLogo(nodeId: string) {
-    const logoDiv = d3
-      .select(nodeId)
-      .select("figure")
-      .select("div")
-      .append("div")
-      .attr("class", "logo");
+  // When a legend is created with the generated plot, a figure element is added to the selected div. 
+  // The first child is then the div with the legend elements.
+  const logoDiv = d3
+    .select(nodeId)
+    .select("figure")
+    .select("div")
+    .append("div")
+    .attr("class", "logo");
 
-    logoDiv.append("img").attr("src", "/media/logo.svg");
-    logoDiv.append("span").text("Hubblo");
+  logoDiv.append("img").attr("src", "/media/logo.svg");
+  logoDiv.append("span").text("Hubblo");
 }
 
 export function renderStackedBarPlot(

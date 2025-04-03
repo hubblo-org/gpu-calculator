@@ -47,7 +47,7 @@
         const resultsByLifeCycle = results.filter((result) => result.life_cycle_step === lifeCycle);
         const resultsImpacts = resultsByLifeCycle.map((result) => {
           const leaf: Leaf = {
-            name: result.name!,
+            name: result.category!,
             value: result.impacts[selectedCriteriaAcronym].value
           };
           return leaf;
@@ -76,7 +76,9 @@
   {selectedImpactCriteria.name} ({selectedImpactCriteria.acronym}), in {selectedImpactCriteria.unit}
 </p>
 
-<div id="treemap-legend"></div>
+<div id="treemap-legend-wrapper">
+  <div id="treemap-legend"></div>
+</div>
 
 <div id="treemap"></div>
 
@@ -99,17 +101,9 @@
     margin-left: 15px;
     font: 10px sans-serif;
   }
-  #treemap-legend p {
-    display: inline-flex;
-    align-items: center;
-    margin-right: 5px;
-    height: 15px;
-  }
-  #treemap-legend p::before {
-    content: "";
-    width: 15px;
-    height: 15px;
-    margin-right: 5px;
-    background: var(--color);
+
+  #treemap-legend-wrapper {
+    display: flex;
+    padding-bottom: 12px;
   }
 </style>

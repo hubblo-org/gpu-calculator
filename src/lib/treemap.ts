@@ -10,7 +10,9 @@ interface Leaf {
   value: number;
 }
 
-function getFirstDepthParent(node: d3.HierarchyRectangularNode<Node>): d3.HierarchyRectangularNode<Node> {
+function getFirstDepthParent(
+  node: d3.HierarchyRectangularNode<Node>
+): d3.HierarchyRectangularNode<Node> {
   return node.depth > 1 ? getFirstDepthParent(node.parent!) : node;
 }
 
@@ -51,6 +53,10 @@ export function renderTreemap(tree: Node, width: number, height: number) {
     console.error("No element to attach the treemap legend to!");
   }
 
+  d3.select("#treemap-legend-wrapper").attr("style", `width: ${width}px`);
+  const hubbloLogo = d3.select("#treemap-legend-wrapper").append("div").attr("class", "logo");
+  hubbloLogo.append("img").attr("src", "/media/logo.svg");
+  hubbloLogo.append("span").text("Hubblo");
   const treemap = d3.select("#treemap");
   if (!treemap.empty()) {
     treemap.selectChild("svg").remove();
