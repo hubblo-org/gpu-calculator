@@ -145,28 +145,22 @@ describe("absolute values for data center impact factors table component test su
     });
     expect(dataCenterImpactFactorsTable).toBeVisible();
   });
-  it("should display impact criterias and life cycle steps as columns for the data center impact factors table", () => {
+  it("should display impact criteria and life cycle steps as columns for the data center impact factors table", () => {
     const dataCenterImpactFactorsSection = screen.getByRole("region", {
       name: /Data center impact factors/
     });
     const dataCenterImpactFactorsTable = within(dataCenterImpactFactorsSection).getByRole("table", {
       name: dataCenterImpactFactorsCaption
     });
-    const lifeCycleColumn = within(dataCenterImpactFactorsTable).getByRole("columnheader", {
-      name: "Life cycle step"
+    const impactCriteriaColumn = within(dataCenterImpactFactorsTable).getByRole("columnheader", {
+      name: "Impact criteria"
     });
-    expect(lifeCycleColumn).toBeVisible();
-    mainImpactCriterias.forEach((impactCriteria) => {
+    expect(impactCriteriaColumn).toBeVisible();
+    lifeCycleSteps.forEach((lifeCycleStep) => {
       const column = within(dataCenterImpactFactorsTable).getByRole("columnheader", {
-        name: impactCriteria.acronym
+        name: lifeCycleStep 
       });
       expect(column).toBeVisible();
-    });
-    lifeCycleSteps.forEach((lifeCycleStep) => {
-      const rowColumn = within(dataCenterImpactFactorsTable).getByRole("rowheader", {
-        name: lifeCycleStep
-      });
-      expect(rowColumn).toBeVisible();
     });
   });
 });

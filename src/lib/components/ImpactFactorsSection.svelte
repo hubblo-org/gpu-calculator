@@ -1,6 +1,7 @@
 <script lang="ts">
   import { renderStackedBarPlot } from "$lib/plots";
-  import { getAllImpactCriterias } from "$lib/types/enums";
+  import { getAllImpactCriterias, LifeCycleSteps } from "$lib/types/enums";
+  import { sortByLifeCycle } from "$lib/inventory";
 
   interface Results {
     per_lifecycle: Result[];
@@ -18,6 +19,7 @@
 
   const { source, results }: Props = $props();
 
+  const lifeCycleSteps = Object.values(LifeCycleSteps);
   const mainImpactCriterias = getAllImpactCriterias().filter(
     (impactCriteria) =>
       impactCriteria.acronym === "GWP" ||
@@ -33,6 +35,17 @@
         result.impact_criteria === "WU"
     );
     return filteredResults;
+  });
+
+  const resultsGroupedByImpactCriteria = $derived.by(() => {
+    const groupedResults = mainImpactCriterias.map((impactCriteria) => {
+      const group = resultsWithMainCriterias?.filter(
+        (result) => result.impact_criteria === impactCriteria.acronym
+      );
+      const sortedGroup = sortByLifeCycle<Result>(group, "lc_step" as keyof Result);
+      return sortedGroup;
+    });
+    return groupedResults;
   });
 
   const absoluteValuesTexts = {
@@ -101,26 +114,9 @@
 <section aria-labelledby={sectionTexts.heading_id}>
   <div id="section-heading">
     <h3 id={sectionTexts.heading_id}>{sectionTexts.section_label}</h3>
-    <button class="btn btn-sm btn-primary" onclick={switchAbsoluteValuesDisplay}
-      >{absoluteValuesButtonText}</button
-    >
   </div>
-  {#if absoluteValues === "display"}
-    <table>
-      <caption>{sectionTexts.table_caption}</caption><thead
-        ><tr><th>Life cycle step</th><th>Impact criteria</th><th>Value</th></tr></thead
-      >
-      <tbody>
-        {#each resultsWithMainCriterias as result}<tr
-            ><th scope="row">{result.lc_step}</th><td>{result.impact_criteria}</td><td
-              >{result.share}</td
-            ></tr
-          >{/each}
-      </tbody>
-    </table>
-  {/if}
   <div id="graph-display">
-    <div id="impact-factors-plot-{source}"><img src="/media/logo.svg" /></div>
+    <div id="impact-factors-plot-{source}"></div>
 
     <div id="criteria-selection">
       <button class="btn btn-sm btn-primary" onclick={switchGraphDisplay}
@@ -135,6 +131,28 @@
       {/if}
     </div>
   </div>
+
+  <button class="btn btn-sm btn-primary" onclick={switchAbsoluteValuesDisplay}
+    >{absoluteValuesButtonText}</button
+  >
+  {#if absoluteValues === "display"}
+    <table>
+      <caption>{sectionTexts.table_caption}</caption><thead
+        ><tr
+          ><th>Impact criteria</th>{#each lifeCycleSteps as lifeCycleStep}<th>{lifeCycleStep}</th
+            >{/each}</tr
+        ></thead
+      >
+      <tbody>
+        {#each mainImpactCriterias as impactCriteria}<tr
+            ><th scope="row">{impactCriteria.acronym}</th>
+            {#each resultsGroupedByImpactCriteria as results}{#each results as result}{#if result.impact_criteria === impactCriteria.acronym}<td
+                    >{result.share}</td
+                  >{/if}{/each}{/each}
+          </tr>{/each}
+      </tbody>
+    </table>
+  {/if}
 </section>
 
 <style>
