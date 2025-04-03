@@ -839,8 +839,6 @@
 
 <ImpactFactorsSection source="data-center" {results} />
 
-<FunctionalUnit />
-
 <style>
   section {
     overflow-y: hidden;
