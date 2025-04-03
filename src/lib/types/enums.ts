@@ -23,11 +23,10 @@ export enum InventoryCategories {
 }
 
 export enum LifeCycleSteps {
-  Extraction = "Extraction",
   Manufacturing = "Manufacturing",
-  Transportation = "Transportation",
   Use = "Use",
-  EndOfLife = "End of life"
+  Transport = "Transport",
+  EndOfLife = "End-of-life"
 }
 
 export enum ElectricalTechnicalResilienceTiers {
