@@ -173,8 +173,6 @@ table caption {
 	color: var(--color, var(--color-white));
 	transition: background var(--timing) var(--easing), color var(--timing) var(--easing);
 	user-select: none;
-	--background: var(--color-primary-100);
-	--color: var(--color-white);
 }
 
 .btn-drop-down {
@@ -183,6 +181,19 @@ table caption {
 	font-size: 1.5rem;
 	border-radius: 50%;
 	background-color: var(--color-secondary-30);
+	cursor: pointer;
+	border: 0;
+	text-align: center;
+}
+
+.btn-download {
+	color: var(--color-white);
+	cursor: pointer;
+	width: 48px;
+	height: 48px;
+	font-size: 1.5rem;
+	border-radius: 50%;
+	background-color: var(--color-primary-100);
 	border: 0;
 	text-align: center;
 }
