@@ -88,18 +88,18 @@ export function addInventoryElement(inventory: DataCenterInventoryElement[]) {
 }
 
 export function sortByLifeCycle<Type>(array: Type[], key: keyof Type): Type[] {
-  let sortedArray: any[] = [];
+  let sortedArray: Type[] = [];
   array.forEach((obj) => {
     if (obj[key] === "manufacturing") {
       sortedArray.unshift(obj);
     } else if (obj[key] === "end-of-life") {
       sortedArray.push(obj);
     } else if (obj[key] === "use") {
-      const isManufacturing = (element: any) => element[key] === "manufacturing";
+      const isManufacturing = (element: Type) => element[key] === "manufacturing";
       const index = sortedArray.findLastIndex(isManufacturing);
         sortedArray.splice(index + 1, 0, obj);
     } else if (obj[key] === "transport") {
-      const isUse = (element: any) => element[key] === "use";
+      const isUse = (element: Type) => element[key] === "use";
       const index = sortedArray.findLastIndex(isUse);
         sortedArray.splice(index + 1, 0, obj);
     }
