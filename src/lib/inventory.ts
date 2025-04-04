@@ -1,5 +1,5 @@
 import type { DataCenterInventoryElement } from "./types/pcr-cloud";
-import { InventoryCategories } from "./types/enums";
+import { InventoryCategories, LifeCycleSteps } from "./types/enums";
 
 export function removeRow(inventory: DataCenterInventoryElement[], inventoryName: string) {
   const isElementWithInventoryName = (element: DataCenterInventoryElement) =>
@@ -88,21 +88,12 @@ export function addInventoryElement(inventory: DataCenterInventoryElement[]) {
 }
 
 export function sortByLifeCycle<Type>(array: Type[], key: keyof Type): Type[] {
-  let sortedArray: Type[] = [];
-  array.forEach((obj) => {
-    if (obj[key] === "manufacturing") {
-      sortedArray.unshift(obj);
-    } else if (obj[key] === "end-of-life") {
-      sortedArray.push(obj);
-    } else if (obj[key] === "use") {
-      const isManufacturing = (element: Type) => element[key] === "manufacturing";
-      const index = sortedArray.findLastIndex(isManufacturing);
-        sortedArray.splice(index + 1, 0, obj);
-    } else if (obj[key] === "transport") {
-      const isUse = (element: Type) => element[key] === "use";
-      const index = sortedArray.findLastIndex(isUse);
-        sortedArray.splice(index + 1, 0, obj);
-    }
+  const lifeCycle = Object.values(LifeCycleSteps).map((step) => step.toLowerCase());
+  const sortedArray = array.sort((a: Type, b: Type) => {
+    return (
+      lifeCycle.indexOf((a[key] as string).toLowerCase()) -
+      lifeCycle.indexOf((b[key] as string).toLowerCase())
+    );
   });
   return sortedArray;
 }

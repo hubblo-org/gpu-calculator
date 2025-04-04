@@ -19,12 +19,11 @@ describe("string validation test suite", () => {
 });
 
 describe("ordering by life cycle step test suite", () => {
+  interface Result {
+    lifeCycleStep: string;
+  }
+  const lifeCycleOrder = Object.values(LifeCycleSteps);
   it("sorts array of objects according to life cycle steps", () => {
-    interface Result {
-      lifeCycleStep: string;
-    }
-    const lifeCycleOrder = Object.values(LifeCycleSteps);
-
     const unorderedResults: Result[] = [
       { lifeCycleStep: "end-of-life" },
       { lifeCycleStep: "use" },
@@ -34,11 +33,28 @@ describe("ordering by life cycle step test suite", () => {
 
     const orderedResults: Result[] = sortByLifeCycle<Result>(
       unorderedResults,
-      "lifeCycleStep" as keyof Result 
+      "lifeCycleStep" as keyof Result
     );
     expect(orderedResults[0].lifeCycleStep).toEqual(lifeCycleOrder[0].toLowerCase());
     expect(orderedResults[1].lifeCycleStep).toEqual(lifeCycleOrder[1].toLowerCase());
     expect(orderedResults[2].lifeCycleStep).toEqual(lifeCycleOrder[2].toLowerCase());
     expect(orderedResults[3].lifeCycleStep).toEqual(lifeCycleOrder[3].toLowerCase());
+  });
+  it("sorts array of object according to life cycle steps with uppercased strings", () => {
+    const unorderedResults: Result[] = [
+      { lifeCycleStep: "End-of-life" },
+      { lifeCycleStep: "Use" },
+      { lifeCycleStep: "Manufacturing" },
+      { lifeCycleStep: "Transport" }
+    ];
+
+    const orderedResults: Result[] = sortByLifeCycle<Result>(
+      unorderedResults,
+      "lifeCycleStep" as keyof Result
+    );
+    expect(orderedResults[0].lifeCycleStep).toEqual(lifeCycleOrder[0]);
+    expect(orderedResults[1].lifeCycleStep).toEqual(lifeCycleOrder[1]);
+    expect(orderedResults[2].lifeCycleStep).toEqual(lifeCycleOrder[2]);
+    expect(orderedResults[3].lifeCycleStep).toEqual(lifeCycleOrder[3]);
   });
 });
