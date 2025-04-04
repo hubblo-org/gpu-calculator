@@ -2,6 +2,7 @@
   import { renderStackedBarPlot } from "$lib/plots";
   import { getAllImpactCriterias, LifeCycleSteps } from "$lib/types/enums";
   import { sortByLifeCycle } from "$lib/inventory";
+  import { downloadToCSV } from "$lib/utils";
   import DropdownButton from "./DropdownButton.svelte";
 
   interface Results {
@@ -144,22 +145,29 @@
   {/if}
 
   {#if absoluteValues === "display"}
-    <table>
-      <caption>{sectionTexts.table_caption}</caption><thead
-        ><tr
-          ><th>Impact criteria</th>{#each lifeCycleSteps as lifeCycleStep}<th>{lifeCycleStep}</th
-            >{/each}</tr
-        ></thead
+    <div id="absolute-values-table">
+      <table>
+        <caption>{sectionTexts.table_caption}</caption><thead
+          ><tr
+            ><th>Impact criteria</th>{#each lifeCycleSteps as lifeCycleStep}<th>{lifeCycleStep}</th
+              >{/each}</tr
+          ></thead
+        >
+        <tbody>
+          {#each mainImpactCriterias as impactCriteria}<tr
+              ><th scope="row">{impactCriteria.acronym}</th>
+              {#each resultsGroupedByImpactCriteria as results}{#each results as result}{#if result.impact_criteria === impactCriteria.acronym}<td
+                      >{result.share}</td
+                    >{/if}{/each}{/each}
+            </tr>{/each}
+        </tbody>
+      </table>
+      <button
+        class="btn-download"
+        aria-label="Download data in CSV format"
+        onclick={downloadToCSV("absolute-values-table")}>&#x1f4e5;&#xfe0e;</button
       >
-      <tbody>
-        {#each mainImpactCriterias as impactCriteria}<tr
-            ><th scope="row">{impactCriteria.acronym}</th>
-            {#each resultsGroupedByImpactCriteria as results}{#each results as result}{#if result.impact_criteria === impactCriteria.acronym}<td
-                    >{result.share}</td
-                  >{/if}{/each}{/each}
-          </tr>{/each}
-      </tbody>
-    </table>
+    </div>
     <DropdownButton
       direction="up"
       label={absoluteValuesButtonText}
@@ -169,6 +177,16 @@
 </section>
 
 <style>
+  #absolute-values-table {
+    display: flex;
+    align-self: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #absolute-values-table button {
+    margin-left: auto;
+  }
   #section-heading,
   #graph-display {
     display: flex;

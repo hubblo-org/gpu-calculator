@@ -11,6 +11,8 @@ const resultsAbsoluteValuesCaption =
 const dataCenterImpactFactorsCaption =
   "Data center impact factors absolute values, per impact criteria";
 
+const downloadDataToCsvLabel = "Download data in CSV format";
+
 const mainImpactCriterias = getAllImpactCriterias().filter(
   (impactCriteria) =>
     impactCriteria.acronym === "GWP" ||
@@ -124,7 +126,7 @@ describe("absolute values for data center impact factors table component test su
         source: "data-center",
         results: { per_lifecycle: filteredResults, steps: lifeCycleSteps }
       }
-    })
+    });
     const displayAbsoluteValues = screen.getByRole("button", { name: "Display absolute values" });
     await user.click(displayAbsoluteValues);
   });
@@ -158,10 +160,21 @@ describe("absolute values for data center impact factors table component test su
     expect(impactCriteriaColumn).toBeVisible();
     lifeCycleSteps.forEach((lifeCycleStep) => {
       const column = within(dataCenterImpactFactorsTable).getByRole("columnheader", {
-        name: lifeCycleStep 
+        name: lifeCycleStep
       });
       expect(column).toBeVisible();
     });
+  });
+
+  it("should display a button to download the raw data to a file in CSV format", () => {
+    const dataCenterImpactFactorsSection = screen.getByRole("region", {
+      name: /Data center impact factors/
+    });
+
+    const downloadDataToCSV = within(dataCenterImpactFactorsSection).getByRole("button", {
+      name: downloadDataToCsvLabel 
+    });
+    expect(downloadDataToCSV).toBeVisible();
   });
 });
 
@@ -173,7 +186,7 @@ describe("absolute values table component for functional unit test suite", () =>
         source: "functional-unit",
         results: { per_lifecycle: filteredResults, steps: lifeCycleSteps }
       }
-    })
+    });
     const displayAbsoluteValues = screen.getByRole("button", { name: "Display absolute values" });
     await user.click(displayAbsoluteValues);
   });
@@ -208,7 +221,7 @@ describe("absolute values table component for functional unit test suite", () =>
     expect(impactCriteriaColumn).toBeVisible();
     lifeCycleSteps.forEach((lifeCycleStep) => {
       const column = within(resultsImpactFactorsSection).getByRole("columnheader", {
-        name: lifeCycleStep 
+        name: lifeCycleStep
       });
       expect(column).toBeVisible();
     });
