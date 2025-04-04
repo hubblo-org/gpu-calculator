@@ -61,6 +61,13 @@
 	src: url("/fonts/Lexend-Regular.ttf");
 }
 
+*,
+::before,
+::after {
+	box-sizing: border-box;
+
+}
+
 a {
 	text-decoration: none;
 }
@@ -71,6 +78,26 @@ body {
 	font-style: normal;
 }
 
+
+header {
+	display: flex;
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+	width: 100%;
+	max-width: min(var(--wrapper-max-width), 100vw);
+	height: var(--header-height);
+	background-color: var(--color-background);
+	margin-inline: auto;
+	padding: var(--space-16) var(--gutter, 2rem);
+	display: flex;
+	column-gap: var(--gutter);
+	align-items: center;
+	justify-content: space-between;
+	border-bottom: var(--border);
+	border-inline: var(--border);
+}
 
 main {
 
@@ -99,12 +126,9 @@ input {
 	font: inherit;
 }
 
-header,
 section,
 .wrapper {
 	padding: 12px;
-	margin-top: 12px;
-	margin-bottom: 12px;
 	border: var(--border);
 	margin-inline: auto;
 	width: 100%;
@@ -117,7 +141,6 @@ section,
 	border-inline: var(--border);
 }
 
-header,
 section {
 	background-color: var(--color-white-100);
 }
@@ -161,7 +184,6 @@ table caption {
 	justify-content: center;
 	align-items: center;
 	padding: .75em 1em 0.8em;
-	min-height: 2rem;
 	text-align: center;
 	text-decoration: none;
 	font-size: var(--text-md);
