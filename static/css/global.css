@@ -174,20 +174,19 @@ table caption {
 }
 
 .btn-sm {
-	max-height: 2.25em;
 	font-size: var(--text-sm);
 }
 
 .btn-primary,
 .btn-primary-100 {
 	display: inline-flex;
+	border-style: none;
 	justify-content: center;
 	align-items: center;
 	padding: .75em 1em 0.8em;
 	text-align: center;
 	text-decoration: none;
 	font-size: var(--text-md);
-	line-height: var(--leading-none);
 	font-weight: 500;
 	border-radius: var(--rounded-xl);
 	cursor: pointer;
@@ -263,6 +262,20 @@ table caption {
 
 ::selection {
 	background: var(--color-secondary-30, Highlight)
+}
+
+@media (min-width: 480px) {
+
+	*,
+	::after,
+	::before {
+		box-sizing: content-box;
+	}
+
+	.btn-sm {
+		max-height: 2.25rem;
+	}
+
 }
 
 @media (hover: hover) {
