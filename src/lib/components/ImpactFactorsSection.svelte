@@ -165,7 +165,7 @@
       <button
         class="btn-download"
         aria-label="Download data in CSV format"
-        onclick={downloadToCSV("absolute-values-table")}>&#x1f4e5;&#xfe0e;</button
+        onclick={downloadToCSV("absolute-values-table")}>csv</button
       >
     </div>
     <DropdownButton
