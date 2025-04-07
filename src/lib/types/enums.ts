@@ -24,8 +24,8 @@ export enum InventoryCategories {
 
 export enum LifeCycleSteps {
   Manufacturing = "Manufacturing",
-  Use = "Use",
   Transport = "Transport",
+  Use = "Use",
   EndOfLife = "End-of-life"
 }
 
