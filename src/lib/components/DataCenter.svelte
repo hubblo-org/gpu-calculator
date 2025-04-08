@@ -535,7 +535,7 @@
       div.append(resultsBarPlot);
     }
   }
-  $effect(() => renderStackedBarPlot());
+  onMount(() => renderStackedBarPlot());
 
   let resultsForTreemap = build_full_dc_impacts_with_categories_and_lifecycle(inventoryWithImpact);
 
@@ -806,6 +806,7 @@
         visibilityFunction={handleSecondaryCharacteristicsVisibility}
       />
     {/if}
+    <button class="btn btn-primary btn-sm" onclick={renderStackedBarPlot}>Recalculate</button>
   </div>
 </section>
 
