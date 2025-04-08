@@ -806,7 +806,9 @@
         visibilityFunction={handleSecondaryCharacteristicsVisibility}
       />
     {/if}
-    <button class="btn btn-primary btn-sm" onclick={renderStackedBarPlot}>Recalculate</button>
+    <button id="recalculate" class="btn btn-primary btn-sm" onclick={renderStackedBarPlot}
+      >Recalculate</button
+    >
   </div>
 </section>
 
@@ -852,7 +854,13 @@
     width: 80px;
     height: 80px;
   }
-
+  #recalculate {
+    margin-right: 12px;
+    margin-bottom: 12px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
   @media (width >= 481px) {
     label {
       height: 40px;
@@ -878,6 +886,11 @@
       justify-content: space-evenly;
       position: relative;
       margin-inline: auto;
+    }
+    #recalculate {
+      margin-right: initial;
+      margin-bottom: initial;
+      width: 120px;
     }
   }
 </style>

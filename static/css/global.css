@@ -192,7 +192,9 @@ tr:nth-child(even) {
 
 .btn-drop-down {
 	width: 36px;
+	min-width: 36px;
 	height: 36px;
+	min-height: 36px;
 	font-size: 1.5rem;
 	border-radius: 50%;
 	background-color: var(--color-secondary-30);

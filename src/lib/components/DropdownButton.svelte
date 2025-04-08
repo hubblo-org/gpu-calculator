@@ -30,7 +30,19 @@
 </div>
 
 <style>
+  .drop-down {
+    padding-top: 12px;
+    display: flex;
+    gap: 12px;
+    width: 240px;
+  }
   .drop-down span {
-    padding-left: 12px;
+    align-self: center;
+  }
+  @media (min-width: 480px) {
+    .drop-down {
+      padding-top: initial;
+      width: initial;
+    }
   }
 </style>
