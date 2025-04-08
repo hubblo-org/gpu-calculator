@@ -68,8 +68,13 @@
 
 }
 
-a {
+a,
+a:visited {
 	text-decoration: none;
+}
+
+a:visited {
+	color: var(--color-text, initial)
 }
 
 body {

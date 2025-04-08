@@ -6,7 +6,7 @@
     </a>
   </div>
   <p>Want to know more about the environmental <br /> evaluation of cloud services?</p>
-  <a href="https://hubblo.org/en/contact/" class="btn btn-primary btn-sm"> Contact </a>
+  <a id="contact" href="https://hubblo.org/en/contact/" class="btn btn-primary btn-sm"> Contact </a>
 </header>
 
 <style>
@@ -32,6 +32,10 @@
   p {
     display: none;
     color: var(--color-gray-500);
+  }
+
+  #contact:visited {
+    color: var(--color-white);
   }
   @media (min-width: 800px) {
     p {
