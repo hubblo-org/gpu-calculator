@@ -118,6 +118,7 @@
 <section aria-labelledby={sectionTexts.heading_id}>
   <div id="section-heading">
     <h3 id={sectionTexts.heading_id}>{sectionTexts.section_label}</h3>
+    <a href="#table-of-contents" aria-label="Scroll back to table of contents">▲</a>
   </div>
   <div id="graph-display">
     <div id="impact-factors-plot-{source}"></div>

@@ -69,6 +69,15 @@ describe("impact factors section table test suite", () => {
       })
     ).not.toBeInTheDocument();
   });
+  it("should display a link to go back to the table of contents section", () => {
+    const dataCenterImpactFactorsSection = screen.getByRole("region", {
+      name: /Data center impact factors/
+    });
+    const scrollBackLink = within(dataCenterImpactFactorsSection).getByRole("link", {
+      name: "Scroll back to table of contents"
+    });
+    expect(scrollBackLink).toBeVisible();
+  });
 });
 describe("impact factors section graphs test suite", () => {
   beforeEach(() =>
@@ -172,7 +181,7 @@ describe("absolute values for data center impact factors table component test su
     });
 
     const downloadDataToCSV = within(dataCenterImpactFactorsSection).getByRole("button", {
-      name: downloadDataToCsvLabel 
+      name: downloadDataToCsvLabel
     });
     expect(downloadDataToCSV).toBeVisible();
   });

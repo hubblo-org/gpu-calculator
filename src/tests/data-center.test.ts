@@ -49,6 +49,16 @@ describe("data center component static elements test suite", () => {
     expect(dataCenterCharacteristicsSection).toBeVisible();
   });
 
+  it("should display a link to go back to the table of contents section", () => {
+    const dataCenterCharacteristicsSection = screen.getByRole("region", {
+      name: /Data center characteristics/
+    });
+    const scrollBackLink = within(dataCenterCharacteristicsSection).getByRole("link", {
+      name: "Scroll back to table of contents"
+    });
+    expect(scrollBackLink).toBeVisible();
+  });
+
   it("should display the main data center characteristics, that can be modified by the user", () => {
     const dataCenterCharacteristicsSection = screen.getByRole("region", {
       name: /Data center characteristics/

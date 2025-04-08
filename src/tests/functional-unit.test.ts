@@ -32,6 +32,16 @@ describe("functional unit component static elements test suite", () => {
     const serverRackImage = screen.getByRole("img", { name: serverRackDescription });
     expect(serverRackImage).toBeVisible();
   });
+
+  it("should display a link to go back to the table of contents section", () => {
+    const functionalUnitParametersSection = screen.getByRole("region", {
+      name: /Functional unit parameters/
+    });
+    const scrollBackLink = within(functionalUnitParametersSection).getByRole("link", {
+      name: "Scroll back to table of contents"
+    });
+    expect(scrollBackLink).toBeVisible();
+  });
   it("should display the first functional unit main parameters", () => {
     const functionalUnitParametersSection = screen.getByRole("region", {
       name: /Functional unit parameters/

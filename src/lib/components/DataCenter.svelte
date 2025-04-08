@@ -574,10 +574,11 @@
 </script>
 
 <section aria-labelledby="data-center-characteristics">
-  <div class="section-header">
+  <header>
     <img id="data-center" src="/media/data-center.svg" alt="A data center" />
     <h2 id="data-center-characteristics">Data center characteristics</h2>
-  </div>
+    <a href="#table-of-contents" aria-label="Scroll back to table of contents">▲</a>
+  </header>
   <div class="section-main">
     <div class="grid">
       <div class="field">
