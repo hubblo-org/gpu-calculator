@@ -1,5 +1,15 @@
 import type { LifeCycleSteps } from "./enums";
 
+export declare type Node = {
+  name: string;
+  children?: Node[] | Leaf[];
+};
+
+export declare type Leaf = {
+  name: string;
+  value: number;
+};
+
 export declare type DataCenterInventoryElement = {
   name: string;
   category: InventoryCategories;
