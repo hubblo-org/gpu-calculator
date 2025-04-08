@@ -34,7 +34,7 @@
     color: var(--color-gray-500);
   }
 
-  #contact:visited {
+  #contact, #contact:visited {
     color: var(--color-white);
   }
   @media (min-width: 800px) {
