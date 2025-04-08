@@ -5,6 +5,7 @@
   import { dataCenterCharacteristics } from "../../mocks/dc-data";
   import TableOfContents from "$lib/components/TableOfContents.svelte";
   import PcrSection from "$lib/components/PCRSection.svelte";
+  import Footer from "$lib/components/Footer.svelte";
   console.log("dataCenterCharacteristics: ");
   console.log(dataCenterCharacteristics);
 </script>
@@ -19,6 +20,7 @@
 
   <FunctionalUnit />
 </main>
+<Footer />
 
 <style>
   @media (max-width: 480px) {

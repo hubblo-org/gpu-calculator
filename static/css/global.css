@@ -73,7 +73,7 @@ a:visited {
 	text-decoration: none;
 }
 
-a:visited {
+a, a:visited {
 	color: var(--color-text, initial)
 }
 
@@ -112,6 +112,7 @@ section button {
 
 
 section,
+footer,
 .wrapper {
 	padding: 12px;
 	border: var(--border);
