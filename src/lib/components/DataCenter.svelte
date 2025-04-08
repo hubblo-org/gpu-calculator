@@ -831,9 +831,9 @@
     </p>
     <ResultsTreeMap results={resultsForTreemap} />
   </div>
-</section>
+</section> 
 
-<ImpactFactorsSection source="data-center" {results} />
+<ImpactFactorsSection source="data-center" {results} resultsTreemap={resultsForTreemap} />
 
 <style>
   section {

@@ -1,9 +1,21 @@
 <script lang="ts">
+  import type {
+    ImpactFactors,
+    Node,
+    Leaf,
+    FunctionalUnitResultsRowWithLifeCycle
+  } from "$lib/types/pcr-cloud";
   import { renderStackedBarPlot } from "$lib/plots";
-  import { getAllImpactCriterias, LifeCycleSteps } from "$lib/types/enums";
+  import {
+    ImpactCriterias,
+    getImpactCriteria,
+    getAllImpactCriterias,
+    LifeCycleSteps
+  } from "$lib/types/enums";
   import { sortByLifeCycle } from "$lib/inventory";
   import { downloadToCSV } from "$lib/utils";
   import DropdownButton from "./DropdownButton.svelte";
+  import { renderTreemap } from "$lib/treemap";
 
   interface Results {
     per_lifecycle: Result[];
@@ -17,9 +29,13 @@
   interface Props {
     source: string;
     results?: Results;
+    resultsTreemap?: FunctionalUnitResultsRowWithLifeCycle[];
   }
 
-  const { source, results }: Props = $props();
+  const { source, results, resultsTreemap }: Props = $props();
+  let selectedImpactCriteria = $state(
+    getImpactCriteria(ImpactCriterias.GlobalWarmingPotential).acronym
+  );
 
   const lifeCycleSteps = Object.values(LifeCycleSteps);
   const mainImpactCriterias = getAllImpactCriterias().filter(
@@ -50,6 +66,31 @@
       }
     });
     return groupedResults;
+  });
+
+  const resultsForTreemap: Node = $derived.by(() => {
+    const selectedCriteriaAcronym = selectedImpactCriteria as keyof ImpactFactors;
+    return {
+      name: "dc_data",
+      children: lifeCycleSteps.map((lifeCycle) => {
+        const resultsByLifeCycle = resultsTreemap?.filter(
+          (result) => result.life_cycle_step === lifeCycle.toLowerCase()
+        );
+        const resultsImpacts = resultsByLifeCycle?.map((result) => {
+          const leaf: Leaf = {
+            name: result.name!,
+            value: result.impacts[selectedCriteriaAcronym].value
+          };
+          return leaf;
+        });
+        return {
+          name: lifeCycle,
+          children: resultsImpacts?.filter(
+            (impactFactors) => impactFactors.name != "all_categories"
+          )
+        };
+      })
+    };
   });
 
   const absoluteValuesTexts = {
@@ -110,6 +151,7 @@
           "lc_step"
         );
       } else if (selectedGraph === "treemap") {
+        renderTreemap(resultsForTreemap, 1300, 600);
       }
     }
   });
@@ -120,21 +162,29 @@
     <h3 id={sectionTexts.heading_id}>{sectionTexts.section_label}</h3>
     <a href="#table-of-contents" aria-label="Scroll back to table of contents">▲</a>
   </div>
-  <div id="graph-display">
-    <div id="impact-factors-plot-{source}"></div>
 
-    <div id="criteria-selection">
-      <button class="btn btn-sm btn-primary" onclick={switchGraphDisplay}
-        >Switch graph display</button
+  <div id="criteria-selection">
+    {#if selectedGraph === "treemap"}
+      <select bind:value={selectedImpactCriteria} aria-label="Select an impact criteria"
+        >{#each mainImpactCriterias as impactCriteria}<option>{impactCriteria.acronym}</option
+          >{/each}</select
       >
-
-      {#if selectedGraph === "treemap"}
-        <select aria-label="Select an impact criteria"
-          >{#each mainImpactCriterias as impactCriteria}<option>{impactCriteria.acronym}</option
-            >{/each}</select
-        >
-      {/if}
-    </div>
+    {/if}
+    <button class="btn btn-sm btn-primary" onclick={switchGraphDisplay}>Switch graph display</button
+    >
+  </div>
+  <div id="graph-display">
+    {#if selectedGraph === "bar-plot"}
+      <div id="impact-factors-plot-{source}"></div>
+    {/if}
+    {#if selectedGraph === "treemap"}
+      <div id="treemap-wrapper">
+        <div id="treemap-legend-wrapper">
+          <div id="treemap-legend"></div>
+        </div>
+        <div id="treemap"></div>
+      </div>
+    {/if}
   </div>
 
   {#if absoluteValues === "hide"}
@@ -184,7 +234,6 @@
     flex-direction: column;
     width: 100%;
   }
-
   #absolute-values-table button {
     margin-left: auto;
   }
@@ -195,13 +244,25 @@
     justify-content: space-between;
   }
   #criteria-selection {
+    position: relative;
+    margin-left: auto;
     display: flex;
     gap: 12px;
-    flex-direction: column;
-    width: 20%;
+    flex-direction: row;
   }
   #criteria-selection select {
     appearance: auto;
     background-color: var(--color-secondary-30);
+  }
+  #criteria-selection * {
+    margin-bottom: 12px;
+    margin-right: 12px;
+  }
+  #treemap-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+  #treemap-legend-wrapper {
+    display: flex;
   }
 </style>
