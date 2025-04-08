@@ -1,14 +1,5 @@
 import * as d3 from "d3";
-
-interface Node {
-  name: string;
-  children?: Node[] | Leaf[];
-}
-
-interface Leaf {
-  name: string;
-  value: number;
-}
+import type { Node } from "$lib/types/pcr-cloud";
 
 function getFirstDepthParent(
   node: d3.HierarchyRectangularNode<Node>
@@ -54,9 +45,18 @@ export function renderTreemap(tree: Node, width: number, height: number) {
   }
 
   d3.select("#treemap-legend-wrapper").attr("style", `width: ${width}px`);
-  const hubbloLogo = d3.select("#treemap-legend-wrapper").append("div").attr("class", "logo");
-  hubbloLogo.append("img").attr("src", "/media/logo.svg");
-  hubbloLogo.append("span").text("Hubblo");
+
+  const treemapLogo = d3.select("#treemap-legend-wrapper").select("#legend-logo");
+  if (treemapLogo.empty()) {
+    const hubbloLogo = d3
+      .select("#treemap-legend-wrapper")
+      .append("div")
+      .attr("class", "logo")
+      .attr("id", "legend-logo");
+    hubbloLogo.append("img").attr("src", "/media/logo.svg");
+    hubbloLogo.append("span").text("Hubblo");
+  }
+
   const treemap = d3.select("#treemap");
   if (!treemap.empty()) {
     treemap.selectChild("svg").remove();
@@ -67,7 +67,7 @@ export function renderTreemap(tree: Node, width: number, height: number) {
       .attr("viewbox", `0 0 ${width} ${height}`)
       .attr("width", `${width}`)
       .attr("height", `${height}`)
-      .attr("style", "max-width: 100%; height: auto; font: 10px sans-serif;");
+      .attr("style", "font: 10px sans-serif;");
 
     root.leaves().forEach((leaf, leafIndex) => {
       const nodes = leaf.data.name
