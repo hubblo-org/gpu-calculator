@@ -10,7 +10,13 @@
   <section aria-labelledby="functional-unit-parameters">
     <header>
       <img src="/media/server-rack.svg" id="server-rack" alt="A server rack" />
-      <h2 id="functional-unit-parameters">Functional unit parameters</h2>
+      <div id="functional-unit-description">
+        <h2 id="functional-unit-parameters">Functional unit parameters</h2>
+        <p>
+          These are the parameters of the selected functional unit, from which the functional unit
+          results are calculated.
+        </p>
+      </div>
       <a href="#table-of-contents" aria-label="Scroll back to table of contents">▲</a>
     </header>
     <h3>{parameters.title}</h3>

@@ -576,7 +576,14 @@
 <section aria-labelledby="data-center-characteristics">
   <header>
     <img id="data-center" src="/media/data-center.svg" alt="A data center" />
-    <h2 id="data-center-characteristics">Data center characteristics</h2>
+    <div id="data-center-description">
+      <h2 id="data-center-characteristics">Data center characteristics</h2>
+
+      <p>
+        These are the parameters used in calculating the environmental impact factors for a given
+        data center.
+      </p>
+    </div>
     <a href="#table-of-contents" aria-label="Scroll back to table of contents">▲</a>
   </header>
   <div class="section-main">
@@ -886,6 +893,10 @@
       justify-content: space-evenly;
       position: relative;
       margin-inline: auto;
+    }
+    #data-center-description {
+      display: flex;
+      flex-direction: column;
     }
     #recalculate {
       margin-right: initial;
