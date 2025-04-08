@@ -78,25 +78,16 @@ body {
 	font-style: normal;
 }
 
-
-header {
-	display: flex;
-	position: -webkit-sticky;
-	position: sticky;
-	top: 0;
-	z-index: 1000;
-	width: 100%;
-	max-width: min(var(--wrapper-max-width), 100vw);
-	height: var(--header-height);
-	background-color: var(--color-background);
-	margin-inline: auto;
-	padding: var(--space-16) var(--gutter, 2rem);
-	display: flex;
-	column-gap: var(--gutter);
-	align-items: center;
-	justify-content: space-between;
-	border-bottom: var(--border);
-	border-inline: var(--border);
+input,
+select {
+	background: 0 0;
+	appearance: none;
+	position: relative;
+	border: var(--border);
+	border-radius: var(--rounded-sm);
+	padding: .425em 1em .45em;
+	min-height: var(--space-40);
+	font: inherit;
 }
 
 main {
@@ -114,17 +105,6 @@ section button {
 	margin-top: 12px;
 }
 
-select,
-input {
-	background: 0 0;
-	appearance: none;
-	position: relative;
-	border: var(--border);
-	border-radius: var(--rounded-sm);
-	padding: .425em 1em .45em;
-	min-height: var(--space-40);
-	font: inherit;
-}
 
 section,
 .wrapper {
@@ -145,10 +125,23 @@ section {
 	background-color: var(--color-white-100);
 }
 
+section header {
+	display: flex
+}
+
+section header h2 {
+	padding-left: 24px;
+}
+
 table {
 	--accent-bg: var(--color-gray-100);
 	border-collapse: collapse;
 	margin: 1.5rem 0;
+}
+
+table caption {
+	font-weight: italic;
+	margin-bottom: 0.5rem;
 }
 
 td,
@@ -166,11 +159,6 @@ th {
 tr:nth-child(even) {
 	/* Set every other cell slightly darker. Improves readability. */
 	background-color: var(--accent-bg);
-}
-
-table caption {
-	font-weight: italic;
-	margin-bottom: 0.5rem;
 }
 
 .btn-sm {
@@ -219,9 +207,6 @@ table caption {
 	text-align: center;
 }
 
-.section-header {
-	display: flex
-}
 
 .logo {
 	display: flex;
@@ -233,11 +218,6 @@ table caption {
 	color: var(--color-headings);
 }
 
-.section-header h2 {
-	padding-left: 24px;
-
-
-}
 
 .wrapper {
 	display: flex;
@@ -274,6 +254,10 @@ table caption {
 
 	.btn-sm {
 		max-height: 2.25rem;
+	}
+
+	section header a {
+		margin-left: auto;
 	}
 
 }
