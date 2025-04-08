@@ -166,6 +166,18 @@ describe("data center component static elements test suite", () => {
       expect(countryOption).toBeVisible();
     });
   });
+
+  it("should display a button to recalculate results after the user modified the data center characteristics", () => {
+    const dataCenterCharacteristicsSection = screen.getByRole("region", {
+      name: /Data center characteristics/
+    });
+    const recalculateButton = within(dataCenterCharacteristicsSection).getByRole("button", {
+      name: "Recalculate"
+    });
+    expect(recalculateButton).toBeVisible();
+  });
+
+  // Skipping this test for the moment while waiting to implement values for each cooling system type
   it.skip("should allow to select a cooling system", async () => {
     const coolingSystemTypes = Object.values(CoolingSystems);
 
