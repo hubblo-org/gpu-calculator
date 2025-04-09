@@ -46,7 +46,9 @@ export const dataCenterCharacteristics: DataCenterBuilding = {
   },
   totalSurface: {
     label: "Building total surface",
-    value: dataCenterInventory.totalSurface
+    value: dataCenterInventory.totalSurface,
+    description:
+      "The building total surface in square meters, allowing to compute the total and yearly impacts for the manufacturing, transport and end-of-life life cycle steps"
   },
   yearlyTotalEnergy: {
     label: "Total energy for one year",

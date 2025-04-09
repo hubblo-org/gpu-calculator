@@ -92,6 +92,7 @@ export declare type DataCenterBuilding = {
 export declare type DataCenterCharacteristic = {
   label: string;
   value: string | number;
+  description?: string;
 };
 
 export declare type InventoryCategorySpellings = {

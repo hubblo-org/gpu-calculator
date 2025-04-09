@@ -34,6 +34,7 @@
   let secondaryCharacteristicsButtonLabel = $state(
     "Display the data center secondary characteristics"
   );
+  let results: null | any = $state();
 
   const electricalTechnicalResilienceTiers = Object.values(ElectricalTechnicalResilienceTiers);
   const countriesNames = Object.values(Countries);
@@ -74,7 +75,7 @@
     impacts2: ImpactFactors,
     ref_years: number,
     lifespan: number
-  ) {
+  ): ImpactFactors {
     var res: ImpactFactors = {
       ADPe: {
         value: computeImpact(
@@ -250,7 +251,7 @@
   /// Casts Data Centre inventory in FunctionalUnitResults
   function build_impact_per_lifecycle_step(
     inventory_with_impact: DataCenterInventoryElementWithImpactFactors[]
-  ) {
+  ): FunctionalUnitResultsRowWithLifeCycle[] {
     var ref_hours = 8760; // hours = 1 year
     var ref_years = 1;
     /// With lifecycle only
@@ -334,7 +335,7 @@
       }
     });
     // Electricity
-    $inspect(yearlyTotalEnergy);
+    //$inspect(yearlyTotalEnergy);
     initUse.impacts = addImpacts(
       initUse.impacts,
       Number(yearlyTotalEnergy),
@@ -484,7 +485,7 @@
 
   var tier = "Tier " + dataCenter.electricalTechnicalResilience.value;
 
-  let results = $derived.by(() => {
+  function computeResults() {
     let res = build_impact_per_lifecycle_step(inventoryWithImpact);
 
     const filteredResults = res; //.filter((result) => result.life_cycle_step != "full_life_cycle");
@@ -508,8 +509,31 @@
 
     const lifeCycleSteps = ["manufacturing", "transport", "use", "end-of-life"];
 
-    return { per_lifecycle: resultsCriteriasPerLifeCycle, steps: lifeCycleSteps };
-  });
+    const computedResults = { per_lifecycle: resultsCriteriasPerLifeCycle, steps: lifeCycleSteps };
+    results = computedResults;
+  }
+
+  function openToggleTip(nodeId: string) {
+    const toggletip = document.getElementById(nodeId);
+    const description = toggletip?.getAttribute("data-toggletip-content");
+    const liveRegion = toggletip?.nextElementSibling;
+    toggletip?.addEventListener("click", function () {
+      liveRegion!.innerHTML = "";
+      window.setTimeout(function () {
+        liveRegion!.innerHTML = '<span class="toggletip-bubble">' + description;
+      }, 100);
+    });
+    document.addEventListener("click", function (event) {
+      if (toggletip !== event.target) {
+        liveRegion!.innerHTML = "";
+      }
+    });
+    toggletip?.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        liveRegion!.innerHTML = "";
+      }
+    });
+  }
 
   function renderStackedBarPlot() {
     let div = document.querySelector("#impact-factors-plot");
@@ -535,7 +559,15 @@
       div.append(resultsBarPlot);
     }
   }
-  onMount(() => renderStackedBarPlot());
+  onMount(() => {
+    computeResults();
+    renderStackedBarPlot();
+  });
+
+  function updateResults() {
+    computeResults();
+    renderStackedBarPlot();
+  }
 
   let resultsForTreemap = build_full_dc_impacts_with_categories_and_lifecycle(inventoryWithImpact);
 
@@ -589,8 +621,20 @@
   <div class="section-main">
     <div class="grid">
       <div class="field">
-        <label for="building-total-surface">{dataCenter.totalSurface.label} (square meters)</label
-        ><input
+        <div>
+          <label for="building-total-surface"
+            >{dataCenter.totalSurface.label} (square meters)
+          </label><span class="tooltip-container"
+            ><button
+              type="button"
+              id="total-surface-toggletip-button"
+              data-toggletip-content={dataCenter.totalSurface.description}
+              onclick={() => openToggleTip("total-surface-toggletip-button")}
+              aria-label="More information">i <span role="status"></span></button
+            ></span
+          >
+        </div>
+        <input
           type="number"
           id="building-total-surface"
           bind:value={totalSurface}
@@ -813,7 +857,7 @@
         visibilityFunction={handleSecondaryCharacteristicsVisibility}
       />
     {/if}
-    <button id="recalculate" class="btn btn-primary btn-sm" onclick={renderStackedBarPlot}
+    <button id="recalculate" class="btn btn-primary btn-sm" onclick={() => updateResults()}
       >Recalculate</button
     >
   </div>
@@ -828,7 +872,7 @@
   </div>
 </section>
 
-<section>
+<!-- <section>
   <div id="section-heading">
     <h3>Treemap impacts breakdown</h3>
   </div>
@@ -838,7 +882,7 @@
     </p>
     <ResultsTreeMap results={resultsForTreemap} />
   </div>
-</section> 
+</section> -->
 
 <ImpactFactorsSection source="data-center" {results} resultsTreemap={resultsForTreemap} />
 
