@@ -1,4 +1,7 @@
 <header>
+  <div id="banner-container">
+    <div id="beta-banner">BETA</div>
+  </div>
   <div id="header-logo">
     <a class="logo" href="https://hubblo.org/en/" aria-label="Navigate to the Hubblo website">
       <img src="/media/logo.svg" alt="Hubblo logo" />
@@ -34,13 +37,44 @@
     color: var(--color-gray-500);
   }
 
-  #contact, #contact:visited {
+  #contact,
+  #contact:visited {
     color: var(--color-white);
+  }
+
+  #banner-container {
+    width: 200px;
+    height: 200px;
+    margin: -26px;
+    position: absolute;
+    overflow: hidden;
+  }
+  #beta-banner {
+    width: 300px;
+    padding: 4px;
+    padding-right: 42px;
+    background-color: var(--color-secondary-30);
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: rotateZ(-45deg);
+    text-align: center;
+    transform-origin: 150px 180px;
   }
   @media (min-width: 800px) {
     p {
       margin-left: auto;
       display: initial;
+    }
+  }
+  @media (min-width: 480px) {
+    #banner-container {
+      margin: -32px;
+    }
+    #beta-banner {
+      padding: 6px;
+      padding-right: 12px;
     }
   }
 </style>
