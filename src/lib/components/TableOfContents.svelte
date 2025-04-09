@@ -11,7 +11,10 @@
 <style>
   ul,
   li {
-    list-style-type: none;
+    list-style-type: square;
+  }
+  ul ul li a {
+    font-size: 0.95rem;
   }
   @media (min-width: 480px) {
     section {
