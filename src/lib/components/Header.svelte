@@ -48,11 +48,12 @@
     margin: -26px;
     position: absolute;
     overflow: hidden;
+    z-index: -1;
   }
   #beta-banner {
     width: 300px;
-    padding: 4px;
-    padding-right: 42px;
+    padding-top: 10px;
+    padding-right: 48px;
     background-color: var(--color-secondary-30);
     box-sizing: border-box;
     position: absolute;
