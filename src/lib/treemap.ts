@@ -53,7 +53,8 @@ export function renderTreemap(source: string, tree: Node, width: number, height:
 
   d3.select(treemapLegendWrapperId).attr("style", `width: ${width}px; display: flex`);
 
-  const treemapLogo = d3.select(treemapLegendWrapperId).select(legendLogoId);
+  const treemapLogo = d3.select(treemapLegendWrapperId).select(`#${legendLogoId}`);
+
   if (treemapLogo.empty()) {
     const hubbloLogo = d3
       .select(treemapLegendWrapperId)
