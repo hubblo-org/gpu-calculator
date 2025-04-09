@@ -63,9 +63,7 @@ export function renderTreemap(source: string, tree: Node, width: number, height:
       .attr("id", legendLogoId);
     hubbloLogo.append("img").attr("src", "/media/logo.svg");
     hubbloLogo.append("span").text("Hubblo");
-  } else {
-    console.error("No element to attach the logo to!");
-  }
+  } 
 
   const treemap = d3.select(treemapId);
   if (!treemap.empty()) {
