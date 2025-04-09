@@ -197,7 +197,8 @@
   {/if}
 
   {#if absoluteValues === "display"}
-    <div class="absolute-values-table">
+		{@const tableId = `${source}-table`} 
+    <div class="absolute-values-table" id="{tableId}">
       <table>
         <caption>{sectionTexts.table_caption}</caption><thead
           ><tr
@@ -217,7 +218,7 @@
       <button
         class="btn-download"
         aria-label="Download data in CSV format"
-        onclick={downloadToCSV("absolute-values-table")}>csv</button
+        onclick={() => downloadToCSV(tableId)}>csv</button
       >
     </div>
     <DropdownButton
