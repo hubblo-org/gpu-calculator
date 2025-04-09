@@ -151,7 +151,7 @@
           "lc_step"
         );
       } else if (selectedGraph === "treemap") {
-        renderTreemap(resultsForTreemap, 1300, 600);
+        renderTreemap(source, resultsForTreemap, 1300, 600);
       }
     }
   });
@@ -163,7 +163,7 @@
     <a href="#table-of-contents" aria-label="Scroll back to table of contents">▲</a>
   </div>
 
-  <div id="criteria-selection">
+  <div id="options">
     {#if selectedGraph === "treemap"}
       <select bind:value={selectedImpactCriteria} aria-label="Select an impact criteria"
         >{#each mainImpactCriterias as impactCriteria}<option>{impactCriteria.acronym}</option
@@ -173,16 +173,17 @@
     <button class="btn btn-sm btn-primary" onclick={switchGraphDisplay}>Switch graph display</button
     >
   </div>
+
   <div id="graph-display">
     {#if selectedGraph === "bar-plot"}
       <div id="impact-factors-plot-{source}"></div>
     {/if}
     {#if selectedGraph === "treemap"}
-      <div id="treemap-wrapper">
-        <div id="treemap-legend-wrapper">
-          <div id="treemap-legend"></div>
+      <div class="treemap-wrapper">
+        <div id="{source}-treemap-legend-wrapper">
+          <div id="{source}-treemap-legend"></div>
         </div>
-        <div id="treemap"></div>
+        <div id="{source}-treemap"></div>
       </div>
     {/if}
   </div>
@@ -237,32 +238,25 @@
   #absolute-values-table button {
     margin-left: auto;
   }
-  #section-heading,
-  #graph-display {
+  #graph-display,
+  #section-heading {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
   }
-  #criteria-selection {
+  #options {
     position: relative;
     margin-left: auto;
     display: flex;
     gap: 12px;
     flex-direction: row;
   }
-  #criteria-selection select {
+  #options select {
     appearance: auto;
     background-color: var(--color-secondary-30);
   }
-  #criteria-selection * {
+  #options * {
     margin-bottom: 12px;
     margin-right: 12px;
-  }
-  #treemap-wrapper {
-    display: flex;
-    flex-direction: column;
-  }
-  #treemap-legend-wrapper {
-    display: flex;
   }
 </style>

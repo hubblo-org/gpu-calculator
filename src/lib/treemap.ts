@@ -7,7 +7,13 @@ function getFirstDepthParent(
   return node.depth > 1 ? getFirstDepthParent(node.parent!) : node;
 }
 
-export function renderTreemap(tree: Node, width: number, height: number) {
+export function renderTreemap(source: string, tree: Node, width: number, height: number) {
+  const treemapLegendId = `#${source}-treemap-legend`;
+  const treemapId = `#${source}-treemap`;
+  const treemapLegendWrapperId = `#${source}-treemap-legend-wrapper`;
+  const svgTreemapId = `${source}-svg-treemap`;
+  const legendLogoId = `${source}-legend-logo`;
+
   const color = d3.scaleOrdinal(
     tree.children!.map((d) => d.name),
     d3.schemeTableau10
@@ -27,7 +33,7 @@ export function renderTreemap(tree: Node, width: number, height: number) {
   );
 
   const treemapLegend = d3
-    .select("#treemap-legend")
+    .select(treemapLegendId)
     .attr(
       "style",
       "display: flex; align-items: center; min-height: 32px; margin-left: 15px; font: 10px sans-serif;"
@@ -37,6 +43,7 @@ export function renderTreemap(tree: Node, width: number, height: number) {
     color.domain().forEach((domain) => {
       treemapLegend
         .append("span")
+        .attr("class", "swatch")
         .attr("style", `--color: ${color(domain)};`)
         .text(domain);
     });
@@ -44,39 +51,45 @@ export function renderTreemap(tree: Node, width: number, height: number) {
     console.error("No element to attach the treemap legend to!");
   }
 
-  d3.select("#treemap-legend-wrapper").attr("style", `width: ${width}px`);
+  d3.select(treemapLegendWrapperId).attr("style", `width: ${width}px; display: flex`);
 
-  const treemapLogo = d3.select("#treemap-legend-wrapper").select("#legend-logo");
+  const treemapLogo = d3.select(treemapLegendWrapperId).select(legendLogoId);
   if (treemapLogo.empty()) {
     const hubbloLogo = d3
-      .select("#treemap-legend-wrapper")
+      .select(treemapLegendWrapperId)
       .append("div")
       .attr("class", "logo")
-      .attr("id", "legend-logo");
+      .attr("id", legendLogoId);
     hubbloLogo.append("img").attr("src", "/media/logo.svg");
     hubbloLogo.append("span").text("Hubblo");
+  } else {
+    console.error("No element to attach the logo to!");
   }
 
-  const treemap = d3.select("#treemap");
+  const treemap = d3.select(treemapId);
   if (!treemap.empty()) {
     treemap.selectChild("svg").remove();
     const svg = d3
-      .select("#treemap")
+      .select(treemapId)
       .append("svg")
-      .attr("id", "svg-treemap")
+      .attr("id", svgTreemapId)
       .attr("viewbox", `0 0 ${width} ${height}`)
       .attr("width", `${width}`)
       .attr("height", `${height}`)
       .attr("style", "font: 10px sans-serif;");
 
     root.leaves().forEach((leaf, leafIndex) => {
+      const gId = `${source}-g-${leafIndex}`;
+      const rectId = `${source}-rect-${leafIndex}`;
+      const clipId = `${source}-clip-${leafIndex}`;
+      const textId = `${source}-text-${leafIndex}`;
       const nodes = leaf.data.name
         .split(/(?=[A-Z][a-z])|\s+/g)
         .concat(numberFormat((leaf.data as d3.HierarchyPointNode<Node>).value!));
 
       svg
         .append("g")
-        .attr("id", `g-${leafIndex}`)
+        .attr("id", gId)
         .attr("transform", `translate(${leaf.x0}, ${leaf.y0})`)
         .append("title")
         .text(
@@ -87,22 +100,19 @@ export function renderTreemap(tree: Node, width: number, height: number) {
             .join(".")}\n${numberFormat(leaf.value!)}`
         );
 
-      const g = d3.select(`#g-${leafIndex}`);
+      const g = d3.select(`#${gId}`);
 
       g.append("rect")
-        .attr("id", `rect-${leafIndex}`)
+        .attr("id", rectId)
         .attr("fill", `${color(getFirstDepthParent(leaf).data.name)}`)
         .attr("fill-opacity", 0.6)
         .attr("width", leaf.x1 - leaf.x0)
         .attr("height", leaf.y1 - leaf.y0);
 
-      g.append("clipPath")
-        .attr("id", `clip-${leafIndex}`)
-        .append("use")
-        .attr("href", `#rect-${leafIndex}`);
+      g.append("clipPath").attr("id", clipId).append("use").attr("href", `#${rectId}`);
 
-      g.append("text").attr("id", `text-${leafIndex}`).attr("clip-path", `url(#clip-${leafIndex}`);
-      const text = d3.select(`#text-${leafIndex}`);
+      g.append("text").attr("id", textId).attr("clip-path", `url(#${clipId}`);
+      const text = d3.select(`#${textId}`);
 
       nodes.forEach((node, nodeIndex) => {
         text

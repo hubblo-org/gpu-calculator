@@ -232,26 +232,30 @@ tr:nth-child(even) {
 	color: var(--color-headings);
 }
 
-
-.wrapper {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
-}
-
-#treemap-legend span {
+.swatch {
 	display: inline-flex;
 	align-items: center;
 	margin-right: 5px;
 	height: 15px;
 }
 
-#treemap-legend span::before {
+.swatch::before {
 	content: "";
 	width: 15px;
 	height: 15px;
 	margin-right: 5px;
 	background: var(--color);
+}
+
+.treemap-wrapper {
+	display: flex;
+	flex-direction: column;
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
 }
 
 ::selection {
