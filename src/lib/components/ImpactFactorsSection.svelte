@@ -158,12 +158,12 @@
 </script>
 
 <section aria-labelledby={sectionTexts.heading_id}>
-  <div id="section-heading">
+  <header>
     <h3 id={sectionTexts.heading_id}>{sectionTexts.section_label}</h3>
     <a href="#table-of-contents" aria-label="Scroll back to table of contents">▲</a>
-  </div>
+  </header>
 
-  <div id="options">
+  <div class="options">
     {#if selectedGraph === "treemap"}
       <select bind:value={selectedImpactCriteria} aria-label="Select an impact criteria"
         >{#each mainImpactCriterias as impactCriteria}<option>{impactCriteria.acronym}</option
@@ -174,7 +174,7 @@
     >
   </div>
 
-  <div id="graph-display">
+  <div class="graph-display">
     {#if selectedGraph === "bar-plot"}
       <div id="impact-factors-plot-{source}"></div>
     {/if}
@@ -197,7 +197,7 @@
   {/if}
 
   {#if absoluteValues === "display"}
-    <div id="absolute-values-table">
+    <div class="absolute-values-table">
       <table>
         <caption>{sectionTexts.table_caption}</caption><thead
           ><tr
@@ -227,36 +227,3 @@
     />
   {/if}
 </section>
-
-<style>
-  #absolute-values-table {
-    display: flex;
-    align-self: center;
-    flex-direction: column;
-    width: 100%;
-  }
-  #absolute-values-table button {
-    margin-left: auto;
-  }
-  #graph-display,
-  #section-heading {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  #options {
-    position: relative;
-    margin-left: auto;
-    display: flex;
-    gap: 12px;
-    flex-direction: row;
-  }
-  #options select {
-    appearance: auto;
-    background-color: var(--color-secondary-30);
-  }
-  #options * {
-    margin-bottom: 12px;
-    margin-right: 12px;
-  }
-</style>
