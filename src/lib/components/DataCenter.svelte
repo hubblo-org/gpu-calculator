@@ -513,28 +513,6 @@
     results = computedResults;
   }
 
-  function openToggleTip(nodeId: string) {
-    const toggletip = document.getElementById(nodeId);
-    const description = toggletip?.getAttribute("data-toggletip-content");
-    const liveRegion = toggletip?.nextElementSibling;
-    toggletip?.addEventListener("click", function () {
-      liveRegion!.innerHTML = "";
-      window.setTimeout(function () {
-        liveRegion!.innerHTML = '<span class="toggletip-bubble">' + description;
-      }, 100);
-    });
-    document.addEventListener("click", function (event) {
-      if (toggletip !== event.target) {
-        liveRegion!.innerHTML = "";
-      }
-    });
-    toggletip?.addEventListener("keydown", function (event) {
-      if (event.key === "Escape") {
-        liveRegion!.innerHTML = "";
-      }
-    });
-  }
-
   function renderStackedBarPlot() {
     let div = document.querySelector("#impact-factors-plot");
     div?.firstChild?.remove();
@@ -574,6 +552,7 @@
   import { getFunctionalUnitParameters, FunctionalUnits } from "$lib/types/enums";
   import ResultsTreeMap from "./ResultsTreeMap.svelte";
   import DropdownButton from "./DropdownButton.svelte";
+  import ToggleTip from "./ToggleTip.svelte";
 
   let selectedFunctionalUnit = $state(FunctionalUnits.First);
   const parameters = $derived(getFunctionalUnitParameters(selectedFunctionalUnit));
@@ -621,18 +600,12 @@
   <div class="section-main">
     <div class="grid">
       <div class="field">
-        <div>
+        <div class="label-wrapper">
           <label for="building-total-surface"
             >{dataCenter.totalSurface.label} (square meters)
-          </label><span class="tooltip-container"
-            ><button
-              type="button"
-              id="total-surface-toggletip-button"
-              data-toggletip-content={dataCenter.totalSurface.description}
-              onclick={() => openToggleTip("total-surface-toggletip-button")}
-              aria-label="More information">i <span role="status"></span></button
-            ></span
-          >
+          </label>
+
+          <ToggleTip info={dataCenter.totalSurface.description!} source="total-surface" />
         </div>
         <input
           type="number"
@@ -642,7 +615,12 @@
         />
       </div>
       <div class="field">
-        <label for="concrete-volume">{dataCenter.concreteVolume.label} (cubic meters)</label><input
+        <div class="label-wrapper">
+          <label for="concrete-volume">{dataCenter.concreteVolume.label} (cubic meters)</label>
+          <ToggleTip info={dataCenter.concreteVolume.description!} source="concrete-volume" />
+        </div>
+
+        <input
           type="number"
           id="concrete-volume"
           bind:value={concreteVolume}
@@ -650,7 +628,12 @@
         />
       </div>
       <div class="field">
-        <label for="steel-mass">{dataCenter.steelMass.label} (kilograms)</label><input
+        <div class="label-wrapper">
+          <label for="steel-mass">{dataCenter.steelMass.label} (kilograms)</label>
+          <ToggleTip info={dataCenter.steelMass.description!} source="steel-mass" />
+        </div>
+
+        <input
           type="number"
           id="steel-mass"
           bind:value={steelMass}
@@ -658,9 +641,16 @@
         />
       </div>
       <div class="field">
-        <label for="yearly-total-energy"
-          >{dataCenter.yearlyTotalEnergy.label} (kilowatts/hour)</label
-        ><input
+        <div class="label-wrapper">
+          <label for="yearly-total-energy"
+            >{dataCenter.yearlyTotalEnergy.label} (kilowatts/hour)</label
+          >
+          <ToggleTip
+            info={dataCenter.yearlyTotalEnergy.description!}
+            source="yearly-total-energy"
+          />
+        </div>
+        <input
           type="number"
           id="yearly-total-energy"
           bind:value={yearlyTotalEnergy}
@@ -670,29 +660,51 @@
     </div>
     <div class="grid">
       <div class="field">
-        <label for="power-usage-effectiveness">Power Usage Effectiveness (PUE)</label><input
+        <div class="label-wrapper">
+          <label for="power-usage-effectiveness">Power Usage Effectiveness (PUE)</label>
+          <ToggleTip
+            info={dataCenter.powerUsageEffectiveness.description!}
+            source="power-usage-effectiveness"
+          />
+        </div>
+        <input
           type="number"
           id="power-usage-effectiveness"
           placeholder={dataCenter.powerUsageEffectiveness.value as string}
         />
       </div>
       <div class="field">
-        <label for="water-usage-effectiveness">Water Usage Effectiveness (WUE)</label><input
+        <div class="label-wrapper">
+          <label for="water-usage-effectiveness">Water Usage Effectiveness (WUE)</label>
+          <ToggleTip
+            info={dataCenter.waterUsageEffectiveness.description!}
+            source="water-usage-effectiveness"
+          />
+        </div>
+        <input
           type="number"
           id="water-usage-effectiveness"
           placeholder={dataCenter.waterUsageEffectiveness.value as string}
         />
       </div>
       <div class="field">
-        <label for="electrical-technical-resilience">Electrical Technical Resilience tier</label
-        ><select bind:value={tier} id="electrical-technical-resilience">
+        <div class="label-wrapper">
+          <label for="electrical-technical-resilience">Electrical Technical Resilience tier</label>
+          <ToggleTip
+            info={dataCenter.electricalTechnicalResilience.description!}
+            source="electrical-technical-resilience"
+          />
+        </div>
+        <select bind:value={tier} id="electrical-technical-resilience">
           {#each electricalTechnicalResilienceTiers as tier}<option>{tier}</option>{/each}
         </select>
       </div>
       <div class="field">
-        <label for="location">Location</label><select
-          bind:value={dataCenter.location.value}
-          id="location"
+        <div class="label-wrapper">
+          <label for="location">Location</label>
+          <ToggleTip info={dataCenter.location.description!} source="location" />
+        </div>
+        <select bind:value={dataCenter.location.value} id="location"
           >{#each countriesNames as country}<option>{country}</option>{/each}</select
         >
       </div>
@@ -709,7 +721,11 @@
       <div transition:fade class="section-main" id="secondary-characteristics">
         <div class="grid">
           <div class="field">
-            <label for="building-lifespan">{dataCenter.lifespan.label} (years)</label>
+            <div class="label-wrapper">
+              <label for="building-lifespan">{dataCenter.lifespan.label} (years)</label>
+              <ToggleTip info={dataCenter.lifespan.description!} source="building-lifespan" />
+            </div>
+
             <input
               type="number"
               id="building-lifespan"
@@ -719,9 +735,16 @@
           </div>
 
           <div class="field">
-            <label for="building-technical-rooms-surface"
-              >{dataCenter.technicalRoomSurface.label} (square meters)</label
-            >
+            <div class="label-wrapper">
+              <label for="building-technical-rooms-surface"
+                >{dataCenter.technicalRoomSurface.label} (square meters)</label
+              >
+              <ToggleTip
+                info={dataCenter.technicalRoomSurface.description!}
+                source="building-technical-rooms-surface"
+              />
+            </div>
+
             <input
               type="number"
               id="building-technical-rooms-surface"
@@ -807,9 +830,15 @@
         </div>-->
 
           <div class="field">
-            <label for="building-suspended-ceiling-surface">
-              {dataCenter.suspendedCeilingSurface.label} (square meters)
-            </label>
+            <div class="label-wrapper">
+              <label for="building-suspended-ceiling-surface">
+                {dataCenter.suspendedCeilingSurface.label} (square meters)
+              </label>
+              <ToggleTip
+                info={dataCenter.suspendedCeilingSurface.description!}
+                source="building-suspended-ceiling-surface"
+              />
+            </div>
             <input
               type="number"
               id="building-suspended-ceiling-surface"
@@ -819,7 +848,10 @@
           </div>
 
           <div class="field">
-            <label for="building-lifts"> {dataCenter.lifts.label} </label>
+            <div class="label-wrapper">
+              <label for="building-lifts"> {dataCenter.lifts.label} </label>
+              <ToggleTip info={dataCenter.lifts.description!} source="building-lifts" />
+            </div>
             <input
               type="number"
               id="building-lifts"
@@ -830,7 +862,13 @@
 
         <div class="grid">
           <div class="field">
-            <label for="building-freight-lifts"> {dataCenter.freightLifts.label} </label>
+            <div class="label-wrapper">
+              <label for="building-freight-lifts"> {dataCenter.freightLifts.label} </label>
+              <ToggleTip
+                info={dataCenter.freightLifts.description!}
+                source="building-freight-lifts"
+              />
+            </div>
             <input
               type="number"
               id="building-freight-lifts"
@@ -839,9 +877,15 @@
           </div>
 
           <div class="field">
-            <label for="building-partition-surface">
-              {dataCenter.partitionSurface.label} (square meters)
-            </label>
+            <div class="label-wrapper">
+              <label for="building-partition-surface">
+                {dataCenter.partitionSurface.label} (square meters)
+              </label>
+              <ToggleTip
+                info={dataCenter.partitionSurface.description!}
+                source="building-partition-surface"
+              />
+            </div>
             <input
               type="number"
               id="building-partition-surface"
@@ -897,6 +941,10 @@
     gap: 16px;
     margin-top: 12px;
   }
+
+  .label-wrapper {
+    display: flex;
+  }
   #secondary-characteristics {
     display: flex;
     flex-direction: column;
@@ -916,6 +964,9 @@
     label {
       height: 40px;
       width: 100%;
+    }
+    input {
+      margin-top: auto;
     }
     input,
     select {

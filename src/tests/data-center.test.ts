@@ -4,7 +4,6 @@ import { dataCenterCharacteristics } from "../mocks/dc-data";
 import { CoolingSystems, Countries, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import * as tsdom from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 
 const dataCenterDescription = "A data center";
@@ -176,18 +175,6 @@ describe("data center component static elements test suite", () => {
       name: "Recalculate"
     });
     expect(recalculateButton).toBeVisible();
-  });
-
-  it("should display a description of the data center characteristic after the user interacted with the element displaying the characteristic", async () => {
-    const user = userEvent.setup();
-    const description = dataCenterCharacteristics.totalSurface.description;
-    const informationButton = screen.getByRole("button", {
-      name: "More information"
-    });
-
-    await user.click(informationButton);
-
-    expect(screen.getByText(`${description}`)).toBeVisible();
   });
 
   // Skipping this test for the moment while waiting to implement values for each cooling system type

@@ -12,37 +12,63 @@ import type {
 import { getAllImpactCriterias, getImpactCriteria, ImpactCriterias } from "$lib/types/enums";
 
 export const dataCenterCharacteristics: DataCenterBuilding = {
-  energyReuseFactor: { label: "Energy Reuse Factor", value: dataCenterInventory.energyReuseFactor },
+  energyReuseFactor: {
+    label: "Energy Reuse Factor",
+    value: dataCenterInventory.energyReuseFactor,
+    description: "test"
+  },
   electricalTechnicalResilience: {
     label: "Electrical Technical Resilience",
-    value: dataCenterInventory.electricalTechnicalResilience
+    value: dataCenterInventory.electricalTechnicalResilience,
+    description: "test"
   },
   renewableEnergyFactor: {
     label: "Renewable Energy Factor",
-    value: dataCenterInventory.renewableEnergyFactor
+    value: dataCenterInventory.renewableEnergyFactor,
+    description: "test"
   },
   suspendedCeilingSurface: {
     label: "Suspended ceiling surface",
-    value: dataCenterInventory.suspendedCeilingSurface
+    value: dataCenterInventory.suspendedCeilingSurface,
+    description: "test"
   },
-  lifts: { label: "Number of lifts", value: dataCenterInventory.lifts },
-  location: { label: "Location", value: dataCenterInventory.location },
-  freightLifts: { label: "Number of freight lifts", value: dataCenterInventory.freightLifts },
+  lifts: { label: "Number of lifts", value: dataCenterInventory.lifts, description: "test" },
+  location: { label: "Location", value: dataCenterInventory.location, description: "test" },
+  freightLifts: {
+    label: "Number of freight lifts",
+    value: dataCenterInventory.freightLifts,
+    description: "test"
+  },
   maximumUsableElectricalPower: {
     label: "Maximum usable electrical power",
-    value: dataCenterInventory.maximumUsableElectricalPower
+    value: dataCenterInventory.maximumUsableElectricalPower,
+    description: "test"
   },
-  coolingSystemType: { label: "Cooling system type", value: dataCenterInventory.coolingSystemType },
-  dataCenterLoadFactor: { label: "Load factor", value: dataCenterInventory.dataCenterLoadFactor },
+  coolingSystemType: {
+    label: "Cooling system type",
+    value: dataCenterInventory.coolingSystemType,
+    description: "test"
+  },
+  dataCenterLoadFactor: {
+    label: "Load factor",
+    value: dataCenterInventory.dataCenterLoadFactor,
+    description: "test"
+  },
   designedFloorAssemblySurface: {
     label: "Designed floor assembly surface",
-    value: dataCenterInventory.designedFloorAssemblySurface
+    value: dataCenterInventory.designedFloorAssemblySurface,
+    description: "test"
   },
-  partitionSurface: { label: "Partition surface", value: dataCenterInventory.partitionSurface },
-  lifespan: { label: "Building lifespan", value: dataCenterInventory.lifespan },
+  partitionSurface: {
+    label: "Partition surface",
+    value: dataCenterInventory.partitionSurface,
+    description: "test"
+  },
+  lifespan: { label: "Building lifespan", value: dataCenterInventory.lifespan, description: "test" },
   technicalRoomSurface: {
     label: "Technical rooms surface area",
-    value: dataCenterInventory.technicalRoomSurface
+    value: dataCenterInventory.technicalRoomSurface,
+    description: "test"
   },
   totalSurface: {
     label: "Building total surface",
@@ -52,18 +78,25 @@ export const dataCenterCharacteristics: DataCenterBuilding = {
   },
   yearlyTotalEnergy: {
     label: "Total energy for one year",
-    value: dataCenterInventory.yearlyTotalEnergy
+    value: dataCenterInventory.yearlyTotalEnergy,
+    description: "test"
   },
   powerUsageEffectiveness: {
     label: "Power Usage Effectiveness",
-    value: dataCenterInventory.powerUsageEffectiveness
+    value: dataCenterInventory.powerUsageEffectiveness,
+    description: "test"
   },
   waterUsageEffectiveness: {
     label: "Water Usage Effectiveness",
-    value: dataCenterInventory.waterUsageEffectiveness
+    value: dataCenterInventory.waterUsageEffectiveness,
+    description: "test"
   },
-  concreteVolume: { label: "Concrete volume", value: dataCenterInventory.concreteVolume },
-  steelMass: { label: "Steel mass", value: dataCenterInventory.steelMass }
+  concreteVolume: {
+    label: "Concrete volume",
+    value: dataCenterInventory.concreteVolume,
+    description: "test"
+  },
+  steelMass: { label: "Steel mass", value: dataCenterInventory.steelMass, description: "test"}
 };
 console.log("Materials Impacts:");
 console.log(MaterialImpacts);

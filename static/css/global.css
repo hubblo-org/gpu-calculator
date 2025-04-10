@@ -332,6 +332,17 @@ select {
   background: var(--color);
 }
 
+.toggletip-container .toggletip-bubble {
+  position: absolute;
+  display: inline-block;
+  z-index: 1;
+  right: 30%;
+  width: 300px;
+  background-color: var(--color-secondary-100);
+  border-radius: var(--rounded-xl);
+  padding: 12px;
+}
+
 .treemap-wrapper {
   display: flex;
   flex-direction: column;
@@ -356,6 +367,29 @@ select {
 
   .btn-sm {
     max-height: 2.25rem;
+  }
+
+  .toggletip-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .toggletip-container .toggletip-bubble {
+    position: absolute;
+    display: inline-block;
+    z-index: 1;
+    right: initial;
+    left: 100%;
+    top: 0;
+    width: 300px;
+    background-color: var(--color-secondary-100);
+    border-radius: var(--rounded-xl);
+    padding: 12px;
+  }
+
+  .field:last-child .label-wrapper .toggletip-container .toggletip-bubble {
+    left: initial;
+    right: 100%;
   }
 
   section header a {
