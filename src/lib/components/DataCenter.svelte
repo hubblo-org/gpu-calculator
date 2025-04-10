@@ -247,6 +247,7 @@
   let concreteVolume = $state(dataCenter.concreteVolume.value);
   let totalSurface = $state(dataCenter.totalSurface.value);
   let datacenterLifespan = $state(dataCenter.lifespan.value);
+  let electricalTechnicalResilience = $state(dataCenter.electricalTechnicalResilience.value);
 
   /// Casts Data Centre inventory in FunctionalUnitResults
   function build_impact_per_lifecycle_step(
@@ -695,7 +696,7 @@
             source="electrical-technical-resilience"
           />
         </div>
-        <select bind:value={tier} id="electrical-technical-resilience">
+        <select bind:value={electricalTechnicalResilience} id="electrical-technical-resilience">
           {#each electricalTechnicalResilienceTiers as tier}<option>{tier}</option>{/each}
         </select>
       </div>
