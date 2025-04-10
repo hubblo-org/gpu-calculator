@@ -66,7 +66,6 @@ export function renderHorizontalBarPlot(
     const resultsBarPlot = Plot.plot({
       width: 1600,
       height: 800,
-      marginLeft: 400,
       y: { grid: true },
       marks: lollipop ? lollipopMarks : barMarks
     });
@@ -75,7 +74,7 @@ export function renderHorizontalBarPlot(
 }
 
 function addLogo(nodeId: string) {
-  // When a legend is created with the generated plot, a figure element is added to the selected div. 
+  // When a legend is created with the generated plot, a figure element is added to the selected div.
   // The first child is then the div with the legend elements.
   const logoDiv = d3
     .select(nodeId)
@@ -104,10 +103,10 @@ export function renderStackedBarPlot(
     const resultsBarPlot = Plot.plot({
       width: width,
       height: height,
-      marginLeft: 100,
       color: { legend: true, domain: domains },
       y: { percent: true },
       marks: [
+        Plot.axisX({ marginTop: 36, marginBottom: 48 }),
         Plot.barY(impactFactors, {
           y: yLabel,
           x: xLabel,

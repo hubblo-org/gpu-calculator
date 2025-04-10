@@ -283,6 +283,12 @@ tr:nth-child(even) {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  min-width: 800px;
+  min-height: 600px;
+}
+
+.graph-display svg {
+  font-size: 1.25rem;
 }
 
 .logo {
@@ -365,8 +371,21 @@ select {
     box-sizing: content-box;
   }
 
+  section header a {
+    margin-left: auto;
+  }
+
   .btn-sm {
     max-height: 2.25rem;
+  }
+
+  .field:last-child .label-wrapper .toggletip-container .toggletip-bubble {
+    left: initial;
+    right: 100%;
+  }
+
+  .graph-display svg {
+    font-size: initial;
   }
 
   .toggletip-container {
@@ -385,15 +404,6 @@ select {
     background-color: var(--color-secondary-100);
     border-radius: var(--rounded-xl);
     padding: 12px;
-  }
-
-  .field:last-child .label-wrapper .toggletip-container .toggletip-bubble {
-    left: initial;
-    right: 100%;
-  }
-
-  section header a {
-    margin-left: auto;
   }
 }
 
