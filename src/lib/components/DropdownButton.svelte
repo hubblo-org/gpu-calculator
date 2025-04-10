@@ -31,7 +31,7 @@
 
 <style>
   .drop-down {
-    padding-top: 12px;
+    margin-top: 12px;
     display: flex;
     gap: 12px;
     width: 240px;

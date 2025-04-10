@@ -250,7 +250,6 @@ tr:nth-child(even) {
   min-width: 36px;
   font-size: 1.5rem;
   text-align: center;
-
   width: 36px;
 }
 
@@ -317,12 +316,6 @@ tr:nth-child(even) {
   margin-top: 12px;
 }
 
-.options button,
-select {
-  margin-bottom: 12px;
-  margin-right: 12px;
-}
-
 .swatch {
   display: inline-flex;
   align-items: center;
@@ -382,6 +375,7 @@ select {
   .field:last-child .label-wrapper .toggletip-container .toggletip-bubble {
     left: initial;
     right: 100%;
+    top: -110%;
   }
 
   .graph-display svg {
