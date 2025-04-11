@@ -1,34 +1,25 @@
 <script lang="ts">
-  import { fly, fade } from "svelte/transition";
-  import { CoolingSystems, Countries, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
-  import type { DataCenterBuilding } from "$lib/types/pcr-cloud";
-  import ImpactFactorsSection from "./ImpactFactorsSection.svelte";
-  import FunctionalUnit from "./FunctionalUnit.svelte";
-  import {
-    genNullImpact,
-    inventoryElementImpactFactors,
-    inventoryWithImpact,
-    dataCenterCharacteristics
-  } from "../../mocks/dc-data";
-  import ResultsPercentages from "./ResultsPercentages.svelte";
+  import { fade } from "svelte/transition";
+  import { Countries, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
+  import { DataCenter } from "$lib/data-center.svelte";
   import type {
     FunctionalUnitResultsRowWithLifeCycle,
-    FunctionalUnitResultsRow,
-    ImpactFactor,
     ImpactFactors,
     DataCenterInventoryElementWithImpactFactors
   } from "$lib/types/pcr-cloud";
-  import BuildingForm from "./BuildingForm.svelte";
-  import ResultsPerImpactFactor from "./ResultsPerImpactFactor.svelte";
-  import ResultsVerticalPercentages from "./ResultsVerticalPercentages.svelte";
-  import { renderTreemap } from "$lib/treemap";
-  import { ImpactCriterias, getAllImpactCriterias, getImpactCriteria } from "$lib/types/enums";
+  import type { DataCenterBuilding } from "$lib/types/pcr-cloud";
+  import DropdownButton from "./DropdownButton.svelte";
+  import ToggleTip from "./ToggleTip.svelte";
+  import ImpactFactorsSection from "./ImpactFactorsSection.svelte";
+  import { genNullImpact, inventoryWithImpact } from "../../mocks/dc-data";
 
   interface Props {
     dataCenter: DataCenterBuilding;
   }
 
   const { dataCenter }: Props = $props();
+
+  const dc = new DataCenter(dataCenter);
 
   let secondaryCharacteristicsAreVisible = $state(false);
   let secondaryCharacteristicsButtonLabel = $state(
@@ -38,7 +29,6 @@
 
   const electricalTechnicalResilienceTiers = Object.values(ElectricalTechnicalResilienceTiers);
   const countriesNames = Object.values(Countries);
-  const coolingSystemTypes = Object.values(CoolingSystems);
 
   function computeImpact(
     impact1: number,
@@ -235,19 +225,11 @@
     return res;
   }
 
-  console.log("matching: " + "Electricity, " + dataCenter.location.value + " mix");
+  console.log("matching: " + "Electricity, " + dc.location + " mix");
   let electricityItem = inventoryWithImpact.filter(
-    (element) => element.name == "Electricity, " + dataCenter.location.value + " mix"
+    (element) => element.name == "Electricity, " + dc.location + " mix"
   )[0];
   console.log("electricityItem: " + electricityItem);
-
-  // state variables
-  let yearlyTotalEnergy = $state(dataCenter.yearlyTotalEnergy.value);
-  let steelMass = $state(dataCenter.steelMass.value);
-  let concreteVolume = $state(dataCenter.concreteVolume.value);
-  let totalSurface = $state(dataCenter.totalSurface.value);
-  let datacenterLifespan = $state(dataCenter.lifespan.value);
-  let electricalTechnicalResilience = $state(dataCenter.electricalTechnicalResilience.value);
 
   /// Casts Data Centre inventory in FunctionalUnitResults
   function build_impact_per_lifecycle_step(
@@ -271,11 +253,11 @@
     initEOL.life_cycle_step = "end-of-life";
 
     let editableInventory = {
-      "Concrete volume": concreteVolume,
-      "Number of freight lifts": dataCenter.freightLifts.value as number,
-      "Number of lifts": dataCenter.lifts.value as number,
-      "Steel mass": steelMass,
-      "Suspended ceiling surface": dataCenter.suspendedCeilingSurface.value as number
+      "Concrete volume": dc.concreteVolume,
+      "Number of freight lifts": dc.freightLifts,
+      "Number of lifts": dc.lifts,
+      "Steel mass": dc.steelMass,
+      "Suspended ceiling surface": dc.suspendedCeilingSurface
     };
     const keys = Object.keys(editableInventory).filter((key) => isNaN(Number(key)));
     keys.forEach((key) => {
@@ -296,7 +278,7 @@
         } else if (impacts[i].lifeCycleStep == initManuf.life_cycle_step) {
           let lifespan = impacts[i].lifespan;
           if (key == "Concrete volume" || key == "Steel mass") {
-            lifespan = Number(datacenterLifespan);
+            lifespan = Number(dc.lifespan);
           }
           initManuf.impacts = addImpacts(
             initManuf.impacts,
@@ -309,7 +291,7 @@
         } else if (impacts[i].lifeCycleStep == initTransport.life_cycle_step) {
           let lifespan = impacts[i].lifespan;
           if (key == "Concrete volume" || key == "Steel mass") {
-            lifespan = Number(datacenterLifespan);
+            lifespan = Number(dc.lifespan);
           }
           initTransport.impacts = addImpacts(
             initTransport.impacts,
@@ -322,7 +304,7 @@
         } else if (impacts[i].lifeCycleStep == initEOL.life_cycle_step) {
           let lifespan = impacts[i].lifespan;
           if (key == "Concrete volume" || key == "Steel mass") {
-            lifespan = Number(datacenterLifespan);
+            lifespan = Number(dc.lifespan);
           }
           initEOL.impacts = addImpacts(
             initEOL.impacts,
@@ -339,7 +321,7 @@
     //$inspect(yearlyTotalEnergy);
     initUse.impacts = addImpacts(
       initUse.impacts,
-      Number(yearlyTotalEnergy),
+      Number(dc.yearlyTotalEnergy),
       electricityItem.impacts,
       1,
       Number(electricityItem.lifespan)
@@ -484,7 +466,7 @@
   import * as Plot from "@observablehq/plot";
   import Results from "./Results.svelte";
 
-  var tier = "Tier " + dataCenter.electricalTechnicalResilience.value;
+  var tier = "Tier " + dc.electricalTechnicalResilience;
 
   function computeResults() {
     let res = build_impact_per_lifecycle_step(inventoryWithImpact);
@@ -550,18 +532,6 @@
 
   let resultsForTreemap = build_full_dc_impacts_with_categories_and_lifecycle(inventoryWithImpact);
 
-  import { getFunctionalUnitParameters, FunctionalUnits } from "$lib/types/enums";
-  import ResultsTreeMap from "./ResultsTreeMap.svelte";
-  import DropdownButton from "./DropdownButton.svelte";
-  import ToggleTip from "./ToggleTip.svelte";
-
-  let selectedFunctionalUnit = $state(FunctionalUnits.First);
-  const parameters = $derived(getFunctionalUnitParameters(selectedFunctionalUnit));
-
-  let selectedImpactCriteria = $state(getImpactCriteria(ImpactCriterias.GlobalWarmingPotential));
-
-  const impactCriterias = getAllImpactCriterias();
-
   //  const selectedCriteriaAcronym = selectedImpactCriteria.acronym as keyof ImpactFactors;
   //  return {
   //    name: "dc_data",
@@ -608,12 +578,7 @@
 
           <ToggleTip info={dataCenter.totalSurface.description!} source="total-surface" />
         </div>
-        <input
-          type="number"
-          id="building-total-surface"
-          bind:value={totalSurface}
-          placeholder={dataCenter.totalSurface.value as string}
-        />
+        <input type="number" id="building-total-surface" bind:value={dc.totalSurface} />
       </div>
       <div class="field">
         <div class="label-wrapper">
@@ -621,12 +586,7 @@
           <ToggleTip info={dataCenter.concreteVolume.description!} source="concrete-volume" />
         </div>
 
-        <input
-          type="number"
-          id="concrete-volume"
-          bind:value={concreteVolume}
-          placeholder={dataCenter.concreteVolume.value as string}
-        />
+        <input type="number" id="concrete-volume" bind:value={dc.concreteVolume} />
       </div>
       <div class="field">
         <div class="label-wrapper">
@@ -634,12 +594,7 @@
           <ToggleTip info={dataCenter.steelMass.description!} source="steel-mass" />
         </div>
 
-        <input
-          type="number"
-          id="steel-mass"
-          bind:value={steelMass}
-          placeholder={dataCenter.steelMass.value as string}
-        />
+        <input type="number" id="steel-mass" bind:value={dc.steelMass} />
       </div>
       <div class="field">
         <div class="label-wrapper">
@@ -651,12 +606,7 @@
             source="yearly-total-energy"
           />
         </div>
-        <input
-          type="number"
-          id="yearly-total-energy"
-          bind:value={yearlyTotalEnergy}
-          placeholder={dataCenter.yearlyTotalEnergy.value as string}
-        />
+        <input type="number" id="yearly-total-energy" bind:value={dc.yearlyTotalEnergy} />
       </div>
     </div>
     <div class="grid">
@@ -671,7 +621,8 @@
         <input
           type="number"
           id="power-usage-effectiveness"
-          placeholder={dataCenter.powerUsageEffectiveness.value as string}
+          step="0.01"
+          bind:value={dc.powerUsageEffectiveness}
         />
       </div>
       <div class="field">
@@ -685,7 +636,8 @@
         <input
           type="number"
           id="water-usage-effectiveness"
-          placeholder={dataCenter.waterUsageEffectiveness.value as string}
+          step="0.01"
+          bind:value={dc.waterUsageEffectiveness}
         />
       </div>
       <div class="field">
@@ -696,7 +648,7 @@
             source="electrical-technical-resilience"
           />
         </div>
-        <select bind:value={electricalTechnicalResilience} id="electrical-technical-resilience">
+        <select bind:value={dc.electricalTechnicalResilience} id="electrical-technical-resilience">
           {#each electricalTechnicalResilienceTiers as tier}<option>{tier}</option>{/each}
         </select>
       </div>
@@ -705,7 +657,7 @@
           <label for="location">Location</label>
           <ToggleTip info={dataCenter.location.description!} source="location" />
         </div>
-        <select bind:value={dataCenter.location.value} id="location"
+        <select bind:value={dc.location} id="location"
           >{#each countriesNames as country}<option>{country}</option>{/each}</select
         >
       </div>
@@ -727,12 +679,7 @@
               <ToggleTip info={dataCenter.lifespan.description!} source="building-lifespan" />
             </div>
 
-            <input
-              type="number"
-              id="building-lifespan"
-              bind:value={datacenterLifespan}
-              placeholder={dataCenter.lifespan.value as string}
-            />
+            <input type="number" id="building-lifespan" bind:value={dc.lifespan} />
           </div>
 
           <div class="field">
@@ -750,85 +697,9 @@
               type="number"
               id="building-technical-rooms-surface"
               step="0.01"
-              placeholder={dataCenter.technicalRoomSurface.value as string}
+              bind:value={dc.technicalRoomsSurface}
             />
           </div>
-
-          <!--<div class="grid">
-          <div class="field">
-            <label for="building-maximum-usable-electrical-power"
-              >{dataCenter.maximumUsableElectricalPower.label} (kilowatts)</label
-            >
-            <input
-              type="number"
-              id="building-maximum-usable-electrical-power"
-              placeholder={dataCenter.maximumUsableElectricalPower.value as string}
-            />
-          </div>
-
-          <div class="field">
-            <label for="building-load-factor"> Load factor </label>
-            <input
-              type="number"
-              id="building-load-factor"
-              step="0.1"
-              placeholder={dataCenter.dataCenterLoadFactor.value as string}
-            />
-          </div>
-        </div>-->
-
-          <!--
-        <div class="grid">
-          <div class="field">
-            <label for="building-energy-reuse-factor">
-              {dataCenter.energyReuseFactor.label} (ERF)
-            </label>
-            <input
-              type="number"
-              id="building-energy-reuse-factor"
-              min="0"
-              max="310000"
-              step="0.01"
-              placeholder={dataCenter.energyReuseFactor.value as string}
-            />
-          </div>-->
-
-          <!--<div class="field">
-            <label for="building-renewable-energy-factor">
-              {dataCenter.renewableEnergyFactor.label} (REF)
-            </label>
-            <input
-              type="number"
-              id="building-renewable-energy-factor"
-              min="0"
-              max="3"
-              step="0.01"
-              placeholder={dataCenter.renewableEnergyFactor.value as string}
-            />
-          </div>
-        </div>-->
-
-          <!--<div class="grid">
-          <div class="field">
-            <label for="building-cooling-system"> {dataCenter.coolingSystemType.label} </label>
-            <select bind:value={dataCenter.coolingSystemType.value} id="building-cooling-system">
-              {#each coolingSystemTypes as coolingSystem}
-                <option>{coolingSystem}</option>{/each}
-            </select>
-
-            <div class="field">
-              <label for="building-designed-floor-assembly-surface">
-                {dataCenter.designedFloorAssemblySurface.label} (square meters)
-              </label>
-              <input
-                type="number"
-                id="building-designed-floor-assembly-surface"
-                step="0.01"
-                placeholder={dataCenter.designedFloorAssemblySurface.value as string}
-              />
-            </div>
-          </div>
-        </div>-->
 
           <div class="field">
             <div class="label-wrapper">
@@ -844,7 +715,7 @@
               type="number"
               id="building-suspended-ceiling-surface"
               step="0.01"
-              placeholder={dataCenter.suspendedCeilingSurface.value as string}
+              bind:value={dc.suspendedCeilingSurface}
             />
           </div>
 
@@ -853,11 +724,7 @@
               <label for="building-lifts"> {dataCenter.lifts.label} </label>
               <ToggleTip info={dataCenter.lifts.description!} source="building-lifts" />
             </div>
-            <input
-              type="number"
-              id="building-lifts"
-              placeholder={dataCenter.lifts.value as string}
-            />
+            <input type="number" id="building-lifts" bind:value={dc.lifts} />
           </div>
         </div>
 
@@ -870,11 +737,7 @@
                 source="building-freight-lifts"
               />
             </div>
-            <input
-              type="number"
-              id="building-freight-lifts"
-              placeholder={dataCenter.freightLifts.value as string}
-            />
+            <input type="number" id="building-freight-lifts" bind:value={dc.freightLifts} />
           </div>
 
           <div class="field">
@@ -891,7 +754,7 @@
               type="number"
               id="building-partition-surface"
               step="0.01"
-              placeholder={dataCenter.partitionSurface.value as string}
+              bind:value={dc.partitionSurface}
             />
           </div>
         </div>
