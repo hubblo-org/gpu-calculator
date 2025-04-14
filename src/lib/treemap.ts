@@ -36,7 +36,7 @@ export function renderTreemap(source: string, tree: Node, width: number, height:
     .select(treemapLegendId)
     .attr(
       "style",
-      "display: flex; align-items: center; min-height: 32px; margin-left: 15px; font-family: var(--main-font-family), var(--fallback-font-family); font-size: 1.10 rem;"
+      "display: flex; align-items: center; margin-bottom: 12px; margin-left: 15px; font-family: var(--main-font-family), var(--fallback-font-family); font-size: 1.10 rem;"
     );
   if (!treemapLegend.empty()) {
     treemapLegend.selectChildren("span").remove();
@@ -51,7 +51,7 @@ export function renderTreemap(source: string, tree: Node, width: number, height:
     console.error("No element to attach the treemap legend to!");
   }
 
-  d3.select(treemapLegendWrapperId).attr("style", `width: ${width}px; display: flex`);
+  d3.select(treemapLegendWrapperId).attr("style", `width: ${width}px; display: flex; margin-bottom: 12px;`);
 
   const treemapLogo = d3.select(treemapLegendWrapperId).select(`#${legendLogoId}`);
 
