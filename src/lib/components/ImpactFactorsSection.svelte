@@ -155,16 +155,16 @@
       if (selectedGraph === graphs.barPlot) {
         renderStackedBarPlot(
           source,
-          1200,
-          800,
+          1000,
+          600,
           displayedResults,
           results?.steps,
-          "share",
           "impact_criteria",
+          "share",
           "lc_step"
         );
       } else if (selectedGraph === graphs.treemap) {
-        renderTreemap(source, resultsForTreemap, 1300, 600);
+        renderTreemap(source, resultsForTreemap, 1000, 600);
       }
     }
   });

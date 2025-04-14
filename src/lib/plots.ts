@@ -105,10 +105,11 @@ export function renderStackedBarPlot(
       height: height,
       className: "plot",
       color: { legend: true, domain: domains },
-      y: { percent: true },
+      x: { percent: true },
       marks: [
-        Plot.axisX({ marginTop: 36, marginBottom: 48 }),
-        Plot.barY(impactFactors, {
+        Plot.axisY({ fontSize: 12, label: null, marginLeft: 60 }),
+        Plot.axisX({ marginBottom: 48 }),
+        Plot.barX(impactFactors, {
           y: yLabel,
           x: xLabel,
           fill: domainColor,
