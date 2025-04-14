@@ -42,26 +42,26 @@
     treemap: "Treemap"
   };
 
-  const selectableCriterias = { main: "Main criterias", all: "All criterias" };
+  const selectableCriteria = { main: "Main criteria", all: "All criteria" };
 
   const { source, results, resultsTreemap }: Props = $props();
 
-  let selectedCriterias = $state(selectableCriterias.main);
-  let selectedImpactCriteria = $state(
+  let selectedCriteria = $state(selectableCriteria.main);
+  let selectedImpactCriterion = $state(
     getImpactCriteria(ImpactCriterias.GlobalWarmingPotential).acronym
   );
   let selectedGraph = $state(graphs.barPlot);
-  let absoluteValuesButtonText = $state(absoluteValuesTexts.hide);
+  let absoluteValuesButtonText = $state(absoluteValuesTexts.display);
 
   const lifeCycleSteps = Object.values(LifeCycleSteps);
-  const mainImpactCriterias = getAllImpactCriterias().filter(
+  const mainImpactCriteria = getAllImpactCriterias().filter(
     (impactCriteria) =>
       impactCriteria.acronym === "GWP" ||
       impactCriteria.acronym === "TPE" ||
       impactCriteria.acronym === "WU"
   );
 
-  const resultsWithMainCriterias: Result[] = $derived.by(() => {
+  const resultsWithMainCriteria: Result[] = $derived.by(() => {
     const filteredResults = results?.per_lifecycle.filter(
       (result) =>
         result.impact_criteria === "GWP" ||
@@ -72,16 +72,16 @@
   });
 
   const displayedResults: Result[] | Results = $derived.by(() => {
-    if (selectedCriterias === selectableCriterias.main) {
-      return resultsWithMainCriterias!;
-    } else if (selectedCriterias === selectableCriterias.all) {
+    if (selectedCriteria === selectableCriteria.main) {
+      return resultsWithMainCriteria!;
+    } else if (selectedCriteria === selectableCriteria.all) {
       return results?.per_lifecycle;
     }
   });
 
-  const resultsGroupedByImpactCriteria = $derived.by(() => {
-    const groupedResults = mainImpactCriterias.map((impactCriteria) => {
-      const group = resultsWithMainCriterias?.filter(
+  const resultsGroupedByImpactCriterion = $derived.by(() => {
+    const groupedResults = mainImpactCriteria.map((impactCriteria) => {
+      const group = resultsWithMainCriteria?.filter(
         (result) => result.impact_criteria === impactCriteria.acronym
       );
       if (group) {
@@ -93,7 +93,7 @@
   });
 
   const resultsForTreemap: Node = $derived.by(() => {
-    const selectedCriteriaAcronym = selectedImpactCriteria as keyof ImpactFactors;
+    const selectedCriterionAcronym = selectedImpactCriterion as keyof ImpactFactors;
     return {
       name: "dc_data",
       children: lifeCycleSteps.map((lifeCycle) => {
@@ -103,7 +103,7 @@
         const resultsImpacts = resultsByLifeCycle?.map((result) => {
           const leaf: Leaf = {
             name: result.name!,
-            value: result.impacts[selectedCriteriaAcronym].value
+            value: result.impacts[selectedCriterionAcronym].value
           };
           return leaf;
         });
@@ -178,15 +178,14 @@
 
   <div class="options">
     {#if selectedGraph === graphs.treemap}
-      <select bind:value={selectedImpactCriteria} aria-label="Select an impact criteria"
-        >{#each mainImpactCriterias as impactCriteria}<option>{impactCriteria.acronym}</option
+      <select bind:value={selectedImpactCriterion} aria-label="Select an impact criteria"
+        >{#each mainImpactCriteria as impactCriterion}<option>{impactCriterion.acronym}</option
           >{/each}</select
       >
     {/if}
     {#if selectedGraph === graphs.barPlot}
-      <select bind:value={selectedCriterias} aria-label="Select displayed criterias"
-        ><option>{selectableCriterias.main}</option><option>{selectableCriterias.all}</option
-        ></select
+      <select bind:value={selectedCriteria} aria-label="Select displayed criterias"
+        ><option>{selectableCriteria.main}</option><option>{selectableCriteria.all}</option></select
       >
     {/if}
     <button class="btn btn-sm btn-primary" onclick={switchGraphDisplay}>Switch graph display</button
@@ -207,7 +206,7 @@
     {/if}
   </div>
 
-  {#if absoluteValuesButtonText === absoluteValuesTexts.hide}
+  {#if absoluteValuesButtonText === absoluteValuesTexts.display}
     <DropdownButton
       direction="down"
       label={absoluteValuesButtonText}
@@ -215,7 +214,7 @@
     />
   {/if}
 
-  {#if absoluteValuesButtonText === absoluteValuesTexts.display}
+  {#if absoluteValuesButtonText === absoluteValuesTexts.hide}
     {@const tableId = `${source}-table`}
     <div class="absolute-values-table" id={tableId}>
       <table>
@@ -226,9 +225,9 @@
           ></thead
         >
         <tbody>
-          {#each mainImpactCriterias as impactCriteria}<tr
-              ><th scope="row">{impactCriteria.acronym}</th>
-              {#each resultsGroupedByImpactCriteria as results}{#each results as result}{#if result.impact_criteria === impactCriteria.acronym}<td
+          {#each mainImpactCriteria as impactCriterion}<tr
+              ><th scope="row">{impactCriterion.acronym}</th>
+              {#each resultsGroupedByImpactCriterion as results}{#each results as result}{#if result.impact_criteria === impactCriterion.acronym}<td
                       >{result.share}</td
                     >{/if}{/each}{/each}
             </tr>{/each}
