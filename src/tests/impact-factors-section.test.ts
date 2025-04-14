@@ -175,6 +175,20 @@ describe("absolute values for data center impact factors table component test su
     });
   });
 
+  it("should display a selection to have graph display main impact criterias or all impact criterias", () => {
+    const dataCenterImpactFactorsSection = screen.getByRole("region", {
+      name: /Data center impact factors/
+    });
+
+    const resultsOptions = ["Main criterias", "All criterias"];
+    const resultsSelection = within(dataCenterImpactFactorsSection).getByLabelText(
+      "Select displayed criterias"
+    );
+    resultsOptions.forEach((option) => {
+      const selectableOption = within(resultsSelection).getByRole("option", { name: option });
+      expect(selectableOption).toBeVisible();
+    });
+  });
   it("should display a button to download the raw data to a file in CSV format", () => {
     const dataCenterImpactFactorsSection = screen.getByRole("region", {
       name: /Data center impact factors/

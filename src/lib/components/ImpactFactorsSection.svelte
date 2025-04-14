@@ -32,10 +32,26 @@
     resultsTreemap?: FunctionalUnitResultsRowWithLifeCycle[];
   }
 
+  const absoluteValuesTexts = {
+    display: "Display absolute values",
+    hide: "Hide absolute values"
+  };
+
+  const graphs = {
+    barPlot: "Bar plot",
+    treemap: "Treemap"
+  };
+
+  const selectableCriterias = { main: "Main criterias", all: "All criterias" };
+
   const { source, results, resultsTreemap }: Props = $props();
+
+  let selectedCriterias = $state(selectableCriterias.main);
   let selectedImpactCriteria = $state(
     getImpactCriteria(ImpactCriterias.GlobalWarmingPotential).acronym
   );
+  let selectedGraph = $state(graphs.barPlot);
+  let absoluteValuesButtonText = $state(absoluteValuesTexts.display);
 
   const lifeCycleSteps = Object.values(LifeCycleSteps);
   const mainImpactCriterias = getAllImpactCriterias().filter(
@@ -53,6 +69,14 @@
         result.impact_criteria === "WU"
     );
     return filteredResults;
+  });
+
+  const displayedResults: Result[] | Results = $derived.by(() => {
+    if (selectedCriterias === selectableCriterias.main) {
+      return resultsWithMainCriterias!;
+    } else if (selectedCriterias === selectableCriterias.all) {
+      return results?.per_lifecycle;
+    }
   });
 
   const resultsGroupedByImpactCriteria = $derived.by(() => {
@@ -93,15 +117,6 @@
     };
   });
 
-  const absoluteValuesTexts = {
-    display: "Display absolute values",
-    hide: "Hide absolute values"
-  };
-
-  let selectedGraph = $state("bar-plot");
-  let absoluteValues = $state("hide");
-  let absoluteValuesButtonText = $state(absoluteValuesTexts.display);
-
   function setSectionTexts() {
     if (source === "data-center") {
       return {
@@ -109,7 +124,7 @@
         section_label: "Data center impact factors",
         table_caption: "Data center impact factors absolute values, per impact criteria"
       };
-    } else {
+    } else if (source === "functional-unit") {
       return {
         heading_id: "functional-unit-table-heading",
         section_label: "Functional unit results",
@@ -119,19 +134,17 @@
   }
 
   function switchGraphDisplay() {
-    if (selectedGraph === "bar-plot") {
-      selectedGraph = "treemap";
-    } else {
-      selectedGraph = "bar-plot";
+    if (selectedGraph === graphs.barPlot) {
+      selectedGraph = graphs.treemap;
+    } else if (selectedGraph === graphs.treemap) {
+      selectedGraph = graphs.barPlot;
     }
   }
 
   function switchAbsoluteValuesDisplay() {
-    if (absoluteValues === "display") {
-      absoluteValues = "hide";
+    if (absoluteValuesButtonText === absoluteValuesTexts.hide) {
       absoluteValuesButtonText = absoluteValuesTexts.display;
-    } else {
-      absoluteValues = "display";
+    } else if (absoluteValuesButtonText === absoluteValuesTexts.display) {
       absoluteValuesButtonText = absoluteValuesTexts.hide;
     }
   }
@@ -139,35 +152,41 @@
   const sectionTexts = setSectionTexts();
   $effect(() => {
     if (results) {
-      if (selectedGraph === "bar-plot") {
+      if (selectedGraph === graphs.barPlot) {
         renderStackedBarPlot(
           source,
           1200,
           800,
-          resultsWithMainCriterias,
+          displayedResults,
           results?.steps,
           "share",
           "impact_criteria",
           "lc_step"
         );
-      } else if (selectedGraph === "treemap") {
+      } else if (selectedGraph === graphs.treemap) {
         renderTreemap(source, resultsForTreemap, 1300, 600);
       }
     }
   });
 </script>
 
-<section aria-labelledby={sectionTexts.heading_id}>
+<section aria-labelledby={sectionTexts!.heading_id}>
   <header>
-    <h3 id={sectionTexts.heading_id}>{sectionTexts.section_label}</h3>
+    <h3 id={sectionTexts!.heading_id}>{sectionTexts!.section_label}</h3>
     <a href="#table-of-contents" aria-label="Scroll back to table of contents">▲</a>
   </header>
 
   <div class="options">
-    {#if selectedGraph === "treemap"}
+    {#if selectedGraph === graphs.treemap}
       <select bind:value={selectedImpactCriteria} aria-label="Select an impact criteria"
         >{#each mainImpactCriterias as impactCriteria}<option>{impactCriteria.acronym}</option
           >{/each}</select
+      >
+    {/if}
+    {#if selectedGraph === graphs.barPlot}
+      <select bind:value={selectedCriterias} aria-label="Select displayed criterias"
+        ><option>{selectableCriterias.main}</option><option>{selectableCriterias.all}</option
+        ></select
       >
     {/if}
     <button class="btn btn-sm btn-primary" onclick={switchGraphDisplay}>Switch graph display</button
@@ -175,10 +194,10 @@
   </div>
 
   <div class="graph-display">
-    {#if selectedGraph === "bar-plot"}
+    {#if selectedGraph === graphs.barPlot}
       <div id="impact-factors-plot-{source}"></div>
     {/if}
-    {#if selectedGraph === "treemap"}
+    {#if selectedGraph === graphs.treemap}
       <div class="treemap-wrapper">
         <div id="{source}-treemap-legend-wrapper">
           <div id="{source}-treemap-legend"></div>
@@ -188,7 +207,7 @@
     {/if}
   </div>
 
-  {#if absoluteValues === "hide"}
+  {#if absoluteValuesButtonText === absoluteValuesTexts.hide}
     <DropdownButton
       direction="down"
       label={absoluteValuesButtonText}
@@ -196,11 +215,11 @@
     />
   {/if}
 
-  {#if absoluteValues === "display"}
-		{@const tableId = `${source}-table`} 
-    <div class="absolute-values-table" id="{tableId}">
+  {#if absoluteValuesButtonText === absoluteValuesTexts.display}
+    {@const tableId = `${source}-table`}
+    <div class="absolute-values-table" id={tableId}>
       <table>
-        <caption>{sectionTexts.table_caption}</caption><thead
+        <caption>{sectionTexts!.table_caption}</caption><thead
           ><tr
             ><th>Impact criteria</th>{#each lifeCycleSteps as lifeCycleStep}<th>{lifeCycleStep}</th
               >{/each}</tr
