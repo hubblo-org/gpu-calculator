@@ -13,7 +13,7 @@
 
   function setArrowCharacter() {
     if (direction === "up") {
-      arrowStyle = "margin-top: -8px";
+      arrowStyle = "margin-top: -4px";
       return "▲";
     } else if (direction === "down") {
       arrowStyle = "";
@@ -31,9 +31,9 @@
 
 <style>
   .drop-down {
-    margin-top: 12px;
     display: flex;
     gap: 12px;
+    margin-top: 12px;
     width: 240px;
   }
   .drop-down span {

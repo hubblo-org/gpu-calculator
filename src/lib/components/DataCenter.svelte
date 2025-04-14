@@ -771,7 +771,7 @@
   </div>
 </section>
 
-<section>
+<!-- section>
   <div id="section-heading">
     <h3>Multi-criteria impacts breakdown</h3>
   </div>
@@ -780,7 +780,7 @@
   </div>
 </section>
 
-<!-- <section>
+<section>
   <div id="section-heading">
     <h3>Treemap impacts breakdown</h3>
   </div>
@@ -805,7 +805,6 @@
     gap: 16px;
     margin-top: 12px;
   }
-
   .label-wrapper {
     display: flex;
   }
@@ -818,11 +817,7 @@
     height: 80px;
   }
   #recalculate {
-    margin-right: 12px;
-    margin-bottom: 12px;
-    position: absolute;
-    bottom: 0;
-    right: 0;
+    margin-left: auto;
   }
   @media (width >= 481px) {
     label {
@@ -856,11 +851,6 @@
     #data-center-description {
       display: flex;
       flex-direction: column;
-    }
-    #recalculate {
-      margin-right: initial;
-      margin-bottom: initial;
-      width: 120px;
     }
   }
 </style>
