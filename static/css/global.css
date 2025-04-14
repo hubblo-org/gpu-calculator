@@ -242,15 +242,10 @@ tr:nth-child(even) {
 
 .btn-drop-down {
   background-color: var(--color-secondary-30);
-  border: 0;
-  cursor: pointer;
   border-radius: 50%;
-  height: 36px;
-  min-height: 36px;
-  min-width: 36px;
-  font-size: 1.5rem;
+  margin-top: initial;
+  cursor: pointer;
   text-align: center;
-  width: 36px;
 }
 
 .btn-primary,
@@ -321,6 +316,14 @@ tr:nth-child(even) {
   align-items: center;
   margin-right: 5px;
   height: 15px;
+}
+
+.plot-swatches {
+  font-family: var(--main-font-family);
+}
+
+.plot-swatch {
+  font-size: 1.1rem;
 }
 
 .swatch::before {

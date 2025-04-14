@@ -84,7 +84,7 @@ function addLogo(nodeId: string) {
     .attr("class", "logo");
 
   logoDiv.append("img").attr("src", "/media/logo.svg");
-  logoDiv.append("span").text("Hubblo");
+  logoDiv.append("span").text("Hubblo").attr("class", "logo");
 }
 
 export function renderStackedBarPlot(
@@ -103,6 +103,7 @@ export function renderStackedBarPlot(
     const resultsBarPlot = Plot.plot({
       width: width,
       height: height,
+      className: "plot",
       color: { legend: true, domain: domains },
       y: { percent: true },
       marks: [

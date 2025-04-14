@@ -1,10 +1,14 @@
+<script lang="ts">
+  import Logo from "./Logo.svelte";
+</script>
+
 <header>
   <div id="banner-container">
     <div id="beta-banner">BETA</div>
   </div>
   <div id="header-logo">
     <a class="logo" href="https://hubblo.org/en/" aria-label="Navigate to the Hubblo website">
-      <img src="/media/logo.svg" alt="Hubblo logo" />
+      <Logo />
       <span>Hubblo</span>
     </a>
   </div>
