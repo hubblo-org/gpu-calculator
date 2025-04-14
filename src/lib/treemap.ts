@@ -36,7 +36,7 @@ export function renderTreemap(source: string, tree: Node, width: number, height:
     .select(treemapLegendId)
     .attr(
       "style",
-      "display: flex; align-items: center; min-height: 32px; margin-left: 15px; font: 10px sans-serif;"
+      "display: flex; align-items: center; min-height: 32px; margin-left: 15px; font-family: var(--main-font-family), var(--fallback-font-family); font-size: 1.10 rem;"
     );
   if (!treemapLegend.empty()) {
     treemapLegend.selectChildren("span").remove();
@@ -45,7 +45,7 @@ export function renderTreemap(source: string, tree: Node, width: number, height:
         .append("span")
         .attr("class", "swatch")
         .attr("style", `--color: ${color(domain)};`)
-        .text(domain);
+        .text(domain.toLowerCase());
     });
   } else {
     console.error("No element to attach the treemap legend to!");
