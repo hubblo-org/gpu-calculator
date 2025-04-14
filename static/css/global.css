@@ -74,6 +74,7 @@
     1
   );
   --color-secondary: var(--color-secondary-100);
+  --color-secondary-opaque: hsla(50.3, 100%, 87.8%, 1);
   --color-background: var(--color-white);
   --color-text: var(--color-gray-800);
   --color-headings: var(--color-black);
@@ -128,10 +129,12 @@ body {
   font-style: normal;
 }
 
+input {
+  appearance: none;
+}
 input,
 select {
   background: 0 0;
-  appearance: none;
   position: relative;
   border: var(--border);
   border-radius: var(--rounded-sm);
@@ -318,6 +321,10 @@ tr:nth-child(even) {
   height: 15px;
 }
 
+.plot text {
+  margin-left: 12px;
+}
+
 .plot-swatches {
   font-family: var(--main-font-family);
 }
@@ -340,9 +347,13 @@ tr:nth-child(even) {
   z-index: 1;
   right: 30%;
   width: 300px;
-  background-color: var(--color-secondary-100);
+  background-color: var(--color-secondary-opaque);
   border-radius: var(--rounded-xl);
   padding: 12px;
+}
+
+.toggletip-bubble {
+  border: var(--border);
 }
 
 .treemap-wrapper {
@@ -382,6 +393,10 @@ tr:nth-child(even) {
     top: -110%;
   }
 
+  .graph-display {
+    align-self: center;
+  }
+
   .graph-display svg {
     font-size: initial;
   }
@@ -392,17 +407,11 @@ tr:nth-child(even) {
   }
 
   .toggletip-container .toggletip-bubble {
-    position: absolute;
-    display: inline-block;
-    z-index: 1;
     right: initial;
     left: 100%;
     top: 0;
-    width: 300px;
-    background-color: var(--color-secondary-100);
-    border-radius: var(--rounded-xl);
-    padding: 12px;
   }
+
 }
 
 @media (hover: hover) {
