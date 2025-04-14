@@ -51,7 +51,7 @@
     getImpactCriteria(ImpactCriterias.GlobalWarmingPotential).acronym
   );
   let selectedGraph = $state(graphs.barPlot);
-  let absoluteValuesButtonText = $state(absoluteValuesTexts.display);
+  let absoluteValuesButtonText = $state(absoluteValuesTexts.hide);
 
   const lifeCycleSteps = Object.values(LifeCycleSteps);
   const mainImpactCriterias = getAllImpactCriterias().filter(
