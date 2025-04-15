@@ -13,7 +13,8 @@ const dataCenterImpactFactorsCaption =
 
 const downloadDataToCsvLabel = "Download data in CSV format";
 
-const mainImpactCriterias = getAllImpactCriterias().filter(
+const allImpactCriteria = getAllImpactCriterias();
+const mainImpactCriteria = getAllImpactCriterias().filter(
   (impactCriteria) =>
     impactCriteria.acronym === "GWP" ||
     impactCriteria.acronym === "TPE" ||
@@ -114,12 +115,12 @@ describe("impact factors section graphs test suite", () => {
 
     await user.click(switchDisplayButton);
 
-    const impactCriteriasSelection = within(dataCenterImpactFactorsSection).getByLabelText(
+    const impactCriteriaSelection = within(dataCenterImpactFactorsSection).getByLabelText(
       "Select an impact criteria"
     );
-    expect(impactCriteriasSelection).toBeVisible();
-    mainImpactCriterias.forEach((impactCriteria) => {
-      const option = within(impactCriteriasSelection).getByRole("option", {
+    expect(impactCriteriaSelection).toBeVisible();
+    mainImpactCriteria.forEach((impactCriteria) => {
+      const option = within(impactCriteriaSelection).getByRole("option", {
         name: impactCriteria.acronym
       });
       expect(option).toBeVisible();
@@ -147,6 +148,7 @@ describe("absolute values for data center impact factors table component test su
     });
     expect(dataCenterImpactFactorsSection).toBeVisible();
   });
+
   it("should display a table with the data center impact factors absolute values", () => {
     const dataCenterImpactFactorsSection = screen.getByRole("region", {
       name: /Data center impact factors/
@@ -156,6 +158,7 @@ describe("absolute values for data center impact factors table component test su
     });
     expect(dataCenterImpactFactorsTable).toBeVisible();
   });
+
   it("should display impact criteria and life cycle steps as columns for the data center impact factors table", () => {
     const dataCenterImpactFactorsSection = screen.getByRole("region", {
       name: /Data center impact factors/
@@ -175,20 +178,50 @@ describe("absolute values for data center impact factors table component test su
     });
   });
 
-  it("should display a selection to have graph display main impact criterias or all impact criterias", () => {
+  it("should display a selection to have a graph display either main impact criterias or all impact criterias", () => {
     const dataCenterImpactFactorsSection = screen.getByRole("region", {
       name: /Data center impact factors/
     });
 
-    const resultsOptions = ["Main criterias", "All criterias"];
+    const resultsOptions = ["Main criteria", "All criteria"];
     const resultsSelection = within(dataCenterImpactFactorsSection).getByLabelText(
-      "Select displayed criterias"
+      "Select displayed criteria"
     );
     resultsOptions.forEach((option) => {
       const selectableOption = within(resultsSelection).getByRole("option", { name: option });
       expect(selectableOption).toBeVisible();
     });
   });
+
+  it("should display either the main impact criteria as column names or all impact criteria depending on selection", async () => {
+    const user = userEvent.setup();
+    const dataCenterImpactFactorsSection = screen.getByRole("region", {
+      name: /Data center impact factors/
+    });
+    const criteriaSelection = within(dataCenterImpactFactorsSection).getByLabelText(
+      "Select displayed criteria"
+    );
+    const dataCenterImpactFactorsTable = within(dataCenterImpactFactorsSection).getByRole("table", {
+      name: dataCenterImpactFactorsCaption
+    });
+
+    mainImpactCriteria.forEach((impactCriterion) => {
+      const criterionColumn = within(dataCenterImpactFactorsTable).getByRole("rowheader", {
+        name: impactCriterion.acronym
+      });
+      expect(criterionColumn).toBeVisible();
+    });
+
+    await user.click(criteriaSelection);
+
+    allImpactCriteria.forEach(async (impactCriterion) => {
+      const criterionColumn = await within(dataCenterImpactFactorsTable).findByRole("rowheader", {
+        name: impactCriterion.acronym
+      });
+      expect(criterionColumn).toBeVisible();
+    });
+  });
+
   it("should display a button to download the raw data to a file in CSV format", () => {
     const dataCenterImpactFactorsSection = screen.getByRole("region", {
       name: /Data center impact factors/
@@ -258,7 +291,7 @@ describe("absolute values table component for functional unit test suite", () =>
     });
 
     filteredResults.forEach((result) => {
-      mainImpactCriterias.forEach((impactCriteria) => {
+      mainImpactCriteria.forEach((impactCriteria) => {
         const valueCell = within(resultsImpactFactorsTable).getByRole("cell", {
           name: result.impacts[impactCriteria.acronym].value
         });

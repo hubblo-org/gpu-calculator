@@ -44,6 +44,15 @@
 
   const selectableCriteria = { main: "Main criteria", all: "All criteria" };
 
+  const lifeCycleSteps = Object.values(LifeCycleSteps);
+  const allImpactCriteria = getAllImpactCriterias();
+  const mainImpactCriteria = getAllImpactCriterias().filter(
+    (impactCriteria) =>
+      impactCriteria.acronym === "GWP" ||
+      impactCriteria.acronym === "TPE" ||
+      impactCriteria.acronym === "WU"
+  );
+
   const { source, results, resultsTreemap }: Props = $props();
 
   let selectedCriteria = $state(selectableCriteria.main);
@@ -53,22 +62,27 @@
   let selectedGraph = $state(graphs.barPlot);
   let absoluteValuesButtonText = $state(absoluteValuesTexts.display);
 
-  const lifeCycleSteps = Object.values(LifeCycleSteps);
-  const mainImpactCriteria = getAllImpactCriterias().filter(
-    (impactCriteria) =>
-      impactCriteria.acronym === "GWP" ||
-      impactCriteria.acronym === "TPE" ||
-      impactCriteria.acronym === "WU"
-  );
+  const resultsGroupedByImpactCriterion = $derived.by(() => {
+    const groupedResults = allImpactCriteria.map((impactCriteria) => {
+      const group = results?.per_lifecycle.filter(
+        (result) => result.impact_criteria === impactCriteria.acronym
+      );
+      if (group) {
+        const sortedGroup = sortByLifeCycle<Result>(group, "lc_step" as keyof Result);
+        return sortedGroup;
+      }
+    });
+    return groupedResults;
+  });
 
   const resultsWithMainCriteria: Result[] = $derived.by(() => {
-    const filteredResults = results?.per_lifecycle.filter(
+    const filtered = results?.per_lifecycle.filter(
       (result) =>
         result.impact_criteria === "GWP" ||
         result.impact_criteria === "TPE" ||
         result.impact_criteria === "WU"
     );
-    return filteredResults;
+    return filtered;
   });
 
   const displayedResults: Result[] | Results = $derived.by(() => {
@@ -79,17 +93,12 @@
     }
   });
 
-  const resultsGroupedByImpactCriterion = $derived.by(() => {
-    const groupedResults = mainImpactCriteria.map((impactCriteria) => {
-      const group = resultsWithMainCriteria?.filter(
-        (result) => result.impact_criteria === impactCriteria.acronym
-      );
-      if (group) {
-        const sortedGroup = sortByLifeCycle<Result>(group, "lc_step" as keyof Result);
-        return sortedGroup;
-      }
-    });
-    return groupedResults;
+  const displayedCriteria = $derived.by(() => {
+    if (selectedCriteria === selectableCriteria.main) {
+      return mainImpactCriteria!;
+    } else if (selectedCriteria === selectableCriteria.all) {
+      return allImpactCriteria;
+    }
   });
 
   const resultsForTreemap: Node = $derived.by(() => {
@@ -150,6 +159,7 @@
   }
 
   const sectionTexts = setSectionTexts();
+
   $effect(() => {
     if (results) {
       if (selectedGraph === graphs.barPlot) {
@@ -184,7 +194,7 @@
       >
     {/if}
     {#if selectedGraph === graphs.barPlot}
-      <select bind:value={selectedCriteria} aria-label="Select displayed criterias"
+      <select bind:value={selectedCriteria} aria-label="Select displayed criteria"
         ><option>{selectableCriteria.main}</option><option>{selectableCriteria.all}</option></select
       >
     {/if}
@@ -225,7 +235,7 @@
           ></thead
         >
         <tbody>
-          {#each mainImpactCriteria as impactCriterion}<tr
+          {#each displayedCriteria! as impactCriterion}<tr
               ><th scope="row">{impactCriterion.acronym}</th>
               {#each resultsGroupedByImpactCriterion as results}{#each results as result}{#if result.impact_criteria === impactCriterion.acronym}<td
                       >{result.share}</td
