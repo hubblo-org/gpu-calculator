@@ -15,6 +15,7 @@
   }
   ul ul li a {
     font-size: 0.95rem;
+    color: var(--color-gray-500);
   }
   @media (min-width: 480px) {
     section {
