@@ -355,7 +355,7 @@ tr:nth-child(even) {
 }
 
 .toggletip-container button {
-  border-radius: var(--rounded-xl);
+  border-radius: var(--rounded-sm);
   appearance: none;
   background-color: var(--color-secondary-30);
   border: var(--border);
