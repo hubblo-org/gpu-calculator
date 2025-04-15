@@ -6,6 +6,7 @@
   import TableOfContents from "$lib/components/TableOfContents.svelte";
   import PcrSection from "$lib/components/PCRSection.svelte";
   import Footer from "$lib/components/Footer.svelte";
+  import Summary from "$lib/components/Summary.svelte";
   console.log("dataCenterCharacteristics: ");
   console.log(dataCenterCharacteristics);
 </script>
@@ -17,7 +18,7 @@
     <PcrSection />
   </div>
   <DataCenter dataCenter={dataCenterCharacteristics} />
-
+  <Summary />
   <FunctionalUnit />
 </main>
 <Footer />

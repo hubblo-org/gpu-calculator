@@ -12,7 +12,6 @@
       <span>Hubblo</span>
     </a>
   </div>
-  <p>Want to know more about the environmental <br /> evaluation of cloud services?</p>
   <a id="contact" href="https://hubblo.org/en/contact/" class="btn btn-primary btn-sm"> Contact </a>
 </header>
 
@@ -35,10 +34,6 @@
     justify-content: space-between;
     border-bottom: var(--border);
     border-inline: var(--border);
-  }
-  p {
-    display: none;
-    color: var(--color-gray-500);
   }
 
   #contact,
@@ -66,12 +61,6 @@
     transform: rotateZ(-45deg);
     text-align: center;
     transform-origin: 150px 180px;
-  }
-  @media (min-width: 800px) {
-    p {
-      margin-left: auto;
-      display: initial;
-    }
   }
   @media (min-width: 480px) {
     #banner-container {
