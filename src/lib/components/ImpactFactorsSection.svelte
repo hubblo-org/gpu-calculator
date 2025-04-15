@@ -131,13 +131,13 @@
       return {
         heading_id: "data-center-table-heading",
         section_label: "Data center impact factors",
-        table_caption: "Data center impact factors absolute values, per impact criteria"
+        table_caption: "Data center impact factors absolute values, per impact criterion"
       };
     } else if (source === "functional-unit") {
       return {
         heading_id: "functional-unit-table-heading",
         section_label: "Functional unit results",
-        table_caption: "Totals for the functional unit per impact criteria, as absolute values"
+        table_caption: "Totals for the functional unit per impact criterion, as absolute values"
       };
     }
   }
@@ -188,7 +188,7 @@
 
   <div class="options">
     {#if selectedGraph === graphs.treemap}
-      <select bind:value={selectedImpactCriterion} aria-label="Select an impact criteria"
+      <select bind:value={selectedImpactCriterion} aria-label="Select an impact criterion"
         >{#each mainImpactCriteria as impactCriterion}<option>{impactCriterion.acronym}</option
           >{/each}</select
       >
@@ -230,7 +230,7 @@
       <table>
         <caption>{sectionTexts!.table_caption}</caption><thead
           ><tr
-            ><th>Impact criteria</th>{#each lifeCycleSteps as lifeCycleStep}<th>{lifeCycleStep}</th
+            ><th>Impact criterion</th>{#each lifeCycleSteps as lifeCycleStep}<th>{lifeCycleStep}</th
               >{/each}</tr
           ></thead
         >

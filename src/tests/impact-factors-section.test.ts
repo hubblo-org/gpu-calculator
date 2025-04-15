@@ -6,10 +6,10 @@ import { functionalUnitOneResultsWithLc } from "../mocks/dc-data";
 import userEvent from "@testing-library/user-event";
 
 const resultsAbsoluteValuesCaption =
-  "Totals for the functional unit per impact criteria, as absolute values";
+  "Totals for the functional unit per impact criterion, as absolute values";
 
 const dataCenterImpactFactorsCaption =
-  "Data center impact factors absolute values, per impact criteria";
+  "Data center impact factors absolute values, per impact criterion";
 
 const downloadDataToCsvLabel = "Download data in CSV format";
 
@@ -100,7 +100,7 @@ describe("impact factors section graphs test suite", () => {
     });
     expect(switchDisplayButton).toBeVisible();
   });
-  it("should display a selection of impact criterias to choose from for the treemap representation of data after selecting the treemap view", async () => {
+  it("should display a selection of impact criteria to choose from for the treemap representation of data after selecting the treemap view", async () => {
     const user = userEvent.setup();
     const dataCenterImpactFactorsSection = screen.getByRole("region", {
       name: /Data center impact factors/
@@ -110,17 +110,17 @@ describe("impact factors section graphs test suite", () => {
       name: "Switch graph display"
     });
     expect(
-      within(dataCenterImpactFactorsSection).queryByLabelText("Select an impact criteria")
+      within(dataCenterImpactFactorsSection).queryByLabelText("Select an impact criterion")
     ).not.toBeInTheDocument();
 
     await user.click(switchDisplayButton);
 
-    const impactCriteriaSelection = within(dataCenterImpactFactorsSection).getByLabelText(
-      "Select an impact criteria"
+    const impactCriterionSelection = within(dataCenterImpactFactorsSection).getByLabelText(
+      "Select an impact criterion"
     );
-    expect(impactCriteriaSelection).toBeVisible();
+    expect(impactCriterionSelection).toBeVisible();
     mainImpactCriteria.forEach((impactCriteria) => {
-      const option = within(impactCriteriaSelection).getByRole("option", {
+      const option = within(impactCriterionSelection).getByRole("option", {
         name: impactCriteria.acronym
       });
       expect(option).toBeVisible();
@@ -166,10 +166,10 @@ describe("absolute values for data center impact factors table component test su
     const dataCenterImpactFactorsTable = within(dataCenterImpactFactorsSection).getByRole("table", {
       name: dataCenterImpactFactorsCaption
     });
-    const impactCriteriaColumn = within(dataCenterImpactFactorsTable).getByRole("columnheader", {
-      name: "Impact criteria"
+    const impactCriterionColumn = within(dataCenterImpactFactorsTable).getByRole("columnheader", {
+      name: "Impact criterion"
     });
-    expect(impactCriteriaColumn).toBeVisible();
+    expect(impactCriterionColumn).toBeVisible();
     lifeCycleSteps.forEach((lifeCycleStep) => {
       const column = within(dataCenterImpactFactorsTable).getByRole("columnheader", {
         name: lifeCycleStep
@@ -178,7 +178,7 @@ describe("absolute values for data center impact factors table component test su
     });
   });
 
-  it("should display a selection to have a graph display either main impact criterias or all impact criterias", () => {
+  it("should display a selection to have a graph display either main impact criteria or all impact criteria", () => {
     const dataCenterImpactFactorsSection = screen.getByRole("region", {
       name: /Data center impact factors/
     });
@@ -272,7 +272,7 @@ describe("absolute values table component for functional unit test suite", () =>
       { name: resultsAbsoluteValuesCaption }
     );
     const impactCriteriaColumn = within(resultsImpactFactorsSection).getByRole("columnheader", {
-      name: "Impact criteria"
+      name: "Impact criterion"
     });
     expect(impactCriteriaColumn).toBeVisible();
     lifeCycleSteps.forEach((lifeCycleStep) => {
@@ -282,7 +282,7 @@ describe("absolute values table component for functional unit test suite", () =>
       expect(column).toBeVisible();
     });
   });
-  it("should display the functional unit results absolute values for the main impact criterias", () => {
+  it("should display the functional unit results absolute values for the main impact criteria", () => {
     const functionalUnitResultsGraphSection = screen.getByRole("region", {
       name: /Functional unit results/
     });
@@ -291,9 +291,9 @@ describe("absolute values table component for functional unit test suite", () =>
     });
 
     filteredResults.forEach((result) => {
-      mainImpactCriteria.forEach((impactCriteria) => {
+      mainImpactCriteria.forEach((impactCriterion) => {
         const valueCell = within(resultsImpactFactorsTable).getByRole("cell", {
-          name: result.impacts[impactCriteria.acronym].value
+          name: result.impacts[impactCriterion.acronym].value
         });
         expect(valueCell).toBeVisible();
       });
