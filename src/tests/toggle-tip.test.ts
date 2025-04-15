@@ -6,7 +6,9 @@ import userEvent from "@testing-library/user-event";
 
 describe("toggle tip component test suite", () => {
   const description = dataCenterCharacteristics.totalSurface.description;
-  beforeEach(() => render(ToggleTip, { props: { info: description, source: "building-total-surface" } }));
+  beforeEach(() =>
+    render(ToggleTip, { props: { info: description, source: "building-total-surface" } })
+  );
   afterEach(() => cleanup());
   it("should display a description of the data center characteristic after the user interacted with a button next to the characteristic", async () => {
     const user = userEvent.setup();
@@ -38,6 +40,20 @@ describe("toggle tip component test suite", () => {
 
     await user.click(informationButton);
     await user.keyboard("[Escape]");
+    expect(screen.queryByText(`${description}`)).not.toBeInTheDocument();
+  });
+
+  it("should have a button inside the toggletip to close the toggletip", async () => {
+    const user = userEvent.setup();
+    const informationButton = screen.getByRole("button", {
+      name: "More information"
+    });
+
+    await user.click(informationButton);
+    const closeButton = await screen.findByRole("button", {
+      name: "Close characteristic description"
+    });
+    await user.click(closeButton);
     expect(screen.queryByText(`${description}`)).not.toBeInTheDocument();
   });
 });

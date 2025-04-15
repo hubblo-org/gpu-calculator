@@ -6,26 +6,29 @@
 
   const { info, source }: Props = $props();
 
+  let descriptionVisible = $state(false);
+
   function openToggleTip(nodeId: string) {
     const buttonWithContent = document.getElementById(nodeId);
-    const description = buttonWithContent?.getAttribute("data-toggletip-content");
-    const liveRegion = buttonWithContent?.nextElementSibling;
-    liveRegion!.innerHTML = "";
     window.setTimeout(() => {
-      liveRegion!.innerHTML = '<span class="toggletip-bubble">' + description;
+      descriptionVisible = true;
     }, 100);
 
     document.addEventListener("click", function (event) {
       if (buttonWithContent !== event.target) {
-        liveRegion!.innerHTML = "";
+        descriptionVisible = false;
       }
     });
 
     buttonWithContent?.addEventListener("keydown", function (event) {
       if (event.key === "Escape") {
-        liveRegion!.innerHTML = "";
+        descriptionVisible = false;
       }
     });
+  }
+
+  function closeToggleTip() {
+    descriptionVisible = false;
   }
 </script>
 
@@ -36,17 +39,13 @@
     data-toggletip-content={info}
     onclick={() => openToggleTip(`${source}-toggletip-button`)}
     aria-label="More information">?</button
-  ><span role="status"></span></span
+  ><span role="status">
+    {#if descriptionVisible}<div class="toggletip-bubble">
+        <span>{info}</span><button
+          aria-label="Close characteristic description"
+          onclick={() => closeToggleTip()}>x</button
+        >
+      </div>
+    {/if}
+  </span></span
 >
-
-<style>
-  .toggletip-container {
-    margin-left: auto;
-  }
-  button {
-    appearance: none;
-    background-color: var(--color-secondary-30);
-    border: var(--border);
-    margin: initial;
-  }
-</style>

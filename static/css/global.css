@@ -343,17 +343,34 @@ tr:nth-child(even) {
 
 .toggletip-container .toggletip-bubble {
   position: absolute;
-  display: inline-block;
   z-index: 1;
   right: 30%;
   width: 300px;
   background-color: var(--color-secondary-opaque);
-  border-radius: var(--rounded-xl);
   padding: 12px;
+}
+
+.toggletip-container {
+  margin-left: auto;
+}
+
+.toggletip-container button {
+  border-radius: var(--rounded-xl);
+  appearance: none;
+  background-color: var(--color-secondary-30);
+  border: var(--border);
+  margin: initial;
 }
 
 .toggletip-bubble {
   border: var(--border);
+  border-radius: 0% var(--rounded-xl) var(--rounded-xl);
+  color: var(--color-gray-700);
+  display: flex;
+}
+
+.toggletip-bubble button {
+  max-height: 24px;
 }
 
 .treemap-wrapper {
@@ -411,7 +428,6 @@ tr:nth-child(even) {
     left: 100%;
     top: 0;
   }
-
 }
 
 @media (hover: hover) {
