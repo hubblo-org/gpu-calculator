@@ -204,15 +204,3 @@ describe("data center component static elements test suite", () => {
     });
   });
 });
-
-describe("characteristic toggletip test suite", () => {
-  function createLabelWithInfo() {
-    const div = document.createElement("div");
-    div.innerHTML = `
-          <label for="building-total-surface"
-            >${dataCenterCharacteristics.totalSurface.label} (square meters)
-          </label><button aria-label="More information">i</button>
-	  `;
-    return div;
-  }
-});
