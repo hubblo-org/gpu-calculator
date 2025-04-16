@@ -520,15 +520,29 @@
       div.append(resultsBarPlot);
     }
   }
-  onMount(() => {
-    computeResults();
-    renderStackedBarPlot();
-  });
 
-  function updateResults() {
+  function updateColor(event: Event, initialValue: string | number) {
+    if (event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement) {
+      const newValue = event.target.value;
+      if ((newValue as number | string) != initialValue) {
+        event.target.style.color = "var(--color-primary-100)";
+	event.target.style.fontStyle = "italic";
+      } else {
+        event.target.style.color = "initial";
+	event.target.style.fontStyle = "initial";
+      }
+    }
+  }
+
+  function renderResults() {
     computeResults();
     renderStackedBarPlot();
   }
+
+  onMount(() => {
+    renderResults();
+  });
+
 
   let resultsForTreemap = build_full_dc_impacts_with_categories_and_lifecycle(inventoryWithImpact);
 
@@ -578,7 +592,12 @@
 
           <ToggleTip info={dataCenter.totalSurface.description!} source="total-surface" />
         </div>
-        <input type="number" id="building-total-surface" bind:value={dc.totalSurface} />
+        <input
+          type="number"
+          id="building-total-surface"
+          oninput={(event) => updateColor(event, dataCenter.totalSurface.value)}
+          bind:value={dc.totalSurface}
+        />
       </div>
       <div class="field">
         <div class="label-wrapper">
@@ -586,7 +605,12 @@
           <ToggleTip info={dataCenter.concreteVolume.description!} source="concrete-volume" />
         </div>
 
-        <input type="number" id="concrete-volume" bind:value={dc.concreteVolume} />
+        <input
+          type="number"
+          id="concrete-volume"
+          oninput={(event) => updateColor(event, dataCenter.concreteVolume.value)}
+          bind:value={dc.concreteVolume}
+        />
       </div>
       <div class="field">
         <div class="label-wrapper">
@@ -594,7 +618,12 @@
           <ToggleTip info={dataCenter.steelMass.description!} source="steel-mass" />
         </div>
 
-        <input type="number" id="steel-mass" bind:value={dc.steelMass} />
+        <input
+          type="number"
+          id="steel-mass"
+          oninput={(event) => updateColor(event, dataCenter.steelMass.value)}
+          bind:value={dc.steelMass}
+        />
       </div>
       <div class="field">
         <div class="label-wrapper">
@@ -606,7 +635,12 @@
             source="yearly-total-energy"
           />
         </div>
-        <input type="number" id="yearly-total-energy" bind:value={dc.yearlyTotalEnergy} />
+        <input
+          type="number"
+          id="yearly-total-energy"
+          oninput={(event) => updateColor(event, dataCenter.yearlyTotalEnergy.value)}
+          bind:value={dc.yearlyTotalEnergy}
+        />
       </div>
     </div>
     <div class="grid">
@@ -622,6 +656,7 @@
           type="number"
           id="power-usage-effectiveness"
           step="0.01"
+          oninput={(event) => updateColor(event, dataCenter.powerUsageEffectiveness.value)}
           bind:value={dc.powerUsageEffectiveness}
         />
       </div>
@@ -637,6 +672,7 @@
           type="number"
           id="water-usage-effectiveness"
           step="0.01"
+          oninput={(event) => updateColor(event, dataCenter.waterUsageEffectiveness.value)}
           bind:value={dc.waterUsageEffectiveness}
         />
       </div>
@@ -648,7 +684,11 @@
             source="electrical-technical-resilience"
           />
         </div>
-        <select bind:value={dc.electricalTechnicalResilience} id="electrical-technical-resilience">
+        <select
+          bind:value={dc.electricalTechnicalResilience}
+          oninput={(event) => updateColor(event, dataCenter.electricalTechnicalResilience.value)}
+          id="electrical-technical-resilience"
+        >
           {#each electricalTechnicalResilienceTiers as tier}<option>{tier}</option>{/each}
         </select>
       </div>
@@ -657,7 +697,10 @@
           <label for="location">Location</label>
           <ToggleTip info={dataCenter.location.description!} source="location" />
         </div>
-        <select bind:value={dc.location} id="location"
+        <select
+          bind:value={dc.location}
+          oninput={(event) => updateColor(event, dataCenter.location.value)}
+          id="location"
           >{#each countriesNames as country}<option>{country}</option>{/each}</select
         >
       </div>
@@ -679,7 +722,12 @@
               <ToggleTip info={dataCenter.lifespan.description!} source="building-lifespan" />
             </div>
 
-            <input type="number" id="building-lifespan" bind:value={dc.lifespan} />
+            <input
+              type="number"
+              id="building-lifespan"
+              oninput={(event) => updateColor(event, dataCenter.lifespan.value)}
+              bind:value={dc.lifespan}
+            />
           </div>
 
           <div class="field">
@@ -697,6 +745,7 @@
               type="number"
               id="building-technical-rooms-surface"
               step="0.01"
+              oninput={(event) => updateColor(event, dataCenter.technicalRoomSurface.value)}
               bind:value={dc.technicalRoomsSurface}
             />
           </div>
@@ -715,6 +764,7 @@
               type="number"
               id="building-suspended-ceiling-surface"
               step="0.01"
+              oninput={(event) => updateColor(event, dataCenter.suspendedCeilingSurface.value)}
               bind:value={dc.suspendedCeilingSurface}
             />
           </div>
@@ -724,7 +774,12 @@
               <label for="building-lifts"> {dataCenter.lifts.label} </label>
               <ToggleTip info={dataCenter.lifts.description!} source="building-lifts" />
             </div>
-            <input type="number" id="building-lifts" bind:value={dc.lifts} />
+            <input
+              type="number"
+              id="building-lifts"
+              oninput={(event) => updateColor(event, dataCenter.lifts.value)}
+              bind:value={dc.lifts}
+            />
           </div>
         </div>
 
@@ -737,7 +792,12 @@
                 source="building-freight-lifts"
               />
             </div>
-            <input type="number" id="building-freight-lifts" bind:value={dc.freightLifts} />
+            <input
+              type="number"
+              id="building-freight-lifts"
+              oninput={(event) => updateColor(event, dataCenter.freightLifts.value)}
+              bind:value={dc.freightLifts}
+            />
           </div>
 
           <div class="field">
@@ -754,6 +814,7 @@
               type="number"
               id="building-partition-surface"
               step="0.01"
+              oninput={(event) => updateColor(event, dataCenter.partitionSurface.value)}
               bind:value={dc.partitionSurface}
             />
           </div>
@@ -765,7 +826,7 @@
         visibilityFunction={handleSecondaryCharacteristicsVisibility}
       />
     {/if}
-    <button id="recalculate" class="btn btn-primary btn-sm" onclick={() => updateResults()}
+    <button id="recalculate" class="btn btn-primary btn-sm" onclick={() => renderResults()}
       >Recalculate</button
     >
   </div>
