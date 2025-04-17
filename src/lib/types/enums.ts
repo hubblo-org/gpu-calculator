@@ -14,12 +14,12 @@ export enum Countries {
   POL = "Poland"
 }
 export enum InventoryCategories {
-  Building,
-  Cooling,
-  Energy,
-  EnergyBackup,
-  Maintenance,
-  Water
+  Building = "Building",
+  Cooling = "Cooling",
+  Energy = "Energy",
+  EnergyBackup = "Energy backup",
+  Maintenance = "Maintenance",
+  Water = "Water"
 }
 
 export enum LifeCycleSteps {

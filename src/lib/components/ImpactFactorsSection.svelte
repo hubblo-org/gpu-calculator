@@ -10,7 +10,8 @@
     ImpactCriterias,
     getImpactCriteria,
     getAllImpactCriterias,
-    LifeCycleSteps
+    LifeCycleSteps,
+    InventoryCategories
   } from "$lib/types/enums";
   import { sortByLifeCycle } from "$lib/inventory";
   import { downloadToCSV } from "$lib/utils";
@@ -45,6 +46,7 @@
   const selectableCriteria = { main: "Main criteria", all: "All criteria" };
 
   const lifeCycleSteps = Object.values(LifeCycleSteps);
+  const inventoryCategories = Object.values(InventoryCategories);
   const allImpactCriteria = getAllImpactCriterias();
   const mainImpactCriteria = getAllImpactCriterias().filter(
     (impactCriteria) =>
@@ -128,11 +130,19 @@
 
   function setSectionTexts() {
     if (source === "data-center") {
-      return {
-        heading_id: "data-center-table-heading",
-        section_label: "Data center impact factors",
-        table_caption: "Data center impact factors absolute values, per impact criterion"
-      };
+      if (selectedGraph === graphs.barPlot) {
+        return {
+          heading_id: "data-center-table-heading",
+          section_label: "Data center impact factors",
+          table_caption: "Data center impact factors absolute values, per impact criterion"
+        };
+      } else if (selectedGraph === graphs.treemap) {
+        return {
+          heading_id: "data-center-table-heading",
+          section_label: "Data center impact factors",
+          table_caption: "Data center impact factors absolute values, per inventory category"
+        };
+      }
     } else if (source === "functional-unit") {
       return {
         heading_id: "functional-unit-table-heading",
@@ -158,7 +168,7 @@
     }
   }
 
-  const sectionTexts = setSectionTexts();
+  const sectionTexts = $derived(setSectionTexts());
 
   $effect(() => {
     if (results) {
@@ -227,22 +237,40 @@
   {#if absoluteValuesButtonText === absoluteValuesTexts.hide}
     {@const tableId = `${source}-table`}
     <div class="absolute-values-table" id={tableId}>
-      <table>
-        <caption>{sectionTexts!.table_caption}</caption><thead
-          ><tr
-            ><th>Impact criterion</th>{#each lifeCycleSteps as lifeCycleStep}<th>{lifeCycleStep}</th
-              >{/each}</tr
-          ></thead
-        >
-        <tbody>
-          {#each displayedCriteria! as impactCriterion}<tr
-              ><th scope="row">{impactCriterion.acronym}</th>
-              {#each resultsGroupedByImpactCriterion as results}{#each results as result}{#if result.impact_criteria === impactCriterion.acronym}<td
-                      >{result.share}</td
-                    >{/if}{/each}{/each}
-            </tr>{/each}
-        </tbody>
-      </table>
+      {#if selectedGraph === graphs.barPlot}
+        <table>
+          <caption>{sectionTexts!.table_caption}</caption><thead
+            ><tr
+              ><th>Impact criterion</th>{#each lifeCycleSteps as lifeCycleStep}<th
+                  >{lifeCycleStep}</th
+                >{/each}</tr
+            ></thead
+          >
+          <tbody>
+            {#each displayedCriteria! as impactCriterion}<tr
+                ><th scope="row">{impactCriterion.acronym}</th>
+                {#each resultsGroupedByImpactCriterion as results}{#each results as result}{#if result.impact_criteria === impactCriterion.acronym}<td
+                        >{result.share}</td
+                      >{/if}{/each}{/each}
+              </tr>{/each}
+          </tbody>
+        </table>
+      {/if}
+      {#if selectedGraph === graphs.treemap}
+        <table>
+          <caption>{sectionTexts!.table_caption}</caption><thead
+            ><tr
+              ><th>Inventory category</th>{#each lifeCycleSteps as lifeCycleStep}<th
+                  >{lifeCycleStep}</th
+                >{/each}<th>Unit</th></tr
+            ></thead
+          >
+          <tbody
+            >{#each inventoryCategories as category}<tr><th scope="row">{category}</th></tr
+              >{/each}</tbody
+          >
+        </table>
+      {/if}
       <button
         class="btn-download"
         aria-label="Download data in CSV format"

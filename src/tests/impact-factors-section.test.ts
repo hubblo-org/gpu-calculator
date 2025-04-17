@@ -1,7 +1,7 @@
 import ImpactFactorsSection from "$lib/components/ImpactFactorsSection.svelte";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { getAllImpactCriterias } from "$lib/types/enums";
+import { getAllImpactCriterias, InventoryCategories } from "$lib/types/enums";
 import { functionalUnitOneResultsWithLc } from "../mocks/dc-data";
 import userEvent from "@testing-library/user-event";
 
@@ -10,6 +10,9 @@ const resultsAbsoluteValuesCaption =
 
 const dataCenterImpactFactorsCaption =
   "Data center impact factors absolute values, per impact criterion";
+
+const dataCenterCategoriesCaption =
+  "Data center impact factors absolute values, per inventory category";
 
 const downloadDataToCsvLabel = "Download data in CSV format";
 
@@ -21,6 +24,7 @@ const mainImpactCriteria = getAllImpactCriterias().filter(
     impactCriteria.acronym === "WU"
 );
 
+const inventoryCategories = Object.values(InventoryCategories);
 const filteredResults = functionalUnitOneResultsWithLc.filter(
   (result) =>
     result.life_cycle_step != "full_life_cycle" &&
@@ -193,7 +197,7 @@ describe("absolute values for data center impact factors table component test su
     });
   });
 
-  it("should display either the main impact criteria as column names or all impact criteria depending on selection", async () => {
+  it("should display either the main impact criteria as column names or all impact criteria depending on selection for the barplot view", async () => {
     const user = userEvent.setup();
     const dataCenterImpactFactorsSection = screen.getByRole("region", {
       name: /Data center impact factors/
@@ -219,6 +223,48 @@ describe("absolute values for data center impact factors table component test su
         name: impactCriterion.acronym
       });
       expect(criterionColumn).toBeVisible();
+    });
+  });
+
+  it("should display a table with inventory categories and life cycle steps as columns for the treemap view", async () => {
+    const user = userEvent.setup();
+    const dataCenterImpactFactorsSection = screen.getByRole("region", {
+      name: /Data center impact factors/
+    });
+    const switchDisplayButton = within(dataCenterImpactFactorsSection).getByRole("button", {
+      name: "Switch graph display"
+    });
+    await user.click(switchDisplayButton);
+
+    const dataCenterImpactFactorsTable = await within(dataCenterImpactFactorsSection).findByRole(
+      "table",
+      {
+        name: dataCenterCategoriesCaption
+      }
+    );
+
+    const equipmentColumn = within(dataCenterImpactFactorsTable).getByRole("columnheader", {
+      name: "Inventory category"
+    });
+    expect(equipmentColumn).toBeVisible();
+
+    const measuringUnitColumn = within(dataCenterImpactFactorsTable).getByRole("columnheader", {
+      name: "Unit"
+    });
+    expect(measuringUnitColumn).toBeVisible();
+
+    lifeCycleSteps.forEach((lifeCycleStep) => {
+      const lifeCycleColumn = within(dataCenterImpactFactorsTable).getByRole("columnheader", {
+        name: lifeCycleStep
+      });
+      expect(lifeCycleColumn).toBeVisible();
+    });
+
+    inventoryCategories.forEach((category) => {
+      const categoryColumn = within(dataCenterImpactFactorsTable).getByRole("rowheader", {
+        name: category
+      });
+      expect(categoryColumn).toBeVisible();
     });
   });
 
