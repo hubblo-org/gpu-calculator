@@ -131,8 +131,9 @@
     if (source === "data-center") {
       return {
         heading_id: "data-center-table-heading",
-        section_label: "Data center impact factors",
-        table_caption: "Data center impact factors absolute values, per impact criterion"
+        section_label: "Data Centre impacts",
+        table_caption:
+          "Data Centre impact factors absolute values, per impact criterion or per material category."
       };
     } else if (source === "functional-unit") {
       return {
@@ -193,7 +194,7 @@
   <div class="options">
     {#if selectedGraph === graphs.treemap}
       <select bind:value={selectedImpactCriterion} aria-label="Select an impact criterion"
-        >{#each mainImpactCriteria as impactCriterion}<option>{impactCriterion.acronym}</option
+        >{#each allImpactCriteria as impactCriterion}<option>{impactCriterion.acronym}</option
           >{/each}</select
       >
     {/if}

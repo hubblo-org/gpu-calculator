@@ -287,205 +287,36 @@ export function addImpacts(
   return res;
 }
 
-/// Casts Data Centre inventory in FunctionalUnitResults
-function build_impact_per_lifecycle_step(
-  inventory_with_impact: DataCenterInventoryElementWithImpactFactors[],
-  datacenterSpecs: DataCenter
-): FunctionalUnitResultsRowWithLifeCycle[] {
-  var ref_years = 1;
-  /// With lifecycle only
-  var res: FunctionalUnitResultsRowWithLifeCycle[] = [];
-  var initManuf = genNullImpact();
-  initManuf.life_cycle_step = "manufacturing";
-  initManuf.name = "Combined manufacturing impact of all equipments in the Data Centre";
-  var initUse = genNullImpact();
-  initUse.name = "Combined use impact of all equipments in the Data Centre";
-  initUse.life_cycle_step = "use";
-  var initTransport = genNullImpact();
-  initTransport.name = "Combined transport impact of all equipments in the Data Centre";
-  initTransport.life_cycle_step = "transport";
-  var initEOL = genNullImpact();
-  initEOL.name = "Combined end-of-life impact of all equipments in the Data Centre";
-  initEOL.life_cycle_step = "end-of-life";
-
-  let editableInventory = {
-    "Concrete volume": datacenterSpecs.concreteVolume,
-    "Number of freight lifts": datacenterSpecs.freightLifts,
-    "Number of lifts": datacenterSpecs.lifts,
-    "Steel mass": datacenterSpecs.steelMass,
-    "Suspended ceiling surface": datacenterSpecs.suspendedCeilingSurface
-  };
-  const keys = Object.keys(editableInventory).filter((key) => isNaN(Number(key)));
-  keys.forEach((key) => {
-    let impacts = inventory_with_impact.filter((element) => element.name == key);
-    console.log("Treating " + key);
-    console.log("impacts: ");
-    console.log(impacts);
-    for (i = 0; i < impacts.length; i++) {
-      if (impacts[i].lifeCycleStep == initUse.life_cycle_step) {
-        initUse.impacts = addImpacts(
-          initUse.impacts,
-          editableInventory[key],
-          impacts[i].impacts,
-          1,
-          Number(impacts[i].lifespan),
-          true
-        );
-        console.log("Adding impacts of " + key + " to initUse");
-      } else if (impacts[i].lifeCycleStep == initManuf.life_cycle_step) {
-        let lifespan = impacts[i].lifespan;
-        if (key == "Concrete volume" || key == "Steel mass") {
-          lifespan = Number(datacenterSpecs.lifespan);
-        }
-        initManuf.impacts = addImpacts(
-          initManuf.impacts,
-          editableInventory[key],
-          impacts[i].impacts,
-          1,
-          Number(lifespan),
-          true
-        );
-        console.log("Adding impacts of " + key + " to initManuf");
-      } else if (impacts[i].lifeCycleStep == initTransport.life_cycle_step) {
-        let lifespan = impacts[i].lifespan;
-        if (key == "Concrete volume" || key == "Steel mass") {
-          lifespan = Number(datacenterSpecs.lifespan);
-        }
-        initTransport.impacts = addImpacts(
-          initTransport.impacts,
-          editableInventory[key],
-          impacts[i].impacts,
-          1,
-          Number(lifespan),
-          true
-        );
-        console.log("Adding impacts of " + key + " to initTransport");
-      } else if (impacts[i].lifeCycleStep == initEOL.life_cycle_step) {
-        let lifespan = impacts[i].lifespan;
-        if (key == "Concrete volume" || key == "Steel mass") {
-          lifespan = Number(datacenterSpecs.lifespan);
-        }
-        initEOL.impacts = addImpacts(
-          initEOL.impacts,
-          editableInventory[key],
-          impacts[i].impacts,
-          1,
-          Number(lifespan),
-          true
-        );
-        console.log("Adding impacts of " + key + " to initEOL");
-      }
-    }
-  });
-  // Electricity
-  let electricityItem = inventory_with_impact.filter(
-    (element) => element.name == "Electricity, " + datacenterSpecs.location + " mix"
-  )[0];
-  console.log("electricityItem: " + electricityItem);
-  //$inspect(yearlyTotalEnergy);
-  initUse.impacts = addImpacts(
-    initUse.impacts,
-    Number(datacenterSpecs.yearlyTotalEnergy),
-    electricityItem.impacts,
-    1,
-    Number(electricityItem.lifespan)
-  );
-  res.push(initEOL);
-  res.push(initUse);
-  res.push(initTransport);
-  res.push(initManuf);
-
-  for (var i = 0; i < inventory_with_impact.length; i++) {
-    if (inventory_with_impact[i].name! in editableInventory) {
-      // if lifecycle step is usage
-      if (inventory_with_impact[i].lifeCycleStep === "use") {
-        for (var j = 0; j < res.length; j++) {
-          if (res[j].life_cycle_step == inventory_with_impact[i].lifeCycleStep) {
-            res[j].amount += 1;
-            if (
-              isNaN(inventory_with_impact[i].quantity) ||
-              isNaN(inventory_with_impact[i].lifespan)
-            ) {
-              console.error(
-                "name=" +
-                  inventory_with_impact[i].name +
-                  " quantity=" +
-                  inventory_with_impact[i].quantity +
-                  " lifespan=" +
-                  inventory_with_impact[i].lifespan
-              );
-            }
-            res[j].impacts = addImpacts(
-              res[j].impacts,
-              inventory_with_impact[i].quantity,
-              inventory_with_impact[i].impacts,
-              ref_years,
-              inventory_with_impact[i].lifespan,
-              true
-            );
-            console.log("res[j].impacts=");
-            console.log(res[j].impacts);
-          }
-        }
-        // if manuf, transport or eol
-      } else if (inventory_with_impact[i].lifeCycleStep != "full_life_cycle") {
-        for (var j = 0; j < res.length; j++) {
-          if (
-            res[j].life_cycle_step == inventory_with_impact[i].lifeCycleStep ||
-            (res[j].life_cycle_step == "eol" &&
-              inventory_with_impact[i].lifeCycleStep == "end-of-life")
-          ) {
-            console.log("updating at index " + j);
-            res[j].amount += 1;
-            res[j].impacts = addImpacts(
-              res[j].impacts,
-              inventory_with_impact[i].quantity,
-              inventory_with_impact[i].impacts,
-              ref_years,
-              inventory_with_impact[i].lifespan
-            );
-          }
-        }
-        // if full lifecycle
-      } else {
-        console.log("life cycle step has an issue");
-      }
-    }
-  }
-
-  console.log("result:");
-  console.log(res);
-  return res;
-}
-
 export function computeResults(
   inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[],
   datacenterSpecs: DataCenter
 ) {
   let res = buildImpactsPerCategoriesAndLifecycle(inventoryWithImpact, datacenterSpecs);
 
-  const filteredResults = res; //.filter((result) => result.life_cycle_step != "full_life_cycle");
-  console.log("filteredResults = " + filteredResults);
-
-  const resultsCriteriasPerLifeCycle = filteredResults
-    .filter((result) => result.life_cycle_step != "full_life_cycle")
-    .flatMap((result) => {
-      const impactCriteriasNames = Object.keys(result.impacts);
-      const sortedImpactCriterias = impactCriteriasNames.map((impactCriteria) => {
-        const object = {
-          impact_criteria: impactCriteria,
-          lc_step: result.life_cycle_step,
-          share: result.impacts[impactCriteria].value
-        };
-        return object;
-      });
-
-      return sortedImpactCriterias;
-    });
-
   const lifeCycleSteps = ["manufacturing", "transport", "use", "end-of-life"];
+  let resultsPerLifecycle = [];
+  let sample = genNullImpact();
+  const impactCriteria = Object.keys(sample.impacts);
 
-  const computedResults = { per_lifecycle: resultsCriteriasPerLifeCycle, steps: lifeCycleSteps };
+  lifeCycleSteps.forEach((step) => {
+    impactCriteria.forEach((crit) => {
+      let totalImpact = {
+        impact_criteria: crit,
+        lc_step: step,
+        share: 0
+      };
+      res.forEach((item) => {
+        if (item.life_cycle_step == step) {
+          totalImpact.share = totalImpact.share + item.impacts[crit].value;
+        }
+      });
+      resultsPerLifecycle.push(totalImpact);
+    });
+  });
+
+  const computedResults = { per_lifecycle: resultsPerLifecycle, steps: lifeCycleSteps };
+  console.error("Computed results:");
+  console.error(computedResults);
   return computedResults;
 }
 
