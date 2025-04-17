@@ -109,7 +109,6 @@
         const resultsByLifeCycle = resultsTreemap?.filter(
           (result) => result.life_cycle_step === lifeCycle.toLowerCase()
         );
-        console.error(resultsByLifeCycle);
         const resultsImpacts = resultsByLifeCycle?.map((result) => {
           const leaf: Leaf = {
             name: result.name!,

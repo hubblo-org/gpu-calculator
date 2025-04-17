@@ -51,7 +51,10 @@ export function renderTreemap(source: string, tree: Node, width: number, height:
     console.error("No element to attach the treemap legend to!");
   }
 
-  d3.select(treemapLegendWrapperId).attr("style", `width: ${width}px; display: flex; margin-bottom: 12px;`);
+  d3.select(treemapLegendWrapperId).attr(
+    "style",
+    `width: ${width}px; display: flex; margin-bottom: 12px;`
+  );
 
   const treemapLogo = d3.select(treemapLegendWrapperId).select(`#${legendLogoId}`);
 
@@ -63,7 +66,7 @@ export function renderTreemap(source: string, tree: Node, width: number, height:
       .attr("id", legendLogoId);
     hubbloLogo.append("img").attr("src", "/media/logo.svg");
     hubbloLogo.append("span").text("Hubblo");
-  } 
+  }
 
   const treemap = d3.select(treemapId);
   if (!treemap.empty()) {
@@ -118,7 +121,8 @@ export function renderTreemap(source: string, tree: Node, width: number, height:
           .append("tspan")
           .attr("x", 3)
           .attr("y", `${(nodes.length - 1) * 0.3 + 1.1 + nodeIndex * 0.9}em`)
-          .text(node);
+          .text(node)
+          .attr("style", "font-size: 1.3em");
       });
     });
   } else {

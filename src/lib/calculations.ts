@@ -33,7 +33,6 @@ export function computeImpact(
   } else {
     res = impact1 + quantityImpact2 * impact2;
   }
-  //if (isNaN(res)) { console.error("Wrong calculation : impact1=" +impact1 +" impact2=" +impact2 +" quantity=" +quantity_impact2 +" refyears=" +reference_years +" lifespan="+lifespan);}
   return res;
 }
 
@@ -287,11 +286,8 @@ export function addImpacts(
   return res;
 }
 
-export function computeResults(
-  inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[],
-  datacenterSpecs: DataCenter
-) {
-  let res = buildImpactsPerCategoriesAndLifecycle(inventoryWithImpact, datacenterSpecs);
+export function computeResults(categorizedImpacts: FunctionalUnitResultsRowWithLifeCycle[]) {
+  let res = categorizedImpacts;
 
   const lifeCycleSteps = ["manufacturing", "transport", "use", "end-of-life"];
   let resultsPerLifecycle = [];
@@ -315,8 +311,6 @@ export function computeResults(
   });
 
   const computedResults = { per_lifecycle: resultsPerLifecycle, steps: lifeCycleSteps };
-  console.error("Computed results:");
-  console.error(computedResults);
   return computedResults;
 }
 
@@ -388,7 +382,6 @@ export function buildImpactsPerCategoriesAndLifecycle(
       // Global inventory impacts
       inventoryWithImpact.forEach((item) => {
         if (item.category == category && item.lifeCycleStep == step) {
-          console.error("adding impacts for " + category + " on " + step + " step");
           totalImpact.impacts = addImpacts(
             totalImpact.impacts,
             Number(item.quantity),
@@ -405,4 +398,11 @@ export function buildImpactsPerCategoriesAndLifecycle(
   });
 
   return res;
+}
+
+export function computeUnitOneResults(
+  datacenterResults: FunctionalUnitResultsRowWithLifeCycle[]
+): FunctionalUnitResultsRowWithLifeCycle[] {
+  //TODO
+  return datacenterResults;
 }

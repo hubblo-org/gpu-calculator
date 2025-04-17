@@ -23,14 +23,11 @@
   <!-- Relative breakdown barplot per category -->
   <!-- Relative breakdown treemap per category and lifecycle -->
   <DataCenter dataCenter={dataCenterCharacteristics} />
-  <Summary />
-
   <!-- Impats of FU1 without Electricity -->
   <!-- Total absolute values header -->
   <!-- Relative breakdown barplot per lifecycle -->
   <!-- Relative breakdown barplot per category -->
   <!-- Relative breakdown treemap per category and lifecycle -->
-  <FunctionalUnit />
 </main>
 <Footer />
 

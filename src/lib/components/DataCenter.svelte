@@ -9,6 +9,9 @@
   import { genNullImpact, inventoryWithImpact } from "../../mocks/dc-data";
   import { computeResults, buildImpactsPerCategoriesAndLifecycle } from "$lib/calculations";
   import { onMount } from "svelte";
+  import { setContext } from "svelte";
+  import Summary from "./Summary.svelte";
+  import FunctionalUnit from "./FunctionalUnit.svelte";
 
   interface Props {
     dataCenter: DataCenterBuilding;
@@ -24,7 +27,9 @@
 
   // Initiate state variables
   let results: null | any = $state();
-  let resultsForTreemap: null | any = $state();
+  let resultsForTreemap: null | any = $state({
+    res: []
+  });
 
   const electricalTechnicalResilienceTiers = Object.values(ElectricalTechnicalResilienceTiers);
   const countriesNames = Object.values(Countries);
@@ -40,15 +45,19 @@
     }
   }
 
+  resultsForTreemap = buildImpactsPerCategoriesAndLifecycle(inventoryWithImpact, dc);
+  results = computeResults(resultsForTreemap);
+  setContext("datacenterResults", resultsForTreemap);
+
   /// Trigger calculations
   onMount(() => {
-    resultsForTreemap = buildImpactsPerCategoriesAndLifecycle(inventoryWithImpact, dc);
-    results = computeResults(inventoryWithImpact, dc);
+    //resultsForTreemap.res = buildImpactsPerCategoriesAndLifecycle(inventoryWithImpact, dc);
+    //results = computeResults(resultsForTreemap.res);
   });
 
   function updateResults() {
     resultsForTreemap = buildImpactsPerCategoriesAndLifecycle(inventoryWithImpact, dc);
-    results = computeResults(inventoryWithImpact, dc);
+    results = computeResults(resultsForTreemap);
   }
 </script>
 
@@ -268,28 +277,11 @@
   </div>
 </section>
 
-<!-- section>
-  <div id="section-heading">
-    <h3>Multi-criteria impacts breakdown</h3>
-  </div>
-  <div id="graph-display">
-    <div id="impact-factors-plot"></div>
-  </div>
-</section>
-
-<section>
-  <div id="section-heading">
-    <h3>Treemap impacts breakdown</h3>
-  </div>
-  <div id="graph-display">
-    <p>
-      {selectedImpactCriteria.name} ({selectedImpactCriteria.acronym}), in {selectedImpactCriteria.unit}
-    </p>
-    <ResultsTreeMap results={resultsForTreemap} />
-  </div>
-</section> -->
-
 <ImpactFactorsSection source="data-center" {results} resultsTreemap={resultsForTreemap} />
+
+<Summary />
+
+<FunctionalUnit datacenterResults={resultsForTreemap} />
 
 <style>
   section {
