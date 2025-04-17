@@ -64,7 +64,11 @@ export const dataCenterCharacteristics: DataCenterBuilding = {
     value: dataCenterInventory.partitionSurface,
     description: "test"
   },
-  lifespan: { label: "Building lifespan", value: dataCenterInventory.lifespan, description: "test" },
+  lifespan: {
+    label: "Building lifespan",
+    value: dataCenterInventory.lifespan,
+    description: "test"
+  },
   technicalRoomSurface: {
     label: "Technical rooms surface area",
     value: dataCenterInventory.technicalRoomSurface,
@@ -96,7 +100,7 @@ export const dataCenterCharacteristics: DataCenterBuilding = {
     value: dataCenterInventory.concreteVolume,
     description: "test"
   },
-  steelMass: { label: "Steel mass", value: dataCenterInventory.steelMass, description: "test"}
+  steelMass: { label: "Steel mass", value: dataCenterInventory.steelMass, description: "test" }
 };
 console.log("Materials Impacts:");
 console.log(MaterialImpacts);
@@ -311,7 +315,7 @@ export const inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[] 
     }
     const inventoryElement = {
       name: element.material_name,
-      category: element.category,
+      category: elementDetails[0]?.category,
       mass: element.mass,
       source: element.source,
       quantity: elementDetails[0]?.quantity,

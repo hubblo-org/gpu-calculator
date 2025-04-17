@@ -109,6 +109,7 @@
         const resultsByLifeCycle = resultsTreemap?.filter(
           (result) => result.life_cycle_step === lifeCycle.toLowerCase()
         );
+        console.error(resultsByLifeCycle);
         const resultsImpacts = resultsByLifeCycle?.map((result) => {
           const leaf: Leaf = {
             name: result.name!,
@@ -173,7 +174,10 @@
           "share",
           "lc_step"
         );
-      } else if (selectedGraph === graphs.treemap) {
+      }
+    }
+    if (resultsTreemap) {
+      if (selectedGraph === graphs.treemap) {
         renderTreemap(source, resultsForTreemap, 1000, 600);
       }
     }
