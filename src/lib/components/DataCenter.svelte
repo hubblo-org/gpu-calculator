@@ -7,15 +7,8 @@
   import ToggleTip from "./ToggleTip.svelte";
   import ImpactFactorsSection from "./ImpactFactorsSection.svelte";
   import { genNullImpact, inventoryWithImpact } from "../../mocks/dc-data";
-  import BuildingForm from "./BuildingForm.svelte";
-  import ResultsPerImpactFactor from "./ResultsPerImpactFactor.svelte";
-  import ResultsVerticalPercentages from "./ResultsVerticalPercentages.svelte";
-  import { renderTreemap } from "$lib/treemap";
-  import { ImpactCriterias, getAllImpactCriterias, getImpactCriteria } from "$lib/types/enums";
   import { computeResults, buildImpactsPerCategoriesAndLifecycle } from "$lib/calculations";
   import { onMount } from "svelte";
-  import * as Plot from "@observablehq/plot";
-  import Results from "./Results.svelte";
 
   interface Props {
     dataCenter: DataCenterBuilding;
@@ -49,36 +42,14 @@
 
   /// Trigger calculations
   onMount(() => {
-    results = computeResults(inventoryWithImpact, dc);
     resultsForTreemap = buildImpactsPerCategoriesAndLifecycle(inventoryWithImpact, dc);
+    results = computeResults(inventoryWithImpact, dc);
   });
 
   function updateResults() {
-    results = computeResults(inventoryWithImpact, dc);
     resultsForTreemap = buildImpactsPerCategoriesAndLifecycle(inventoryWithImpact, dc);
+    results = computeResults(inventoryWithImpact, dc);
   }
-
-  //  const selectedCriteriaAcronym = selectedImpactCriteria.acronym as keyof ImpactFactors;
-  //  return {
-  //    name: "dc_data",
-  //    children: lifeCycleSteps.map((lifeCycle) => {
-  //      const resultsByLifeCycle = results.per_lifecycle.filter(
-  //        (element) => element.impact_criteria == lifeCycle
-  //      ); //.filter((result) => result.life_cycle_step === lifeCycle);
-  //      const resultsImpacts = resultsByLifeCycle.map((result) => {
-  //        const leaf: Leaf = {
-  //          name: result.category!,
-  //          value: result.impacts[selectedCriteriaAcronym].value
-  //        };
-  //        return leaf;
-  //      });
-  //      return {
-  //        name: lifeCycle,
-  //        children: resultsImpacts.filter((impactFactors) => impactFactors.name != "all_categories")
-  //      };
-  //    })
-  //  };
-  //});
 </script>
 
 <section aria-labelledby="data-center-characteristics">
@@ -98,9 +69,7 @@
     <div class="grid">
       <div class="field">
         <div class="label-wrapper">
-          <label for="building-total-surface"
-            >{dataCenter.totalSurface.label} (square meters)
-          </label>
+          <label for="building-total-surface">{dataCenter.totalSurface.label} (m²) </label>
 
           <ToggleTip info={dataCenter.totalSurface.description!} source="total-surface" />
         </div>
@@ -108,7 +77,7 @@
       </div>
       <div class="field">
         <div class="label-wrapper">
-          <label for="concrete-volume">{dataCenter.concreteVolume.label} (cubic meters)</label>
+          <label for="concrete-volume">{dataCenter.concreteVolume.label} (m³)</label>
           <ToggleTip info={dataCenter.concreteVolume.description!} source="concrete-volume" />
         </div>
 
@@ -116,7 +85,7 @@
       </div>
       <div class="field">
         <div class="label-wrapper">
-          <label for="steel-mass">{dataCenter.steelMass.label} (kilograms)</label>
+          <label for="steel-mass">{dataCenter.steelMass.label} (kg)</label>
           <ToggleTip info={dataCenter.steelMass.description!} source="steel-mass" />
         </div>
 
@@ -124,9 +93,7 @@
       </div>
       <div class="field">
         <div class="label-wrapper">
-          <label for="yearly-total-energy"
-            >{dataCenter.yearlyTotalEnergy.label} (kilowatts/hour)</label
-          >
+          <label for="yearly-total-energy">{dataCenter.yearlyTotalEnergy.label} (kWh)</label>
           <ToggleTip
             info={dataCenter.yearlyTotalEnergy.description!}
             source="yearly-total-energy"
@@ -168,24 +135,20 @@
       </div>
       <div class="field">
         <div class="label-wrapper">
-          <label for="electrical-technical-resilience">Electrical Technical Resilience tier</label>
-          <ToggleTip
-            info={dataCenter.electricalTechnicalResilience.description!}
-            source="electrical-technical-resilience"
-          />
-        </div>
-        <select bind:value={dc.electricalTechnicalResilience} id="electrical-technical-resilience">
-          {#each electricalTechnicalResilienceTiers as tier}<option>{tier}</option>{/each}
-        </select>
-      </div>
-      <div class="field">
-        <div class="label-wrapper">
           <label for="location">Location</label>
           <ToggleTip info={dataCenter.location.description!} source="location" />
         </div>
         <select bind:value={dc.location} id="location"
           >{#each countriesNames as country}<option>{country}</option>{/each}</select
         >
+      </div>
+      <div class="field">
+        <div class="label-wrapper">
+          <label for="building-lifespan">{dataCenter.lifespan.label} (years)</label>
+          <ToggleTip info={dataCenter.lifespan.description!} source="building-lifespan" />
+        </div>
+
+        <input type="number" id="building-lifespan" bind:value={dc.lifespan} />
       </div>
     </div>
 
@@ -201,17 +164,8 @@
         <div class="grid">
           <div class="field">
             <div class="label-wrapper">
-              <label for="building-lifespan">{dataCenter.lifespan.label} (years)</label>
-              <ToggleTip info={dataCenter.lifespan.description!} source="building-lifespan" />
-            </div>
-
-            <input type="number" id="building-lifespan" bind:value={dc.lifespan} />
-          </div>
-
-          <div class="field">
-            <div class="label-wrapper">
               <label for="building-technical-rooms-surface"
-                >{dataCenter.technicalRoomSurface.label} (square meters)</label
+                >{dataCenter.technicalRoomSurface.label} (m²)</label
               >
               <ToggleTip
                 info={dataCenter.technicalRoomSurface.description!}
@@ -230,7 +184,7 @@
           <div class="field">
             <div class="label-wrapper">
               <label for="building-suspended-ceiling-surface">
-                {dataCenter.suspendedCeilingSurface.label} (square meters)
+                {dataCenter.suspendedCeilingSurface.label} (m²)
               </label>
               <ToggleTip
                 info={dataCenter.suspendedCeilingSurface.description!}
@@ -269,7 +223,7 @@
           <div class="field">
             <div class="label-wrapper">
               <label for="building-partition-surface">
-                {dataCenter.partitionSurface.label} (square meters)
+                {dataCenter.partitionSurface.label} (²)
               </label>
               <ToggleTip
                 info={dataCenter.partitionSurface.description!}
@@ -282,6 +236,23 @@
               step="0.01"
               bind:value={dc.partitionSurface}
             />
+          </div>
+          <div class="field">
+            <div class="label-wrapper">
+              <label for="electrical-technical-resilience"
+                >Electrical Technical Resilience tier</label
+              >
+              <ToggleTip
+                info={dataCenter.electricalTechnicalResilience.description!}
+                source="electrical-technical-resilience"
+              />
+            </div>
+            <select
+              bind:value={dc.electricalTechnicalResilience}
+              id="electrical-technical-resilience"
+            >
+              {#each electricalTechnicalResilienceTiers as tier}<option>{tier}</option>{/each}
+            </select>
           </div>
         </div>
       </div>

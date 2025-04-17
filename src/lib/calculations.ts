@@ -462,7 +462,7 @@ export function computeResults(
   inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[],
   datacenterSpecs: DataCenter
 ) {
-  let res = build_impact_per_lifecycle_step(inventoryWithImpact, datacenterSpecs);
+  let res = buildImpactsPerCategoriesAndLifecycle(inventoryWithImpact, datacenterSpecs);
 
   const filteredResults = res; //.filter((result) => result.life_cycle_step != "full_life_cycle");
   console.log("filteredResults = " + filteredResults);
@@ -520,7 +520,8 @@ export function buildImpactsPerCategoriesAndLifecycle(
         )[0];
         totalImpact.impacts = addImpacts(
           totalImpact.impacts,
-          Number(datacenterSpecs.yearlyTotalEnergy),
+          Number(datacenterSpecs.yearlyTotalEnergy) *
+            Number(datacenterSpecs.powerUsageEffectiveness),
           electricityItem.impacts,
           refYears,
           Number(electricityItem.lifespan),
