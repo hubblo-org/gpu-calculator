@@ -6,13 +6,12 @@
   import DropdownButton from "./DropdownButton.svelte";
   import ToggleTip from "./ToggleTip.svelte";
   import ImpactFactorsSection from "./ImpactFactorsSection.svelte";
-  import { genNullImpact, inventoryWithImpact } from "../../mocks/dc-data";
+  import { inventoryWithImpact } from "../../mocks/dc-data";
   import {
     buildImpactsPerCategoriesAndLifecycle,
     formatForBarPlot,
     computeUnitOneResults
   } from "$lib/calculations";
-  import { onMount } from "svelte";
   import Summary from "./Summary.svelte";
   import FunctionalUnit from "./FunctionalUnit.svelte";
 
@@ -36,7 +35,6 @@
 
   const electricalTechnicalResilienceTiers = Object.values(ElectricalTechnicalResilienceTiers);
   const countriesNames = Object.values(Countries);
-  var tier = "Tier " + dc.electricalTechnicalResilience;
 
   function handleSecondaryCharacteristicsVisibility() {
     if (secondaryCharacteristicsAreVisible) {
@@ -60,12 +58,6 @@
       }
     }
   }
-
-  /// Trigger calculations
-  //onMount(() => {
-  //resultsForTreemap.res = buildImpactsPerCategoriesAndLifecycle(inventoryWithImpact, dc);
-  //results = computeResults(resultsForTreemap.res);
-  //});
 
   function updateResults() {
     resultsForTreemap = buildImpactsPerCategoriesAndLifecycle(inventoryWithImpact, dc);
@@ -182,22 +174,6 @@
       </div>
       <div class="field">
         <div class="label-wrapper">
-          <label for="electrical-technical-resilience">Electrical Technical Resilience tier</label>
-          <ToggleTip
-            info={dataCenter.electricalTechnicalResilience.description!}
-            source="electrical-technical-resilience"
-          />
-        </div>
-        <select
-          bind:value={dc.electricalTechnicalResilience}
-          oninput={(event) => updateColor(event, dataCenter.electricalTechnicalResilience.value)}
-          id="electrical-technical-resilience"
-        >
-          {#each electricalTechnicalResilienceTiers as tier}<option>{tier}</option>{/each}
-        </select>
-      </div>
-      <div class="field">
-        <div class="label-wrapper">
           <label for="location">Location</label>
           <ToggleTip info={dataCenter.location.description!} source="location" />
         </div>
@@ -228,20 +204,6 @@
     {#if secondaryCharacteristicsAreVisible}
       <div transition:fade class="section-main" id="secondary-characteristics">
         <div class="grid">
-          <div class="field">
-            <div class="label-wrapper">
-              <label for="building-lifespan">{dataCenter.lifespan.label} (years)</label>
-              <ToggleTip info={dataCenter.lifespan.description!} source="building-lifespan" />
-            </div>
-
-            <input
-              type="number"
-              id="building-lifespan"
-              oninput={(event) => updateColor(event, dataCenter.lifespan.value)}
-              bind:value={dc.lifespan}
-            />
-          </div>
-
           <div class="field">
             <div class="label-wrapper">
               <label for="building-technical-rooms-surface"
@@ -355,7 +317,7 @@
         visibilityFunction={handleSecondaryCharacteristicsVisibility}
       />
     {/if}
-    <button id="recalculate" class="btn btn-primary btn-sm" onclick={() => renderResults()}
+    <button id="recalculate" class="btn btn-primary btn-sm" onclick={() => updateResults()}
       >Recalculate</button
     >
   </div>

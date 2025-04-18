@@ -13,14 +13,11 @@
   let results: null | any = $state();
   let selectedFunctionalUnit = $state(FunctionalUnits.First);
 
-  console.error("uf 1 results:");
-  console.error(uf1Results);
-
   const parameters = $derived(getFunctionalUnitParameters(selectedFunctionalUnit));
 
   function updateResults() {
     ufResults = uf1Results;
-    results = uf1BarPlotResults; //formatForBarPlot(uf1Results);
+    results = uf1BarPlotResults;
   }
   $effect(() => {
     updateResults();
