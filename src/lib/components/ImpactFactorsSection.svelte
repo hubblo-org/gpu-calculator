@@ -183,7 +183,10 @@
           "share",
           "lc_step"
         );
-      } else if (selectedGraph === graphs.treemap) {
+      }
+    }
+    if (resultsTreemap) {
+      if (selectedGraph === graphs.treemap) {
         renderTreemap(source, resultsForTreemap, 1000, 600);
       }
     }
@@ -199,7 +202,7 @@
   <div class="options">
     {#if selectedGraph === graphs.treemap}
       <select bind:value={selectedImpactCriterion} aria-label="Select an impact criterion"
-        >{#each mainImpactCriteria as impactCriterion}<option>{impactCriterion.acronym}</option
+        >{#each allImpactCriteria as impactCriterion}<option>{impactCriterion.acronym}</option
           >{/each}</select
       >
     {/if}

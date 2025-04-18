@@ -124,7 +124,9 @@
       <input type="number" id="building-maximum-usable-electrical-power" required />
     </div>
     <div class="row-input">
-      <label for="building-yearly-total-energy"> Total energy for one year, in kilowatts </label>
+      <label for="building-yearly-total-energy">
+        Total IT energy for one year, in KilowattHours</label
+      >
       <input type="number" id="building-yearly-total-energy" required />
     </div>
     <div class="row-input">

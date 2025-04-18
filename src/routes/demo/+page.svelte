@@ -7,7 +7,7 @@
   import PcrSection from "$lib/components/PCRSection.svelte";
   import Footer from "$lib/components/Footer.svelte";
   import Summary from "$lib/components/Summary.svelte";
-  console.log("dataCenterCharacteristics: ");
+  console.log("page.svelte - dataCenterCharacteristics: ");
   console.log(dataCenterCharacteristics);
 </script>
 
@@ -17,9 +17,17 @@
     <TableOfContents />
     <PcrSection />
   </div>
+  <!-- Total impacts of DC with Electricity (example) -->
+  <!-- Total absolute values header -->
+  <!-- Relative breakdown barplot per lifecycle -->
+  <!-- Relative breakdown barplot per category -->
+  <!-- Relative breakdown treemap per category and lifecycle -->
   <DataCenter dataCenter={dataCenterCharacteristics} />
-  <Summary />
-  <FunctionalUnit />
+  <!-- Impats of FU1 without Electricity -->
+  <!-- Total absolute values header -->
+  <!-- Relative breakdown barplot per lifecycle -->
+  <!-- Relative breakdown barplot per category -->
+  <!-- Relative breakdown treemap per category and lifecycle -->
 </main>
 <Footer />
 
