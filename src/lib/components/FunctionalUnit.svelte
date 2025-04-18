@@ -3,9 +3,6 @@
   import { getFunctionalUnitParameters, FunctionalUnits } from "$lib/types/enums";
   import type { FunctionalUnitResultsRowWithLifeCycle } from "$lib/types/pcr-cloud";
 
-  import { computeUnitOneResults, formatForBarPlot } from "$lib/calculations";
-  import type { DataCenter } from "$lib/data-center.svelte";
-
   interface Props {
     uf1Results: FunctionalUnitResultsRowWithLifeCycle[];
     uf1BarPlotResults: any;
