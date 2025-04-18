@@ -7,9 +7,12 @@
   import ToggleTip from "./ToggleTip.svelte";
   import ImpactFactorsSection from "./ImpactFactorsSection.svelte";
   import { genNullImpact, inventoryWithImpact } from "../../mocks/dc-data";
-  import { computeResults, buildImpactsPerCategoriesAndLifecycle } from "$lib/calculations";
+  import {
+    buildImpactsPerCategoriesAndLifecycle,
+    formatForBarPlot,
+    computeUnitOneResults
+  } from "$lib/calculations";
   import { onMount } from "svelte";
-  import { setContext } from "svelte";
   import Summary from "./Summary.svelte";
   import FunctionalUnit from "./FunctionalUnit.svelte";
 
@@ -27,9 +30,9 @@
 
   // Initiate state variables
   let results: null | any = $state();
-  let resultsForTreemap: null | any = $state({
-    res: []
-  });
+  let resultsForTreemap: null | any = $state();
+  let uf1Results: null | any = $state();
+  let uf1BarPlotResults: null | any = $state();
 
   const electricalTechnicalResilienceTiers = Object.values(ElectricalTechnicalResilienceTiers);
   const countriesNames = Object.values(Countries);
@@ -45,19 +48,19 @@
     }
   }
 
-  resultsForTreemap = buildImpactsPerCategoriesAndLifecycle(inventoryWithImpact, dc);
-  results = computeResults(resultsForTreemap);
-  setContext("datacenterResults", resultsForTreemap);
+  updateResults();
 
   /// Trigger calculations
-  onMount(() => {
-    //resultsForTreemap.res = buildImpactsPerCategoriesAndLifecycle(inventoryWithImpact, dc);
-    //results = computeResults(resultsForTreemap.res);
-  });
+  //onMount(() => {
+  //resultsForTreemap.res = buildImpactsPerCategoriesAndLifecycle(inventoryWithImpact, dc);
+  //results = computeResults(resultsForTreemap.res);
+  //});
 
   function updateResults() {
     resultsForTreemap = buildImpactsPerCategoriesAndLifecycle(inventoryWithImpact, dc);
-    results = computeResults(resultsForTreemap);
+    results = formatForBarPlot(resultsForTreemap);
+    uf1Results = computeUnitOneResults(dc, resultsForTreemap);
+    uf1BarPlotResults = formatForBarPlot(uf1Results);
   }
 </script>
 
@@ -281,7 +284,7 @@
 
 <Summary />
 
-<FunctionalUnit datacenterResults={resultsForTreemap} />
+<FunctionalUnit {uf1Results} {uf1BarPlotResults} />
 
 <style>
   section {

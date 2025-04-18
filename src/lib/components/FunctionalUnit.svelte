@@ -3,26 +3,27 @@
   import { getFunctionalUnitParameters, FunctionalUnits } from "$lib/types/enums";
   import type { FunctionalUnitResultsRowWithLifeCycle } from "$lib/types/pcr-cloud";
 
-  import { computeUnitOneResults, computeResults } from "$lib/calculations";
+  import { computeUnitOneResults, formatForBarPlot } from "$lib/calculations";
+  import type { DataCenter } from "$lib/data-center.svelte";
 
   interface Props {
-    datacenterResults: FunctionalUnitResultsRowWithLifeCycle[];
+    uf1Results: FunctionalUnitResultsRowWithLifeCycle[];
+    uf1BarPlotResults: any;
   }
-  const { datacenterResults }: Props = $props();
+  const { uf1Results, uf1BarPlotResults }: Props = $props();
 
+  let ufResults: null | any = $state();
   let results: null | any = $state();
-  let resultsForTreemap: null | any = $state();
   let selectedFunctionalUnit = $state(FunctionalUnits.First);
 
-  const parameters = $derived(getFunctionalUnitParameters(selectedFunctionalUnit));
-  console.error(datacenterResults);
+  console.error("uf 1 results:");
+  console.error(uf1Results);
 
-  resultsForTreemap = computeUnitOneResults(datacenterResults);
-  results = computeResults(resultsForTreemap);
+  const parameters = $derived(getFunctionalUnitParameters(selectedFunctionalUnit));
 
   function updateResults() {
-    resultsForTreemap = computeUnitOneResults(datacenterResults);
-    results = computeResults(resultsForTreemap);
+    ufResults = uf1Results;
+    results = uf1BarPlotResults; //formatForBarPlot(uf1Results);
   }
   $effect(() => {
     updateResults();
@@ -50,7 +51,7 @@
   </section>
 </div>
 
-<ImpactFactorsSection source="functional-unit" {results} resultsTreemap={resultsForTreemap} />
+<ImpactFactorsSection source="functional-unit" {results} resultsTreemap={ufResults} />
 
 <style>
   #server-rack {

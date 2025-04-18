@@ -1,6 +1,11 @@
 import { genNullImpact } from "../mocks/dc-data";
 import type { DataCenter } from "./data-center.svelte";
-import type { DataCenterCharacteristic, ImpactFactors, Node } from "./types/pcr-cloud";
+import type {
+  DataCenterBuilding,
+  DataCenterCharacteristic,
+  ImpactFactors,
+  Node
+} from "./types/pcr-cloud";
 import type {
   FunctionalUnitResultsRowWithLifeCycle,
   DataCenterInventoryElementWithImpactFactors
@@ -286,7 +291,7 @@ export function addImpacts(
   return res;
 }
 
-export function computeResults(categorizedImpacts: FunctionalUnitResultsRowWithLifeCycle[]) {
+export function formatForBarPlot(categorizedImpacts: FunctionalUnitResultsRowWithLifeCycle[]) {
   let res = categorizedImpacts;
 
   const lifeCycleSteps = ["manufacturing", "transport", "use", "end-of-life"];
@@ -401,8 +406,32 @@ export function buildImpactsPerCategoriesAndLifecycle(
 }
 
 export function computeUnitOneResults(
+  datacenterSpecs: DataCenter,
   datacenterResults: FunctionalUnitResultsRowWithLifeCycle[]
 ): FunctionalUnitResultsRowWithLifeCycle[] {
-  //TODO
-  return datacenterResults;
+  let res: FunctionalUnitResultsRowWithLifeCycle[] = [];
+  let puissCommDC = 54000; // kW IT, TODO: get it from parameters
+  const impactCriteria = Object.keys(genNullImpact().impacts);
+  datacenterResults.forEach((item) => {
+    let newItem: FunctionalUnitResultsRowWithLifeCycle = genNullImpact();
+    newItem.amount = item.amount;
+    newItem.category = item.category;
+    newItem.life_cycle_step = item.life_cycle_step;
+    newItem.name = item.name;
+    newItem.source = item.source;
+    if (item.life_cycle_step == "use") {
+      impactCriteria.forEach((crit) => {
+        newItem.impacts[crit].value = item.impacts[crit].value / puissCommDC;
+      });
+    } else {
+      impactCriteria.forEach((crit) => {
+        newItem.impacts[crit].value =
+          (item.impacts[crit].value * 1) / (datacenterSpecs.lifespan * puissCommDC);
+      });
+    }
+    res.push(newItem);
+  });
+  console.error(datacenterResults);
+
+  return res;
 }

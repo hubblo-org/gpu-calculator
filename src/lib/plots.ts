@@ -97,8 +97,6 @@ export function renderStackedBarPlot(
   xLabel: string,
   domainColor: string
 ) {
-  console.error("Impact Factors:");
-  console.error(impactFactors);
   let div = document.querySelector(`#impact-factors-plot-${source}`);
   div?.firstChild?.remove();
   if (div) {
