@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import type { ImpactFactors } from "./types/pcr-cloud";
 
 interface ImpactFactor {
-  impact_criteria: string;
+  impactCriterion: string;
   amount: number;
 }
 
@@ -13,8 +13,8 @@ interface ImpactFactorWithScope {
 }
 
 interface ImpactFactorWithLifeCycle {
-  impact_criteria: string;
-  life_cycle_step: string;
+  impactCriterion: string;
+  lifeCycleStep: string;
   share: number;
 }
 
@@ -131,7 +131,7 @@ interface ImpactFactorWithCategory {
   values: ImpactFactors;
 }
 interface ImpactFactorsWithLC {
-  life_cycle_step: string;
+  lifeCycleStep: string;
   value: number;
   impact_factors: ImpactFactorWithCategory[];
 }

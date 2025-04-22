@@ -9,7 +9,7 @@ import type {
   FunctionalUnitResultsRow,
   FunctionalUnitResultsRowWithLifeCycle
 } from "$lib/types/pcr-cloud";
-import { getAllImpactCriterias, getImpactCriteria, ImpactCriterias } from "$lib/types/enums";
+import { getImpactCriteria, ImpactCriterias } from "$lib/types/enums";
 
 export const dataCenterCharacteristics: DataCenterBuilding = {
   energyReuseFactor: {
@@ -102,16 +102,12 @@ export const dataCenterCharacteristics: DataCenterBuilding = {
   },
   steelMass: { label: "Steel mass", value: dataCenterInventory.steelMass, description: "test" }
 };
-console.log("Materials Impacts:");
-console.log(MaterialImpacts);
-console.log("Materials Inventory:");
-console.log(MaterialInventory);
 
 export function genNullImpact() {
   const nullImpact: FunctionalUnitResultsRowWithLifeCycle = {
     name: "Null initialized element",
     amount: 0,
-    life_cycle_step: "all lifecycle",
+    lifeCycleStep: "all lifecycle",
     source: "Generated",
     impacts: {
       ADPe: {
@@ -196,115 +192,6 @@ export function genNullImpact() {
   return nullImpact;
 }
 
-//function gen_full_material_inventory_with_impacts() {
-//  var inventoryElementsImpactFactors: DataCenterInventoryElementWithImpactFactors[] =
-//    MaterialImpacts.map((element) => {
-//      const inventoryElementImpacts = {
-//        name: element.material_name,
-//        category: element.category,
-//        mass: element.mass,
-//        source: element.source,
-//        lifeCycleStep: element.lc_step,
-//        impacts: {
-//          ADPe: {
-//            value: element.ADPe,
-//            unit: getImpactCriteria(ImpactCriterias.AbioticDepletionPotentialElements).unit
-//          },
-//          ADPf: {
-//            value: element.ADPf,
-//            unit: getImpactCriteria(ImpactCriterias.AbioticDepletionPotentialFossilFuels).unit
-//          },
-//          AP: {
-//            value: element.AP,
-//            unit: getImpactCriteria(ImpactCriterias.AcidificationPotential).unit
-//          },
-//          CTUe: {
-//            value: element.CTUe,
-//            unit: getImpactCriteria(ImpactCriterias.ComparativeToxicityUnitsForEcosystems).unit
-//          },
-//          CTUh: {
-//            value: element.CTUh_c,
-//            unit: getImpactCriteria(ImpactCriterias.ComparativeToxicityUnitsForHumans).unit
-//          },
-//          CTUh_c: {
-//            value: element.CTUh_c,
-//            unit: getImpactCriteria(ImpactCriterias.ComparativeToxicityUnitsForHumansCarcinogenic)
-//              .unit
-//          },
-//          CTUh_nc: {
-//            value: element.CTUh_nc,
-//            unit: getImpactCriteria(
-//              ImpactCriterias.ComparativeToxicityUnitsForHumansNonCarcinogenic
-//            ).unit
-//          },
-//          EPF: {
-//            value: element.Epf,
-//            unit: getImpactCriteria(ImpactCriterias.EutrophicationPotentialFreshWater).unit
-//          },
-//          EPM: {
-//            value: element.Epm,
-//            unit: getImpactCriteria(ImpactCriterias.EutrophicationPotentialMarine).unit
-//          },
-//          EPT: {
-//            value: element.Ept,
-//            unit: getImpactCriteria(ImpactCriterias.EutrophicationPotentialTerrestrial).unit
-//          },
-//          GWP: {
-//            value: element.GWP,
-//            unit: getImpactCriteria(ImpactCriterias.GlobalWarmingPotential).unit
-//          },
-//          GWPb: {
-//            value: element.GWPb,
-//            unit: getImpactCriteria(ImpactCriterias.GlobalWarmingPotentialBiogenic).unit
-//          },
-//          GWPf: {
-//            value: element.GWPf,
-//            unit: getImpactCriteria(ImpactCriterias.GlobalWarmingPotentialFossil).unit
-//          },
-//          GWPlu: {
-//            value: element.GWPlu,
-//            unit: getImpactCriteria(ImpactCriterias.GlobalWarmingPotentialLandUse).unit
-//          },
-//          IR: {
-//            value: element.IR,
-//            unit: getImpactCriteria(ImpactCriterias.IonisingRadiation).unit
-//          },
-//          LU: { value: element.LU, unit: getImpactCriteria(ImpactCriterias.LandUse).unit },
-//          MIPS: {
-//            value: element.MIPS,
-//            unit: getImpactCriteria(ImpactCriterias.MaterialInputPerServiceUnit).unit
-//          },
-//          ODP: {
-//            value: element.ODP,
-//            unit: getImpactCriteria(ImpactCriterias.OzoneDepletionPotential).unit
-//          },
-//          PM: {
-//            value: element.PM,
-//            unit: getImpactCriteria(ImpactCriterias.ParticulateMatter).unit
-//          },
-//          POCP: {
-//            value: element.POCP,
-//            unit: getImpactCriteria(ImpactCriterias.PhotochemicalOzoneFormationPotential).unit
-//          },
-//          TPE: {
-//            value: element.TPE,
-//            unit: getImpactCriteria(ImpactCriterias.TotalPrimaryEnergy).unit
-//          },
-//          WU: { value: element.WU, unit: getImpactCriteria(ImpactCriterias.WaterUse).unit }
-//        }
-//      };
-//    });
-//  return inventoryElementsImpactFactors;
-//}
-
-//const concreteRawImpacts = MaterialImpacts.filter(
-//  (element) => element.id == "Concrete volume"
-//)[0];
-//
-//export const concreteImpact = {
-//
-//};
-
 export const inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[] =
   MaterialImpacts.map((element) => {
     const elementDetails = MaterialInventory.filter(
@@ -320,7 +207,7 @@ export const inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[] 
       source: element.source,
       quantity: elementDetails[0]?.quantity,
       lifespan: elementDetails[0]?.lifespan,
-      lifeCycleStep: element.lc_step,
+      lifeCycleStep: element.lifeCycleStep,
       impacts: {
         ADPe: {
           value: element.ADPe,
@@ -410,7 +297,7 @@ const inventoryElementWithImpactFactors = MaterialImpacts.filter(
   (elementWithImpacts) => elementWithImpacts.id === firstInventoryElement.id
 );
 export const inventoryElementsLifeCycleSteps = inventoryElementWithImpactFactors.map(
-  (elementWithImpactFactors) => elementWithImpactFactors.lc_step
+  (elementWithImpactFactors) => elementWithImpactFactors.lifeCycleStep
 );
 
 export const inventoryElementImpactFactors: DataCenterInventoryElementWithImpactFactors[] =
@@ -420,7 +307,7 @@ export const inventoryElementImpactFactors: DataCenterInventoryElementWithImpact
       category: element.category,
       mass: element.mass,
       source: element.source,
-      lifeCycleStep: element.lc_step,
+      lifeCycleStep: element.lifeCycleStep,
       impacts: {
         ADPe: {
           value: element.ADPe,
@@ -515,7 +402,7 @@ export const technicalEnvironmentElementsWithImpactFactors: DataCenterInventoryE
       category: element.category,
       mass: element.mass,
       source: element.source,
-      lifeCycleStep: element.lc_step,
+      lifeCycleStep: element.lifeCycleStep,
       impacts: {
         ADPe: {
           value: element.ADPe,
@@ -627,7 +514,7 @@ export const coolingInventoryElementsImpactsFactors: DataCenterInventoryElementW
       category: element.category,
       mass: element.mass,
       source: element.source,
-      lifeCycleStep: element.lc_step,
+      lifeCycleStep: element.lifeCycleStep,
       impacts: {
         ADPe: {
           value: element.ADPe,
@@ -746,7 +633,7 @@ export const functionalUnitOneResults: FunctionalUnitResultsRow[] = Fu1Results.m
   return row;
 });
 
-const lifeCycleRegex = /(?<=lc_step=)(.*)(?=})/;
+const lifeCycleRegex = /(?<=lifeCycleStep=)(.*)(?=})/;
 
 export function formatToLifeCycle(result_c: string) {
   let match = lifeCycleRegex.exec(result_c);
@@ -779,7 +666,7 @@ export const functionalUnitOneResultsWithLc: FunctionalUnitResultsRowWithLifeCyc
       unit: result.unit,
       source: result.a,
       scope: result.c,
-      life_cycle_step: formatToLifeCycle(result.c),
+      lifeCycleStep: formatToLifeCycle(result.c),
       category: formatCategory(result.c),
       impacts: {
         ADPe: { value: result.adpe, unit: result.adpe_unit },

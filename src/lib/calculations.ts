@@ -297,12 +297,12 @@ export function formatForBarPlot(categorizedImpacts: FunctionalUnitResultsRowWit
   lifeCycleSteps.forEach((step) => {
     impactCriteria.forEach((crit) => {
       let totalImpact = {
-        impact_criteria: crit,
-        lc_step: step,
+        impactCriterion: crit,
+        lifeCycleStep: step,
         share: 0
       };
       res.forEach((item) => {
-        if (item.life_cycle_step == step) {
+        if (item.lifeCycleStep == step) {
           totalImpact.share = totalImpact.share + item.impacts[crit].value;
         }
       });
@@ -310,7 +310,7 @@ export function formatForBarPlot(categorizedImpacts: FunctionalUnitResultsRowWit
     });
   });
 
-  const computedResults = { per_lifecycle: resultsPerLifecycle, steps: lifeCycleSteps };
+  const computedResults = { perLifeCycle: resultsPerLifecycle, steps: lifeCycleSteps };
   return computedResults;
 }
 
@@ -328,7 +328,7 @@ export function buildImpactsPerCategoriesAndLifecycle(
     lifecycleSteps.forEach((step) => {
       let totalImpact = genNullImpact();
       totalImpact.name = category + " (consumables & hardware)";
-      totalImpact.life_cycle_step = step;
+      totalImpact.lifeCycleStep = step;
       totalImpact.category = category;
       // Electricity impacts
       if (category == "energy" && step == "use") {
@@ -403,10 +403,10 @@ export function computeUnitOneResults(
     let newItem: FunctionalUnitResultsRowWithLifeCycle = genNullImpact();
     newItem.amount = item.amount;
     newItem.category = item.category;
-    newItem.life_cycle_step = item.life_cycle_step;
+    newItem.lifeCycleStep = item.lifeCycleStep;
     newItem.name = item.name;
     newItem.source = item.source;
-    if (item.life_cycle_step == "use") {
+    if (item.lifeCycleStep == "use") {
       impactCriteria.forEach((crit) => {
         newItem.impacts[crit].value = item.impacts[crit].value / puissCommDC;
       });

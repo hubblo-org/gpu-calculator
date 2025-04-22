@@ -113,7 +113,7 @@ export declare type FunctionalUnitResultsRow = {
 };
 
 export declare type FunctionalUnitResultsRowWithLifeCycle = FunctionalUnitResultsRow & {
-  life_cycle_step?: string;
+  lifeCycleStep?: string;
   category?: string;
   source?: string;
 };

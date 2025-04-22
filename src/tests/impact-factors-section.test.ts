@@ -27,19 +27,19 @@ const mainImpactCriteria = getAllImpactCriterias().filter(
 const inventoryCategories = Object.values(InventoryCategories);
 const filteredResults = functionalUnitOneResultsWithLc.filter(
   (result) =>
-    result.life_cycle_step != "full_life_cycle" &&
+    result.lifeCycleStep != "full_life_cycle" &&
     (result.source === "datacenter_building_fn_except_usage" ||
       result.source === "datacenter_building_fn_usage")
 );
 
-const lifeCycleSteps = filteredResults.map((result) => result.life_cycle_step);
+const lifeCycleSteps = filteredResults.map((result) => result.lifeCycleStep);
 
 describe("impact factors section table test suite", () => {
   beforeEach(() =>
     render(ImpactFactorsSection, {
       props: {
         source: "data-center",
-        results: { per_lifecycle: filteredResults, steps: lifeCycleSteps }
+        impactFactorsPercentages: { perLifeCycle: filteredResults, steps: lifeCycleSteps }
       }
     })
   );
@@ -89,7 +89,7 @@ describe("impact factors section graphs test suite", () => {
     render(ImpactFactorsSection, {
       props: {
         source: "data-center",
-        results: { per_lifecycle: filteredResults, steps: lifeCycleSteps }
+        impactFactorsPercentages: { perLifeCycle: filteredResults, steps: lifeCycleSteps }
       }
     })
   );
@@ -138,7 +138,7 @@ describe("absolute values for data center impact factors table component test su
     render(ImpactFactorsSection, {
       props: {
         source: "data-center",
-        results: { per_lifecycle: filteredResults, steps: lifeCycleSteps }
+        impactFactorsPercentages: { perLifeCycle: filteredResults, steps: lifeCycleSteps }
       }
     });
     const displayAbsoluteValues = screen.getByRole("button", { name: "Display absolute values" });
@@ -286,7 +286,7 @@ describe("absolute values table component for functional unit test suite", () =>
     render(ImpactFactorsSection, {
       props: {
         source: "functional-unit",
-        results: { per_lifecycle: filteredResults, steps: lifeCycleSteps }
+        impactFactorsPercentages: { perLifeCycle: filteredResults, steps: lifeCycleSteps }
       }
     });
     const displayAbsoluteValues = screen.getByRole("button", { name: "Display absolute values" });
