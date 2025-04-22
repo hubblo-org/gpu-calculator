@@ -37,8 +37,8 @@
 
 <ImpactFactorsSection
   source="functional-unit"
-  impactFactors={dc.firstUnitResults}
-  impactFactorsPercentages={dc.firstUnitPercentages}
+  impactFactors={dc.firstUnitResults!}
+  impactFactorsShares={dc.firstUnitShares!}
 />
 
 <style>

@@ -1,8 +1,10 @@
 <script lang="ts">
   import type {
     ImpactFactors,
+    ImpactFactorShare,
     Node,
     Leaf,
+    OrderedImpactFactors,
     FunctionalUnitResultsRowWithLifeCycle
   } from "$lib/types/pcr-cloud";
   import { renderStackedBarPlot } from "$lib/plots";
@@ -18,19 +20,10 @@
   import DropdownButton from "./DropdownButton.svelte";
   import { renderTreemap } from "$lib/treemap";
 
-  interface Results {
-    perLifeCycle: Result[];
-    steps: string[];
-  }
-  interface Result {
-    impactCriterion: string;
-    lifeCycleStep: string | undefined;
-    share: number;
-  }
   interface Props {
     source: string;
-    impactFactors?: FunctionalUnitResultsRowWithLifeCycle[];
-    impactFactorsPercentages?: Results;
+    impactFactors: FunctionalUnitResultsRowWithLifeCycle[];
+    impactFactorsShares: OrderedImpactFactors;
   }
 
   const absoluteValuesTexts = {
@@ -55,7 +48,7 @@
       impactCriterion.acronym === "WU"
   );
 
-  const { source, impactFactors, impactFactorsPercentages }: Props = $props();
+  const { source, impactFactors, impactFactorsShares }: Props = $props();
 
   let selectedCriterion = $state(selectableCriteria.main);
   let selectedImpactCriterion = $state(
@@ -66,19 +59,22 @@
 
   const impactsGroupedByImpactCriterion = $derived.by(() => {
     const groupedResults = allImpactCriteria.map((impactCriteria) => {
-      const group = impactFactorsPercentages?.perLifeCycle.filter(
+      const group = impactFactorsShares.perLifeCycle.filter(
         (result) => result.impactCriterion === impactCriteria.acronym
       );
       if (group) {
-        const sortedGroup = sortByLifeCycle<Result>(group, "lifeCycleStep" as keyof Result);
+        const sortedGroup = sortByLifeCycle<ImpactFactorShare>(
+          group,
+          "lifeCycleStep" as keyof ImpactFactorShare
+        );
         return sortedGroup;
       }
     });
     return groupedResults;
   });
 
-  const impactsWithMainCriteria: Result[] = $derived.by(() => {
-    const filtered = impactFactorsPercentages?.perLifeCycle.filter(
+  const impactsWithMainCriteria: ImpactFactorShare[] = $derived.by(() => {
+    const filtered = impactFactorsShares.perLifeCycle.filter(
       (result) =>
         result.impactCriterion === "GWP" ||
         result.impactCriterion === "TPE" ||
@@ -87,11 +83,11 @@
     return filtered;
   });
 
-  const displayedImpacts: Result[] | Results = $derived.by(() => {
+  const displayedImpacts = $derived.by(() => {
     if (selectedCriterion === selectableCriteria.main) {
-      return impactsWithMainCriteria!;
+      return impactsWithMainCriteria;
     } else if (selectedCriterion === selectableCriteria.all) {
-      return impactFactorsPercentages?.perLifeCycle;
+      return impactFactorsShares.perLifeCycle;
     }
   });
 
@@ -120,9 +116,7 @@
         });
         return {
           name: lifeCycle,
-          children: leaves?.filter(
-            (impactFactors) => impactFactors.name != "all_categories"
-          )
+          children: leaves?.filter((impactFactors) => impactFactors.name != "all_categories")
         };
       })
     };
@@ -171,14 +165,14 @@
   const sectionTexts = $derived(setSectionTexts());
 
   $effect(() => {
-    if (impactFactorsPercentages) {
+    if (impactFactorsShares) {
       if (selectedGraph === graphs.barPlot) {
         renderStackedBarPlot(
           source,
           1000,
           600,
-          displayedImpacts,
-          impactFactorsPercentages?.steps,
+          displayedImpacts!,
+          impactFactorsShares?.steps,
           "impactCriterion",
           "share",
           "lifeCycleStep"
@@ -253,7 +247,7 @@
             {#each displayedCriteria! as impactCriterion}<tr
                 ><th scope="row">{impactCriterion.acronym}</th>
                 {#each impactsGroupedByImpactCriterion as impacts}{#each impacts as impact}{#if impact.impactCriterion === impactCriterion.acronym}<td
-                        >{(impact as Result).share}</td
+                        >{(impact as ImpactFactorShare).share}</td
                       >{/if}{/each}{/each}
               </tr>{/each}
           </tbody>

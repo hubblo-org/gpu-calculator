@@ -66,6 +66,17 @@ export declare type ImpactFactors = {
 };
 export declare type IF = keyof ImpactFactors;
 
+export declare type ImpactFactorShare = {
+  impactCriterion: string;
+  lifeCycleStep: string | null;
+  share: number;
+};
+
+export declare type OrderedImpactFactors = {
+  perLifeCycle: ImpactFactorShare[];
+  steps: string[];
+};
+
 export declare type DataCenterBuilding = {
   lifespan: DataCenterCharacteristic;
   totalSurface: DataCenterCharacteristic;
@@ -113,9 +124,9 @@ export declare type FunctionalUnitResultsRow = {
 };
 
 export declare type FunctionalUnitResultsRowWithLifeCycle = FunctionalUnitResultsRow & {
-  lifeCycleStep?: string;
-  category?: string;
-  source?: string;
+  lifeCycleStep: string;
+  category: string;
+  source: string;
 };
 
 declare module "pcr-cloud";

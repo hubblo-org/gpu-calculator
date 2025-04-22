@@ -1,9 +1,10 @@
 import { genNullImpact } from "../mocks/dc-data";
 import type { DataCenter } from "./data-center.svelte";
-import type { ImpactFactors } from "./types/pcr-cloud";
+import type { IF, ImpactFactors, ImpactFactorShare } from "./types/pcr-cloud";
 import type {
+  DataCenterInventoryElementWithImpactFactors,
   FunctionalUnitResultsRowWithLifeCycle,
-  DataCenterInventoryElementWithImpactFactors
+  OrderedImpactFactors
 } from "./types/pcr-cloud";
 
 /**
@@ -286,11 +287,13 @@ export function addImpacts(
   return res;
 }
 
-export function formatForBarPlot(categorizedImpacts: FunctionalUnitResultsRowWithLifeCycle[]) {
+export function formatForBarPlot(
+  categorizedImpacts: FunctionalUnitResultsRowWithLifeCycle[]
+): OrderedImpactFactors {
   let res = categorizedImpacts;
 
   const lifeCycleSteps = ["manufacturing", "transport", "use", "end-of-life"];
-  let resultsPerLifecycle = [];
+  let resultsPerLifecycle: ImpactFactorShare[] = [];
   let sample = genNullImpact();
   const impactCriteria = Object.keys(sample.impacts);
 
@@ -303,14 +306,17 @@ export function formatForBarPlot(categorizedImpacts: FunctionalUnitResultsRowWit
       };
       res.forEach((item) => {
         if (item.lifeCycleStep == step) {
-          totalImpact.share = totalImpact.share + item.impacts[crit].value;
+          totalImpact.share = totalImpact.share + item.impacts[(crit as IF)].value;
         }
       });
       resultsPerLifecycle.push(totalImpact);
     });
   });
 
-  const computedResults = { perLifeCycle: resultsPerLifecycle, steps: lifeCycleSteps };
+  const computedResults: OrderedImpactFactors = {
+    perLifeCycle: resultsPerLifecycle,
+    steps: lifeCycleSteps
+  };
   return computedResults;
 }
 
@@ -408,12 +414,12 @@ export function computeUnitOneResults(
     newItem.source = item.source;
     if (item.lifeCycleStep == "use") {
       impactCriteria.forEach((crit) => {
-        newItem.impacts[crit].value = item.impacts[crit].value / puissCommDC;
+        newItem.impacts[(crit as IF)].value = item.impacts[(crit as IF)].value / puissCommDC;
       });
     } else {
       impactCriteria.forEach((crit) => {
-        newItem.impacts[crit].value =
-          (item.impacts[crit].value * 1) / (datacenterSpecs.lifespan * puissCommDC);
+        newItem.impacts[(crit as IF)].value =
+          (item.impacts[(crit as IF)].value * 1) / (datacenterSpecs.lifespan! * puissCommDC);
       });
     }
     res.push(newItem);

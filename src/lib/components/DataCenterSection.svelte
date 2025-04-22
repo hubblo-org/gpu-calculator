@@ -301,8 +301,8 @@
 
 <ImpactFactorsSection
   source="data-center"
-  impactFactors={dc.impactFactors}
-  impactFactorsPercentages={dc.impactFactorsPercentages}
+  impactFactors={dc.impactFactors!}
+  impactFactorsShares={dc.impactFactorsShares!}
 />
 
 <style>

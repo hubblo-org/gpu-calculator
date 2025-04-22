@@ -1,14 +1,14 @@
 <script lang="ts">
+  import { DataCenter } from "$lib/data-center.svelte";
   import FunctionalUnitSection from "$lib/components/FunctionalUnitSection.svelte";
   import DataCenterSection from "$lib/components/DataCenterSection.svelte";
   import Header from "$lib/components/Header.svelte";
-  import { dataCenterCharacteristics } from "../mocks/dc-data";
   import TableOfContents from "$lib/components/TableOfContents.svelte";
   import PcrSection from "$lib/components/PCRSection.svelte";
   import Footer from "$lib/components/Footer.svelte";
   import Summary from "$lib/components/Summary.svelte";
+  import { dataCenterCharacteristics } from "../mocks/dc-data";
   import { inventoryWithImpact } from "../mocks/dc-data";
-  import { DataCenter } from "$lib/data-center.svelte";
 
   const dataCenter = new DataCenter(dataCenterCharacteristics, inventoryWithImpact);
 </script>

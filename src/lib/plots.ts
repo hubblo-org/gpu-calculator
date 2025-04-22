@@ -1,6 +1,6 @@
 import * as Plot from "@observablehq/plot";
 import * as d3 from "d3";
-import type { ImpactFactors } from "./types/pcr-cloud";
+import type { ImpactFactors, ImpactFactorShare, OrderedImpactFactors } from "./types/pcr-cloud";
 
 interface ImpactFactor {
   impactCriterion: string;
@@ -12,11 +12,6 @@ interface ImpactFactorWithScope {
   amount: number;
 }
 
-interface ImpactFactorWithLifeCycle {
-  impactCriterion: string;
-  lifeCycleStep: string;
-  share: number;
-}
 
 interface Axes {
   x: string;
@@ -91,7 +86,7 @@ export function renderStackedBarPlot(
   source: string,
   width: number,
   height: number,
-  impactFactors: ImpactFactorWithLifeCycle[],
+  impactFactors: ImpactFactorShare[] | OrderedImpactFactors,
   domains: string[],
   yLabel: string,
   xLabel: string,

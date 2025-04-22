@@ -6,15 +6,16 @@ import {
 import type {
   DataCenterBuilding,
   DataCenterInventoryElementWithImpactFactors,
-  FunctionalUnitResultsRowWithLifeCycle
+  FunctionalUnitResultsRowWithLifeCycle,
+  OrderedImpactFactors
 } from "./types/pcr-cloud";
 
 export class DataCenter {
   dataCenterInventory: DataCenterInventoryElementWithImpactFactors[];
   impactFactors = $state<FunctionalUnitResultsRowWithLifeCycle[]>();
-  impactFactorsPercentages = $state<any>();
+  impactFactorsShares = $state<OrderedImpactFactors>();
   firstUnitResults = $state<FunctionalUnitResultsRowWithLifeCycle[]>();
-  firstUnitPercentages = $state<any>();
+  firstUnitShares = $state<OrderedImpactFactors>();
   yearlyTotalEnergy = $state<number>();
   steelMass = $state<number>();
   concreteVolume = $state<number>();
@@ -50,15 +51,15 @@ export class DataCenter {
     this.freightLifts = dataCenter.freightLifts.value as number;
     this.partitionSurface = dataCenter.partitionSurface.value as number;
     this.impactFactors = buildImpactsPerCategoriesAndLifecycle(this, this.dataCenterInventory);
-    this.impactFactorsPercentages = formatForBarPlot(this.impactFactors);
+    this.impactFactorsShares = formatForBarPlot(this.impactFactors);
     this.firstUnitResults = computeUnitOneResults(this, this.impactFactors);
-    this.firstUnitPercentages = formatForBarPlot(this.firstUnitResults);
+    this.firstUnitShares = formatForBarPlot(this.firstUnitResults);
   }
 
   update() {
     this.impactFactors = buildImpactsPerCategoriesAndLifecycle(this, this.dataCenterInventory);
-    this.impactFactorsPercentages = formatForBarPlot(this.impactFactors);
+    this.impactFactorsShares = formatForBarPlot(this.impactFactors);
     this.firstUnitResults = computeUnitOneResults(this, this.impactFactors);
-    this.firstUnitPercentages = formatForBarPlot(this.firstUnitResults);
+    this.firstUnitShares = formatForBarPlot(this.firstUnitResults);
   }
 }
