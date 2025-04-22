@@ -37,8 +37,8 @@
 
 <ImpactFactorsSection
   source="functional-unit"
-  results={dc.firstUnitPercentages}
-  resultsTreemap={dc.firstUnitResults}
+  impactFactors={dc.firstUnitResults}
+  impactFactorsPercentages={dc.firstUnitPercentages}
 />
 
 <style>

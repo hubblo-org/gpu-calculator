@@ -44,7 +44,6 @@
       }
     }
   }
-
 </script>
 
 <section aria-labelledby="data-center-characteristics">
@@ -303,8 +302,8 @@
 
 <ImpactFactorsSection
   source="data-center"
-  results={dc.impactFactorsPercentages}
-  resultsTreemap={dc.impactFactors}
+  impactFactors={dc.impactFactors}
+  impactFactorsPercentages={dc.impactFactorsPercentages}
 />
 
 <style>
