@@ -1,4 +1,13 @@
-import type { DataCenterInventoryElement } from "./types/pcr-cloud";
+import type {
+  DataCenterInventoryElement,
+  FunctionalUnitResultsRowWithLifeCycle,
+  IF,
+  ImpactCriteria,
+  ImpactFactorShare,
+  Node,
+  Leaf,
+  OrderedImpactFactors
+} from "./types/pcr-cloud";
 import { InventoryCategories, LifeCycleSteps } from "./types/enums";
 
 export function removeRow(inventory: DataCenterInventoryElement[], inventoryName: string) {
@@ -96,4 +105,47 @@ export function sortByLifeCycle<Type>(array: Type[], key: keyof Type): Type[] {
     );
   });
   return sortedArray;
+}
+
+export function groupByImpactCriterion(
+  impactCriteria: ImpactCriteria[],
+  shares: OrderedImpactFactors
+): ImpactFactorShare[][] {
+  const groupedResults = impactCriteria.map((impactCriterion) => {
+    const group = shares.perLifeCycle.filter(
+      (result) => result.impactCriterion === impactCriterion.acronym
+    );
+      const sortedGroup = sortByLifeCycle<ImpactFactorShare>(
+        group,
+        "lifeCycleStep" as keyof ImpactFactorShare
+      );
+      return sortedGroup;
+  });
+  return groupedResults;
+}
+
+export function formatForTreemap(
+  impactCriterion: IF,
+  impactFactors: FunctionalUnitResultsRowWithLifeCycle[]
+): Node {
+  const lifeCycleSteps = Object.values(LifeCycleSteps);
+  return {
+    name: "dc_data",
+    children: lifeCycleSteps.map((lifeCycle) => {
+      const impactsByLifeCycle = impactFactors.filter(
+        (result) => result.lifeCycleStep === lifeCycle.toLowerCase()
+      );
+      const leaves = impactsByLifeCycle.map((result) => {
+        const leaf: Leaf = {
+          name: result.name,
+          value: result.impacts[impactCriterion].value
+        };
+        return leaf;
+      });
+      return {
+        name: lifeCycle,
+        children: leaves?.filter((impactFactors) => impactFactors.name != "all_categories")
+      };
+    })
+  };
 }

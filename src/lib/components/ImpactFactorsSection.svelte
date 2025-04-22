@@ -1,11 +1,8 @@
 <script lang="ts">
   import type {
-    ImpactFactors,
     ImpactFactorShare,
-    Node,
-    Leaf,
     OrderedImpactFactors,
-    FunctionalUnitResultsRowWithLifeCycle
+    FunctionalUnitResultsRowWithLifeCycle,
   } from "$lib/types/pcr-cloud";
   import { renderStackedBarPlot } from "$lib/plots";
   import {
@@ -15,7 +12,7 @@
     LifeCycleSteps,
     InventoryCategories
   } from "$lib/types/enums";
-  import { sortByLifeCycle } from "$lib/inventory";
+  import { groupByImpactCriterion, formatForTreemap } from "$lib/inventory";
   import { downloadToCSV } from "$lib/utils";
   import DropdownButton from "./DropdownButton.svelte";
   import { renderTreemap } from "$lib/treemap";
@@ -57,21 +54,15 @@
   let selectedGraph = $state(graphs.barPlot);
   let absoluteValuesButtonText = $state(absoluteValuesTexts.display);
 
-  const impactsGroupedByImpactCriterion = $derived.by(() => {
-    const groupedResults = allImpactCriteria.map((impactCriteria) => {
-      const group = impactFactorsShares.perLifeCycle.filter(
-        (result) => result.impactCriterion === impactCriteria.acronym
-      );
-      if (group) {
-        const sortedGroup = sortByLifeCycle<ImpactFactorShare>(
-          group,
-          "lifeCycleStep" as keyof ImpactFactorShare
-        );
-        return sortedGroup;
-      }
-    });
-    return groupedResults;
-  });
+  const impactsGroupedByImpactCriterion = $derived(
+    groupByImpactCriterion(allImpactCriteria, impactFactorsShares)
+  );
+
+  $inspect(impactsGroupedByImpactCriterion)
+
+  const impactsForTreemap = $derived(
+    formatForTreemap(selectedImpactCriterion, impactFactors)
+  );
 
   const impactsWithMainCriteria: ImpactFactorShare[] = $derived.by(() => {
     const filtered = impactFactorsShares.perLifeCycle.filter(
@@ -99,28 +90,6 @@
     }
   });
 
-  const impactsForTreemap: Node = $derived.by(() => {
-    const selectedCriterionAcronym = selectedImpactCriterion as keyof ImpactFactors;
-    return {
-      name: "dc_data",
-      children: lifeCycleSteps.map((lifeCycle) => {
-        const impactsByLifeCycle = impactFactors?.filter(
-          (result) => result.lifeCycleStep === lifeCycle.toLowerCase()
-        );
-        const leaves = impactsByLifeCycle?.map((result) => {
-          const leaf: Leaf = {
-            name: result.name!,
-            value: result.impacts[selectedCriterionAcronym].value
-          };
-          return leaf;
-        });
-        return {
-          name: lifeCycle,
-          children: leaves?.filter((impactFactors) => impactFactors.name != "all_categories")
-        };
-      })
-    };
-  });
 
   function setSectionTexts() {
     if (source === "data-center") {

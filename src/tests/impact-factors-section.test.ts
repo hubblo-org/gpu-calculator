@@ -39,7 +39,7 @@ describe("impact factors section table test suite", () => {
     render(ImpactFactorsSection, {
       props: {
         source: "data-center",
-        impactFactorsPercentages: { perLifeCycle: filteredResults, steps: lifeCycleSteps }
+        impactFactorsShares: { perLifeCycle: filteredResults, steps: lifeCycleSteps }
       }
     })
   );
@@ -89,7 +89,7 @@ describe("impact factors section graphs test suite", () => {
     render(ImpactFactorsSection, {
       props: {
         source: "data-center",
-        impactFactorsPercentages: { perLifeCycle: filteredResults, steps: lifeCycleSteps }
+        impactFactorsShares: { perLifeCycle: filteredResults, steps: lifeCycleSteps }
       }
     })
   );
@@ -138,7 +138,7 @@ describe("absolute values for data center impact factors table component test su
     render(ImpactFactorsSection, {
       props: {
         source: "data-center",
-        impactFactorsPercentages: { perLifeCycle: filteredResults, steps: lifeCycleSteps }
+        impactFactorsShares: { perLifeCycle: filteredResults, steps: lifeCycleSteps }
       }
     });
     const displayAbsoluteValues = screen.getByRole("button", { name: "Display absolute values" });
@@ -286,7 +286,7 @@ describe("absolute values table component for functional unit test suite", () =>
     render(ImpactFactorsSection, {
       props: {
         source: "functional-unit",
-        impactFactorsPercentages: { perLifeCycle: filteredResults, steps: lifeCycleSteps }
+        impactFactorsShares: { perLifeCycle: filteredResults, steps: lifeCycleSteps }
       }
     });
     const displayAbsoluteValues = screen.getByRole("button", { name: "Display absolute values" });
