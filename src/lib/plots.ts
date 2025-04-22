@@ -63,13 +63,13 @@ export function renderHorizontalBarPlot(
         sort: { y: "x", order: "descending" }
       })
     ];
-    const resultsBarPlot = Plot.plot({
+    const barPlot = Plot.plot({
       width: 1600,
       height: 800,
       y: { grid: true },
       marks: lollipop ? lollipopMarks : barMarks
     });
-    div.append(resultsBarPlot);
+    div.append(barPlot);
   }
 }
 
@@ -100,7 +100,7 @@ export function renderStackedBarPlot(
   let div = document.querySelector(`#impact-factors-plot-${source}`);
   div?.firstChild?.remove();
   if (div) {
-    const resultsBarPlot = Plot.plot({
+    const barPlot = Plot.plot({
       width: width,
       height: height,
       className: "plot",
@@ -120,7 +120,7 @@ export function renderStackedBarPlot(
       ]
     });
 
-    div.append(resultsBarPlot);
+    div.append(barPlot);
 
     addLogo(`#impact-factors-plot-${source}`);
   }
