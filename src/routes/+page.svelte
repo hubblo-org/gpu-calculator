@@ -1,48 +1,53 @@
 <script lang="ts">
-  import InventoryForm from "$lib/components/InventoryForm.svelte";
-  import BuildingForm from "$lib/components/BuildingForm.svelte";
-  import type { DataCenterInventoryElement } from "$lib/types/pcr-cloud";
-  import { addInventoryElement, removeRow } from "$lib/inventory";
-  import InventoryTable from "$lib/components/InventoryTable.svelte";
-  let inventory: DataCenterInventoryElement[] = $state([]);
+  import FunctionalUnitSection from "$lib/components/FunctionalUnitSection.svelte";
+  import DataCenterSection from "$lib/components/DataCenterSection.svelte";
+  import Header from "$lib/components/Header.svelte";
+  import { dataCenterCharacteristics } from "../mocks/dc-data";
+  import TableOfContents from "$lib/components/TableOfContents.svelte";
+  import PcrSection from "$lib/components/PCRSection.svelte";
+  import Footer from "$lib/components/Footer.svelte";
+  import Summary from "$lib/components/Summary.svelte";
+  import { inventoryWithImpact } from "../mocks/dc-data";
+  import { DataCenter } from "$lib/data-center.svelte";
 
+  const dataCenter = new DataCenter(dataCenterCharacteristics, inventoryWithImpact);
 </script>
 
-{#snippet removeRowButton(inventoryElementName: string)}
-  <button
-    onclick={() => removeRow(inventory, inventoryElementName)}
-    aria-label="Remove inventory element">x</button
-  >
-{/snippet}
-
-<h1>PCR for Cloud provider services</h1>
-<p>
-  Fill these forms to calculate the environmental costs of the cloud service according to the
-  selected functional unit
-</p>
-
-<div id="calculator">
-  <div id="inventory-form">
-    <InventoryForm />
-    <button onclick={() => addInventoryElement(inventory)}>Add inventory element</button>
+<Header />
+<main>
+  <div class="wrapper" id="toc-wrapper">
+    <TableOfContents />
+    <PcrSection />
   </div>
-  <div id="building-form">
-    <BuildingForm />
-  </div>
-  <div id="inventory-table">
-    <InventoryTable inventoryElements={inventory} {removeRowButton} />
-  </div>
-</div>
+  <!-- Total impacts of DC with Electricity (example) -->
+  <!-- Total absolute values header -->
+  <!-- Relative breakdown barplot per lifecycle -->
+  <!-- Relative breakdown barplot per category -->
+  <!-- Relative breakdown treemap per category and lifecycle -->
+  <DataCenterSection dc={dataCenter} />
+  <Summary />
+  <FunctionalUnitSection dc={dataCenter} />
+  <!-- Impats of FU1 without Electricity -->
+  <!-- Total absolute values header -->
+  <!-- Relative breakdown barplot per lifecycle -->
+  <!-- Relative breakdown barplot per category -->
+  <!-- Relative breakdown treemap per category and lifecycle -->
+</main>
+<Footer />
 
 <style>
-  #calculator {
-    display: flex;
+  @media (max-width: 480px) {
+    #toc-wrapper {
+      padding: 0px;
+    }
   }
-  #calculator > * {
-    margin-right: 10px;
-  }
-  #inventory-form {
-    border: 2px black solid;
-    margin-bottom: 20px;
+  @media (min-width: 480px) {
+    #toc-wrapper {
+      padding-top: 0px;
+      padding-bottom: 0px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+    }
   }
 </style>
