@@ -1,7 +1,10 @@
-import FunctionalUnit from "$lib/components/FunctionalUnit.svelte";
-import { FunctionalUnits, getFunctionalUnitParameters } from "$lib/types/enums";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { dataCenterCharacteristics } from "../mocks/dc-data";
+import { inventoryWithImpact } from "../mocks/dc-data";
+import { DataCenter } from "$lib/data-center.svelte";
+import FunctionalUnitSection from "$lib/components/FunctionalUnitSection.svelte";
+import { FunctionalUnits, getFunctionalUnitParameters } from "$lib/types/enums";
 
 const serverRackDescription = "A server rack";
 const firstFunctionalUnit = "Functional Unit 1";
@@ -15,9 +18,11 @@ const firstFunctionalUnitParameters = [
   firstFunctionalUnitStudyDuration
 ];
 
+const dataCenter = new DataCenter(dataCenterCharacteristics, inventoryWithImpact);
+
 describe("functional unit component static elements test suite", () => {
   beforeEach(() => {
-    render(FunctionalUnit);
+    render(FunctionalUnitSection, { props: { dc: dataCenter } });
   });
   afterEach(() => {
     cleanup();

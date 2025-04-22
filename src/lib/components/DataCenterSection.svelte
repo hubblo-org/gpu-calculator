@@ -2,36 +2,22 @@
   import { fade } from "svelte/transition";
   import { Countries, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
   import { DataCenter } from "$lib/data-center.svelte";
-  import type { DataCenterBuilding } from "$lib/types/pcr-cloud";
+
+  import { dataCenterCharacteristics as dataCenter } from "../../mocks/dc-data";
   import DropdownButton from "./DropdownButton.svelte";
   import ToggleTip from "./ToggleTip.svelte";
   import ImpactFactorsSection from "./ImpactFactorsSection.svelte";
-  import { inventoryWithImpact } from "../../mocks/dc-data";
-  import {
-    buildImpactsPerCategoriesAndLifecycle,
-    formatForBarPlot,
-    computeUnitOneResults
-  } from "$lib/calculations";
-  import Summary from "./Summary.svelte";
-  import FunctionalUnit from "./FunctionalUnit.svelte";
 
   interface Props {
-    dataCenter: DataCenterBuilding;
+    dc: InstanceType<typeof DataCenter>;
   }
-  const { dataCenter }: Props = $props();
-  const dc = new DataCenter(dataCenter);
+  const { dc }: Props = $props();
 
   // Visual parameters
   let secondaryCharacteristicsAreVisible = $state(false);
   let secondaryCharacteristicsButtonLabel = $state(
     "Display the data center secondary characteristics"
   );
-
-  // Initiate state variables
-  let results: null | any = $state();
-  let resultsForTreemap: null | any = $state();
-  let uf1Results: null | any = $state();
-  let uf1BarPlotResults: null | any = $state();
 
   const electricalTechnicalResilienceTiers = Object.values(ElectricalTechnicalResilienceTiers);
   const countriesNames = Object.values(Countries);
@@ -59,14 +45,6 @@
     }
   }
 
-  function updateResults() {
-    resultsForTreemap = buildImpactsPerCategoriesAndLifecycle(inventoryWithImpact, dc);
-    results = formatForBarPlot(resultsForTreemap);
-    uf1Results = computeUnitOneResults(dc, resultsForTreemap);
-    uf1BarPlotResults = formatForBarPlot(uf1Results);
-  }
-
-  updateResults();
 </script>
 
 <section aria-labelledby="data-center-characteristics">
@@ -317,17 +295,17 @@
         visibilityFunction={handleSecondaryCharacteristicsVisibility}
       />
     {/if}
-    <button id="recalculate" class="btn btn-primary btn-sm" onclick={() => updateResults()}
+    <button id="recalculate" class="btn btn-primary btn-sm" onclick={() => dc.update()}
       >Recalculate</button
     >
   </div>
 </section>
 
-<ImpactFactorsSection source="data-center" {results} resultsTreemap={resultsForTreemap} />
-
-<Summary />
-
-<FunctionalUnit {uf1Results} {uf1BarPlotResults} />
+<ImpactFactorsSection
+  source="data-center"
+  results={dc.impactFactorsPercentages}
+  resultsTreemap={dc.impactFactors}
+/>
 
 <style>
   section {

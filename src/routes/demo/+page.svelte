@@ -1,14 +1,16 @@
 <script lang="ts">
-  import FunctionalUnit from "$lib/components/FunctionalUnit.svelte";
-  import DataCenter from "$lib/components/DataCenter.svelte";
+  import FunctionalUnitSection from "$lib/components/FunctionalUnitSection.svelte";
+  import DataCenterSection from "$lib/components/DataCenterSection.svelte";
   import Header from "$lib/components/Header.svelte";
   import { dataCenterCharacteristics } from "../../mocks/dc-data";
   import TableOfContents from "$lib/components/TableOfContents.svelte";
   import PcrSection from "$lib/components/PCRSection.svelte";
   import Footer from "$lib/components/Footer.svelte";
   import Summary from "$lib/components/Summary.svelte";
-  console.log("page.svelte - dataCenterCharacteristics: ");
-  console.log(dataCenterCharacteristics);
+  import { inventoryWithImpact } from "../../mocks/dc-data";
+  import { DataCenter } from "$lib/data-center.svelte";
+
+  const dataCenter = new DataCenter(dataCenterCharacteristics, inventoryWithImpact);
 </script>
 
 <Header />
@@ -22,7 +24,9 @@
   <!-- Relative breakdown barplot per lifecycle -->
   <!-- Relative breakdown barplot per category -->
   <!-- Relative breakdown treemap per category and lifecycle -->
-  <DataCenter dataCenter={dataCenterCharacteristics} />
+  <DataCenterSection dc={dataCenter} />
+  <Summary />
+  <FunctionalUnitSection dc={dataCenter} />
   <!-- Impats of FU1 without Electricity -->
   <!-- Total absolute values header -->
   <!-- Relative breakdown barplot per lifecycle -->

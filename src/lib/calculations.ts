@@ -1,8 +1,6 @@
 import { genNullImpact } from "../mocks/dc-data";
 import type { DataCenter } from "./data-center.svelte";
-import type {
-  ImpactFactors,
-} from "./types/pcr-cloud";
+import type { ImpactFactors } from "./types/pcr-cloud";
 import type {
   FunctionalUnitResultsRowWithLifeCycle,
   DataCenterInventoryElementWithImpactFactors
@@ -317,8 +315,8 @@ export function formatForBarPlot(categorizedImpacts: FunctionalUnitResultsRowWit
 }
 
 export function buildImpactsPerCategoriesAndLifecycle(
-  inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[],
-  datacenterSpecs: DataCenter
+  datacenterSpecs: DataCenter,
+  inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[]
 ): FunctionalUnitResultsRowWithLifeCycle[] {
   let res: FunctionalUnitResultsRowWithLifeCycle[] = [];
   let refYears = 1;

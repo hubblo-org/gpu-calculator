@@ -1,27 +1,16 @@
 <script lang="ts">
   import ImpactFactorsSection from "./ImpactFactorsSection.svelte";
   import { getFunctionalUnitParameters, FunctionalUnits } from "$lib/types/enums";
-  import type { FunctionalUnitResultsRowWithLifeCycle } from "$lib/types/pcr-cloud";
+  import { DataCenter } from "$lib/data-center.svelte";
 
   interface Props {
-    uf1Results: FunctionalUnitResultsRowWithLifeCycle[];
-    uf1BarPlotResults: any;
+    dc: InstanceType<typeof DataCenter>;
   }
-  const { uf1Results, uf1BarPlotResults }: Props = $props();
+  const { dc }: Props = $props();
 
-  let ufResults: null | any = $state();
-  let results: null | any = $state();
   let selectedFunctionalUnit = $state(FunctionalUnits.First);
 
   const parameters = $derived(getFunctionalUnitParameters(selectedFunctionalUnit));
-
-  function updateResults() {
-    ufResults = uf1Results;
-    results = uf1BarPlotResults;
-  }
-  $effect(() => {
-    updateResults();
-  });
 </script>
 
 <div>
@@ -29,10 +18,11 @@
     <header>
       <img src="/media/server-rack.svg" id="server-rack" alt="A server rack" />
       <div id="functional-unit-description">
-        <h2 id="functional-unit-parameters">
-          {parameters.title}
-        </h2>
-        <p>{parameters.service}.</p>
+        <h2 id="functional-unit-parameters">Functional unit parameters</h2>
+        <p>
+          These are the parameters of the selected functional unit, from which the functional unit
+          results are calculated.
+        </p>
       </div>
       <a href="#table-of-contents" aria-label="Scroll back to table of contents">▲</a>
     </header>
@@ -45,7 +35,11 @@
   </section>
 </div>
 
-<ImpactFactorsSection source="functional-unit" {results} resultsTreemap={ufResults} />
+<ImpactFactorsSection
+  source="functional-unit"
+  results={dc.firstUnitPercentages}
+  resultsTreemap={dc.firstUnitResults}
+/>
 
 <style>
   #server-rack {

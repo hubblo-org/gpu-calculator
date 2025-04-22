@@ -57,7 +57,7 @@
 
   const { source, results, resultsTreemap }: Props = $props();
 
-  let selectedCriteria = $state(selectableCriteria.main);
+  let selectedCriterion = $state(selectableCriteria.main);
   let selectedImpactCriterion = $state(
     getImpactCriteria(ImpactCriterias.GlobalWarmingPotential).acronym
   );
@@ -88,17 +88,17 @@
   });
 
   const displayedResults: Result[] | Results = $derived.by(() => {
-    if (selectedCriteria === selectableCriteria.main) {
+    if (selectedCriterion === selectableCriteria.main) {
       return resultsWithMainCriteria!;
-    } else if (selectedCriteria === selectableCriteria.all) {
+    } else if (selectedCriterion === selectableCriteria.all) {
       return results?.per_lifecycle;
     }
   });
 
   const displayedCriteria = $derived.by(() => {
-    if (selectedCriteria === selectableCriteria.main) {
+    if (selectedCriterion === selectableCriteria.main) {
       return mainImpactCriteria!;
-    } else if (selectedCriteria === selectableCriteria.all) {
+    } else if (selectedCriterion === selectableCriteria.all) {
       return allImpactCriteria;
     }
   });
@@ -207,7 +207,7 @@
       >
     {/if}
     {#if selectedGraph === graphs.barPlot}
-      <select bind:value={selectedCriteria} aria-label="Select displayed criteria"
+      <select bind:value={selectedCriterion} aria-label="Select displayed criterion"
         ><option>{selectableCriteria.main}</option><option>{selectableCriteria.all}</option></select
       >
     {/if}

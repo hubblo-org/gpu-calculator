@@ -1,11 +1,14 @@
-import DataCenter from "$lib/components/DataCenter.svelte";
-import type { DataCenterCharacteristic } from "$lib/types/pcr-cloud";
 import { dataCenterCharacteristics } from "../mocks/dc-data";
+import { inventoryWithImpact } from "../mocks/dc-data";
+import { DataCenter } from "$lib/data-center.svelte";
+import DataCenterSection from "$lib/components/DataCenterSection.svelte";
+import type { DataCenterCharacteristic } from "$lib/types/pcr-cloud";
 import { CoolingSystems, Countries, ElectricalTechnicalResilienceTiers } from "$lib/types/enums";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import userEvent from "@testing-library/user-event";
 
+const dataCenter = new DataCenter(dataCenterCharacteristics, inventoryWithImpact);
 const dataCenterDescription = "A data center";
 const displayDataCenterCharacteristicsButtonDescription =
   "Display the data center secondary characteristics";
@@ -14,11 +17,11 @@ const hideDataCenterCharacteristicsButtonDescription =
 
 const dataCenterMainCharacteristicsLabels = [
   "Building total surface",
-  "Total energy for one year",
+  "Total IT energy for one year",
   "Power Usage Effectiveness",
   "Water Usage Effectiveness",
   "Concrete volume",
-  "Electrical Technical Resilience",
+  "Building lifespan",
   "Location",
   "Steel mass"
 ];
@@ -26,7 +29,9 @@ const dataCenterMainCharacteristicsLabels = [
 function filterByLabel(value: DataCenterCharacteristic) {
   if (
     value.label === "Electrical Technical Resilience" ||
+    value.label === "Maximum usable electrical power" ||
     value.label === "Location" ||
+    value.label === "Load factor" ||
     value.label === "Cooling system type" ||
     value.label === "Energy Reuse Factor" ||
     value.label === "Renewable Energy Factor" ||
@@ -39,7 +44,7 @@ function filterByLabel(value: DataCenterCharacteristic) {
 }
 
 describe("data center component static elements test suite", () => {
-  beforeEach(() => render(DataCenter, { props: { dataCenter: dataCenterCharacteristics } }));
+  beforeEach(() => render(DataCenterSection, { props: { dc: dataCenter } }));
   afterEach(() => cleanup());
 
   it("should have a section for displaying the data center characteristics", () => {
@@ -85,12 +90,13 @@ describe("data center component static elements test suite", () => {
 
     Object.values(dataCenterCharacteristics)
       .filter(filterByLabel)
-      .forEach((characteristic) => {
+      .forEach(async (characteristic) => {
         const characteristicInput = within(dataCenterCharacteristicsSection).getByLabelText(
           characteristic.label,
           { exact: false }
         );
-        expect(characteristicInput).toHaveAttribute("placeholder", `${characteristic.value}`);
+        const content = await within(characteristicInput).findByText(characteristic.value);
+        expect(content).toBeVisible();
       });
   });
 
@@ -137,14 +143,20 @@ describe("data center component static elements test suite", () => {
     const dataCenterImage = screen.getByRole("img", { name: dataCenterDescription });
     expect(dataCenterImage).toBeVisible();
   });
-  it("should allow to select between the different electrical technical resilience tiers", () => {
+  it("should allow to select between the different electrical technical resilience tiers", async () => {
+    const user = userEvent.setup();
+
     const resilienceTiers = Object.values(ElectricalTechnicalResilienceTiers);
 
     const dataCenterCharacteristicsSection = screen.getByRole("region", {
       name: /Data center characteristics/
     });
+    const displaySecondaryCharacteristicsButton = within(
+      dataCenterCharacteristicsSection
+    ).getByRole("button", { name: displayDataCenterCharacteristicsButtonDescription });
+    await user.click(displaySecondaryCharacteristicsButton);
     const resilienceTiersSelection = within(dataCenterCharacteristicsSection).getByLabelText(
-      "Electrical Technical Resilience",
+      "Electrical Technical Resilience tier",
       { exact: false }
     );
     resilienceTiers.forEach((tier) => {

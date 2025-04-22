@@ -1,6 +1,20 @@
-import type { DataCenterBuilding } from "./types/pcr-cloud";
+import {
+  buildImpactsPerCategoriesAndLifecycle,
+  computeUnitOneResults,
+  formatForBarPlot
+} from "./calculations";
+import type {
+  DataCenterBuilding,
+  DataCenterInventoryElementWithImpactFactors,
+  FunctionalUnitResultsRowWithLifeCycle
+} from "./types/pcr-cloud";
 
 export class DataCenter {
+  dataCenterInventory: DataCenterInventoryElementWithImpactFactors[];
+  impactFactors = $state<FunctionalUnitResultsRowWithLifeCycle[]>();
+  impactFactorsPercentages = $state<any>();
+  firstUnitResults = $state<FunctionalUnitResultsRowWithLifeCycle[]>();
+  firstUnitPercentages = $state<any>();
   yearlyTotalEnergy = $state<number>();
   steelMass = $state<number>();
   concreteVolume = $state<number>();
@@ -16,7 +30,11 @@ export class DataCenter {
   freightLifts = $state<number>();
   partitionSurface = $state<number>();
 
-  constructor(dataCenter: DataCenterBuilding) {
+  constructor(
+    dataCenter: DataCenterBuilding,
+    dataCenterInventory: DataCenterInventoryElementWithImpactFactors[]
+  ) {
+    this.dataCenterInventory = dataCenterInventory;
     this.yearlyTotalEnergy = dataCenter.yearlyTotalEnergy.value as number;
     this.steelMass = dataCenter.steelMass.value as number;
     this.concreteVolume = dataCenter.concreteVolume.value as number;
@@ -31,5 +49,16 @@ export class DataCenter {
     this.lifts = dataCenter.lifts.value as number;
     this.freightLifts = dataCenter.freightLifts.value as number;
     this.partitionSurface = dataCenter.partitionSurface.value as number;
+    this.impactFactors = buildImpactsPerCategoriesAndLifecycle(this, this.dataCenterInventory);
+    this.impactFactorsPercentages = formatForBarPlot(this.impactFactors);
+    this.firstUnitResults = computeUnitOneResults(this, this.impactFactors);
+    this.firstUnitPercentages = formatForBarPlot(this.firstUnitResults);
+  }
+
+  update() {
+    this.impactFactors = buildImpactsPerCategoriesAndLifecycle(this, this.dataCenterInventory);
+    this.impactFactorsPercentages = formatForBarPlot(this.impactFactors);
+    this.firstUnitResults = computeUnitOneResults(this, this.impactFactors);
+    this.firstUnitPercentages = formatForBarPlot(this.firstUnitResults);
   }
 }

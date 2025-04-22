@@ -18,10 +18,10 @@ const downloadDataToCsvLabel = "Download data in CSV format";
 
 const allImpactCriteria = getAllImpactCriterias();
 const mainImpactCriteria = getAllImpactCriterias().filter(
-  (impactCriteria) =>
-    impactCriteria.acronym === "GWP" ||
-    impactCriteria.acronym === "TPE" ||
-    impactCriteria.acronym === "WU"
+  (impactCriterion) =>
+    impactCriterion.acronym === "GWP" ||
+    impactCriterion.acronym === "TPE" ||
+    impactCriterion.acronym === "WU"
 );
 
 const inventoryCategories = Object.values(InventoryCategories);
@@ -189,7 +189,7 @@ describe("absolute values for data center impact factors table component test su
 
     const resultsOptions = ["Main criteria", "All criteria"];
     const resultsSelection = within(dataCenterImpactFactorsSection).getByLabelText(
-      "Select displayed criteria"
+      "Select displayed criterion"
     );
     resultsOptions.forEach((option) => {
       const selectableOption = within(resultsSelection).getByRole("option", { name: option });
@@ -203,7 +203,7 @@ describe("absolute values for data center impact factors table component test su
       name: /Data center impact factors/
     });
     const criteriaSelection = within(dataCenterImpactFactorsSection).getByLabelText(
-      "Select displayed criteria"
+      "Select displayed criterion"
     );
     const dataCenterImpactFactorsTable = within(dataCenterImpactFactorsSection).getByRole("table", {
       name: dataCenterImpactFactorsCaption
