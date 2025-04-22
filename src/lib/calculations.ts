@@ -41,11 +41,11 @@ export function addImpacts(
   impacts1: ImpactFactors,
   quantity: number,
   impacts2: ImpactFactors,
-  ref_years: number,
+  refYears: number,
   lifespan: number,
   fullLifespanCalculation: boolean
   // whether or not to calculate the impact on the full lifespan
-  // will calculate on ref_years / lifespan if not
+  // will calculate on refYears / lifespan if not
 ) {
   var res: ImpactFactors = {
     ADPe: {
@@ -53,7 +53,7 @@ export function addImpacts(
         impacts1.ADPe.value,
         quantity,
         impacts2.ADPe.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -64,14 +64,14 @@ export function addImpacts(
         impacts1.ADPf.value,
         quantity,
         impacts2.ADPf.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
       unit: impacts1.ADPf.unit
     },
     AP: {
-      value: computeImpact(impacts1.AP.value, quantity, impacts2.AP.value, ref_years, lifespan),
+      value: computeImpact(impacts1.AP.value, quantity, impacts2.AP.value, refYears, lifespan),
       unit: impacts1.AP.unit
     },
     CTUe: {
@@ -79,7 +79,7 @@ export function addImpacts(
         impacts1.CTUe.value,
         quantity,
         impacts2.CTUe.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -90,7 +90,7 @@ export function addImpacts(
         impacts1.CTUh.value,
         quantity,
         impacts2.CTUh.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -101,7 +101,7 @@ export function addImpacts(
         impacts1.CTUh_c.value,
         quantity,
         impacts2.CTUh_c.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -112,7 +112,7 @@ export function addImpacts(
         impacts1.CTUh_nc.value,
         quantity,
         impacts2.CTUh_nc.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -123,7 +123,7 @@ export function addImpacts(
         impacts1.EPF.value,
         quantity,
         impacts2.EPF.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -134,7 +134,7 @@ export function addImpacts(
         impacts1.EPM.value,
         quantity,
         impacts2.EPM.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -145,7 +145,7 @@ export function addImpacts(
         impacts1.EPT.value,
         quantity,
         impacts2.EPT.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -156,7 +156,7 @@ export function addImpacts(
         impacts1.GWP.value,
         quantity,
         impacts2.GWP.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -167,7 +167,7 @@ export function addImpacts(
         impacts1.GWPb.value,
         quantity,
         impacts2.GWPb.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -178,7 +178,7 @@ export function addImpacts(
         impacts1.GWPf.value,
         quantity,
         impacts2.GWPf.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -189,7 +189,7 @@ export function addImpacts(
         impacts1.GWPlu.value,
         quantity,
         impacts2.GWPlu.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -200,7 +200,7 @@ export function addImpacts(
         impacts1.IR.value,
         quantity,
         impacts2.IR.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -211,7 +211,7 @@ export function addImpacts(
         impacts1.LU.value,
         quantity,
         impacts2.LU.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -222,7 +222,7 @@ export function addImpacts(
         impacts1.MIPS.value,
         quantity,
         impacts2.MIPS.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -233,7 +233,7 @@ export function addImpacts(
         impacts1.ODP.value,
         quantity,
         impacts2.ODP.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -244,7 +244,7 @@ export function addImpacts(
         impacts1.PM.value,
         quantity,
         impacts2.PM.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -255,7 +255,7 @@ export function addImpacts(
         impacts1.POCP.value,
         quantity,
         impacts2.POCP.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -266,7 +266,7 @@ export function addImpacts(
         impacts1.TPE.value,
         quantity,
         impacts2.TPE.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
@@ -277,7 +277,7 @@ export function addImpacts(
         impacts1.WU.value,
         quantity,
         impacts2.WU.value,
-        ref_years,
+        refYears,
         lifespan,
         fullLifespanCalculation
       ),
