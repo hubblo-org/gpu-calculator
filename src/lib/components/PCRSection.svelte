@@ -1,12 +1,15 @@
 <section class="card" aria-labelledby="pcr-introduction">
-  <h2 id="pcr-introduction">Product Category Rule for Data Centre IT hosting and Cloud services</h2>
+  <h2 id="pcr-introduction">
+    Product Category Rules for Data center IT hosting and Cloud services
+  </h2>
   <p>
-    This tool is a demonstrator of the Product Category Rule for Data Centre IT hosting and Cloud
-    services from <a href="https://www.ademe.fr/">ADEME</a>.
+    This tool is a demonstrator of the Product Category Rules for Data center IT hosting and Cloud
+    services from <a href="https://www.ademe.fr">ADEME</a>.
   </p>
   <p>
     It is developped by <a href="https://hubblo.org">Hubblo</a> and is open-source, under AGPLv3.0
-    licence. Please check <a href="https://github.com/hubblo-org/dataviz-pcr-cloud">the code</a>.
+    licence. You can find the source code
+    <a href="https://github.com/hubblo-org/dataviz-pcr-cloud">here</a>.
   </p>
 </section>
 

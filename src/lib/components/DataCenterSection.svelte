@@ -16,7 +16,7 @@
   // Visual parameters
   let secondaryCharacteristicsAreVisible = $state(false);
   let secondaryCharacteristicsButtonLabel = $state(
-    "Display the data center secondary characteristics"
+    "Display the data center secondary parameters"
   );
 
   const electricalTechnicalResilienceTiers = Object.values(ElectricalTechnicalResilienceTiers);
@@ -25,10 +25,10 @@
   function handleSecondaryCharacteristicsVisibility() {
     if (secondaryCharacteristicsAreVisible) {
       secondaryCharacteristicsAreVisible = false;
-      secondaryCharacteristicsButtonLabel = "Display the data center secondary characteristics";
+      secondaryCharacteristicsButtonLabel = "Display the data center secondary parameters";
     } else {
       secondaryCharacteristicsAreVisible = true;
-      secondaryCharacteristicsButtonLabel = "Hide the data center secondary characteristics";
+      secondaryCharacteristicsButtonLabel = "Hide the data center secondary parameters";
     }
   }
 
@@ -46,12 +46,11 @@
   }
 </script>
 
-<section aria-labelledby="data-center-characteristics">
+<section aria-labelledby="data-center-parameters">
   <header>
     <img id="data-center" src="/media/data-center.svg" alt="A data center" />
     <div id="data-center-description">
-      <h2 id="data-center-characteristics">Data center characteristics</h2>
-
+      <h2 id="data-center-parameters">Data center parameters</h2>
       <p>
         These are the parameters used in calculating the environmental impact factors for a given
         data center.
@@ -179,7 +178,7 @@
       />
     {/if}
     {#if secondaryCharacteristicsAreVisible}
-      <div transition:fade class="section-main" id="secondary-characteristics">
+      <div transition:fade class="section-main" id="secondary-parameters">
         <div class="grid">
           <div class="field">
             <div class="label-wrapper">
@@ -254,7 +253,7 @@
           <div class="field">
             <div class="label-wrapper">
               <label for="building-partition-surface">
-                {dataCenter.partitionSurface.label} (²)
+                {dataCenter.partitionSurface.label} (m²)
               </label>
               <ToggleTip
                 info={dataCenter.partitionSurface.description!}
@@ -320,7 +319,7 @@
   .label-wrapper {
     display: flex;
   }
-  #secondary-characteristics {
+  #secondary-parameters {
     display: flex;
     flex-direction: column;
   }

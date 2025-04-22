@@ -11,9 +11,9 @@ import userEvent from "@testing-library/user-event";
 const dataCenter = new DataCenter(dataCenterCharacteristics, inventoryWithImpact);
 const dataCenterDescription = "A data center";
 const displayDataCenterCharacteristicsButtonDescription =
-  "Display the data center secondary characteristics";
+  "Display the data center secondary parameters";
 const hideDataCenterCharacteristicsButtonDescription =
-  "Hide the data center secondary characteristics";
+  "Hide the data center secondary parameters";
 
 const dataCenterMainCharacteristicsLabels = [
   "Building total surface",
@@ -47,16 +47,16 @@ describe("data center component static elements test suite", () => {
   beforeEach(() => render(DataCenterSection, { props: { dc: dataCenter } }));
   afterEach(() => cleanup());
 
-  it("should have a section for displaying the data center characteristics", () => {
+  it("should have a section for displaying the data center parameters", () => {
     const dataCenterCharacteristicsSection = screen.getByRole("region", {
-      name: /Data center characteristics/
+      name: /Data center parameters/
     });
     expect(dataCenterCharacteristicsSection).toBeVisible();
   });
 
   it("should display a link to go back to the table of contents section", () => {
     const dataCenterCharacteristicsSection = screen.getByRole("region", {
-      name: /Data center characteristics/
+      name: /Data center parameters/
     });
     const scrollBackLink = within(dataCenterCharacteristicsSection).getByRole("link", {
       name: "Scroll back to table of contents"
@@ -64,9 +64,9 @@ describe("data center component static elements test suite", () => {
     expect(scrollBackLink).toBeVisible();
   });
 
-  it("should display the main data center characteristics, that can be modified by the user", () => {
+  it("should display the main data center parameters, that can be modified by the user", () => {
     const dataCenterCharacteristicsSection = screen.getByRole("region", {
-      name: /Data center characteristics/
+      name: /Data center parameters/
     });
     dataCenterMainCharacteristicsLabels.forEach((characteristicLabel) => {
       const characteristicInput = within(dataCenterCharacteristicsSection).getByLabelText(
@@ -81,7 +81,7 @@ describe("data center component static elements test suite", () => {
     const user = userEvent.setup();
 
     const dataCenterCharacteristicsSection = screen.getByRole("region", {
-      name: /Data center characteristics/
+      name: /Data center parameters/
     });
     const displaySecondaryCharacteristicsButton = within(
       dataCenterCharacteristicsSection
@@ -100,11 +100,11 @@ describe("data center component static elements test suite", () => {
       });
   });
 
-  it("should display the secondary data center characteristics after the user interacted with an element for that purpose", async () => {
+  it("should display the secondary data center parameters after the user interacted with an element for that purpose", async () => {
     const user = userEvent.setup();
 
     const dataCenterCharacteristicsSection = screen.getByRole("region", {
-      name: /Data center characteristics/
+      name: /Data center parameters/
     });
     const displaySecondaryCharacteristicsButton = within(
       dataCenterCharacteristicsSection
@@ -122,11 +122,11 @@ describe("data center component static elements test suite", () => {
       });
   });
 
-  it("should display a button to hide the data center secondary characteristics if they are visible to the user", async () => {
+  it("should display a button to hide the data center secondary parameters if they are visible to the user", async () => {
     const user = userEvent.setup();
 
     const dataCenterCharacteristicsSection = screen.getByRole("region", {
-      name: /Data center characteristics/
+      name: /Data center parameters/
     });
     const displaySecondaryCharacteristicsButton = within(
       dataCenterCharacteristicsSection
@@ -149,7 +149,7 @@ describe("data center component static elements test suite", () => {
     const resilienceTiers = Object.values(ElectricalTechnicalResilienceTiers);
 
     const dataCenterCharacteristicsSection = screen.getByRole("region", {
-      name: /Data center characteristics/
+      name: /Data center parameters/
     });
     const displaySecondaryCharacteristicsButton = within(
       dataCenterCharacteristicsSection
@@ -168,7 +168,7 @@ describe("data center component static elements test suite", () => {
     const countriesNames = Object.values(Countries);
 
     const dataCenterCharacteristicsSection = screen.getByRole("region", {
-      name: /Data center characteristics/
+      name: /Data center parameters/
     });
     const countriesSelection = within(dataCenterCharacteristicsSection).getByLabelText("Location", {
       exact: false
@@ -179,9 +179,9 @@ describe("data center component static elements test suite", () => {
     });
   });
 
-  it("should display a button to recalculate results after the user modified the data center characteristics", () => {
+  it("should display a button to recalculate results after the user modified the data center parameters", () => {
     const dataCenterCharacteristicsSection = screen.getByRole("region", {
-      name: /Data center characteristics/
+      name: /Data center parameters/
     });
     const recalculateButton = within(dataCenterCharacteristicsSection).getByRole("button", {
       name: "Recalculate"
@@ -196,7 +196,7 @@ describe("data center component static elements test suite", () => {
     const user = userEvent.setup();
 
     const dataCenterCharacteristicsSection = screen.getByRole("region", {
-      name: /Data center characteristics/
+      name: /Data center parameters/
     });
     const displaySecondaryCharacteristicsButton = within(
       dataCenterCharacteristicsSection
