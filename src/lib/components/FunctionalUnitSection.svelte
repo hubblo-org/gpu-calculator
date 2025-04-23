@@ -13,7 +13,7 @@
   const parameters = $derived(getFunctionalUnitParameters(selectedFunctionalUnit));
 </script>
 
-<div>
+<div id="functional-unit-wrapper">
   <section aria-labelledby="functional-unit-parameters">
     <header>
       <img src="/media/server-rack.svg" id="server-rack" alt="A server rack" />
