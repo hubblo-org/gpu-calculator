@@ -3,6 +3,9 @@
     ImpactFactorShare,
     OrderedImpactFactors,
     FunctionalUnitResultsRowWithLifeCycle,
+    Node,
+    Leaf,
+    IF
   } from "$lib/types/pcr-cloud";
   import { renderStackedBarPlot } from "$lib/plots";
   import {
@@ -36,7 +39,9 @@
   const selectableCriteria = { main: "Main criteria", all: "All criteria" };
 
   const lifeCycleSteps = Object.values(LifeCycleSteps);
-  const inventoryCategories = Object.values(InventoryCategories);
+  const inventoryCategories = Object.values(InventoryCategories).filter(
+    (category) => category != "Energy backup"
+  );
   const allImpactCriteria = getAllImpactCriterias();
   const mainImpactCriteria = getAllImpactCriterias().filter(
     (impactCriterion) =>
@@ -48,9 +53,7 @@
   const { source, impactFactors, impactFactorsShares }: Props = $props();
 
   let selectedCriterion = $state(selectableCriteria.main);
-  let selectedImpactCriterion = $state(
-    getImpactCriteria(ImpactCriterias.GlobalWarmingPotential).acronym
-  );
+  let selectedImpactCriterion = $state(getImpactCriteria(ImpactCriterias.GlobalWarmingPotential));
   let selectedGraph = $state(graphs.barPlot);
   let absoluteValuesButtonText = $state(absoluteValuesTexts.display);
 
@@ -58,10 +61,8 @@
     groupByImpactCriterion(allImpactCriteria, impactFactorsShares)
   );
 
-  $inspect(impactsGroupedByImpactCriterion)
-
   const impactsForTreemap = $derived(
-    formatForTreemap(selectedImpactCriterion, impactFactors)
+    formatForTreemap(selectedImpactCriterion.acronym as IF, impactFactors)
   );
 
   const impactsWithMainCriteria: ImpactFactorShare[] = $derived.by(() => {
@@ -89,7 +90,6 @@
       return allImpactCriteria;
     }
   });
-
 
   function setSectionTexts() {
     if (source === "data-center") {
@@ -164,7 +164,7 @@
 
   <div class="options">
     {#if selectedGraph === graphs.treemap}
-      <select bind:value={selectedImpactCriterion} aria-label="Select an impact criterion"
+      <select bind:value={selectedImpactCriterion.acronym} aria-label="Select an impact criterion"
         >{#each allImpactCriteria as impactCriterion}<option>{impactCriterion.acronym}</option
           >{/each}</select
       >
@@ -209,7 +209,7 @@
             ><tr
               ><th>Impact criterion</th>{#each lifeCycleSteps as lifeCycleStep}<th
                   >{lifeCycleStep}</th
-                >{/each}</tr
+                >{/each}<th>Unit</th></tr
             ></thead
           >
           <tbody>
@@ -217,7 +217,7 @@
                 ><th scope="row">{impactCriterion.acronym}</th>
                 {#each impactsGroupedByImpactCriterion as impacts}{#each impacts as impact}{#if impact.impactCriterion === impactCriterion.acronym}<td
                         >{(impact as ImpactFactorShare).share}</td
-                      >{/if}{/each}{/each}
+                      >{/if}{/each}{/each}<td>{selectedImpactCriterion.unit}</td>
               </tr>{/each}
           </tbody>
         </table>
@@ -232,7 +232,12 @@
             ></thead
           >
           <tbody
-            >{#each inventoryCategories as category}<tr><th scope="row">{category}</th></tr
+            >{#each inventoryCategories as category}<tr
+                ><th scope="row">{category}</th
+                >{#each impactsForTreemap.children as Array<Node> as impacts}{#each impacts.children as Array<Leaf> as impact}{#if (impact as Leaf).category === category.toLowerCase()}<td
+                        >{impact.value}</td
+                      >{/if}{/each}
+                {/each}<td>{selectedImpactCriterion.unit}</td></tr
               >{/each}</tbody
           >
         </table>

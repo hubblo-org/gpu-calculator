@@ -115,11 +115,11 @@ export function groupByImpactCriterion(
     const group = shares.perLifeCycle.filter(
       (result) => result.impactCriterion === impactCriterion.acronym
     );
-      const sortedGroup = sortByLifeCycle<ImpactFactorShare>(
-        group,
-        "lifeCycleStep" as keyof ImpactFactorShare
-      );
-      return sortedGroup;
+    const sortedGroup = sortByLifeCycle<ImpactFactorShare>(
+      group,
+      "lifeCycleStep" as keyof ImpactFactorShare
+    );
+    return sortedGroup;
   });
   return groupedResults;
 }
@@ -138,6 +138,7 @@ export function formatForTreemap(
       const leaves = impactsByLifeCycle.map((result) => {
         const leaf: Leaf = {
           name: result.name,
+          category: result.category,
           value: result.impacts[impactCriterion].value
         };
         return leaf;

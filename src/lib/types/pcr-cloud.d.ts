@@ -7,6 +7,7 @@ export declare type Node = {
 
 export declare type Leaf = {
   name: string;
+  category: string;
   value: number;
 };
 

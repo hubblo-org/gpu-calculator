@@ -337,8 +337,8 @@ describe("absolute values table component for functional unit test suite", () =>
     });
 
     filteredResults.forEach((result) => {
-      mainImpactCriteria.forEach((impactCriterion) => {
-        const valueCell = within(resultsImpactFactorsTable).getByRole("cell", {
+      mainImpactCriteria.forEach(async (impactCriterion) => {
+        const valueCell = await within(resultsImpactFactorsTable).findByRole("cell", {
           name: result.impacts[impactCriterion.acronym].value
         });
         expect(valueCell).toBeVisible();
