@@ -16,7 +16,7 @@
     InventoryCategories,
     getImpactCriterion
   } from "$lib/types/enums";
-  import { groupByImpactCriterion, formatForTreemap } from "$lib/inventory";
+  import { groupByImpactCriterion, formatForTreemap, isMainCriterion } from "$lib/inventory";
   import { downloadToCSV } from "$lib/utils";
   import DropdownButton from "./DropdownButton.svelte";
   import { renderTreemap } from "$lib/treemap";
@@ -44,11 +44,8 @@
     (category) => category != "Energy backup"
   );
   const allImpactCriteria = getAllImpactCriteria();
-  const mainImpactCriteria = getAllImpactCriteria().filter(
-    (impactCriterion) =>
-      impactCriterion.acronym === "GWP" ||
-      impactCriterion.acronym === "TPE" ||
-      impactCriterion.acronym === "WU"
+  const mainImpactCriteria = getAllImpactCriteria().filter((impactCriterion) =>
+    isMainCriterion(impactCriterion, "acronym")
   );
 
   const { source, impactFactors, impactFactorsShares }: Props = $props();
@@ -74,10 +71,7 @@
 
   const impactsWithMainCriteria: ImpactFactorShare[] = $derived.by(() => {
     const filtered = impactFactorsShares.perLifeCycle.filter(
-      (result) =>
-        result.impactCriterion === "GWP" ||
-        result.impactCriterion === "TPE" ||
-        result.impactCriterion === "WU"
+      (result) => isMainCriterion(result, "impactCriterion")
     );
     return filtered;
   });

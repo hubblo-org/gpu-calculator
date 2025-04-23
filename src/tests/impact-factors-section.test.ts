@@ -12,7 +12,7 @@ import { dataCenterCharacteristics, inventoryWithImpact } from "../mocks/dc-data
 import userEvent from "@testing-library/user-event";
 import { DataCenter } from "$lib/data-center.svelte";
 import type { IF, Leaf, Node } from "$lib/types/pcr-cloud";
-import { formatForTreemap } from "$lib/inventory";
+import { formatForTreemap, isMainCriterion } from "$lib/inventory";
 
 const resultsAbsoluteValuesCaption =
   "Totals for the functional unit per impact criterion, as absolute values";
@@ -27,10 +27,7 @@ const downloadDataToCsvLabel = "Download data in CSV format";
 
 const allImpactCriteria = getAllImpactCriteria();
 const mainImpactCriteria = getAllImpactCriteria().filter(
-  (impactCriterion) =>
-    impactCriterion.acronym === "GWP" ||
-    impactCriterion.acronym === "TPE" ||
-    impactCriterion.acronym === "WU"
+  (impactCriterion) => isMainCriterion(impactCriterion, "acronym")
 );
 
 const inventoryCategories = Object.values(InventoryCategories).filter(

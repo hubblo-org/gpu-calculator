@@ -150,3 +150,10 @@ export function formatForTreemap(
     })
   };
 }
+
+export function isMainCriterion<Type>(value: Type, key: keyof Type): boolean {
+  if (value[key] === "GWP" || value[key] === "TPE" || value[key] === "WU") {
+    return true;
+  }
+  return false;
+}
