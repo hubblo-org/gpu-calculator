@@ -1,6 +1,7 @@
-import * as Plot from "@observablehq/plot";
-import * as d3 from "d3";
-import type { ImpactFactors, ImpactFactorShare, OrderedImpactFactors } from "./types/pcr-cloud";
+import type { Data } from "@observablehq/plot";
+import type { ImpactFactorShare, OrderedImpactFactors } from "./types/pcr-cloud";
+import { select } from "d3";
+import { axisX, axisY, barX, dot, plot, ruleX, ruleY } from "@observablehq/plot";
 
 interface ImpactFactor {
   impactCriterion: string;
@@ -11,7 +12,6 @@ interface ImpactFactorWithScope {
   scope: string;
   amount: number;
 }
-
 
 interface Axes {
   x: string;
@@ -34,9 +34,9 @@ export function renderHorizontalBarPlot(
   div?.firstChild?.remove();
   if (div) {
     const lollipopMarks = [
-      Plot.ruleX([0]),
-      Plot.axisX({ tickSpacing: 100 }),
-      Plot.ruleY(impactFactors, {
+      ruleX([0]),
+      axisX({ tickSpacing: 100 }),
+      ruleY(impactFactors, {
         x: xLabel,
         y: yLabel,
         stroke: xLabel,
@@ -44,13 +44,13 @@ export function renderHorizontalBarPlot(
         strokeWidth: 5,
         sort: { y: "x", order: "descending" }
       }),
-      Plot.dot(impactFactors, { x: xLabel, y: yLabel, fill: xLabel, r: 10 })
+      dot(impactFactors, { x: xLabel, y: yLabel, fill: xLabel, r: 10 })
     ];
 
     const barMarks = [
-      Plot.ruleX([0]),
-      Plot.axisX({ tickSpacing: 100 }),
-      Plot.barX(impactFactors, {
+      ruleX([0]),
+      axisX({ tickSpacing: 100 }),
+      barX(impactFactors, {
         x: xLabel,
         y: yLabel,
         fill: xLabel,
@@ -58,7 +58,7 @@ export function renderHorizontalBarPlot(
         sort: { y: "x", order: "descending" }
       })
     ];
-    const barPlot = Plot.plot({
+    const barPlot = plot({
       width: 1600,
       height: 800,
       y: { grid: true },
@@ -71,12 +71,7 @@ export function renderHorizontalBarPlot(
 function addLogo(nodeId: string) {
   // When a legend is created with the generated plot, a figure element is added to the selected div.
   // The first child is then the div with the legend elements.
-  const logoDiv = d3
-    .select(nodeId)
-    .select("figure")
-    .select("div")
-    .append("div")
-    .attr("class", "logo");
+  const logoDiv = select(nodeId).select("figure").select("div").append("div").attr("class", "logo");
 
   logoDiv.append("img").attr("src", "/media/logo.svg");
   logoDiv.append("span").text("Hubblo").attr("class", "logo");
@@ -95,16 +90,16 @@ export function renderStackedBarPlot(
   let div = document.querySelector(`#impact-factors-plot-${source}`);
   div?.firstChild?.remove();
   if (div) {
-    const barPlot = Plot.plot({
+    const barPlot = plot({
       width: width,
       height: height,
       className: "plot",
       color: { legend: true, domain: domains },
       x: { percent: true },
       marks: [
-        Plot.axisY({ fontSize: 12, label: null, marginLeft: 60 }),
-        Plot.axisX({ marginBottom: 48 }),
-        Plot.barX(impactFactors, {
+        axisY({ fontSize: 12, label: null, marginLeft: 60 }),
+        axisX({ marginBottom: 48 }),
+        barX(impactFactors as Data, {
           y: yLabel,
           x: xLabel,
           fill: domainColor,
@@ -119,20 +114,4 @@ export function renderStackedBarPlot(
 
     addLogo(`#impact-factors-plot-${source}`);
   }
-}
-
-interface ImpactFactorWithCategory {
-  category: string;
-  values: ImpactFactors;
-}
-interface ImpactFactorsWithLC {
-  lifeCycleStep: string;
-  value: number;
-  impact_factors: ImpactFactorWithCategory[];
-}
-
-interface DataCenterImpactFactors {
-  name: string;
-  life_cycles: ImpactFactorsWithLC[];
-  value: number;
 }
