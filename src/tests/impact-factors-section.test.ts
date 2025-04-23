@@ -1,45 +1,57 @@
 import ImpactFactorsSection from "$lib/components/ImpactFactorsSection.svelte";
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { getAllImpactCriterias, InventoryCategories } from "$lib/types/enums";
-import { functionalUnitOneResultsWithLc } from "../mocks/dc-data";
+import {
+  getAllImpactCriteria,
+  getImpactCriterionValues,
+  ImpactCriterion,
+  InventoryCategories,
+  LifeCycleSteps
+} from "$lib/types/enums";
+import { dataCenterCharacteristics, inventoryWithImpact } from "../mocks/dc-data";
 import userEvent from "@testing-library/user-event";
+import { DataCenter } from "$lib/data-center.svelte";
+import type { IF, Leaf, Node } from "$lib/types/pcr-cloud";
+import { formatForTreemap } from "$lib/inventory";
 
 const resultsAbsoluteValuesCaption =
   "Totals for the functional unit per impact criterion, as absolute values";
 
 const dataCenterImpactFactorsCaption =
-  "Data center impact factors absolute values, per impact criterion";
+  "Data center impact factors per impact criterion, as absolute values";
 
 const dataCenterCategoriesCaption =
-  "Data center impact factors absolute values, per inventory category";
+  "Data center impact factors per inventory category, as absolute values";
 
 const downloadDataToCsvLabel = "Download data in CSV format";
 
-const allImpactCriteria = getAllImpactCriterias();
-const mainImpactCriteria = getAllImpactCriterias().filter(
+const allImpactCriteria = getAllImpactCriteria();
+const mainImpactCriteria = getAllImpactCriteria().filter(
   (impactCriterion) =>
     impactCriterion.acronym === "GWP" ||
     impactCriterion.acronym === "TPE" ||
     impactCriterion.acronym === "WU"
 );
 
-const inventoryCategories = Object.values(InventoryCategories);
-const filteredResults = functionalUnitOneResultsWithLc.filter(
-  (result) =>
-    result.lifeCycleStep != "full_life_cycle" &&
-    (result.source === "datacenter_building_fn_except_usage" ||
-      result.source === "datacenter_building_fn_usage")
+const inventoryCategories = Object.values(InventoryCategories).filter(
+  (category) => category != "Energy backup"
 );
+const lifeCycleSteps = Object.values(LifeCycleSteps);
+const dataCenter = new DataCenter(dataCenterCharacteristics, inventoryWithImpact);
 
-const lifeCycleSteps = filteredResults.map((result) => result.lifeCycleStep);
+const gwp = getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotential);
+const formattedGwpImpactFactors: Node = formatForTreemap(
+  gwp.acronym as IF,
+  dataCenter.impactFactors!
+);
 
 describe("impact factors section table test suite", () => {
   beforeEach(() =>
     render(ImpactFactorsSection, {
       props: {
         source: "data-center",
-        impactFactorsShares: { perLifeCycle: filteredResults, steps: lifeCycleSteps }
+        impactFactors: dataCenter.impactFactors,
+        impactFactorsShares: dataCenter.impactFactorsShares
       }
     })
   );
@@ -89,7 +101,8 @@ describe("impact factors section graphs test suite", () => {
     render(ImpactFactorsSection, {
       props: {
         source: "data-center",
-        impactFactorsShares: { perLifeCycle: filteredResults, steps: lifeCycleSteps }
+        impactFactors: dataCenter.impactFactors!,
+        impactFactorsShares: dataCenter.impactFactorsShares!
       }
     })
   );
@@ -138,10 +151,14 @@ describe("absolute values for data center impact factors table component test su
     render(ImpactFactorsSection, {
       props: {
         source: "data-center",
-        impactFactorsShares: { perLifeCycle: filteredResults, steps: lifeCycleSteps }
+        impactFactors: dataCenter.impactFactors!,
+        impactFactorsShares: dataCenter.impactFactorsShares!
       }
     });
-    const displayAbsoluteValues = screen.getByRole("button", { name: "Display absolute values" });
+
+    const displayAbsoluteValues = screen.getByRole("button", {
+      name: "Display absolute values"
+    });
     await user.click(displayAbsoluteValues);
   });
   afterEach(() => cleanup());
@@ -266,6 +283,17 @@ describe("absolute values for data center impact factors table component test su
       });
       expect(categoryColumn).toBeVisible();
     });
+
+    formattedGwpImpactFactors.children?.forEach((child: Node) => {
+      child.children?.forEach((impact) => {
+        const valueCells = within(dataCenterImpactFactorsTable).getAllByRole("cell", {
+          name: (impact as Leaf).value.toString()
+        });
+        valueCells.forEach((cell) => {
+          expect(cell).toBeVisible();
+        });
+      });
+    });
   });
 
   it("should display a button to download the raw data to a file in CSV format", () => {
@@ -286,7 +314,11 @@ describe("absolute values table component for functional unit test suite", () =>
     render(ImpactFactorsSection, {
       props: {
         source: "functional-unit",
-        impactFactorsShares: { perLifeCycle: filteredResults, steps: lifeCycleSteps }
+        impactFactors: dataCenter.impactFactors,
+        impactFactorsShares: {
+          perLifeCycle: dataCenter.impactFactorsShares?.perLifeCycle,
+          steps: dataCenter.impactFactorsShares?.steps
+        }
       }
     });
     const displayAbsoluteValues = screen.getByRole("button", { name: "Display absolute values" });
@@ -336,10 +368,10 @@ describe("absolute values table component for functional unit test suite", () =>
       name: resultsAbsoluteValuesCaption
     });
 
-    filteredResults.forEach((result) => {
+    dataCenter.impactFactors!.forEach((result) => {
       mainImpactCriteria.forEach(async (impactCriterion) => {
         const valueCell = await within(resultsImpactFactorsTable).findByRole("cell", {
-          name: result.impacts[impactCriterion.acronym].value
+          name: result.impacts[impactCriterion.acronym as IF].value.toString()
         });
         expect(valueCell).toBeVisible();
       });

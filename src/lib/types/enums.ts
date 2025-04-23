@@ -43,7 +43,7 @@ export enum CoolingSystems {
   FreeCooling = "Free cooling"
 }
 
-export enum ImpactCriterias {
+export enum ImpactCriterion {
   AbioticDepletionPotentialElements,
   AbioticDepletionPotentialFossilFuels,
   AcidificationPotential,
@@ -68,7 +68,7 @@ export enum ImpactCriterias {
   WaterUse
 }
 
-export declare type IC = keyof typeof ImpactCriterias;
+export declare type IC = keyof typeof ImpactCriterion;
 
 export function getFunctionalUnitParameters(
   functionalUnit: FunctionalUnits
@@ -103,85 +103,134 @@ export function getInventoryCategorySpelling(
   }
 }
 
-export function getImpactCriteria(impactCriterias: ImpactCriterias): ImpactCriteria {
-  switch (impactCriterias) {
-    case ImpactCriterias.AbioticDepletionPotentialElements:
+export function getImpactCriterionValues(impactCriterion: ImpactCriterion): ImpactCriteria {
+  switch (impactCriterion) {
+    case ImpactCriterion.AbioticDepletionPotentialElements:
       return { name: "Abiotic Depletion Potential Elements", acronym: "ADPe", unit: "kg Sb-Eq" };
-    case ImpactCriterias.AbioticDepletionPotentialFossilFuels:
+    case ImpactCriterion.AbioticDepletionPotentialFossilFuels:
       return {
         name: "Abiotic Depletion Potential Fossil Fuels",
         acronym: "ADPf",
         unit: "MJ, net calorific value"
       };
-    case ImpactCriterias.AcidificationPotential:
+    case ImpactCriterion.AcidificationPotential:
       return { name: "Acidification Potential", acronym: "AP", unit: "mol H+-Eq" };
-    case ImpactCriterias.ComparativeToxicityUnitsForEcosystems:
+    case ImpactCriterion.ComparativeToxicityUnitsForEcosystems:
       return { acronym: "CTUe", name: "Comparative Toxicity Units For Ecosystems", unit: "CTUe" };
-    case ImpactCriterias.ComparativeToxicityUnitsForHumans:
+    case ImpactCriterion.ComparativeToxicityUnitsForHumans:
       return { acronym: "CTUh", name: "Comparative Toxicity Units For Humans", unit: "CTUh" };
-    case ImpactCriterias.ComparativeToxicityUnitsForHumansCarcinogenic:
+    case ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic:
       return {
         acronym: "CTUh_c",
         name: "Comparative Toxicity Units For Humans Carcinogenic",
         unit: "CTUh"
       };
-    case ImpactCriterias.ComparativeToxicityUnitsForHumansNonCarcinogenic:
+    case ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic:
       return {
         acronym: "CTUh_nc",
         name: "Comparative Toxicity Units For Humans Non Carcinogenic",
         unit: "CTUh"
       };
-    case ImpactCriterias.EutrophicationPotentialFreshWater:
+    case ImpactCriterion.EutrophicationPotentialFreshWater:
       return { acronym: "EPF", name: "Eutrophication Potential Fresh Water", unit: "kg P-Eq" };
-    case ImpactCriterias.EutrophicationPotentialMarine:
+    case ImpactCriterion.EutrophicationPotentialMarine:
       return { acronym: "EPM", name: "Eutrophication Potential Marine", unit: "kg N-Eq" };
-    case ImpactCriterias.EutrophicationPotentialTerrestrial:
+    case ImpactCriterion.EutrophicationPotentialTerrestrial:
       return { acronym: "EPT", name: "Eutrophication Potential Terrestrial", unit: "mol N-Eq" };
-    case ImpactCriterias.GlobalWarmingPotential:
+    case ImpactCriterion.GlobalWarmingPotential:
       return { acronym: "GWP", name: "Global Warming Potential", unit: "kg CO2-Eq" };
-    case ImpactCriterias.GlobalWarmingPotentialBiogenic:
+    case ImpactCriterion.GlobalWarmingPotentialBiogenic:
       return { acronym: "GWPb", name: "Global Warming Potential Biogenic", unit: "kg CO2-Eq" };
-    case ImpactCriterias.GlobalWarmingPotentialFossil:
+    case ImpactCriterion.GlobalWarmingPotentialFossil:
       return { acronym: "GWPf", name: "Global WarmingPotentialFossil", unit: "kg C02-Eq" };
-    case ImpactCriterias.GlobalWarmingPotentialLandUse:
+    case ImpactCriterion.GlobalWarmingPotentialLandUse:
       return { acronym: "GWPlu", name: "Global Warming Potential LandUse", unit: "kg CO2-Eq" };
-    case ImpactCriterias.IonisingRadiation:
+    case ImpactCriterion.IonisingRadiation:
       return { acronym: "IR", name: "Ionising Radiation", unit: "kBq U235-Eq" };
-    case ImpactCriterias.LandUse:
+    case ImpactCriterion.LandUse:
       return { acronym: "LU", name: "Land Use", unit: "u" };
-    case ImpactCriterias.MaterialInputPerServiceUnit:
+    case ImpactCriterion.MaterialInputPerServiceUnit:
       return { acronym: "MIPS", name: "Material Input Per Service Unit", unit: "kg" };
-    case ImpactCriterias.OzoneDepletionPotential:
+    case ImpactCriterion.OzoneDepletionPotential:
       return { acronym: "ODP", name: "Ozone Depletion Potential", unit: "kg CFC-11-Eq" };
-    case ImpactCriterias.ParticulateMatter:
+    case ImpactCriterion.ParticulateMatter:
       return { acronym: "PM", name: "Particulate Matter", unit: "disease incidence" };
-    case ImpactCriterias.PhotochemicalOzoneFormationPotential:
+    case ImpactCriterion.PhotochemicalOzoneFormationPotential:
       return {
         acronym: "POCP",
         name: "Photochemical Ozone Formation Potential",
         unit: "kg NMVOC-Eq"
       };
-    case ImpactCriterias.TotalPrimaryEnergy:
+    case ImpactCriterion.TotalPrimaryEnergy:
       return { acronym: "TPE", name: "Total Primary Energy", unit: "MJ, net calorific value" };
-    case ImpactCriterias.WaterUse:
+    case ImpactCriterion.WaterUse:
       return { acronym: "WU", name: "Water Use", unit: "m3 world eq. deprived" };
   }
 }
 
-export function getAllImpactCriterias(): ImpactCriteria[] {
-  const impactCriterias = Object.keys(ImpactCriterias).filter((key) => isNaN(Number(key)));
+export function getImpactCriterion(acronym: string): ImpactCriterion | undefined {
+  switch (acronym) {
+    case "ADPe":
+      return ImpactCriterion.AbioticDepletionPotentialElements;
+    case "ADPf":
+      return ImpactCriterion.AbioticDepletionPotentialFossilFuels;
+    case "AP":
+      return ImpactCriterion.AcidificationPotential;
+    case "CTUe":
+      return ImpactCriterion.ComparativeToxicityUnitsForEcosystems;
+    case "CTUh":
+      return ImpactCriterion.ComparativeToxicityUnitsForHumans;
+    case "CTUh_c":
+      return ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic;
+    case "CTUh_nc":
+      return ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic;
+    case "EPH":
+      return ImpactCriterion.EutrophicationPotentialFreshWater;
+    case "EPM":
+      return ImpactCriterion.EutrophicationPotentialMarine;
+    case "EPT":
+      return ImpactCriterion.EutrophicationPotentialTerrestrial;
+    case "GWP":
+      return ImpactCriterion.GlobalWarmingPotential;
+    case "GWPb":
+      return ImpactCriterion.GlobalWarmingPotentialBiogenic;
+    case "GWPf":
+      return ImpactCriterion.GlobalWarmingPotentialFossil;
+    case "GWPlu":
+      return ImpactCriterion.GlobalWarmingPotentialLandUse;
+    case "IR":
+      return ImpactCriterion.IonisingRadiation;
+    case "LU":
+      return ImpactCriterion.LandUse;
+    case "MIPS":
+      return ImpactCriterion.MaterialInputPerServiceUnit;
+    case "ODP":
+      return ImpactCriterion.OzoneDepletionPotential;
+    case "PM":
+      return ImpactCriterion.ParticulateMatter;
+    case "POCP":
+      return ImpactCriterion.PhotochemicalOzoneFormationPotential;
+    case "TPE":
+      return ImpactCriterion.TotalPrimaryEnergy;
+    case "WU":
+      return ImpactCriterion.WaterUse;
+  }
+}
+
+export function getAllImpactCriteria(): ImpactCriteria[] {
+  const impactCriterias = Object.keys(ImpactCriterion).filter((key) => isNaN(Number(key)));
   const impactCriteriasValues = impactCriterias.map((impactCriteria) => {
-    const value = getImpactCriteria(ImpactCriterias[impactCriteria as IC]);
+    const value = getImpactCriterionValues(ImpactCriterion[impactCriteria as IC]);
     return value;
   });
   return impactCriteriasValues;
 }
 
-export function getImpactCriteriasByField(field: keyof ImpactCriteria): string[] {
-  const impactCriterias = Object.keys(ImpactCriterias).filter((key) => isNaN(Number(key)));
+export function getImpactCriterionByField(field: keyof ImpactCriteria): string[] {
+  const impactCriterias = Object.keys(ImpactCriterion).filter((key) => isNaN(Number(key)));
 
   const impactCriteriasValues = impactCriterias.map((impactCriteria) => {
-    const value = getImpactCriteria(ImpactCriterias[impactCriteria as IC])[field];
+    const value = getImpactCriterionValues(ImpactCriterion[impactCriteria as IC])[field];
     return value;
   });
   return impactCriteriasValues;
