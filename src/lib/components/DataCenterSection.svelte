@@ -58,7 +58,7 @@
     </div>
     <a href="#table-of-contents" aria-label="Scroll back to table of contents">▲</a>
   </header>
-  <div class="section-main">
+  <form>
     <div class="grid">
       <div class="field">
         <div class="label-wrapper">
@@ -296,7 +296,7 @@
     <button id="recalculate" class="btn btn-primary btn-sm" onclick={() => dc.update()}
       >Recalculate</button
     >
-  </div>
+  </form>
 </section>
 
 <ImpactFactorsSection
@@ -350,14 +350,6 @@
       display: flex;
       padding-top: 10px;
       gap: 50px;
-    }
-    .section-main {
-      display: flex;
-      flex-direction: column;
-      max-width: 80rem;
-      justify-content: space-evenly;
-      position: relative;
-      margin-inline: auto;
     }
     #data-center-description {
       display: flex;

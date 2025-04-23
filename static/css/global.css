@@ -129,9 +129,19 @@ body {
   font-style: normal;
 }
 
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 80rem;
+  justify-content: space-evenly;
+  position: relative;
+  margin-inline: auto;
+}
+
 input {
   appearance: none;
 }
+
 input,
 select {
   background: 0 0;
