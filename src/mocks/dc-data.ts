@@ -6,8 +6,8 @@ import type {
   DataCenterBuilding,
   DataCenterInventoryElement,
   DataCenterInventoryElementWithImpactFactors,
-  FunctionalUnitResultsRow,
-  FunctionalUnitResultsRowWithLifeCycle
+  Result,
+  ResultWithLifeCycle
 } from "$lib/types/pcr-cloud";
 import { getImpactCriterionValues, ImpactCriterion } from "$lib/types/enums";
 
@@ -104,7 +104,7 @@ export const dataCenterCharacteristics: DataCenterBuilding = {
 };
 
 export function genNullImpact() {
-  const nullImpact: FunctionalUnitResultsRowWithLifeCycle = {
+  const nullImpact: ResultWithLifeCycle = {
     name: "Null initialized element",
     amount: 0,
     lifeCycleStep: "all lifecycle",
@@ -599,8 +599,8 @@ export const coolingInventoryElementsImpactsFactors: DataCenterInventoryElementW
     return inventoryElementImpacts;
   });
 
-export const functionalUnitOneResults: FunctionalUnitResultsRow[] = Fu1Results.map((result) => {
-  const row: FunctionalUnitResultsRow = {
+export const functionalUnitOneResults: Result[] = Fu1Results.map((result) => {
+  const row: Result = {
     amount: result.amount,
     unit: result.unit,
     name: result.name,
@@ -659,9 +659,9 @@ export function formatCategory(result_c: string) {
   }
 }
 
-export const functionalUnitOneResultsWithLc: FunctionalUnitResultsRowWithLifeCycle[] =
+export const functionalUnitOneResultsWithLc: ResultWithLifeCycle[] =
   Fu1Results.filter((result) => result.a != "material").map((result) => {
-    const row: FunctionalUnitResultsRowWithLifeCycle = {
+    const row: ResultWithLifeCycle = {
       amount: result.amount,
       unit: result.unit,
       source: result.a,

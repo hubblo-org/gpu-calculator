@@ -1,6 +1,6 @@
 import type {
   DataCenterInventoryElement,
-  FunctionalUnitResultsRowWithLifeCycle,
+  ResultWithLifeCycle,
   IF,
   ImpactCriteria,
   ImpactFactorShare,
@@ -126,7 +126,7 @@ export function groupByImpactCriterion(
 
 export function formatForTreemap(
   impactCriterion: IF,
-  impactFactors: FunctionalUnitResultsRowWithLifeCycle[]
+  impactFactors: ResultWithLifeCycle[]
 ): Node {
   const lifeCycleSteps = Object.values(LifeCycleSteps);
   return {

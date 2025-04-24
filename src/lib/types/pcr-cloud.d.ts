@@ -118,13 +118,13 @@ export declare type ImpactCriteria = {
   unit: string;
 };
 
-export declare type FunctionalUnitResultsRow = {
+export declare type Result = {
   amount: number;
   name: string;
   impacts: ImpactFactors;
 };
 
-export declare type FunctionalUnitResultsRowWithLifeCycle = FunctionalUnitResultsRow & {
+export declare type ResultWithLifeCycle = Result & {
   lifeCycleStep: string;
   category: string;
   source: string;

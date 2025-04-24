@@ -2,7 +2,7 @@
   import type {
     ImpactFactorShare,
     OrderedImpactFactors,
-    FunctionalUnitResultsRowWithLifeCycle,
+    ResultWithLifeCycle,
     Node,
     Leaf,
     IF
@@ -23,7 +23,7 @@
 
   interface Props {
     source: string;
-    impactFactors: FunctionalUnitResultsRowWithLifeCycle[];
+    impactFactors: ResultWithLifeCycle[];
     impactFactorsShares: OrderedImpactFactors;
   }
 

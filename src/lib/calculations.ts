@@ -3,7 +3,7 @@ import type { DataCenter } from "./data-center.svelte";
 import type { IF, ImpactFactors, ImpactFactorShare } from "./types/pcr-cloud";
 import type {
   DataCenterInventoryElementWithImpactFactors,
-  FunctionalUnitResultsRowWithLifeCycle,
+  ResultWithLifeCycle,
   OrderedImpactFactors
 } from "./types/pcr-cloud";
 
@@ -288,7 +288,7 @@ export function addImpacts(
 }
 
 export function formatForBarPlot(
-  categorizedImpacts: FunctionalUnitResultsRowWithLifeCycle[]
+  categorizedImpacts: ResultWithLifeCycle[]
 ): OrderedImpactFactors {
   let res = categorizedImpacts;
 
@@ -323,8 +323,8 @@ export function formatForBarPlot(
 export function buildImpactsPerCategoriesAndLifecycle(
   datacenterSpecs: DataCenter,
   inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[]
-): FunctionalUnitResultsRowWithLifeCycle[] {
-  let res: FunctionalUnitResultsRowWithLifeCycle[] = [];
+): ResultWithLifeCycle[] {
+  let res: ResultWithLifeCycle[] = [];
   let refYears = 1;
 
   let categories = ["building", "cooling", "energy", "maintenance", "water"];
@@ -400,13 +400,13 @@ export function buildImpactsPerCategoriesAndLifecycle(
 
 export function computeUnitOneResults(
   datacenterSpecs: DataCenter,
-  datacenterResults: FunctionalUnitResultsRowWithLifeCycle[]
-): FunctionalUnitResultsRowWithLifeCycle[] {
-  let res: FunctionalUnitResultsRowWithLifeCycle[] = [];
+  datacenterResults: ResultWithLifeCycle[]
+): ResultWithLifeCycle[] {
+  let res: ResultWithLifeCycle[] = [];
   let puissCommDC = 54000; // kW IT, TODO: get it from parameters
   const impactCriteria = Object.keys(genNullImpact().impacts);
   datacenterResults.forEach((item) => {
-    let newItem: FunctionalUnitResultsRowWithLifeCycle = genNullImpact();
+    let newItem: ResultWithLifeCycle = genNullImpact();
     newItem.amount = item.amount;
     newItem.category = item.category;
     newItem.lifeCycleStep = item.lifeCycleStep;
