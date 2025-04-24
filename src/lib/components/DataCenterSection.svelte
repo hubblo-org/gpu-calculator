@@ -15,9 +15,7 @@
 
   // Visual parameters
   let secondaryCharacteristicsAreVisible = $state(false);
-  let secondaryCharacteristicsButtonLabel = $state(
-    "Display the data center secondary parameters"
-  );
+  let secondaryCharacteristicsButtonLabel = $state("Display the data center secondary parameters");
 
   const electricalTechnicalResilienceTiers = Object.values(ElectricalTechnicalResilienceTiers);
   const countriesNames = Object.values(Countries);
@@ -44,6 +42,13 @@
       }
     }
   }
+
+  function updateImpacts() {
+    const dataCenterSectionId = "data-center-table-heading";
+    dc.update();
+    const graphSection = document.getElementById(dataCenterSectionId)?.parentElement;
+    graphSection?.scrollIntoView();
+  }
 </script>
 
 <section aria-labelledby="data-center-parameters">
@@ -69,6 +74,7 @@
         <input
           type="number"
           id="building-total-surface"
+          step="0.01"
           oninput={(event) => updateColor(event, dataCenter.totalSurface.value)}
           bind:value={dc.totalSurface}
         />
@@ -82,6 +88,7 @@
         <input
           type="number"
           id="concrete-volume"
+          step="0.01"
           oninput={(event) => updateColor(event, dataCenter.concreteVolume.value)}
           bind:value={dc.concreteVolume}
         />
@@ -95,6 +102,7 @@
         <input
           type="number"
           id="steel-mass"
+          step="0.01"
           oninput={(event) => updateColor(event, dataCenter.steelMass.value)}
           bind:value={dc.steelMass}
         />
@@ -110,6 +118,7 @@
         <input
           type="number"
           id="yearly-total-energy"
+          step="0.01"
           oninput={(event) => updateColor(event, dataCenter.yearlyTotalEnergy.value)}
           bind:value={dc.yearlyTotalEnergy}
         />
@@ -293,8 +302,13 @@
         visibilityFunction={handleSecondaryCharacteristicsVisibility}
       />
     {/if}
-    <button id="recalculate" class="btn btn-primary btn-sm" onclick={() => dc.update()}
-      >Recalculate</button
+    <button
+      id="recalculate"
+      class="btn btn-primary btn-sm"
+      onclick={(event) => {
+        event.preventDefault();
+        updateImpacts();
+      }}>Recalculate</button
     >
   </form>
 </section>
