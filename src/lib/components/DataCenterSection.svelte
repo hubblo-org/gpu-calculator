@@ -44,8 +44,8 @@
   }
 
   function updateImpacts() {
-    const dataCenterSectionId = "data-center-table-heading";
     dc.update();
+    const dataCenterSectionId = "data-center-table-heading";
     const graphSection = document.getElementById(dataCenterSectionId)?.parentElement;
     graphSection?.scrollIntoView();
   }

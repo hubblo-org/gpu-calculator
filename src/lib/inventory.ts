@@ -8,7 +8,7 @@ import type {
   Leaf,
   OrderedImpactFactors
 } from "./types/pcr-cloud";
-import { InventoryCategories, LifeCycleSteps } from "./types/enums";
+import { ImpactCriterionAcronym, InventoryCategories, LifeCycleSteps } from "./types/enums";
 
 export function removeRow(inventory: DataCenterInventoryElement[], inventoryName: string) {
   const isElementWithInventoryName = (element: DataCenterInventoryElement) =>
@@ -108,12 +108,12 @@ export function sortByLifeCycle<Type>(array: Type[], key: keyof Type): Type[] {
 }
 
 export function groupByImpactCriterion(
-  impactCriteria: ImpactCriteria[],
+  impactCriteria: ImpactCriterionAcronym[],
   shares: OrderedImpactFactors
 ): ImpactFactorShare[][] {
   const groupedResults = impactCriteria.map((impactCriterion) => {
     const group = shares.perLifeCycle.filter(
-      (result) => result.impactCriterion === impactCriterion.acronym
+      (result) => result.impactCriterion === impactCriterion
     );
     const sortedGroup = sortByLifeCycle<ImpactFactorShare>(
       group,
@@ -124,10 +124,7 @@ export function groupByImpactCriterion(
   return groupedResults;
 }
 
-export function formatForTreemap(
-  impactCriterion: IF,
-  impactFactors: ResultWithLifeCycle[]
-): Node {
+export function formatForTreemap(impactCriterion: IF, impactFactors: ResultWithLifeCycle[]): Node {
   const lifeCycleSteps = Object.values(LifeCycleSteps);
   return {
     name: "dc_data",
@@ -152,7 +149,11 @@ export function formatForTreemap(
 }
 
 export function isMainCriterion<Type>(value: Type, key: keyof Type): boolean {
-  if (value[key] === "GWP" || value[key] === "TPE" || value[key] === "WU") {
+  if (
+    value[key] === ImpactCriterionAcronym.GWP ||
+    value[key] === ImpactCriterionAcronym.TPE ||
+    value[key] === ImpactCriterionAcronym.WU
+  ) {
     return true;
   }
   return false;

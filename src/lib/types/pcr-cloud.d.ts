@@ -1,4 +1,4 @@
-import type { LifeCycleSteps } from "./enums";
+import type { ImpactCriterionAcronym, LifeCycleSteps } from "./enums";
 
 export declare type Node = {
   name: string;
@@ -114,7 +114,7 @@ export declare type InventoryCategorySpellings = {
 
 export declare type ImpactCriteria = {
   name: string;
-  acronym: string;
+  acronym: ImpactCriterionAcronym;
   unit: string;
 };
 

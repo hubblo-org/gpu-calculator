@@ -9,7 +9,7 @@
   } from "$lib/types/pcr-cloud";
   import { renderStackedBarPlot } from "$lib/plots";
   import {
-    ImpactCriterion,
+    ImpactCriterionAcronym,
     getImpactCriterionValues,
     getAllImpactCriteria,
     LifeCycleSteps,
@@ -47,6 +47,7 @@
   const mainImpactCriteria = getAllImpactCriteria().filter((impactCriterion) =>
     isMainCriterion(impactCriterion, "acronym")
   );
+  const impactCriteriaAcronyms = Object.values(ImpactCriterionAcronym);
 
   const { source, impactFactors, impactFactorsShares }: Props = $props();
 
@@ -56,22 +57,20 @@
   // BAR-PLOT
   let selectedCriteria = $state(selectableCriteria.main);
   let impactsGroupedByImpactCriterion = $derived(
-    groupByImpactCriterion(allImpactCriteria, impactFactorsShares)
+    groupByImpactCriterion(impactCriteriaAcronyms, impactFactorsShares)
   );
 
   // TREEMAP
-  let selectedImpactCriterion = $state(
-    getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotential).acronym
-  );
+  let selectedImpactCriterion = $state(ImpactCriterionAcronym.GWP);
   let impactCriterionKey = $derived(getImpactCriterion(selectedImpactCriterion!));
   let selectedImpactCriterionValues = $derived(getImpactCriterionValues(impactCriterionKey!));
   let impactsForTreemap = $derived(
-    formatForTreemap(selectedImpactCriterionValues.acronym as IF, impactFactors)
+    formatForTreemap(selectedImpactCriterion as IF, impactFactors)
   );
 
   const impactsWithMainCriteria: ImpactFactorShare[] = $derived.by(() => {
-    const filtered = impactFactorsShares.perLifeCycle.filter(
-      (result) => isMainCriterion(result, "impactCriterion")
+    const filtered = impactFactorsShares.perLifeCycle.filter((result) =>
+      isMainCriterion(result, "impactCriterion")
     );
     return filtered;
   });
@@ -166,7 +165,7 @@
   <div class="options">
     {#if selectedGraph === graphs.treemap}
       <select bind:value={selectedImpactCriterion} aria-label="Select an impact criterion"
-        >{#each allImpactCriteria as impactCriterion}<option>{impactCriterion.acronym}</option
+        >{#each impactCriteriaAcronyms as impactCriterion}<option>{impactCriterion}</option
           >{/each}</select
       >
     {/if}
