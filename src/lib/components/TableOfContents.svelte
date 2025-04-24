@@ -8,7 +8,7 @@
     </li>
     <ul>
       <li>
-        <a href="#functional-unit-table-heading">Functional Unit impact results</a>
+        <a href="#functional-unit-table-heading">Functional Unit impacts results</a>
       </li>
     </ul>
   </ul>

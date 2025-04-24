@@ -13,10 +13,10 @@ describe("table of contents component test suite", () => {
   });
   it("should display a list of links allowing to navigate across the page", () => {
     const contentsLabels = [
-      "Data center characteristics",
-      "Data center impact factors",
-      "Functional unit parameters",
-      "Functional unit results"
+      "Data center parameters",
+      "Data center impacts results",
+      "Functional Unit parameters",
+      "Functional Unit impacts results"
     ];
 
     const tableOfContents = screen.getByRole("region", { name: "Table of contents" });

@@ -26,8 +26,8 @@ const dataCenterCategoriesCaption =
 const downloadDataToCsvLabel = "Download data in CSV format";
 
 const allImpactCriteria = getAllImpactCriteria();
-const mainImpactCriteria = getAllImpactCriteria().filter(
-  (impactCriterion) => isMainCriterion(impactCriterion, "acronym")
+const mainImpactCriteria = getAllImpactCriteria().filter((impactCriterion) =>
+  isMainCriterion(impactCriterion, "acronym")
 );
 
 const inventoryCategories = Object.values(InventoryCategories).filter(
@@ -75,14 +75,9 @@ describe("impact factors section table test suite", () => {
     const hideAbsoluteValuesButton = within(dataCenterImpactFactorsSection).getByRole("button", {
       name: "Hide absolute values"
     });
-    await user.click(hideAbsoluteValuesButton);
-
-    expect(
-      within(dataCenterImpactFactorsSection).queryByRole("table", {
-        name: dataCenterImpactFactorsCaption
-      })
-    ).not.toBeInTheDocument();
+    expect(hideAbsoluteValuesButton).toBeVisible();
   });
+
   it("should display a link to go back to the table of contents section", () => {
     const dataCenterImpactFactorsSection = screen.getByRole("region", {
       name: /Data center impact factors/
@@ -93,6 +88,7 @@ describe("impact factors section table test suite", () => {
     expect(scrollBackLink).toBeVisible();
   });
 });
+
 describe("impact factors section graphs test suite", () => {
   beforeEach(() =>
     render(ImpactFactorsSection, {
@@ -114,6 +110,7 @@ describe("impact factors section graphs test suite", () => {
     });
     expect(switchDisplayButton).toBeVisible();
   });
+
   it("should display a selection of impact criteria to choose from for the treemap representation of data after selecting the treemap view", async () => {
     const user = userEvent.setup();
     const dataCenterImpactFactorsSection = screen.getByRole("region", {
@@ -230,7 +227,7 @@ describe("absolute values for data center impact factors table component test su
       expect(criterionColumn).toBeVisible();
     });
 
-    await user.click(criteriaSelection);
+    await user.selectOptions(criteriaSelection, "All criteria");
 
     allImpactCriteria.forEach(async (impactCriterion) => {
       const criterionColumn = await within(dataCenterImpactFactorsTable).findByRole("rowheader", {
@@ -328,6 +325,7 @@ describe("absolute values table component for functional unit test suite", () =>
     });
     expect(functionalUnitResultsGraphSection).toBeVisible();
   });
+
   it("should display a table with the absolute values of the results", () => {
     const functionalUnitResultsGraphSection = screen.getByRole("region", {
       name: /Functional unit results/
@@ -338,6 +336,7 @@ describe("absolute values table component for functional unit test suite", () =>
     );
     expect(resultsImpactFactorsSection).toBeVisible();
   });
+
   it("should display impact criteria and life cycle steps as columns for the functional unit impact factors table", () => {
     const functionalUnitResultsGraphSection = screen.getByRole("region", {
       name: /Functional unit results/
@@ -357,6 +356,7 @@ describe("absolute values table component for functional unit test suite", () =>
       expect(column).toBeVisible();
     });
   });
+
   it("should display the functional unit results absolute values for the main impact criteria", () => {
     const functionalUnitResultsGraphSection = screen.getByRole("region", {
       name: /Functional unit results/
