@@ -14,9 +14,12 @@
 </section>
 
 <style>
+  a {
+    font-weight: 900;
+  }
   @media (min-width: 480px) {
     section {
-      padding: 0px;
+      padding: initial;
       border: initial;
     }
     h2,
