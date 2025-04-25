@@ -37,6 +37,9 @@ const lifeCycleSteps = Object.values(LifeCycleSteps);
 const dataCenter = new DataCenter(dataCenterCharacteristics, inventoryWithImpact);
 
 const gwp = getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotential);
+const tpe = getImpactCriterionValues(ImpactCriterion.TotalPrimaryEnergy);
+const wu = getImpactCriterionValues(ImpactCriterion.WaterUse);
+
 const formattedGwpImpactFactors: Node = formatForTreemap(
   gwp.acronym as IF,
   dataCenter.impactFactors!
@@ -193,6 +196,22 @@ describe("absolute values for data center impact factors table component test su
     });
   });
 
+  it("should display the appropriate units for each of the main impact criterion in the absolute values table", () => {
+    const dataCenterImpactFactorsSection = screen.getByRole("region", {
+      name: /Data center impact factors/
+    });
+    const dataCenterImpactFactorsTable = within(dataCenterImpactFactorsSection).getByRole("table", {
+      name: dataCenterImpactFactorsCaption
+    });
+    const mainImpactCriteria = [gwp, tpe, wu];
+    mainImpactCriteria.forEach((criterion) => {
+      const criterionUnit = within(dataCenterImpactFactorsTable).getByRole("cell", {
+        name: criterion.unit
+      });
+      expect(criterionUnit).toBeVisible();
+    });
+  });
+
   it("should display a selection to have a graph display either main impact criteria or all impact criteria", () => {
     const dataCenterImpactFactorsSection = screen.getByRole("region", {
       name: /Data center impact factors/
@@ -288,6 +307,38 @@ describe("absolute values for data center impact factors table component test su
         });
       });
     });
+  });
+
+  it("should display the appropriate unit for the selected impact criteria in the unit column of the absolute values table depending on the user selection", async () => {
+    const user = userEvent.setup();
+    const dataCenterImpactFactorsSection = screen.getByRole("region", {
+      name: /Data center impact factors/
+    });
+    const switchDisplayButton = within(dataCenterImpactFactorsSection).getByRole("button", {
+      name: "Switch graph display"
+    });
+    await user.click(switchDisplayButton);
+
+    const dataCenterImpactFactorsTable = await within(dataCenterImpactFactorsSection).findByRole(
+      "table",
+      {
+        name: dataCenterCategoriesCaption
+      }
+    );
+    const gwpUnitValues = within(dataCenterImpactFactorsTable).getAllByRole("cell", {
+      name: gwp.unit
+    });
+    gwpUnitValues.forEach((value) => expect(value).toBeVisible());
+
+    const impactCriterionSelection = within(dataCenterImpactFactorsSection).getByLabelText(
+      "Select an impact criterion"
+    );
+    await user.selectOptions(impactCriterionSelection, tpe.acronym);
+
+    const tpeUnitValues = within(dataCenterImpactFactorsTable).getAllByRole("cell", {
+      name: tpe.unit
+    });
+    tpeUnitValues.forEach((value) => expect(value).toBeVisible());
   });
 
   it("should display a button to download the raw data to a file in CSV format", () => {
