@@ -8,8 +8,8 @@
   </p>
   <p>
     It is developped by <a href="https://hubblo.org">Hubblo</a> and is open-source, under AGPLv3.0
-    licence. You can find the source code
-    <a href="https://github.com/hubblo-org/dataviz-pcr-cloud">here</a>.
+    licence.
+    <a href="https://github.com/hubblo-org/dataviz-pcr-cloud">You can find the source code here</a>.
   </p>
 </section>
 
