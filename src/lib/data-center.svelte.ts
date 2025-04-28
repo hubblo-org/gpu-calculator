@@ -6,15 +6,15 @@ import {
 import type {
   DataCenterBuilding,
   DataCenterInventoryElementWithImpactFactors,
-  ResultRowWithLifeCycle,
+  ResultWithLifeCycle,
   OrderedImpactFactors
 } from "./types/pcr-cloud";
 
 export class DataCenter {
   dataCenterInventory: DataCenterInventoryElementWithImpactFactors[];
-  impactFactors = $state<ResultRowWithLifeCycle[]>();
+  impactFactors = $state<ResultWithLifeCycle[]>();
   impactFactorsShares = $state<OrderedImpactFactors>();
-  firstUnitResults = $state<ResultRowWithLifeCycle[]>();
+  firstUnitResults = $state<ResultWithLifeCycle[]>();
   firstUnitShares = $state<OrderedImpactFactors>();
   yearlyTotalEnergy = $state<number>();
   steelMass = $state<number>();
