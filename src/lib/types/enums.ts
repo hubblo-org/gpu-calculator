@@ -7,12 +7,14 @@ import type {
 export enum FunctionalUnits {
   First
 }
+
 export enum Countries {
   FRA = "France",
   GBR = "United Kingdom",
   USA = "United States of America",
   POL = "Poland"
 }
+
 export enum InventoryCategories {
   Building = "Building",
   Cooling = "Cooling",
@@ -20,6 +22,11 @@ export enum InventoryCategories {
   EnergyBackup = "Energy backup",
   Maintenance = "Maintenance",
   Water = "Water"
+}
+
+export enum Graph {
+  BarPlot = "bar-plot",
+  Treemap = "treemap"
 }
 
 export enum LifeCycleSteps {
@@ -332,4 +339,3 @@ export function getInventoryCategorySpelling(
       return { lowercase: "water", uppercase: "Water" };
   }
 }
-

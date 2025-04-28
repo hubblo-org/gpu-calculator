@@ -3,22 +3,22 @@
     ImpactFactorShare,
     OrderedImpactFactors,
     ResultWithLifeCycle,
-    Node,
-    Leaf,
-    IF
+    IF,
+    SectionText
   } from "$lib/types/pcr-cloud";
   import { renderStackedBarPlot } from "$lib/plots";
   import {
     ImpactCriterionAcronym,
     getImpactCriterionValues,
     getAllImpactCriteria,
-    LifeCycleSteps,
-    InventoryCategories,
-    getImpactCriterion
+    getImpactCriterion,
+
+    Graph
+
   } from "$lib/types/enums";
   import { groupByImpactCriterion, formatForTreemap, isMainCriterion } from "$lib/inventory";
-  import { downloadToCSV } from "$lib/utils";
   import DropdownButton from "./DropdownButton.svelte";
+  import AbsoluteValuesTable from "./AbsoluteValuesTable.svelte";
   import { renderTreemap } from "$lib/treemap";
 
   interface Props {
@@ -32,17 +32,8 @@
     hide: "Hide absolute values"
   };
 
-  const graphs = {
-    barPlot: "Bar plot",
-    treemap: "Treemap"
-  };
-
   const selectableCriteria = { main: "Main criteria", all: "All criteria" };
 
-  const lifeCycleSteps = Object.values(LifeCycleSteps);
-  const inventoryCategories = Object.values(InventoryCategories).filter(
-    (category) => category != "Energy backup"
-  );
   const allImpactCriteria = getAllImpactCriteria();
   const mainImpactCriteria = getAllImpactCriteria().filter((impactCriterion) =>
     isMainCriterion(impactCriterion, "acronym")
@@ -51,7 +42,7 @@
 
   const { source, impactFactors, impactFactorsShares }: Props = $props();
 
-  let selectedGraph = $state(graphs.barPlot);
+  let selectedGraph = $state(Graph.BarPlot);
   let absoluteValuesButtonText = $state(absoluteValuesTexts.display);
 
   // BAR-PLOT
@@ -64,9 +55,7 @@
   let selectedImpactCriterion = $state(ImpactCriterionAcronym.GWP);
   let impactCriterionKey = $derived(getImpactCriterion(selectedImpactCriterion!));
   let selectedImpactCriterionValues = $derived(getImpactCriterionValues(impactCriterionKey!));
-  let impactsForTreemap = $derived(
-    formatForTreemap(selectedImpactCriterion as IF, impactFactors)
-  );
+  let impactsForTreemap = $derived(formatForTreemap(selectedImpactCriterion as IF, impactFactors));
 
   const impactsWithMainCriteria: ImpactFactorShare[] = $derived.by(() => {
     const filtered = impactFactorsShares.perLifeCycle.filter((result) =>
@@ -91,23 +80,23 @@
     }
   });
 
-  function setSectionTexts() {
+  function setSectionTexts(): SectionText {
     if (source === "data-center") {
       const sectionTexts = {
-        heading_id: "data-center-table-heading",
-        section_label: "Data center impact factors",
-        table_caption:
-          selectedGraph === graphs.barPlot
+        headingId: "data-center-table-heading",
+        sectionLabel: "Data center impact factors",
+        tableCaption:
+          selectedGraph === Graph.BarPlot 
             ? "Data center impact factors per impact criterion, as absolute values"
             : "Data center impact factors per inventory category, as absolute values"
       };
       return sectionTexts;
-    } else if (source === "functional-unit") {
+    } else {
       const sectionTexts = {
-        heading_id: "functional-unit-table-heading",
-        section_label: "Functional unit results",
-        table_caption:
-          selectedGraph === graphs.barPlot
+        headingId: "functional-unit-table-heading",
+        sectionLabel: "Functional unit results",
+        tableCaption:
+          selectedGraph === Graph.BarPlot 
             ? "Totals for the functional unit per impact criterion, as absolute values"
             : "Totals for the functional unit per inventory category, as absolute values"
       };
@@ -116,10 +105,10 @@
   }
 
   function switchGraphDisplay() {
-    if (selectedGraph === graphs.barPlot) {
-      selectedGraph = graphs.treemap;
-    } else if (selectedGraph === graphs.treemap) {
-      selectedGraph = graphs.barPlot;
+    if (selectedGraph === Graph.BarPlot) {
+      selectedGraph = Graph.Treemap;
+    } else if (selectedGraph === Graph.Treemap) {
+      selectedGraph = Graph.BarPlot;
     }
   }
 
@@ -135,7 +124,7 @@
 
   $effect(() => {
     if (impactFactorsShares) {
-      if (selectedGraph === graphs.barPlot) {
+      if (selectedGraph === Graph.BarPlot) {
         renderStackedBarPlot(
           source,
           1000,
@@ -149,27 +138,27 @@
       }
     }
     if (impactFactors) {
-      if (selectedGraph === graphs.treemap) {
+      if (selectedGraph === Graph.Treemap) {
         renderTreemap(source, impactsForTreemap, 1000, 600);
       }
     }
   });
 </script>
 
-<section aria-labelledby={sectionTexts!.heading_id}>
+<section aria-labelledby={sectionTexts!.headingId}>
   <header>
-    <h3 id={sectionTexts!.heading_id}>{sectionTexts!.section_label}</h3>
+    <h3 id={sectionTexts!.headingId}>{sectionTexts!.sectionLabel}</h3>
     <a href="#table-of-contents" aria-label="Scroll back to table of contents">▲</a>
   </header>
 
   <div class="options">
-    {#if selectedGraph === graphs.treemap}
+    {#if selectedGraph === Graph.Treemap}
       <select bind:value={selectedImpactCriterion} aria-label="Select an impact criterion"
         >{#each impactCriteriaAcronyms as impactCriterion}<option>{impactCriterion}</option
           >{/each}</select
       >
     {/if}
-    {#if selectedGraph === graphs.barPlot}
+    {#if selectedGraph === Graph.BarPlot}
       <select bind:value={selectedCriteria} aria-label="Select displayed criterion"
         ><option>{selectableCriteria.main}</option><option>{selectableCriteria.all}</option></select
       >
@@ -179,10 +168,10 @@
   </div>
 
   <div class="graph-display">
-    {#if selectedGraph === graphs.barPlot}
+    {#if selectedGraph === Graph.BarPlot}
       <div id="impact-factors-plot-{source}"></div>
     {/if}
-    {#if selectedGraph === graphs.treemap}
+    {#if selectedGraph === Graph.Treemap}
       <div class="treemap-wrapper">
         <div id="{source}-treemap-legend-wrapper">
           <div id="{source}-treemap-legend"></div>
@@ -201,9 +190,29 @@
   {/if}
 
   {#if absoluteValuesButtonText === absoluteValuesTexts.hide}
-    {@const tableId = `${source}-table`}
+    {#if selectedGraph === Graph.BarPlot}
+      <AbsoluteValuesTable
+        displayedCriteria={displayedCriteria!}
+        groupedImpacts={impactsGroupedByImpactCriterion}
+        impactCriterionValues={selectedImpactCriterionValues}
+        selectedGraph={Graph.BarPlot}
+        {sectionTexts}
+        {source}
+      />
+    {/if}
+    {#if selectedGraph === Graph.Treemap}
+      <AbsoluteValuesTable
+        displayedCriteria={displayedCriteria!}
+        impactCriterionValues={selectedImpactCriterionValues}
+        selectedGraph={Graph.Treemap}
+        {sectionTexts}
+        {source}
+        treemapImpacts={impactsForTreemap}
+      />
+    {/if}
+    <!-- {@const tableId = `${source}-table`}
     <div class="absolute-values-table" id={tableId}>
-      {#if selectedGraph === graphs.barPlot}
+      {#if selectedGraph === Graph.BarPlot}
         <table>
           <caption>{sectionTexts!.table_caption}</caption><thead
             ><tr
@@ -222,7 +231,7 @@
           </tbody>
         </table>
       {/if}
-      {#if selectedGraph === graphs.treemap}
+      {#if selectedGraph === Graph.Treemap}
         <table>
           <caption>{sectionTexts!.table_caption}</caption><thead
             ><tr
@@ -240,14 +249,14 @@
                 {/each}<td>{selectedImpactCriterionValues.unit}</td></tr
               >{/each}</tbody
           >
-        </table>
+        </table> 
       {/if}
       <button
         class="btn-download"
         aria-label="Download data in CSV format"
         onclick={() => downloadToCSV(tableId)}>csv</button
       >
-    </div>
+    </div> -->
     <DropdownButton
       direction="up"
       label={absoluteValuesButtonText}
