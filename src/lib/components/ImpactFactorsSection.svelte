@@ -12,10 +12,9 @@
     getImpactCriterionValues,
     getAllImpactCriteria,
     getImpactCriterion,
-
     Graph
-
   } from "$lib/types/enums";
+  import { downloadToCSV, downloadToPNG } from "$lib/utils";
   import { groupByImpactCriterion, formatForTreemap, isMainCriterion } from "$lib/inventory";
   import DropdownButton from "./DropdownButton.svelte";
   import AbsoluteValuesTable from "./AbsoluteValuesTable.svelte";
@@ -86,7 +85,7 @@
         headingId: "data-center-table-heading",
         sectionLabel: "Data center impact factors",
         tableCaption:
-          selectedGraph === Graph.BarPlot 
+          selectedGraph === Graph.BarPlot
             ? "Data center impact factors per impact criterion, as absolute values"
             : "Data center impact factors per inventory category, as absolute values"
       };
@@ -96,7 +95,7 @@
         headingId: "functional-unit-table-heading",
         sectionLabel: "Functional unit results",
         tableCaption:
-          selectedGraph === Graph.BarPlot 
+          selectedGraph === Graph.BarPlot
             ? "Totals for the functional unit per impact criterion, as absolute values"
             : "Totals for the functional unit per inventory category, as absolute values"
       };
@@ -165,14 +164,19 @@
     {/if}
     <button class="btn btn-sm btn-primary" onclick={switchGraphDisplay}>Switch graph display</button
     >
+    <button
+      class="btn-download"
+      aria-label="Download graph in PNG format"
+      onclick={() => downloadToPNG("impact-factors-graph")}>png</button
+    >
   </div>
 
-  <div class="graph-display">
+  <div id="impact-factors-graph" class="graph-display">
     {#if selectedGraph === Graph.BarPlot}
       <div id="impact-factors-plot-{source}"></div>
     {/if}
     {#if selectedGraph === Graph.Treemap}
-      <div class="treemap-wrapper">
+      <div id="{source}-treemap-wrapper" class="treemap-wrapper">
         <div id="{source}-treemap-legend-wrapper">
           <div id="{source}-treemap-legend"></div>
         </div>
@@ -210,53 +214,6 @@
         treemapImpacts={impactsForTreemap}
       />
     {/if}
-    <!-- {@const tableId = `${source}-table`}
-    <div class="absolute-values-table" id={tableId}>
-      {#if selectedGraph === Graph.BarPlot}
-        <table>
-          <caption>{sectionTexts!.table_caption}</caption><thead
-            ><tr
-              ><th>Impact criterion</th>{#each lifeCycleSteps as lifeCycleStep}<th
-                  >{lifeCycleStep}</th
-                >{/each}<th>Unit</th></tr
-            ></thead
-          >
-          <tbody>
-            {#each displayedCriteria! as impactCriterion}<tr
-                ><th scope="row">{impactCriterion.acronym}</th>
-                {#each impactsGroupedByImpactCriterion as impacts}{#each impacts as impact}{#if impact.impactCriterion === impactCriterion.acronym}<td
-                        >{(impact as ImpactFactorShare).share}</td
-                      >{/if}{/each}{/each}<td>{impactCriterion.unit}</td>
-              </tr>{/each}
-          </tbody>
-        </table>
-      {/if}
-      {#if selectedGraph === Graph.Treemap}
-        <table>
-          <caption>{sectionTexts!.table_caption}</caption><thead
-            ><tr
-              ><th>Inventory category</th>{#each lifeCycleSteps as lifeCycleStep}<th
-                  >{lifeCycleStep}</th
-                >{/each}<th>Unit</th></tr
-            ></thead
-          >
-          <tbody
-            >{#each inventoryCategories as category}<tr
-                ><th scope="row">{category}</th
-                >{#each impactsForTreemap.children as Array<Node> as impacts}{#each impacts.children as Array<Leaf> as impact}{#if (impact as Leaf).category === category.toLowerCase()}<td
-                        >{impact.value}</td
-                      >{/if}{/each}
-                {/each}<td>{selectedImpactCriterionValues.unit}</td></tr
-              >{/each}</tbody
-          >
-        </table> 
-      {/if}
-      <button
-        class="btn-download"
-        aria-label="Download data in CSV format"
-        onclick={() => downloadToCSV(tableId)}>csv</button
-      >
-    </div> -->
     <DropdownButton
       direction="up"
       label={absoluteValuesButtonText}

@@ -25,6 +25,8 @@ const dataCenterCategoriesCaption =
 
 const downloadDataToCsvLabel = "Download data in CSV format";
 
+const downloadGraphToPngLabel = "Download graph in PNG format";
+
 const allImpactCriteria = getAllImpactCriteria();
 const mainImpactCriteria = getAllImpactCriteria().filter((impactCriterion) =>
   isMainCriterion(impactCriterion, "acronym")
@@ -350,6 +352,17 @@ describe("absolute values for data center impact factors table component test su
       name: downloadDataToCsvLabel
     });
     expect(downloadDataToCSV).toBeVisible();
+  });
+
+  it("should display a button to download the graph as a PNG image", () => {
+    const dataCenterImpactFactorsSection = screen.getByRole("region", {
+      name: /Data center impact factors/
+    });
+
+    const downloadGraphToPNG = within(dataCenterImpactFactorsSection).getByRole("button", {
+      name: downloadGraphToPngLabel
+    });
+    expect(downloadGraphToPNG).toBeVisible();
   });
 });
 
