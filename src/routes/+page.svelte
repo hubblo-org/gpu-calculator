@@ -2,10 +2,8 @@
   import { DataCenter } from "$lib/data-center.svelte";
   import FunctionalUnitSection from "$lib/components/FunctionalUnitSection.svelte";
   import DataCenterSection from "$lib/components/DataCenterSection.svelte";
-  import Header from "$lib/components/Header.svelte";
   import TableOfContents from "$lib/components/TableOfContents.svelte";
   import PcrSection from "$lib/components/PCRSection.svelte";
-  import Footer from "$lib/components/Footer.svelte";
   import Summary from "$lib/components/Summary.svelte";
   import { dataCenterCharacteristics } from "../mocks/dc-data";
   import { inventoryWithImpact } from "../mocks/dc-data";
@@ -13,8 +11,6 @@
   const dataCenter = new DataCenter(dataCenterCharacteristics, inventoryWithImpact);
 </script>
 
-<Header />
-<main>
   <div class="wrapper" id="toc-wrapper">
     <TableOfContents />
     <PcrSection />
@@ -32,8 +28,6 @@
   <!-- Relative breakdown barplot per lifecycle -->
   <!-- Relative breakdown barplot per category -->
   <!-- Relative breakdown treemap per category and lifecycle -->
-</main>
-<Footer />
 
 <style>
   @media (max-width: 480px) {
