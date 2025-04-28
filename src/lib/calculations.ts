@@ -71,7 +71,7 @@ export function addImpacts(
       unit: impacts1.ADPf.unit
     },
     AP: {
-      value: computeImpact(impacts1.AP.value, quantity, impacts2.AP.value, refYears, lifespan),
+      value: computeImpact(impacts1.AP.value, quantity, impacts2.AP.value, refYears, lifespan, fullLifespanCalculation),
       unit: impacts1.AP.unit
     },
     CTUe: {
