@@ -20,9 +20,9 @@
       const buildingTotalSurface = document.getElementById(
         "building-total-surface"
       ) as HTMLInputElement;
-      const buildingTechnicalRoomsSurface = document.getElementById(
-        "building-technical-rooms-surface"
-      ) as HTMLInputElement;
+      //const buildingTechnicalRoomsSurface = document.getElementById(
+      //  "building-technical-rooms-surface"
+      //) as HTMLInputElement;
       const buildingMaximumUsableElectricalPower = document.getElementById(
         "building-maximum-usable-electrical-power"
       ) as HTMLInputElement;
@@ -54,45 +54,45 @@
       const buildingStudyDuration = document.getElementById(
         "building-study-duration"
       ) as HTMLInputElement;
-      const buildingConcreteVolume = document.getElementById(
-        "building-concrete-volume"
-      ) as HTMLInputElement;
-      const buildingSteelMass = document.getElementById("building-steel-mass") as HTMLInputElement;
-      const buildingDesignedFloorSurface = document.getElementById(
-        "building-designed-floor-assembly-surface"
-      ) as HTMLInputElement;
-      const buildingSuspendedCeilingSurface = document.getElementById(
-        "building-suspended-ceiling-surface"
-      ) as HTMLInputElement;
-      const buildingLifts = document.getElementById("building-lifts") as HTMLInputElement;
-      const buildingFreightLifts = document.getElementById(
-        "building-freight-lifts"
-      ) as HTMLInputElement;
-      const buildingPartitionSurface = document.getElementById(
-        "building-partition-surface"
-      ) as HTMLInputElement;
+      //const buildingConcreteVolume = document.getElementById(
+      //  "building-concrete-volume"
+      //) as HTMLInputElement;
+      //const buildingSteelMass = document.getElementById("building-steel-mass") as HTMLInputElement;
+      //const buildingDesignedFloorSurface = document.getElementById(
+      //  "building-designed-floor-assembly-surface"
+      //) as HTMLInputElement;
+      //const buildingSuspendedCeilingSurface = document.getElementById(
+      //  "building-suspended-ceiling-surface"
+      //) as HTMLInputElement;
+      //const buildingLifts = document.getElementById("building-lifts") as HTMLInputElement;
+      //const buildingFreightLifts = document.getElementById(
+      //  "building-freight-lifts"
+      //) as HTMLInputElement;
+      //const buildingPartitionSurface = document.getElementById(
+      //  "building-partition-surface"
+      //) as HTMLInputElement;
       const buildingInventory: DataCenterBuilding = {
         lifespan: validateInt(buildingLifespan.value),
         totalSurface: validateFloat(buildingTotalSurface.value),
-        technicalRoomSurface: validateFloat(buildingTechnicalRoomsSurface.value),
+        //technicalRoomSurface: validateFloat(buildingTechnicalRoomsSurface.value),
         yearlyTotalEnergy: validateInt(buildingYearlyTotalEnergy.value),
         maximumUsableElectricalPower: validateInt(buildingMaximumUsableElectricalPower.value),
         dataCenterLoadFactor: validateFloat(buildingLoadFactor.value),
         powerUsageEffectiveness: validateFloat(buildingPUE.value),
         waterUsageEffectiveness: validateFloat(buildingWUE.value),
-        energyReuseFactor: validateFloat(buildingERF.value),
-        renewableEnergyFactor: validateFloat(buildingREF.value),
+        //energyReuseFactor: validateFloat(buildingERF.value),
+        //renewableEnergyFactor: validateFloat(buildingREF.value),
         electricalTechnicalResilience: buildingResilience.value,
-        coolingSystemType: buildingCoolingSystem.value,
+        //coolingSystemType: buildingCoolingSystem.value,
         location: validateString(buildingLocation.value),
-        studyDuration: validateInt(buildingStudyDuration.value),
-        concreteVolume: validateFloat(buildingConcreteVolume.value),
-        steelMass: validateFloat(buildingSteelMass.value),
-        designedFloorAssemblySurface: validateFloat(buildingDesignedFloorSurface.value),
-        suspendedCeilingSurface: validateFloat(buildingSuspendedCeilingSurface.value),
-        lifts: validateInt(buildingLifts.value),
-        freightLifts: validateInt(buildingFreightLifts.value),
-        partitionSurface: validateFloat(buildingPartitionSurface.value)
+        studyDuration: validateInt(buildingStudyDuration.value)
+        //concreteVolume: validateFloat(buildingConcreteVolume.value),
+        //steelMass: validateFloat(buildingSteelMass.value),
+        //designedFloorAssemblySurface: validateFloat(buildingDesignedFloorSurface.value),
+        //suspendedCeilingSurface: validateFloat(buildingSuspendedCeilingSurface.value),
+        //lifts: validateInt(buildingLifts.value),
+        //freightLifts: validateInt(buildingFreightLifts.value),
+        //partitionSurface: validateFloat(buildingPartitionSurface.value)
       };
       submittedBuildingInventory = buildingInventory;
     } catch (error) {
@@ -111,12 +111,12 @@
       <label for="building-total-surface">Building total surface, in square meters</label>
       <input type="number" id="building-total-surface" step="0.01" required />
     </div>
-    <div class="row-input">
+    <!--<div class="row-input">
       <label for="building-technical-rooms-surface"
         >Technical rooms surface area, in square meters</label
       >
       <input type="number" id="building-technical-rooms-surface" step="0.01" required />
-    </div>
+    </div>-->
     <div class="row-input">
       <label for="building-maximum-usable-electrical-power"
         >Maximum usable electrical power, in kilowatts</label
@@ -155,7 +155,7 @@
         required
       />
     </div>
-    <div class="row-input">
+    <!--<div class="row-input">
       <label for="building-energy-reuse-factor"> Energy Reuse Factor (ERF) </label>
       <input type="number" id="building-energy-reuse-factor" min="0" max="3" step="0.01" required />
     </div>
@@ -169,7 +169,7 @@
         step="0.01"
         required
       />
-    </div>
+    </div>-->
     <div class="row-input">
       <label for="building-electrical-technical-resilience">
         Electrical Technical Resilience tier
@@ -180,14 +180,14 @@
         {/each}
       </select>
     </div>
-    <div class="row-input">
+    <!--<div class="row-input">
       <label for="building-cooling-system"> Cooling system type </label>
       <select id="building-cooling-system">
         {#each coolingSystems as coolingSystem}
           <option value={coolingSystem}>{coolingSystem}</option>
         {/each}
       </select>
-    </div>
+    </div>-->
     <div class="row-input">
       <label for="building-location"> Location </label>
       <input type="text" id="building-location" required />
@@ -196,7 +196,7 @@
       <label for="building-study-duration"> Study duration, in days </label>
       <input type="number" id="building-study-duration" required />
     </div>
-    <div class="row-input">
+    <!--<div class="row-input">
       <label for="building-concrete-volume"> Concrete volume, in cubic meters </label>
       <input type="number" id="building-concrete-volume" step="0.01" required />
     </div>
@@ -227,7 +227,7 @@
     <div class="row-input">
       <label for="building-partition-surface"> Partition surface, in square meters </label>
       <input type="number" id="building-partition-surface" step="0.01" required />
-    </div>
+    </div>-->
     <button onclick={submitBuildingInventory}>Submit building details</button>
   </form>
 {/if}

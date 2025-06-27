@@ -12,68 +12,68 @@ import type {
 import { getImpactCriterionValues, ImpactCriterion } from "$lib/types/enums";
 
 export const dataCenterCharacteristics: DataCenterBuilding = {
-  energyReuseFactor: {
-    label: "Energy Reuse Factor",
-    value: dataCenterInventory.energyReuseFactor,
-    description: "test"
-  },
+  //energyReuseFactor: {
+  //  label: "Energy Reuse Factor",
+  //  value: dataCenterInventory.energyReuseFactor,
+  //  description: "test"
+  //},
   electricalTechnicalResilience: {
     label: "Electrical Technical Resilience",
     value: dataCenterInventory.electricalTechnicalResilience,
     description: "test"
   },
-  renewableEnergyFactor: {
-    label: "Renewable Energy Factor",
-    value: dataCenterInventory.renewableEnergyFactor,
-    description: "test"
-  },
-  suspendedCeilingSurface: {
-    label: "Suspended ceiling surface",
-    value: dataCenterInventory.suspendedCeilingSurface,
-    description: "test"
-  },
-  lifts: { label: "Number of lifts", value: dataCenterInventory.lifts, description: "test" },
+  //renewableEnergyFactor: {
+  //  label: "Renewable Energy Factor",
+  //  value: dataCenterInventory.renewableEnergyFactor,
+  //  description: "test"
+  //},
+  //suspendedCeilingSurface: {
+  //  label: "Suspended ceiling surface",
+  //  value: dataCenterInventory.suspendedCeilingSurface,
+  //  description: "test"
+  //},
+  //lifts: { label: "Number of lifts", value: dataCenterInventory.lifts, description: "test" },
   location: { label: "Location", value: dataCenterInventory.location, description: "test" },
-  freightLifts: {
-    label: "Number of freight lifts",
-    value: dataCenterInventory.freightLifts,
-    description: "test"
-  },
+  //freightLifts: {
+  //  label: "Number of freight lifts",
+  //  value: dataCenterInventory.freightLifts,
+  //  description: "test"
+  //},
   maximumUsableElectricalPower: {
     label: "Maximum usable electrical power",
     value: dataCenterInventory.maximumUsableElectricalPower,
     description: "test"
   },
-  coolingSystemType: {
-    label: "Cooling system type",
-    value: dataCenterInventory.coolingSystemType,
-    description: "test"
-  },
+  //coolingSystemType: {
+  //  label: "Cooling system type",
+  //  value: dataCenterInventory.coolingSystemType,
+  //  description: "test"
+  //},
   dataCenterLoadFactor: {
     label: "Load factor",
     value: dataCenterInventory.dataCenterLoadFactor,
     description: "test"
   },
-  designedFloorAssemblySurface: {
-    label: "Designed floor assembly surface",
-    value: dataCenterInventory.designedFloorAssemblySurface,
-    description: "test"
-  },
-  partitionSurface: {
-    label: "Partition surface",
-    value: dataCenterInventory.partitionSurface,
-    description: "test"
-  },
+  //designedFloorAssemblySurface: {
+  //  label: "Designed floor assembly surface",
+  //  value: dataCenterInventory.designedFloorAssemblySurface,
+  //  description: "test"
+  //},
+  //partitionSurface: {
+  //  label: "Partition surface",
+  //  value: dataCenterInventory.partitionSurface,
+  //  description: "test"
+  //},
   lifespan: {
     label: "Building lifespan",
     value: dataCenterInventory.lifespan,
     description: "test"
   },
-  technicalRoomSurface: {
-    label: "Technical rooms surface area",
-    value: dataCenterInventory.technicalRoomSurface,
-    description: "test"
-  },
+  //technicalRoomSurface: {
+  //  label: "Technical rooms surface area",
+  //  value: dataCenterInventory.technicalRoomSurface,
+  //  description: "test"
+  //},
   totalSurface: {
     label: "Building total surface",
     value: dataCenterInventory.totalSurface,
@@ -94,13 +94,13 @@ export const dataCenterCharacteristics: DataCenterBuilding = {
     label: "Water Usage Effectiveness",
     value: dataCenterInventory.waterUsageEffectiveness,
     description: "test"
-  },
-  concreteVolume: {
-    label: "Concrete volume",
-    value: dataCenterInventory.concreteVolume,
-    description: "test"
-  },
-  steelMass: { label: "Steel mass", value: dataCenterInventory.steelMass, description: "test" }
+  }
+  //concreteVolume: {
+  //  label: "Concrete volume",
+  //  value: dataCenterInventory.concreteVolume,
+  //  description: "test"
+  //},
+  //steelMass: { label: "Steel mass", value: dataCenterInventory.steelMass, description: "test" }
 };
 
 export function genNullImpact() {
@@ -132,12 +132,15 @@ export function genNullImpact() {
       },
       CTUh_c: {
         value: 0,
-        unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic).unit
+        unit: getImpactCriterionValues(
+          ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic
+        ).unit
       },
       CTUh_nc: {
         value: 0,
-        unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic)
-          .unit
+        unit: getImpactCriterionValues(
+          ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic
+        ).unit
       },
       EPF: {
         value: 0,
@@ -231,13 +234,15 @@ export const inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[] 
         },
         CTUh_c: {
           value: element.CTUh_c,
-          unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic)
-            .unit
+          unit: getImpactCriterionValues(
+            ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic
+          ).unit
         },
         CTUh_nc: {
           value: element.CTUh_nc,
-          unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic)
-            .unit
+          unit: getImpactCriterionValues(
+            ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic
+          ).unit
         },
         EPF: {
           value: element.Epf,
@@ -267,7 +272,10 @@ export const inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[] 
           value: element.GWPlu,
           unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialLandUse).unit
         },
-        IR: { value: element.IR, unit: getImpactCriterionValues(ImpactCriterion.IonisingRadiation).unit },
+        IR: {
+          value: element.IR,
+          unit: getImpactCriterionValues(ImpactCriterion.IonisingRadiation).unit
+        },
         LU: { value: element.LU, unit: getImpactCriterionValues(ImpactCriterion.LandUse).unit },
         MIPS: {
           value: element.MIPS,
@@ -277,7 +285,10 @@ export const inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[] 
           value: element.ODP,
           unit: getImpactCriterionValues(ImpactCriterion.OzoneDepletionPotential).unit
         },
-        PM: { value: element.PM, unit: getImpactCriterionValues(ImpactCriterion.ParticulateMatter).unit },
+        PM: {
+          value: element.PM,
+          unit: getImpactCriterionValues(ImpactCriterion.ParticulateMatter).unit
+        },
         POCP: {
           value: element.POCP,
           unit: getImpactCriterionValues(ImpactCriterion.PhotochemicalOzoneFormationPotential).unit
@@ -331,13 +342,15 @@ export const inventoryElementImpactFactors: DataCenterInventoryElementWithImpact
         },
         CTUh_c: {
           value: element.CTUh_c,
-          unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic)
-            .unit
+          unit: getImpactCriterionValues(
+            ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic
+          ).unit
         },
         CTUh_nc: {
           value: element.CTUh_nc,
-          unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic)
-            .unit
+          unit: getImpactCriterionValues(
+            ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic
+          ).unit
         },
         EPF: {
           value: element.Epf,
@@ -367,7 +380,10 @@ export const inventoryElementImpactFactors: DataCenterInventoryElementWithImpact
           value: element.GWPlu,
           unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialLandUse).unit
         },
-        IR: { value: element.IR, unit: getImpactCriterionValues(ImpactCriterion.IonisingRadiation).unit },
+        IR: {
+          value: element.IR,
+          unit: getImpactCriterionValues(ImpactCriterion.IonisingRadiation).unit
+        },
         LU: { value: element.LU, unit: getImpactCriterionValues(ImpactCriterion.LandUse).unit },
         MIPS: {
           value: element.MIPS,
@@ -377,7 +393,10 @@ export const inventoryElementImpactFactors: DataCenterInventoryElementWithImpact
           value: element.ODP,
           unit: getImpactCriterionValues(ImpactCriterion.OzoneDepletionPotential).unit
         },
-        PM: { value: element.PM, unit: getImpactCriterionValues(ImpactCriterion.ParticulateMatter).unit },
+        PM: {
+          value: element.PM,
+          unit: getImpactCriterionValues(ImpactCriterion.ParticulateMatter).unit
+        },
         POCP: {
           value: element.POCP,
           unit: getImpactCriterionValues(ImpactCriterion.PhotochemicalOzoneFormationPotential).unit
@@ -426,13 +445,15 @@ export const technicalEnvironmentElementsWithImpactFactors: DataCenterInventoryE
         },
         CTUh_c: {
           value: element.CTUh_c,
-          unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic)
-            .unit
+          unit: getImpactCriterionValues(
+            ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic
+          ).unit
         },
         CTUh_nc: {
           value: element.CTUh_nc,
-          unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic)
-            .unit
+          unit: getImpactCriterionValues(
+            ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic
+          ).unit
         },
         EPF: {
           value: element.Epf,
@@ -462,7 +483,10 @@ export const technicalEnvironmentElementsWithImpactFactors: DataCenterInventoryE
           value: element.GWPlu,
           unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialLandUse).unit
         },
-        IR: { value: element.IR, unit: getImpactCriterionValues(ImpactCriterion.IonisingRadiation).unit },
+        IR: {
+          value: element.IR,
+          unit: getImpactCriterionValues(ImpactCriterion.IonisingRadiation).unit
+        },
         LU: { value: element.LU, unit: getImpactCriterionValues(ImpactCriterion.LandUse).unit },
         MIPS: {
           value: element.MIPS,
@@ -472,7 +496,10 @@ export const technicalEnvironmentElementsWithImpactFactors: DataCenterInventoryE
           value: element.ODP,
           unit: getImpactCriterionValues(ImpactCriterion.OzoneDepletionPotential).unit
         },
-        PM: { value: element.PM, unit: getImpactCriterionValues(ImpactCriterion.ParticulateMatter).unit },
+        PM: {
+          value: element.PM,
+          unit: getImpactCriterionValues(ImpactCriterion.ParticulateMatter).unit
+        },
         POCP: {
           value: element.POCP,
           unit: getImpactCriterionValues(ImpactCriterion.PhotochemicalOzoneFormationPotential).unit
@@ -538,13 +565,15 @@ export const coolingInventoryElementsImpactsFactors: DataCenterInventoryElementW
         },
         CTUh_c: {
           value: element.CTUh_c,
-          unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic)
-            .unit
+          unit: getImpactCriterionValues(
+            ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic
+          ).unit
         },
         CTUh_nc: {
           value: element.CTUh_nc,
-          unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic)
-            .unit
+          unit: getImpactCriterionValues(
+            ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic
+          ).unit
         },
         EPF: {
           value: element.Epf,
@@ -574,7 +603,10 @@ export const coolingInventoryElementsImpactsFactors: DataCenterInventoryElementW
           value: element.GWPlu,
           unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialLandUse).unit
         },
-        IR: { value: element.IR, unit: getImpactCriterionValues(ImpactCriterion.IonisingRadiation).unit },
+        IR: {
+          value: element.IR,
+          unit: getImpactCriterionValues(ImpactCriterion.IonisingRadiation).unit
+        },
         LU: { value: element.LU, unit: getImpactCriterionValues(ImpactCriterion.LandUse).unit },
         MIPS: {
           value: element.MIPS,
@@ -584,7 +616,10 @@ export const coolingInventoryElementsImpactsFactors: DataCenterInventoryElementW
           value: element.ODP,
           unit: getImpactCriterionValues(ImpactCriterion.OzoneDepletionPotential).unit
         },
-        PM: { value: element.PM, unit: getImpactCriterionValues(ImpactCriterion.ParticulateMatter).unit },
+        PM: {
+          value: element.PM,
+          unit: getImpactCriterionValues(ImpactCriterion.ParticulateMatter).unit
+        },
         POCP: {
           value: element.POCP,
           unit: getImpactCriterionValues(ImpactCriterion.PhotochemicalOzoneFormationPotential).unit
@@ -659,39 +694,40 @@ export function formatCategory(result_c: string) {
   }
 }
 
-export const functionalUnitOneResultsWithLc: ResultWithLifeCycle[] =
-  Fu1Results.filter((result) => result.a != "material").map((result) => {
-    const row: ResultWithLifeCycle = {
-      amount: result.amount,
-      unit: result.unit,
-      source: result.a,
-      scope: result.c,
-      lifeCycleStep: formatToLifeCycle(result.c),
-      category: formatCategory(result.c),
-      impacts: {
-        ADPe: { value: result.adpe, unit: result.adpe_unit },
-        ADPf: { value: result.adpf, unit: result.adpf_unit },
-        AP: { value: result.ap, unit: result.ap_unit },
-        CTUe: { value: result.ctue, unit: result.ctue_unit },
-        CTUh: { value: result.ctuh_c, unit: result.ctuh_c_unit },
-        CTUh_c: { value: result.ctuh_c, unit: result.ctuh_c_unit },
-        CTUh_nc: { value: result.ctuh_n, unit: result.ctuh_n_unit },
-        EPF: { value: result.epf, unit: result.epf_unit },
-        EPM: { value: result.epm, unit: result.epm_unit },
-        EPT: { value: result.ept, unit: result.ept_unit },
-        GWP: { value: result.gwp, unit: result.gwp_unit },
-        GWPb: { value: result.gwpb, unit: result.gwpb_unit },
-        GWPf: { value: result.gwpf, unit: result.gwpf_unit },
-        GWPlu: { value: result.gwplu, unit: result.gwplu_unit },
-        IR: { value: result.ir, unit: result.ir_unit },
-        LU: { value: result.lu, unit: result.lu_unit },
-        MIPS: { value: result.mips, unit: result.mips_unit },
-        ODP: { value: result.odp, unit: result.odp_unit },
-        PM: { value: result.pm, unit: result.pm_unit },
-        POCP: { value: result.pocp, unit: result.pocp_unit },
-        TPE: { value: result.tpe, unit: result.tpe_unit },
-        WU: { value: result.wu, unit: result.wu_unit }
-      }
-    };
-    return row;
-  });
+export const functionalUnitOneResultsWithLc: ResultWithLifeCycle[] = Fu1Results.filter(
+  (result) => result.a != "material"
+).map((result) => {
+  const row: ResultWithLifeCycle = {
+    amount: result.amount,
+    unit: result.unit,
+    source: result.a,
+    scope: result.c,
+    lifeCycleStep: formatToLifeCycle(result.c),
+    category: formatCategory(result.c),
+    impacts: {
+      ADPe: { value: result.adpe, unit: result.adpe_unit },
+      ADPf: { value: result.adpf, unit: result.adpf_unit },
+      AP: { value: result.ap, unit: result.ap_unit },
+      CTUe: { value: result.ctue, unit: result.ctue_unit },
+      CTUh: { value: result.ctuh_c, unit: result.ctuh_c_unit },
+      CTUh_c: { value: result.ctuh_c, unit: result.ctuh_c_unit },
+      CTUh_nc: { value: result.ctuh_n, unit: result.ctuh_n_unit },
+      EPF: { value: result.epf, unit: result.epf_unit },
+      EPM: { value: result.epm, unit: result.epm_unit },
+      EPT: { value: result.ept, unit: result.ept_unit },
+      GWP: { value: result.gwp, unit: result.gwp_unit },
+      GWPb: { value: result.gwpb, unit: result.gwpb_unit },
+      GWPf: { value: result.gwpf, unit: result.gwpf_unit },
+      GWPlu: { value: result.gwplu, unit: result.gwplu_unit },
+      IR: { value: result.ir, unit: result.ir_unit },
+      LU: { value: result.lu, unit: result.lu_unit },
+      MIPS: { value: result.mips, unit: result.mips_unit },
+      ODP: { value: result.odp, unit: result.odp_unit },
+      PM: { value: result.pm, unit: result.pm_unit },
+      POCP: { value: result.pocp, unit: result.pocp_unit },
+      TPE: { value: result.tpe, unit: result.tpe_unit },
+      WU: { value: result.wu, unit: result.wu_unit }
+    }
+  };
+  return row;
+});

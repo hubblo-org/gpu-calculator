@@ -9,10 +9,13 @@ export enum FunctionalUnits {
 }
 
 export enum Countries {
-  FRA = "France",
-  GBR = "United Kingdom",
-  USA = "United States of America",
-  POL = "Poland"
+  AU = "Australia",
+  CA = "Canada",
+  DE = "Germany",
+  DK = "Denmark",
+  ES = "Spain",
+  FR = "France",
+  US = "United States"
 }
 
 export enum InventoryCategories {

@@ -68,7 +68,6 @@
       <div class="field">
         <div class="label-wrapper">
           <label for="building-total-surface">{dataCenter.totalSurface.label} (m²) </label>
-
           <ToggleTip info={dataCenter.totalSurface.description!} source="total-surface" />
         </div>
         <input
@@ -78,36 +77,6 @@
           oninput={(event) => updateColor(event, dataCenter.totalSurface.value)}
           bind:value={dc.totalSurface}
         />
-      </div>
-      <div class="field">
-        <div class="label-wrapper">
-          <label for="concrete-volume">{dataCenter.concreteVolume.label} (m³)</label>
-          <ToggleTip info={dataCenter.concreteVolume.description!} source="concrete-volume" />
-        </div>
-
-        <input
-          type="number"
-          id="concrete-volume"
-          step="0.01"
-          oninput={(event) => updateColor(event, dataCenter.concreteVolume.value)}
-          bind:value={dc.concreteVolume}
-        />
-      </div>
-      <div class="field">
-        <div class="label-wrapper">
-          <label for="steel-mass">{dataCenter.steelMass.label} (kg)</label>
-          <ToggleTip info={dataCenter.steelMass.description!} source="steel-mass" />
-        </div>
-
-        <input
-          type="number"
-          id="steel-mass"
-          step="0.01"
-          oninput={(event) => updateColor(event, dataCenter.steelMass.value)}
-          bind:value={dc.steelMass}
-        />
-      </div>
-      <div class="field">
         <div class="label-wrapper">
           <label for="yearly-total-energy">{dataCenter.yearlyTotalEnergy.label} (kWh)</label>
           <ToggleTip
@@ -122,10 +91,24 @@
           oninput={(event) => updateColor(event, dataCenter.yearlyTotalEnergy.value)}
           bind:value={dc.yearlyTotalEnergy}
         />
+        <div class="label-wrapper">
+          <label for="building-lifespan">{dataCenter.lifespan.label} (years)</label>
+          <ToggleTip info={dataCenter.lifespan.description!} source="building-lifespan" />
+        </div>
+
+        <input type="number" id="building-lifespan" bind:value={dc.lifespan} />
       </div>
-    </div>
-    <div class="grid">
       <div class="field">
+        <div class="label-wrapper">
+          <label for="location">Location</label>
+          <ToggleTip info={dataCenter.location.description!} source="location" />
+        </div>
+        <select
+          bind:value={dc.location}
+          oninput={(event) => updateColor(event, dataCenter.location.value)}
+          id="location"
+          >{#each countriesNames as country}<option>{country}</option>{/each}</select
+        >
         <div class="label-wrapper">
           <label for="power-usage-effectiveness">Power Usage Effectiveness (PUE)</label>
           <ToggleTip
@@ -140,8 +123,6 @@
           oninput={(event) => updateColor(event, dataCenter.powerUsageEffectiveness.value)}
           bind:value={dc.powerUsageEffectiveness}
         />
-      </div>
-      <div class="field">
         <div class="label-wrapper">
           <label for="water-usage-effectiveness">Water Usage Effectiveness (WUE)</label>
           <ToggleTip
@@ -157,26 +138,6 @@
           bind:value={dc.waterUsageEffectiveness}
         />
       </div>
-      <div class="field">
-        <div class="label-wrapper">
-          <label for="location">Location</label>
-          <ToggleTip info={dataCenter.location.description!} source="location" />
-        </div>
-        <select
-          bind:value={dc.location}
-          oninput={(event) => updateColor(event, dataCenter.location.value)}
-          id="location"
-          >{#each countriesNames as country}<option>{country}</option>{/each}</select
-        >
-      </div>
-      <div class="field">
-        <div class="label-wrapper">
-          <label for="building-lifespan">{dataCenter.lifespan.label} (years)</label>
-          <ToggleTip info={dataCenter.lifespan.description!} source="building-lifespan" />
-        </div>
-
-        <input type="number" id="building-lifespan" bind:value={dc.lifespan} />
-      </div>
     </div>
 
     {#if !secondaryCharacteristicsAreVisible}
@@ -189,94 +150,6 @@
     {#if secondaryCharacteristicsAreVisible}
       <div transition:fade class="section-main" id="secondary-parameters">
         <div class="grid">
-          <div class="field">
-            <div class="label-wrapper">
-              <label for="building-technical-rooms-surface"
-                >{dataCenter.technicalRoomSurface.label} (m²)</label
-              >
-              <ToggleTip
-                info={dataCenter.technicalRoomSurface.description!}
-                source="building-technical-rooms-surface"
-              />
-            </div>
-
-            <input
-              type="number"
-              id="building-technical-rooms-surface"
-              step="0.01"
-              oninput={(event) => updateColor(event, dataCenter.technicalRoomSurface.value)}
-              bind:value={dc.technicalRoomsSurface}
-            />
-          </div>
-
-          <div class="field">
-            <div class="label-wrapper">
-              <label for="building-suspended-ceiling-surface">
-                {dataCenter.suspendedCeilingSurface.label} (m²)
-              </label>
-              <ToggleTip
-                info={dataCenter.suspendedCeilingSurface.description!}
-                source="building-suspended-ceiling-surface"
-              />
-            </div>
-            <input
-              type="number"
-              id="building-suspended-ceiling-surface"
-              step="0.01"
-              oninput={(event) => updateColor(event, dataCenter.suspendedCeilingSurface.value)}
-              bind:value={dc.suspendedCeilingSurface}
-            />
-          </div>
-
-          <div class="field">
-            <div class="label-wrapper">
-              <label for="building-lifts"> {dataCenter.lifts.label} </label>
-              <ToggleTip info={dataCenter.lifts.description!} source="building-lifts" />
-            </div>
-            <input
-              type="number"
-              id="building-lifts"
-              oninput={(event) => updateColor(event, dataCenter.lifts.value)}
-              bind:value={dc.lifts}
-            />
-          </div>
-        </div>
-
-        <div class="grid">
-          <div class="field">
-            <div class="label-wrapper">
-              <label for="building-freight-lifts"> {dataCenter.freightLifts.label} </label>
-              <ToggleTip
-                info={dataCenter.freightLifts.description!}
-                source="building-freight-lifts"
-              />
-            </div>
-            <input
-              type="number"
-              id="building-freight-lifts"
-              oninput={(event) => updateColor(event, dataCenter.freightLifts.value)}
-              bind:value={dc.freightLifts}
-            />
-          </div>
-
-          <div class="field">
-            <div class="label-wrapper">
-              <label for="building-partition-surface">
-                {dataCenter.partitionSurface.label} (m²)
-              </label>
-              <ToggleTip
-                info={dataCenter.partitionSurface.description!}
-                source="building-partition-surface"
-              />
-            </div>
-            <input
-              type="number"
-              id="building-partition-surface"
-              step="0.01"
-              oninput={(event) => updateColor(event, dataCenter.partitionSurface.value)}
-              bind:value={dc.partitionSurface}
-            />
-          </div>
           <div class="field">
             <div class="label-wrapper">
               <label for="electrical-technical-resilience"
