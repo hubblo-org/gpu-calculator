@@ -1,7 +1,8 @@
 import {
   buildImpactsPerCategoriesAndLifecycle,
   computeUnitOneResults,
-  formatForBarPlot
+  formatForBarPlot,
+  computeTotalEnergyFromTotalPower
 } from "./calculations";
 import type {
   DataCenterBuilding,
@@ -21,6 +22,8 @@ export class DataCenter {
   concreteVolume = $state<number>();
   totalSurface = $state<number>();
   lifespan = $state<number>();
+  datacenterLoadFactor = $state<number>();
+  maximumUsableElectricalPower = $state<number>();
   electricalTechnicalResilience = $state<string>();
   powerUsageEffectiveness = $state<number>();
   waterUsageEffectiveness = $state<number>();
@@ -50,10 +53,15 @@ export class DataCenter {
     //this.lifts = dataCenter.lifts.value as number;
     //this.freightLifts = dataCenter.freightLifts.value as number;
     //this.partitionSurface = dataCenter.partitionSurface.value as number;
+    this.datacenterLoadFactor = dataCenter.dataCenterLoadFactor.value as number;
     this.impactFactors = buildImpactsPerCategoriesAndLifecycle(this, this.dataCenterInventory);
     this.impactFactorsShares = formatForBarPlot(this.impactFactors);
     this.firstUnitResults = computeUnitOneResults(this, this.impactFactors);
     this.firstUnitShares = formatForBarPlot(this.firstUnitResults);
+    this.yearlyTotalEnergy = computeTotalEnergyFromTotalPower(
+      Number(this.maximumUsableElectricalPower),
+      Number(this.datacenterLoadFactor)
+    );
   }
 
   update() {
@@ -61,5 +69,9 @@ export class DataCenter {
     this.impactFactorsShares = formatForBarPlot(this.impactFactors);
     this.firstUnitResults = computeUnitOneResults(this, this.impactFactors);
     this.firstUnitShares = formatForBarPlot(this.firstUnitResults);
+    this.yearlyTotalEnergy = computeTotalEnergyFromTotalPower(
+      Number(this.maximumUsableElectricalPower),
+      Number(this.datacenterLoadFactor)
+    );
   }
 }

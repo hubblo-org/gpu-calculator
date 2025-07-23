@@ -7,6 +7,10 @@
   import DropdownButton from "./DropdownButton.svelte";
   import ToggleTip from "./ToggleTip.svelte";
   import ImpactFactorsSection from "./ImpactFactorsSection.svelte";
+  import {
+    computeTotalEnergyFromTotalPower,
+    computeTotalPowerFromTotalEnergy
+  } from "$lib/calculations";
 
   interface Props {
     dc: InstanceType<typeof DataCenter>;
@@ -49,6 +53,34 @@
     const graphSection = document.getElementById(dataCenterSectionId)?.parentElement;
     graphSection?.scrollIntoView();
   }
+
+  function updateValue(event: Event, initialValue: string | number) {
+    if (event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement) {
+      console.log("got event");
+      if (event.target.id == "maximum-usable-electrical-power") {
+        console.log("got event from " + event.target.id);
+        let newValue = computeTotalEnergyFromTotalPower(
+          event.target.value,
+          dc.datacenterLoadFactor
+        );
+        console.log("setting newvalue to yearly-total-energy: " + newValue);
+        dc.yearlyTotalEnergy = newValue;
+      } else if (event.target.id == "yearly-total-energy") {
+        console.log("got event from " + event.target.id);
+        let newValue = computeTotalPowerFromTotalEnergy(
+          event.target.value,
+          dc.datacenterLoadFactor
+        );
+        dc.maximumUsableElectricalPower = newValue;
+      } else if (event.target.id == "datacenter-load-factor") {
+        console.log("got event from " + event.target.id);
+        dc.yearlyTotalEnergy = computeTotalEnergyFromTotalPower(
+          dc.maximumUsableElectricalPower,
+          event.target.value
+        );
+      }
+    }
+  }
 </script>
 
 <section aria-labelledby="data-center-parameters">
@@ -78,6 +110,25 @@
           bind:value={dc.totalSurface}
         />
         <div class="label-wrapper">
+          <label for="maximum-usable-electrical-power">
+            {dataCenter.maximumUsableElectricalPower.label} MW
+          </label>
+          <ToggleTip
+            info={dataCenter.maximumUsableElectricalPower.description!}
+            source="maximum-usable-electrical-power"
+          />
+        </div>
+        <input
+          type="number"
+          id="maximum-usable-electrical-power"
+          step="0.1"
+          oninput={(event) => {
+            updateColor(event, dataCenter.maximumUsableElectricalPower.value);
+            updateValue(event, dataCenter.maximumUsableElectricalPower.value);
+          }}
+          bind:value={dc.maximumUsableElectricalPower}
+        />
+        <div class="label-wrapper">
           <label for="yearly-total-energy">{dataCenter.yearlyTotalEnergy.label} (kWh)</label>
           <ToggleTip
             info={dataCenter.yearlyTotalEnergy.description!}
@@ -88,15 +139,31 @@
           type="number"
           id="yearly-total-energy"
           step="0.01"
-          oninput={(event) => updateColor(event, dataCenter.yearlyTotalEnergy.value)}
+          oninput={(event) => {
+            updateColor(event, dataCenter.yearlyTotalEnergy.value);
+            updateValue(event, dataCenter.yearlyTotalEnergy.value);
+          }}
           bind:value={dc.yearlyTotalEnergy}
         />
         <div class="label-wrapper">
-          <label for="building-lifespan">{dataCenter.lifespan.label} (years)</label>
-          <ToggleTip info={dataCenter.lifespan.description!} source="building-lifespan" />
+          <label for="datacenter-load-factor">{dataCenter.dataCenterLoadFactor.label}</label>
+          <ToggleTip
+            info={dataCenter.dataCenterLoadFactor.description!}
+            source="datacenter-load-factor"
+          />
         </div>
-
-        <input type="number" id="building-lifespan" bind:value={dc.lifespan} />
+        <input
+          type="number"
+          id="datacenter-load-factor"
+          step="0.1"
+          max="1"
+          min="0"
+          oninput={(event) => {
+            updateColor(event, dataCenter.dataCenterLoadFactor.value);
+            updateValue(event, dataCenter.dataCenterLoadFactor.value);
+          }}
+          bind:value={dc.datacenterLoadFactor}
+        />
       </div>
       <div class="field">
         <div class="label-wrapper">
@@ -120,7 +187,7 @@
           type="number"
           id="power-usage-effectiveness"
           step="0.01"
-          oninput={(event) => updateColor(event, dataCenter.powerUsageEffectiveness.value)}
+          onchange={(event) => updateColor(event, dataCenter.powerUsageEffectiveness.value)}
           bind:value={dc.powerUsageEffectiveness}
         />
         <div class="label-wrapper">
@@ -137,9 +204,16 @@
           oninput={(event) => updateColor(event, dataCenter.waterUsageEffectiveness.value)}
           bind:value={dc.waterUsageEffectiveness}
         />
+        <div class="label-wrapper">
+          <label for="building-lifespan">{dataCenter.lifespan.label} (years)</label>
+          <ToggleTip info={dataCenter.lifespan.description!} source="building-lifespan" />
+        </div>
+
+        <input type="number" id="building-lifespan" bind:value={dc.lifespan} />
       </div>
     </div>
 
+    <!--
     {#if !secondaryCharacteristicsAreVisible}
       <DropdownButton
         direction="down"
@@ -175,6 +249,7 @@
         visibilityFunction={handleSecondaryCharacteristicsVisibility}
       />
     {/if}
+    -->
     <button
       id="recalculate"
       class="btn btn-primary btn-sm"

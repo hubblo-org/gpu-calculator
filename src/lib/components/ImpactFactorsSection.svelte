@@ -83,11 +83,11 @@
     if (source === "data-center") {
       const sectionTexts = {
         headingId: "data-center-table-heading",
-        sectionLabel: "Data center impact factors",
+        sectionLabel: "Datacenter impacts on 1 year",
         tableCaption:
           selectedGraph === Graph.BarPlot
-            ? "Data center impact factors per impact criterion, as absolute values"
-            : "Data center impact factors per inventory category, as absolute values"
+            ? "Datacenter impacts per impact criterion, as absolute values"
+            : "Datacenter impacts per inventory category, as absolute values"
       };
       return sectionTexts;
     } else {

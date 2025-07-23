@@ -1,2 +1,0 @@
-id,lifespan,total_surface,technical_rooms_surface_area,maximum_usable_electrical_power,total_energy_one_year_kwh,data_center_load_factor,pue,wue,erf,ref,electrical_and_technical_resilience,type_of_cooling_system,location,duration_of_the_study,concrete_volume,steel_mass,designed_floor_assembly_surface,suspensed_ceilling_surface,number_of_lifts,number_of_freight_lifs,partition_surface
-dc-01,60,2362.5,2362.5,5400,46910000,0.3,1.36,0,0,0,3,'Free-cooling','Poland',1,10683.76,756557.15,0,2362.51,1,1,0

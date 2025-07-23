@@ -59,52 +59,52 @@ export enum CoolingSystems {
 
 export enum ImpactCriterion {
   AbioticDepletionPotentialElements,
-  AbioticDepletionPotentialFossilFuels,
+  //AbioticDepletionPotentialFossilFuels,
   AcidificationPotential,
-  ComparativeToxicityUnitsForEcosystems,
-  ComparativeToxicityUnitsForHumans,
-  ComparativeToxicityUnitsForHumansCarcinogenic,
-  ComparativeToxicityUnitsForHumansNonCarcinogenic,
-  EutrophicationPotentialFreshWater,
-  EutrophicationPotentialMarine,
-  EutrophicationPotentialTerrestrial,
+  //ComparativeToxicityUnitsForEcosystems,
+  //ComparativeToxicityUnitsForHumans,
+  //ComparativeToxicityUnitsForHumansCarcinogenic,
+  //ComparativeToxicityUnitsForHumansNonCarcinogenic,
+  //EutrophicationPotentialFreshWater,
+  //EutrophicationPotentialMarine,
+  //EutrophicationPotentialTerrestrial,
   GlobalWarmingPotential,
-  GlobalWarmingPotentialBiogenic,
-  GlobalWarmingPotentialFossil,
-  GlobalWarmingPotentialLandUse,
+  //GlobalWarmingPotentialBiogenic,
+  //GlobalWarmingPotentialFossil,
+  //GlobalWarmingPotentialLandUse,
   IonisingRadiation,
-  LandUse,
-  MaterialInputPerServiceUnit,
-  OzoneDepletionPotential,
+  //LandUse,
+  //MaterialInputPerServiceUnit,
+  //OzoneDepletionPotential,
   ParticulateMatter,
-  PhotochemicalOzoneFormationPotential,
-  TotalPrimaryEnergy,
-  WaterUse
+  //PhotochemicalOzoneFormationPotential,
+  TotalPrimaryEnergy
+  //WaterUse
 }
 
 export enum ImpactCriterionAcronym {
   ADPe = "ADPe",
-  ADPf = "ADPf",
+  //ADPf = "ADPf",
   AP = "AP",
-  CTUe = "CTUe",
-  CTUh = "CTUh",
-  CTUh_c = "CTUh_c",
-  CTUh_nc = "CTUh_nc",
-  EPF = "EPF",
-  EPM = "EPM",
-  EPT = "EPT",
+  //CTUe = "CTUe",
+  //CTUh = "CTUh",
+  //CTUh_c = "CTUh_c",
+  //CTUh_nc = "CTUh_nc",
+  //EPF = "EPF",
+  //EPM = "EPM",
+  //EPT = "EPT",
   GWP = "GWP",
-  GWPb = "GWPb",
-  GWPf = "GWPf",
-  GWPlu = "GWPlu",
+  //GWPb = "GWPb",
+  //GWPf = "GWPf",
+  //GWPlu = "GWPlu",
   IR = "IR",
-  LU = "LU",
-  MIPS = "MIPS",
-  ODP = "ODP",
+  //LU = "LU",
+  //MIPS = "MIPS",
+  //ODP = "ODP",
   PM = "PM",
-  POCP = "POCP",
-  TPE = "TPE",
-  WU = "WU"
+  //POCP = "POCP",
+  TPE = "TPE"
+  //WU = "WU"
 }
 
 export declare type IC = keyof typeof ImpactCriterion;
@@ -117,128 +117,128 @@ export function getImpactCriterionValues(impactCriterion: ImpactCriterion): Impa
         name: "Abiotic Depletion Potential Elements",
         unit: "kg Sb-Eq"
       };
-    case ImpactCriterion.AbioticDepletionPotentialFossilFuels:
-      return {
-        acronym: ImpactCriterionAcronym.ADPf,
-        name: "Abiotic Depletion Potential Fossil Fuels",
-        unit: "MJ, net calorific value"
-      };
+    //case ImpactCriterion.AbioticDepletionPotentialFossilFuels:
+    //  return {
+    //    acronym: ImpactCriterionAcronym.ADPf,
+    //    name: "Abiotic Depletion Potential Fossil Fuels",
+    //    unit: "MJ, net calorific value"
+    //  };
     case ImpactCriterion.AcidificationPotential:
       return {
         acronym: ImpactCriterionAcronym.AP,
         name: "Acidification Potential",
         unit: "mol H+-Eq"
       };
-    case ImpactCriterion.ComparativeToxicityUnitsForEcosystems:
-      return {
-        acronym: ImpactCriterionAcronym.CTUe,
-        name: "Comparative Toxicity Units For Ecosystems",
-        unit: "CTUe"
-      };
-    case ImpactCriterion.ComparativeToxicityUnitsForHumans:
-      return {
-        acronym: ImpactCriterionAcronym.CTUh,
-        name: "Comparative Toxicity Units For Humans",
-        unit: "CTUh"
-      };
-    case ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic:
-      return {
-        acronym: ImpactCriterionAcronym.CTUh_c,
-        name: "Comparative Toxicity Units For Humans Carcinogenic",
-        unit: "CTUh"
-      };
-    case ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic:
-      return {
-        acronym: ImpactCriterionAcronym.CTUh_nc,
-        name: "Comparative Toxicity Units For Humans Non Carcinogenic",
-        unit: "CTUh"
-      };
-    case ImpactCriterion.EutrophicationPotentialFreshWater:
-      return {
-        acronym: ImpactCriterionAcronym.EPF,
-        name: "Eutrophication Potential Fresh Water",
-        unit: "kg P-Eq"
-      };
-    case ImpactCriterion.EutrophicationPotentialMarine:
-      return {
-        acronym: ImpactCriterionAcronym.EPM,
-        name: "Eutrophication Potential Marine",
-        unit: "kg N-Eq"
-      };
-    case ImpactCriterion.EutrophicationPotentialTerrestrial:
-      return {
-        acronym: ImpactCriterionAcronym.EPT,
-        name: "Eutrophication Potential Terrestrial",
-        unit: "mol N-Eq"
-      };
+    //case ImpactCriterion.ComparativeToxicityUnitsForEcosystems:
+    //  return {
+    //    acronym: ImpactCriterionAcronym.CTUe,
+    //    name: "Comparative Toxicity Units For Ecosystems",
+    //    unit: "CTUe"
+    //  };
+    //case ImpactCriterion.ComparativeToxicityUnitsForHumans:
+    //  return {
+    //    acronym: ImpactCriterionAcronym.CTUh,
+    //    name: "Comparative Toxicity Units For Humans",
+    //    unit: "CTUh"
+    //  };
+    //case ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic:
+    //  return {
+    //    acronym: ImpactCriterionAcronym.CTUh_c,
+    //    name: "Comparative Toxicity Units For Humans Carcinogenic",
+    //    unit: "CTUh"
+    //  };
+    //case ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic:
+    //  return {
+    //    acronym: ImpactCriterionAcronym.CTUh_nc,
+    //    name: "Comparative Toxicity Units For Humans Non Carcinogenic",
+    //    unit: "CTUh"
+    //  };
+    //case ImpactCriterion.EutrophicationPotentialFreshWater:
+    //  return {
+    //    acronym: ImpactCriterionAcronym.EPF,
+    //    name: "Eutrophication Potential Fresh Water",
+    //    unit: "kg P-Eq"
+    //  };
+    //case ImpactCriterion.EutrophicationPotentialMarine:
+    //  return {
+    //    acronym: ImpactCriterionAcronym.EPM,
+    //    name: "Eutrophication Potential Marine",
+    //    unit: "kg N-Eq"
+    //  };
+    //case ImpactCriterion.EutrophicationPotentialTerrestrial:
+    //  return {
+    //    acronym: ImpactCriterionAcronym.EPT,
+    //    name: "Eutrophication Potential Terrestrial",
+    //    unit: "mol N-Eq"
+    //  };
     case ImpactCriterion.GlobalWarmingPotential:
       return {
         acronym: ImpactCriterionAcronym.GWP,
         name: "Global Warming Potential",
         unit: "kg CO2-Eq"
       };
-    case ImpactCriterion.GlobalWarmingPotentialBiogenic:
-      return {
-        acronym: ImpactCriterionAcronym.GWPb,
-        name: "Global Warming Potential Biogenic",
-        unit: "kg CO2-Eq"
-      };
-    case ImpactCriterion.GlobalWarmingPotentialFossil:
-      return {
-        acronym: ImpactCriterionAcronym.GWPf,
-        name: "Global WarmingPotentialFossil",
-        unit: "kg C02-Eq"
-      };
-    case ImpactCriterion.GlobalWarmingPotentialLandUse:
-      return {
-        acronym: ImpactCriterionAcronym.GWPlu,
-        name: "Global Warming Potential LandUse",
-        unit: "kg CO2-Eq"
-      };
+    //case ImpactCriterion.GlobalWarmingPotentialBiogenic:
+    //  return {
+    //    acronym: ImpactCriterionAcronym.GWPb,
+    //    name: "Global Warming Potential Biogenic",
+    //    unit: "kg CO2-Eq"
+    //  };
+    //case ImpactCriterion.GlobalWarmingPotentialFossil:
+    //  return {
+    //    acronym: ImpactCriterionAcronym.GWPf,
+    //    name: "Global WarmingPotentialFossil",
+    //    unit: "kg C02-Eq"
+    //  };
+    //case ImpactCriterion.GlobalWarmingPotentialLandUse:
+    //  return {
+    //    acronym: ImpactCriterionAcronym.GWPlu,
+    //    name: "Global Warming Potential LandUse",
+    //    unit: "kg CO2-Eq"
+    //  };
     case ImpactCriterion.IonisingRadiation:
       return {
         acronym: ImpactCriterionAcronym.IR,
         name: "Ionising Radiation",
         unit: "kBq U235-Eq"
       };
-    case ImpactCriterion.LandUse:
-      return { acronym: ImpactCriterionAcronym.LU, name: "Land Use", unit: "u" };
-    case ImpactCriterion.MaterialInputPerServiceUnit:
-      return {
-        acronym: ImpactCriterionAcronym.MIPS,
-        name: "Material Input Per Service Unit",
-        unit: "kg"
-      };
-    case ImpactCriterion.OzoneDepletionPotential:
-      return {
-        acronym: ImpactCriterionAcronym.ODP,
-        name: "Ozone Depletion Potential",
-        unit: "kg CFC-11-Eq"
-      };
+    //case ImpactCriterion.LandUse:
+    //  return { acronym: ImpactCriterionAcronym.LU, name: "Land Use", unit: "u" };
+    //case ImpactCriterion.MaterialInputPerServiceUnit:
+    //  return {
+    //    acronym: ImpactCriterionAcronym.MIPS,
+    //    name: "Material Input Per Service Unit",
+    //    unit: "kg"
+    //  };
+    //case ImpactCriterion.OzoneDepletionPotential:
+    //  return {
+    //    acronym: ImpactCriterionAcronym.ODP,
+    //    name: "Ozone Depletion Potential",
+    //    unit: "kg CFC-11-Eq"
+    //  };
     case ImpactCriterion.ParticulateMatter:
       return {
         acronym: ImpactCriterionAcronym.PM,
         name: "Particulate Matter",
         unit: "disease incidence"
       };
-    case ImpactCriterion.PhotochemicalOzoneFormationPotential:
-      return {
-        acronym: ImpactCriterionAcronym.POCP,
-        name: "Photochemical Ozone Formation Potential",
-        unit: "kg NMVOC-Eq"
-      };
+    //case ImpactCriterion.PhotochemicalOzoneFormationPotential:
+    //  return {
+    //    acronym: ImpactCriterionAcronym.POCP,
+    //    name: "Photochemical Ozone Formation Potential",
+    //    unit: "kg NMVOC-Eq"
+    //  };
     case ImpactCriterion.TotalPrimaryEnergy:
       return {
         acronym: ImpactCriterionAcronym.TPE,
         name: "Total Primary Energy",
         unit: "MJ, net calorific value"
       };
-    case ImpactCriterion.WaterUse:
-      return {
-        acronym: ImpactCriterionAcronym.WU,
-        name: "Water Use",
-        unit: "m3 world eq. deprived"
-      };
+    //case ImpactCriterion.WaterUse:
+    //  return {
+    //    acronym: ImpactCriterionAcronym.WU,
+    //    name: "Water Use",
+    //    unit: "m3 world eq. deprived"
+    //  };
   }
 }
 

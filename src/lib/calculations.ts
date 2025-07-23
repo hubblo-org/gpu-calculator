@@ -59,97 +59,16 @@ export function addImpacts(
       ),
       unit: impacts1.ADPe.unit
     },
-    ADPf: {
-      value: computeImpact(
-        impacts1.ADPf.value,
-        quantity,
-        impacts2.ADPf.value,
-        refYears,
-        lifespan,
-        fullLifespanCalculation
-      ),
-      unit: impacts1.ADPf.unit
-    },
     AP: {
-      value: computeImpact(impacts1.AP.value, quantity, impacts2.AP.value, refYears, lifespan, fullLifespanCalculation),
+      value: computeImpact(
+        impacts1.AP.value,
+        quantity,
+        impacts2.AP.value,
+        refYears,
+        lifespan,
+        fullLifespanCalculation
+      ),
       unit: impacts1.AP.unit
-    },
-    CTUe: {
-      value: computeImpact(
-        impacts1.CTUe.value,
-        quantity,
-        impacts2.CTUe.value,
-        refYears,
-        lifespan,
-        fullLifespanCalculation
-      ),
-      unit: impacts1.CTUe.unit
-    },
-    CTUh: {
-      value: computeImpact(
-        impacts1.CTUh.value,
-        quantity,
-        impacts2.CTUh.value,
-        refYears,
-        lifespan,
-        fullLifespanCalculation
-      ),
-      unit: impacts1.CTUh.unit
-    },
-    CTUh_c: {
-      value: computeImpact(
-        impacts1.CTUh_c.value,
-        quantity,
-        impacts2.CTUh_c.value,
-        refYears,
-        lifespan,
-        fullLifespanCalculation
-      ),
-      unit: impacts1.CTUh_c.unit
-    },
-    CTUh_nc: {
-      value: computeImpact(
-        impacts1.CTUh_nc.value,
-        quantity,
-        impacts2.CTUh_nc.value,
-        refYears,
-        lifespan,
-        fullLifespanCalculation
-      ),
-      unit: impacts1.CTUh_nc.unit
-    },
-    EPF: {
-      value: computeImpact(
-        impacts1.EPF.value,
-        quantity,
-        impacts2.EPF.value,
-        refYears,
-        lifespan,
-        fullLifespanCalculation
-      ),
-      unit: impacts1.EPF.unit
-    },
-    EPM: {
-      value: computeImpact(
-        impacts1.EPM.value,
-        quantity,
-        impacts2.EPM.value,
-        refYears,
-        lifespan,
-        fullLifespanCalculation
-      ),
-      unit: impacts1.EPM.unit
-    },
-    EPT: {
-      value: computeImpact(
-        impacts1.EPT.value,
-        quantity,
-        impacts2.EPT.value,
-        refYears,
-        lifespan,
-        fullLifespanCalculation
-      ),
-      unit: impacts1.EPT.unit
     },
     GWP: {
       value: computeImpact(
@@ -162,39 +81,6 @@ export function addImpacts(
       ),
       unit: impacts1.GWP.unit
     },
-    GWPb: {
-      value: computeImpact(
-        impacts1.GWPb.value,
-        quantity,
-        impacts2.GWPb.value,
-        refYears,
-        lifespan,
-        fullLifespanCalculation
-      ),
-      unit: impacts1.GWPb.unit
-    },
-    GWPf: {
-      value: computeImpact(
-        impacts1.GWPf.value,
-        quantity,
-        impacts2.GWPf.value,
-        refYears,
-        lifespan,
-        fullLifespanCalculation
-      ),
-      unit: impacts1.GWPf.unit
-    },
-    GWPlu: {
-      value: computeImpact(
-        impacts1.GWPlu.value,
-        quantity,
-        impacts2.GWPlu.value,
-        refYears,
-        lifespan,
-        fullLifespanCalculation
-      ),
-      unit: impacts1.GWPlu.unit
-    },
     IR: {
       value: computeImpact(
         impacts1.IR.value,
@@ -205,39 +91,6 @@ export function addImpacts(
         fullLifespanCalculation
       ),
       unit: impacts1.IR.unit
-    },
-    LU: {
-      value: computeImpact(
-        impacts1.LU.value,
-        quantity,
-        impacts2.LU.value,
-        refYears,
-        lifespan,
-        fullLifespanCalculation
-      ),
-      unit: impacts1.LU.unit
-    },
-    MIPS: {
-      value: computeImpact(
-        impacts1.MIPS.value,
-        quantity,
-        impacts2.MIPS.value,
-        refYears,
-        lifespan,
-        fullLifespanCalculation
-      ),
-      unit: impacts1.MIPS.unit
-    },
-    ODP: {
-      value: computeImpact(
-        impacts1.ODP.value,
-        quantity,
-        impacts2.ODP.value,
-        refYears,
-        lifespan,
-        fullLifespanCalculation
-      ),
-      unit: impacts1.ODP.unit
     },
     PM: {
       value: computeImpact(
@@ -250,17 +103,6 @@ export function addImpacts(
       ),
       unit: impacts1.PM.unit
     },
-    POCP: {
-      value: computeImpact(
-        impacts1.POCP.value,
-        quantity,
-        impacts2.POCP.value,
-        refYears,
-        lifespan,
-        fullLifespanCalculation
-      ),
-      unit: impacts1.POCP.unit
-    },
     TPE: {
       value: computeImpact(
         impacts1.TPE.value,
@@ -271,25 +113,12 @@ export function addImpacts(
         fullLifespanCalculation
       ),
       unit: impacts1.TPE.unit
-    },
-    WU: {
-      value: computeImpact(
-        impacts1.WU.value,
-        quantity,
-        impacts2.WU.value,
-        refYears,
-        lifespan,
-        fullLifespanCalculation
-      ),
-      unit: impacts1.WU.unit
     }
   };
   return res;
 }
 
-export function formatForBarPlot(
-  categorizedImpacts: ResultWithLifeCycle[]
-): OrderedImpactFactors {
+export function formatForBarPlot(categorizedImpacts: ResultWithLifeCycle[]): OrderedImpactFactors {
   let res = categorizedImpacts;
 
   const lifeCycleSteps = ["manufacturing", "transport", "use", "end-of-life"];
@@ -306,7 +135,10 @@ export function formatForBarPlot(
       };
       res.forEach((item) => {
         if (item.lifeCycleStep == step) {
-          totalImpact.share = totalImpact.share + item.impacts[(crit as IF)].value;
+          if (crit in item.impacts) {
+            console.log("item impacts " + item.impacts[crit as IF].value);
+            totalImpact.share = totalImpact.share + item.impacts[crit as IF].value;
+          }
         }
       });
       resultsPerLifecycle.push(totalImpact);
@@ -337,6 +169,7 @@ export function buildImpactsPerCategoriesAndLifecycle(
       totalImpact.lifeCycleStep = step;
       totalImpact.category = category;
       // Electricity impacts
+      //
       if (category == "energy" && step == "use") {
         let electricityItem = inventoryWithImpact.filter(
           (element) => element.name == "Electricity, " + datacenterSpecs.location + " mix"
@@ -350,31 +183,70 @@ export function buildImpactsPerCategoriesAndLifecycle(
           Number(electricityItem.lifespan),
           true
         );
-      }
-      // Concrete impacts
-      if (category == "building" && step != "use") {
-        let concreteItem = inventoryWithImpact.filter(
-          (element) => element.name == "Concrete volume"
-        )[0];
-        totalImpact.impacts = addImpacts(
-          totalImpact.impacts,
-          Number(datacenterSpecs.concreteVolume),
-          concreteItem.impacts,
-          refYears,
-          Number(concreteItem.lifespan),
-          true
+        console.log(
+          "added impacts for Electricity : " +
+            Number(datacenterSpecs.yearlyTotalEnergy) *
+              Number(
+                datacenterSpecs.powerUsageEffectiveness +
+                  "x Electricity, " +
+                  datacenterSpecs.location +
+                  " mix impacts"
+              )
         );
       }
-      // Steel impacts
-      if (category == "building" && step != "use") {
-        let steelItem = inventoryWithImpact.filter((element) => element.name == "Steel mass")[0];
+      // Diesel impacts
+      // We consider that the full diesel capacity available is consumed once per year, for testing and refresh purpose.
+      // 1 liter of Diesel = 0.84 kg of weight
+      // We consider an average 12 kWh of energy available per kg of diesel consumed
+      // We consider that there is a Diesel capacity for 48 hours of running the Datacenter during an electricity shortage, at full power capacity.
+      if (category == "energy" && step == "use") {
+        let dieselItem = inventoryWithImpact.filter((element) => element.name == "Diesel")[0];
+        let maxPower = 1;
+        if (datacenterSpecs.maximumUsableElectricalPower > 0) {
+          maxPower = datacenterSpecs.maximumUsableElectricalPower;
+        }
         totalImpact.impacts = addImpacts(
           totalImpact.impacts,
-          Number(datacenterSpecs.steelMass),
-          steelItem.impacts,
+          (maxPower * 48) / 12,
+          dieselItem.impacts,
           refYears,
-          Number(steelItem.lifespan),
+          Number(dieselItem.lifespan),
           true
+        );
+        console.log("added impacts for Diesel : " + maxPower * 48 + " x dieselItem impacts");
+      }
+      // Building architecture impacts based on Cloud & Datacenters PCR from Ademe, generic data
+      if (
+        category == "building" &&
+        (step == "manufacturing" || step == "transport" || step == "end-of-life")
+      ) {
+        let buildingArchitectureItems = inventoryWithImpact.filter(
+          (element) => element.name == "Building architecture" && element.lifeCycleStep == step
+        );
+        console.log("Got building items : " + buildingArchitectureItems);
+        let buildingArchitectureItem = buildingArchitectureItems[0];
+        console.log(
+          "found buildingArch: " +
+            buildingArchitectureItem.name +
+            " with lc step = " +
+            buildingArchitectureItem.lifeCycleStep +
+            " category " +
+            buildingArchitectureItem.category
+        );
+        totalImpact.impacts = addImpacts(
+          totalImpact.impacts,
+          datacenterSpecs.totalSurface,
+          buildingArchitectureItem.impacts,
+          refYears,
+          Number(buildingArchitectureItem.lifespan),
+          false
+        );
+        console.log(
+          "added impacts for Building Architecture, step " +
+            step +
+            " : " +
+            datacenterSpecs.totalSurface +
+            " x BuildingArchitectureItem impacts"
         );
       }
       // Global inventory impacts
@@ -414,12 +286,16 @@ export function computeUnitOneResults(
     newItem.source = item.source;
     if (item.lifeCycleStep == "use") {
       impactCriteria.forEach((crit) => {
-        newItem.impacts[(crit as IF)].value = item.impacts[(crit as IF)].value / puissCommDC;
+        if (crit in newItem.impacts && crit in item.impacts) {
+          newItem.impacts[crit as IF].value = item.impacts[crit as IF].value / puissCommDC;
+        }
       });
     } else {
       impactCriteria.forEach((crit) => {
-        newItem.impacts[(crit as IF)].value =
-          (item.impacts[(crit as IF)].value * 1) / (datacenterSpecs.lifespan! * puissCommDC);
+        if (crit in newItem.impacts && crit in item.impacts) {
+          newItem.impacts[crit as IF].value =
+            (item.impacts[crit as IF].value * 1) / (datacenterSpecs.lifespan! * puissCommDC);
+        }
       });
     }
     res.push(newItem);
@@ -427,4 +303,18 @@ export function computeUnitOneResults(
   console.error(datacenterResults);
 
   return res;
+}
+
+export function computeITPowerFromTotalPower(installedPower: number, pue: number) {
+  return installedPower / pue;
+}
+
+export function computeTotalEnergyFromTotalPower(installedPower: number, loadFactor: number) {
+  console.log("returning yearly energy as " + installedPower + " x " + loadFactor + " x 365 x 24");
+  return installedPower * loadFactor * 365 * 24;
+}
+
+export function computeTotalPowerFromTotalEnergy(yearlyEnergy: number, loadFactor) {
+  console.log("returning totalPower as " + yearlyEnergy + " / (" + loadFactor + " x 365 x 24)");
+  return yearlyEnergy / (365 * 24 * loadFactor);
 }

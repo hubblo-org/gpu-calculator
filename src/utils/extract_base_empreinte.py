@@ -61,6 +61,7 @@ def main():
     path = "../mocks/BASE-IMPACTS-v3-0/BI_3.0__02_Procedes_Details.xlsx"
     df = p.read_excel(path)
 
+    res = []
     for k in elec_mixes.keys():
         elec_mixes[k]["meta"] = {}
         for n in df.T.iterrows():
@@ -70,11 +71,18 @@ def main():
                 elec_mixes[k]["meta"]["reference_year"] = int(n[1][23])
                 elec_mixes[k]["meta"]["source"] = "ADEME Base Empreinte"
                 break
-
-    pprint(elec_mixes)
+        item = elec_mixes[k]
+        item["id"] = "Electricity mix - {}".format(country_fullname)
+        item["category"] = "Consumables"
+        item["material_unit"] = 1
+        item["material_name"] = "Electricity, {} mix".format(country_fullname)
+        item["source"] = "Mix electrique reseau, {}/Electricity grid mix, {}, from Base Empreinte".format(k, k)
+        item["mass"] = 0
+        item["lc_step"] = "use"
+        res.append(item)
 
     with open("result.json", 'w') as fd:
-        json.dump(elec_mixes, fd)
+        json.dump(res, fd)
         fd.close()
     #print(df.iloc[4:])
     #for i in df.iloc[4:]:

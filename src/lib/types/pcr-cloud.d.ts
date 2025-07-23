@@ -49,27 +49,27 @@ export declare type ImpactFactor = {
 
 export declare type ImpactFactors = {
   ADPe: ImpactFactor;
-  ADPf: ImpactFactor;
+  //ADPf: ImpactFactor;
   AP: ImpactFactor;
-  CTUe: ImpactFactor;
-  CTUh: ImpactFactor;
-  CTUh_c: ImpactFactor;
-  CTUh_nc: ImpactFactor;
-  EPF: ImpactFactor;
-  EPM: ImpactFactor;
-  EPT: ImpactFactor;
+  //CTUe: ImpactFactor;
+  //CTUh: ImpactFactor;
+  //CTUh_c: ImpactFactor;
+  //CTUh_nc: ImpactFactor;
+  //EPF: ImpactFactor;
+  //EPM: ImpactFactor;
+  //EPT: ImpactFactor;
   GWP: ImpactFactor;
-  GWPb: ImpactFactor;
-  GWPf: ImpactFactor;
-  GWPlu: ImpactFactor;
+  //GWPb: ImpactFactor;
+  //GWPf: ImpactFactor;
+  //GWPlu: ImpactFactor;
   IR: ImpactFactor;
-  LU: ImpactFactor;
-  MIPS: ImpactFactor;
-  ODP: ImpactFactor;
+  //LU: ImpactFactor;
+  //MIPS: ImpactFactor;
+  //ODP: ImpactFactor;
   PM: ImpactFactor;
-  POCP: ImpactFactor;
+  //POCP: ImpactFactor;
   TPE: ImpactFactor;
-  WU: ImpactFactor;
+  //WU: ImpactFactor;
 };
 export declare type IF = keyof ImpactFactors;
 

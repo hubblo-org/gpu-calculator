@@ -12,68 +12,27 @@ import type {
 import { getImpactCriterionValues, ImpactCriterion } from "$lib/types/enums";
 
 export const dataCenterCharacteristics: DataCenterBuilding = {
-  //energyReuseFactor: {
-  //  label: "Energy Reuse Factor",
-  //  value: dataCenterInventory.energyReuseFactor,
-  //  description: "test"
-  //},
   electricalTechnicalResilience: {
     label: "Electrical Technical Resilience",
     value: dataCenterInventory.electricalTechnicalResilience,
     description: "test"
   },
-  //renewableEnergyFactor: {
-  //  label: "Renewable Energy Factor",
-  //  value: dataCenterInventory.renewableEnergyFactor,
-  //  description: "test"
-  //},
-  //suspendedCeilingSurface: {
-  //  label: "Suspended ceiling surface",
-  //  value: dataCenterInventory.suspendedCeilingSurface,
-  //  description: "test"
-  //},
-  //lifts: { label: "Number of lifts", value: dataCenterInventory.lifts, description: "test" },
   location: { label: "Location", value: dataCenterInventory.location, description: "test" },
-  //freightLifts: {
-  //  label: "Number of freight lifts",
-  //  value: dataCenterInventory.freightLifts,
-  //  description: "test"
-  //},
   maximumUsableElectricalPower: {
-    label: "Maximum usable electrical power",
+    label: "Total power installed (IT + facility)",
     value: dataCenterInventory.maximumUsableElectricalPower,
     description: "test"
   },
-  //coolingSystemType: {
-  //  label: "Cooling system type",
-  //  value: dataCenterInventory.coolingSystemType,
-  //  description: "test"
-  //},
   dataCenterLoadFactor: {
     label: "Load factor",
     value: dataCenterInventory.dataCenterLoadFactor,
     description: "test"
   },
-  //designedFloorAssemblySurface: {
-  //  label: "Designed floor assembly surface",
-  //  value: dataCenterInventory.designedFloorAssemblySurface,
-  //  description: "test"
-  //},
-  //partitionSurface: {
-  //  label: "Partition surface",
-  //  value: dataCenterInventory.partitionSurface,
-  //  description: "test"
-  //},
   lifespan: {
     label: "Building lifespan",
     value: dataCenterInventory.lifespan,
     description: "test"
   },
-  //technicalRoomSurface: {
-  //  label: "Technical rooms surface area",
-  //  value: dataCenterInventory.technicalRoomSurface,
-  //  description: "test"
-  //},
   totalSurface: {
     label: "Building total surface",
     value: dataCenterInventory.totalSurface,
@@ -81,7 +40,7 @@ export const dataCenterCharacteristics: DataCenterBuilding = {
       "The building total surface in square meters, allowing to compute the total and yearly impacts for the manufacturing, transport and end-of-life life cycle steps"
   },
   yearlyTotalEnergy: {
-    label: "Total IT energy for one year",
+    label: "Total energy (IT + facility), for one year",
     value: dataCenterInventory.yearlyTotalEnergy,
     description: "test"
   },
@@ -95,12 +54,6 @@ export const dataCenterCharacteristics: DataCenterBuilding = {
     value: dataCenterInventory.waterUsageEffectiveness,
     description: "test"
   }
-  //concreteVolume: {
-  //  label: "Concrete volume",
-  //  value: dataCenterInventory.concreteVolume,
-  //  description: "test"
-  //},
-  //steelMass: { label: "Steel mass", value: dataCenterInventory.steelMass, description: "test" }
 };
 
 export function genNullImpact() {
@@ -114,82 +67,82 @@ export function genNullImpact() {
         value: 0,
         unit: getImpactCriterionValues(ImpactCriterion.AbioticDepletionPotentialElements).unit
       },
-      ADPf: {
-        value: 0,
-        unit: getImpactCriterionValues(ImpactCriterion.AbioticDepletionPotentialFossilFuels).unit
-      },
+      //ADPf: {
+      //  value: 0,
+      //  unit: getImpactCriterionValues(ImpactCriterion.AbioticDepletionPotentialFossilFuels).unit
+      //},
       AP: {
         value: 0,
         unit: getImpactCriterionValues(ImpactCriterion.AcidificationPotential).unit
       },
-      CTUe: {
-        value: 0,
-        unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForEcosystems).unit
-      },
-      CTUh: {
-        value: 0,
-        unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumans).unit
-      },
-      CTUh_c: {
-        value: 0,
-        unit: getImpactCriterionValues(
-          ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic
-        ).unit
-      },
-      CTUh_nc: {
-        value: 0,
-        unit: getImpactCriterionValues(
-          ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic
-        ).unit
-      },
-      EPF: {
-        value: 0,
-        unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialFreshWater).unit
-      },
-      EPM: {
-        value: 0,
-        unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialMarine).unit
-      },
-      EPT: {
-        value: 0,
-        unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialTerrestrial).unit
-      },
+      //CTUe: {
+      //  value: 0,
+      //  unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForEcosystems).unit
+      //},
+      //CTUh: {
+      //  value: 0,
+      //  unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumans).unit
+      //},
+      //CTUh_c: {
+      //  value: 0,
+      //  unit: getImpactCriterionValues(
+      //    ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic
+      //  ).unit
+      //},
+      //CTUh_nc: {
+      //  value: 0,
+      //  unit: getImpactCriterionValues(
+      //    ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic
+      //  ).unit
+      //},
+      //EPF: {
+      //  value: 0,
+      //  unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialFreshWater).unit
+      //},
+      //EPM: {
+      //  value: 0,
+      //  unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialMarine).unit
+      //},
+      //EPT: {
+      //  value: 0,
+      //  unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialTerrestrial).unit
+      //
       GWP: {
         value: 0,
         unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotential).unit
       },
-      GWPb: {
-        value: 0,
-        unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialBiogenic).unit
-      },
-      GWPf: {
-        value: 0,
-        unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialFossil).unit
-      },
-      GWPlu: {
-        value: 0,
-        unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialLandUse).unit
-      },
+      //GWPb: {
+      //  value: 0,
+      //  unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialBiogenic).unit
+      //},
+      //GWPf: {
+      //  value: 0,
+      //  unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialFossil).unit
+      //},
+      //GWPlu: {
+      //  value: 0,
+      //  unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialLandUse).unit
+      //},
       IR: { value: 0, unit: getImpactCriterionValues(ImpactCriterion.IonisingRadiation).unit },
-      LU: { value: 0, unit: getImpactCriterionValues(ImpactCriterion.LandUse).unit },
-      MIPS: {
-        value: 0,
-        unit: getImpactCriterionValues(ImpactCriterion.MaterialInputPerServiceUnit).unit
-      },
-      ODP: {
-        value: 0,
-        unit: getImpactCriterionValues(ImpactCriterion.OzoneDepletionPotential).unit
-      },
+      //LU: { value: 0, unit: getImpactCriterionValues(ImpactCriterion.LandUse).unit },
+      //MIPS: {
+      //  value: 0,
+      //  unit: getImpactCriterionValues(ImpactCriterion.MaterialInputPerServiceUnit).unit
+      //},
+      //ODP: {
+      //  value: 0,
+      //  unit: getImpactCriterionValues(ImpactCriterion.OzoneDepletionPotential).unit
+      //},
       PM: { value: 0, unit: getImpactCriterionValues(ImpactCriterion.ParticulateMatter).unit },
-      POCP: {
-        value: 0,
-        unit: getImpactCriterionValues(ImpactCriterion.PhotochemicalOzoneFormationPotential).unit
-      },
+      //POCP: {
+      //  value: 0,
+      //  unit: getImpactCriterionValues(ImpactCriterion.PhotochemicalOzoneFormationPotential).unit
+      //},
       TPE: {
         value: 0,
         unit: getImpactCriterionValues(ImpactCriterion.TotalPrimaryEnergy).unit
-      },
-      WU: { value: 0, unit: getImpactCriterionValues(ImpactCriterion.WaterUse).unit }
+      }
+      //WU: { value: 0, unit: getImpactCriterionValues(ImpactCriterion.WaterUse).unit }
     }
   };
   return nullImpact;
@@ -201,7 +154,14 @@ export const inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[] 
       (inventoryElement) => element.id == inventoryElement.id
     );
     if (elementDetails.length == 0) {
-      console.error(element.id);
+      console.error("is empty: " + element.id);
+    } else {
+      for (var key in elementDetails) {
+        console.log("element details, key " + key + ": " + elementDetails[key]);
+        for (var k in elementDetails[key]) {
+          console.log("details: " + k + " value=" + elementDetails[key][k]);
+        }
+      }
     }
     const inventoryElement = {
       name: element.material_name,
@@ -210,94 +170,94 @@ export const inventoryWithImpact: DataCenterInventoryElementWithImpactFactors[] 
       source: element.source,
       quantity: elementDetails[0]?.quantity,
       lifespan: elementDetails[0]?.lifespan,
-      lifeCycleStep: element.lifeCycleStep,
+      lifeCycleStep: element.lc_step,
       impacts: {
         ADPe: {
           value: element.ADPe,
           unit: getImpactCriterionValues(ImpactCriterion.AbioticDepletionPotentialElements).unit
         },
-        ADPf: {
-          value: element.ADPf,
-          unit: getImpactCriterionValues(ImpactCriterion.AbioticDepletionPotentialFossilFuels).unit
-        },
+        //ADPf: {
+        //  value: element.ADPf,
+        //  unit: getImpactCriterionValues(ImpactCriterion.AbioticDepletionPotentialFossilFuels).unit
+        //},
         AP: {
           value: element.AP,
           unit: getImpactCriterionValues(ImpactCriterion.AcidificationPotential).unit
         },
-        CTUe: {
-          value: element.CTUe,
-          unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForEcosystems).unit
-        },
-        CTUh: {
-          value: element.CTUh_c,
-          unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumans).unit
-        },
-        CTUh_c: {
-          value: element.CTUh_c,
-          unit: getImpactCriterionValues(
-            ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic
-          ).unit
-        },
-        CTUh_nc: {
-          value: element.CTUh_nc,
-          unit: getImpactCriterionValues(
-            ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic
-          ).unit
-        },
-        EPF: {
-          value: element.Epf,
-          unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialFreshWater).unit
-        },
-        EPM: {
-          value: element.Epm,
-          unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialMarine).unit
-        },
-        EPT: {
-          value: element.Ept,
-          unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialTerrestrial).unit
-        },
+        //CTUe: {
+        //  value: element.CTUe,
+        //  unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForEcosystems).unit
+        //},
+        //CTUh: {
+        //  value: element.CTUh_c,
+        //  unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumans).unit
+        //},
+        //CTUh_c: {
+        //  value: element.CTUh_c,
+        //  unit: getImpactCriterionValues(
+        //    ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic
+        //  ).unit
+        //},
+        //CTUh_nc: {
+        //  value: element.CTUh_nc,
+        //  unit: getImpactCriterionValues(
+        //    ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic
+        //  ).unit
+        //},
+        //EPF: {
+        //  value: element.Epf,
+        //  unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialFreshWater).unit
+        //},
+        //EPM: {
+        //  value: element.Epm,
+        //  unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialMarine).unit
+        //},
+        //EPT: {
+        //  value: element.Ept,
+        //  unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialTerrestrial).unit
+        //},
         GWP: {
           value: element.GWP,
           unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotential).unit
         },
-        GWPb: {
-          value: element.GWPb,
-          unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialBiogenic).unit
-        },
-        GWPf: {
-          value: element.GWPf,
-          unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialFossil).unit
-        },
-        GWPlu: {
-          value: element.GWPlu,
-          unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialLandUse).unit
-        },
+        //GWPb: {
+        //  value: element.GWPb,
+        //  unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialBiogenic).unit
+        //},
+        //GWPf: {
+        //  value: element.GWPf,
+        //  unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialFossil).unit
+        //},
+        //GWPlu: {
+        //  value: element.GWPlu,
+        //  unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialLandUse).unit
+        //},
         IR: {
           value: element.IR,
           unit: getImpactCriterionValues(ImpactCriterion.IonisingRadiation).unit
         },
-        LU: { value: element.LU, unit: getImpactCriterionValues(ImpactCriterion.LandUse).unit },
-        MIPS: {
-          value: element.MIPS,
-          unit: getImpactCriterionValues(ImpactCriterion.MaterialInputPerServiceUnit).unit
-        },
-        ODP: {
-          value: element.ODP,
-          unit: getImpactCriterionValues(ImpactCriterion.OzoneDepletionPotential).unit
-        },
+        //LU: { value: element.LU, unit: getImpactCriterionValues(ImpactCriterion.LandUse).unit },
+        //MIPS: {
+        //  value: element.MIPS,
+        //  unit: getImpactCriterionValues(ImpactCriterion.MaterialInputPerServiceUnit).unit
+        //},
+        //ODP: {
+        //  value: element.ODP,
+        //  unit: getImpactCriterionValues(ImpactCriterion.OzoneDepletionPotential).unit
+        //},
         PM: {
           value: element.PM,
           unit: getImpactCriterionValues(ImpactCriterion.ParticulateMatter).unit
         },
-        POCP: {
-          value: element.POCP,
-          unit: getImpactCriterionValues(ImpactCriterion.PhotochemicalOzoneFormationPotential).unit
-        },
+        //POCP: {
+        //  value: element.POCP,
+        //  unit: getImpactCriterionValues(ImpactCriterion.PhotochemicalOzoneFormationPotential).unit
+        //},
         TPE: {
           value: element.TPE,
           unit: getImpactCriterionValues(ImpactCriterion.TotalPrimaryEnergy).unit
-        },
-        WU: { value: element.WU, unit: getImpactCriterionValues(ImpactCriterion.WaterUse).unit }
+        }
+        //WU: { value: element.WU, unit: getImpactCriterionValues(ImpactCriterion.WaterUse).unit }
       }
     };
     return inventoryElement;
@@ -318,89 +278,89 @@ export const inventoryElementImpactFactors: DataCenterInventoryElementWithImpact
       category: element.category,
       mass: element.mass,
       source: element.source,
-      lifeCycleStep: element.lifeCycleStep,
+      lifeCycleStep: element.lc_step,
       impacts: {
         ADPe: {
           value: element.ADPe,
           unit: getImpactCriterionValues(ImpactCriterion.AbioticDepletionPotentialElements).unit
         },
-        ADPf: {
-          value: element.ADPf,
-          unit: getImpactCriterionValues(ImpactCriterion.AbioticDepletionPotentialFossilFuels).unit
-        },
+        //ADPf: {
+        //  value: element.ADPf,
+        //  unit: getImpactCriterionValues(ImpactCriterion.AbioticDepletionPotentialFossilFuels).unit
+        //},
         AP: {
           value: element.AP,
           unit: getImpactCriterionValues(ImpactCriterion.AcidificationPotential).unit
         },
-        CTUe: {
-          value: element.CTUe,
-          unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForEcosystems).unit
-        },
-        CTUh: {
-          value: element.CTUh_c,
-          unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumans).unit
-        },
-        CTUh_c: {
-          value: element.CTUh_c,
-          unit: getImpactCriterionValues(
-            ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic
-          ).unit
-        },
-        CTUh_nc: {
-          value: element.CTUh_nc,
-          unit: getImpactCriterionValues(
-            ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic
-          ).unit
-        },
-        EPF: {
-          value: element.Epf,
-          unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialFreshWater).unit
-        },
-        EPM: {
-          value: element.Epm,
-          unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialMarine).unit
-        },
-        EPT: {
-          value: element.Ept,
-          unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialTerrestrial).unit
-        },
+        //CTUe: {
+        //  value: element.CTUe,
+        //  unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForEcosystems).unit
+        //},
+        //CTUh: {
+        //  value: element.CTUh_c,
+        //  unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumans).unit
+        //},
+        //CTUh_c: {
+        //  value: element.CTUh_c,
+        //  unit: getImpactCriterionValues(
+        //    ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic
+        //  ).unit
+        //},
+        //CTUh_nc: {
+        //  value: element.CTUh_nc,
+        //  unit: getImpactCriterionValues(
+        //    ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic
+        //  ).unit
+        //},
+        //EPF: {
+        //  value: element.Epf,
+        //  unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialFreshWater).unit
+        //},
+        //EPM: {
+        //  value: element.Epm,
+        //  unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialMarine).unit
+        //},
+        //EPT: {
+        //  value: element.Ept,
+        //  unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialTerrestrial).unit
+        //},
         GWP: {
           value: element.GWP,
           unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotential).unit
         },
-        GWPb: {
-          value: element.GWPb,
-          unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialBiogenic).unit
-        },
-        GWPf: {
-          value: element.GWPf,
-          unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialFossil).unit
-        },
-        GWPlu: {
-          value: element.GWPlu,
-          unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialLandUse).unit
-        },
+        //GWPb: {
+        //  value: element.GWPb,
+        //  unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialBiogenic).unit
+        //},
+        //GWPf: {
+        //  value: element.GWPf,
+        //  unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialFossil).unit
+        //},
+        //GWPlu: {
+        //  value: element.GWPlu,
+        //  unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialLandUse).unit
+        //},
         IR: {
           value: element.IR,
           unit: getImpactCriterionValues(ImpactCriterion.IonisingRadiation).unit
         },
-        LU: { value: element.LU, unit: getImpactCriterionValues(ImpactCriterion.LandUse).unit },
-        MIPS: {
-          value: element.MIPS,
-          unit: getImpactCriterionValues(ImpactCriterion.MaterialInputPerServiceUnit).unit
-        },
-        ODP: {
-          value: element.ODP,
-          unit: getImpactCriterionValues(ImpactCriterion.OzoneDepletionPotential).unit
-        },
+        //LU: { value: element.LU, unit: getImpactCriterionValues(ImpactCriterion.LandUse).unit },
+        //MIPS: {
+        //  value: element.MIPS,
+        //  unit: getImpactCriterionValues(ImpactCriterion.MaterialInputPerServiceUnit).unit
+        //},
+        //ODP: {
+        //  value: element.ODP,
+        //  unit: getImpactCriterionValues(ImpactCriterion.OzoneDepletionPotential).unit
+        //},
         PM: {
           value: element.PM,
           unit: getImpactCriterionValues(ImpactCriterion.ParticulateMatter).unit
         },
-        POCP: {
-          value: element.POCP,
-          unit: getImpactCriterionValues(ImpactCriterion.PhotochemicalOzoneFormationPotential).unit
-        },
+        //POCP: {
+        //  value: element.POCP,
+        //  unit: getImpactCriterionValues(ImpactCriterion.PhotochemicalOzoneFormationPotential).unit
+        //},
         TPE: {
           value: element.TPE,
           unit: getImpactCriterionValues(ImpactCriterion.TotalPrimaryEnergy).unit
@@ -427,88 +387,88 @@ export const technicalEnvironmentElementsWithImpactFactors: DataCenterInventoryE
           value: element.ADPe,
           unit: getImpactCriterionValues(ImpactCriterion.AbioticDepletionPotentialElements).unit
         },
-        ADPf: {
-          value: element.ADPf,
-          unit: getImpactCriterionValues(ImpactCriterion.AbioticDepletionPotentialFossilFuels).unit
-        },
+        //ADPf: {
+        //  value: element.ADPf,
+        //  unit: getImpactCriterionValues(ImpactCriterion.AbioticDepletionPotentialFossilFuels).unit
+        //},
         AP: {
           value: element.AP,
           unit: getImpactCriterionValues(ImpactCriterion.AcidificationPotential).unit
         },
-        CTUe: {
-          value: element.CTUe,
-          unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForEcosystems).unit
-        },
-        CTUh: {
-          value: element.CTUh_c,
-          unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumans).unit
-        },
-        CTUh_c: {
-          value: element.CTUh_c,
-          unit: getImpactCriterionValues(
-            ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic
-          ).unit
-        },
-        CTUh_nc: {
-          value: element.CTUh_nc,
-          unit: getImpactCriterionValues(
-            ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic
-          ).unit
-        },
-        EPF: {
-          value: element.Epf,
-          unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialFreshWater).unit
-        },
-        EPM: {
-          value: element.Epm,
-          unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialMarine).unit
-        },
-        EPT: {
-          value: element.Ept,
-          unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialTerrestrial).unit
-        },
+        //CTUe: {
+        //  value: element.CTUe,
+        //  unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForEcosystems).unit
+        //},
+        //CTUh: {
+        //  value: element.CTUh_c,
+        //  unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumans).unit
+        //},
+        //CTUh_c: {
+        //  value: element.CTUh_c,
+        //  unit: getImpactCriterionValues(
+        //    ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic
+        //  ).unit
+        //},
+        //CTUh_nc: {
+        //  value: element.CTUh_nc,
+        //  unit: getImpactCriterionValues(
+        //    ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic
+        //  ).unit
+        //},
+        //EPF: {
+        //  value: element.Epf,
+        //  unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialFreshWater).unit
+        //},
+        //EPM: {
+        //  value: element.Epm,
+        //  unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialMarine).unit
+        //},
+        //EPT: {
+        //  value: element.Ept,
+        //  unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialTerrestrial).unit
+        //},
         GWP: {
           value: element.GWP,
           unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotential).unit
         },
-        GWPb: {
-          value: element.GWPb,
-          unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialBiogenic).unit
-        },
-        GWPf: {
-          value: element.GWPf,
-          unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialFossil).unit
-        },
-        GWPlu: {
-          value: element.GWPlu,
-          unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialLandUse).unit
-        },
+        //GWPb: {
+        //  value: element.GWPb,
+        //  unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialBiogenic).unit
+        //},
+        //GWPf: {
+        //  value: element.GWPf,
+        //  unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialFossil).unit
+        //},
+        //GWPlu: {
+        //  value: element.GWPlu,
+        //  unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialLandUse).unit
+        //},
         IR: {
           value: element.IR,
           unit: getImpactCriterionValues(ImpactCriterion.IonisingRadiation).unit
         },
-        LU: { value: element.LU, unit: getImpactCriterionValues(ImpactCriterion.LandUse).unit },
-        MIPS: {
-          value: element.MIPS,
-          unit: getImpactCriterionValues(ImpactCriterion.MaterialInputPerServiceUnit).unit
-        },
-        ODP: {
-          value: element.ODP,
-          unit: getImpactCriterionValues(ImpactCriterion.OzoneDepletionPotential).unit
-        },
+        //LU: { value: element.LU, unit: getImpactCriterionValues(ImpactCriterion.LandUse).unit },
+        //MIPS: {
+        //  value: element.MIPS,
+        //  unit: getImpactCriterionValues(ImpactCriterion.MaterialInputPerServiceUnit).unit
+        //},
+        //ODP: {
+        //  value: element.ODP,
+        //  unit: getImpactCriterionValues(ImpactCriterion.OzoneDepletionPotential).unit
+        //},
         PM: {
           value: element.PM,
           unit: getImpactCriterionValues(ImpactCriterion.ParticulateMatter).unit
         },
-        POCP: {
-          value: element.POCP,
-          unit: getImpactCriterionValues(ImpactCriterion.PhotochemicalOzoneFormationPotential).unit
-        },
+        //POCP: {
+        //  value: element.POCP,
+        //  unit: getImpactCriterionValues(ImpactCriterion.PhotochemicalOzoneFormationPotential).unit
+        //},
         TPE: {
           value: element.TPE,
           unit: getImpactCriterionValues(ImpactCriterion.TotalPrimaryEnergy).unit
-        },
-        WU: { value: element.WU, unit: getImpactCriterionValues(ImpactCriterion.WaterUse).unit }
+        }
+        //WU: { value: element.WU, unit: getImpactCriterionValues(ImpactCriterion.WaterUse).unit }
       }
     };
     return inventoryElementImpacts;
@@ -547,88 +507,88 @@ export const coolingInventoryElementsImpactsFactors: DataCenterInventoryElementW
           value: element.ADPe,
           unit: getImpactCriterionValues(ImpactCriterion.AbioticDepletionPotentialElements).unit
         },
-        ADPf: {
-          value: element.ADPf,
-          unit: getImpactCriterionValues(ImpactCriterion.AbioticDepletionPotentialFossilFuels).unit
-        },
+        //ADPf: {
+        //  value: element.ADPf,
+        //  unit: getImpactCriterionValues(ImpactCriterion.AbioticDepletionPotentialFossilFuels).unit
+        //},
         AP: {
           value: element.AP,
           unit: getImpactCriterionValues(ImpactCriterion.AcidificationPotential).unit
         },
-        CTUe: {
-          value: element.CTUe,
-          unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForEcosystems).unit
-        },
-        CTUh: {
-          value: element.CTUh_c,
-          unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumans).unit
-        },
-        CTUh_c: {
-          value: element.CTUh_c,
-          unit: getImpactCriterionValues(
-            ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic
-          ).unit
-        },
-        CTUh_nc: {
-          value: element.CTUh_nc,
-          unit: getImpactCriterionValues(
-            ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic
-          ).unit
-        },
-        EPF: {
-          value: element.Epf,
-          unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialFreshWater).unit
-        },
-        EPM: {
-          value: element.Epm,
-          unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialMarine).unit
-        },
-        EPT: {
-          value: element.Ept,
-          unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialTerrestrial).unit
-        },
+        //CTUe: {
+        //  value: element.CTUe,
+        //  unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForEcosystems).unit
+        //},
+        //CTUh: {
+        //  value: element.CTUh_c,
+        //  unit: getImpactCriterionValues(ImpactCriterion.ComparativeToxicityUnitsForHumans).unit
+        //},
+        //CTUh_c: {
+        //  value: element.CTUh_c,
+        //  unit: getImpactCriterionValues(
+        //    ImpactCriterion.ComparativeToxicityUnitsForHumansCarcinogenic
+        //  ).unit
+        //},
+        //CTUh_nc: {
+        //  value: element.CTUh_nc,
+        //  unit: getImpactCriterionValues(
+        //    ImpactCriterion.ComparativeToxicityUnitsForHumansNonCarcinogenic
+        //  ).unit
+        //},
+        //EPF: {
+        //  value: element.Epf,
+        //  unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialFreshWater).unit
+        //},
+        //EPM: {
+        //  value: element.Epm,
+        //  unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialMarine).unit
+        //},
+        //EPT: {
+        //  value: element.Ept,
+        //  unit: getImpactCriterionValues(ImpactCriterion.EutrophicationPotentialTerrestrial).unit
+        //},
         GWP: {
           value: element.GWP,
           unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotential).unit
         },
-        GWPb: {
-          value: element.GWPb,
-          unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialBiogenic).unit
-        },
-        GWPf: {
-          value: element.GWPf,
-          unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialFossil).unit
-        },
-        GWPlu: {
-          value: element.GWPlu,
-          unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialLandUse).unit
-        },
+        //GWPb: {
+        //  value: element.GWPb,
+        //  unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialBiogenic).unit
+        //},
+        //GWPf: {
+        //  value: element.GWPf,
+        //  unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialFossil).unit
+        //},
+        //GWPlu: {
+        //  value: element.GWPlu,
+        //  unit: getImpactCriterionValues(ImpactCriterion.GlobalWarmingPotentialLandUse).unit
+        //},
         IR: {
           value: element.IR,
           unit: getImpactCriterionValues(ImpactCriterion.IonisingRadiation).unit
         },
-        LU: { value: element.LU, unit: getImpactCriterionValues(ImpactCriterion.LandUse).unit },
-        MIPS: {
-          value: element.MIPS,
-          unit: getImpactCriterionValues(ImpactCriterion.MaterialInputPerServiceUnit).unit
-        },
-        ODP: {
-          value: element.ODP,
-          unit: getImpactCriterionValues(ImpactCriterion.OzoneDepletionPotential).unit
-        },
+        //LU: { value: element.LU, unit: getImpactCriterionValues(ImpactCriterion.LandUse).unit },
+        //MIPS: {
+        //  value: element.MIPS,
+        //  unit: getImpactCriterionValues(ImpactCriterion.MaterialInputPerServiceUnit).unit
+        //},
+        //ODP: {
+        //  value: element.ODP,
+        //  unit: getImpactCriterionValues(ImpactCriterion.OzoneDepletionPotential).unit
+        //},
         PM: {
           value: element.PM,
           unit: getImpactCriterionValues(ImpactCriterion.ParticulateMatter).unit
         },
-        POCP: {
-          value: element.POCP,
-          unit: getImpactCriterionValues(ImpactCriterion.PhotochemicalOzoneFormationPotential).unit
-        },
+        //POCP: {
+        //  value: element.POCP,
+        //  unit: getImpactCriterionValues(ImpactCriterion.PhotochemicalOzoneFormationPotential).unit
+        //},
         TPE: {
           value: element.TPE,
           unit: getImpactCriterionValues(ImpactCriterion.TotalPrimaryEnergy).unit
-        },
-        WU: { value: element.WU, unit: getImpactCriterionValues(ImpactCriterion.WaterUse).unit }
+        }
+        //WU: { value: element.WU, unit: getImpactCriterionValues(ImpactCriterion.WaterUse).unit }
       }
     };
     return inventoryElementImpacts;

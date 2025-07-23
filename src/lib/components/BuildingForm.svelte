@@ -125,7 +125,7 @@
     </div>
     <div class="row-input">
       <label for="building-yearly-total-energy">
-        Total IT energy for one year, in KilowattHours</label
+        Total energy (IT+facility), for one year, in KilowattHours</label
       >
       <input type="number" id="building-yearly-total-energy" required />
     </div>

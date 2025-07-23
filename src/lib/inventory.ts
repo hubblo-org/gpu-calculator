@@ -152,7 +152,7 @@ export function isMainCriterion<Type>(value: Type, key: keyof Type): boolean {
   if (
     value[key] === ImpactCriterionAcronym.GWP ||
     value[key] === ImpactCriterionAcronym.TPE ||
-    value[key] === ImpactCriterionAcronym.WU
+    value[key] === ImpactCriterionAcronym.ADPe
   ) {
     return true;
   }
