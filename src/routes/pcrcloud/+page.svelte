@@ -5,8 +5,8 @@
   import TableOfContents from "$lib/components/TableOfContents.svelte";
   import PcrSection from "$lib/components/PCRSection.svelte";
   import Summary from "$lib/components/Summary.svelte";
-  import { dataCenterCharacteristics } from "../mocks/dc-data";
-  import { inventoryWithImpact } from "../mocks/dc-data";
+  import { dataCenterCharacteristics } from "../../mocks/dc-data";
+  import { inventoryWithImpact } from "../../mocks/dc-data";
 
   const dataCenter = new DataCenter(dataCenterCharacteristics, inventoryWithImpact);
 </script>
