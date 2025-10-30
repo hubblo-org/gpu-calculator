@@ -8,7 +8,7 @@ import {
   InventoryCategories,
   LifeCycleSteps
 } from "$lib/types/enums";
-import { dataCenterCharacteristics, inventoryWithImpact } from "../mocks/dc-data";
+import { dataCenterCharacteristics, inventoryWithImpact } from "$mocks/dc-data";
 import userEvent from "@testing-library/user-event";
 import { DataCenter } from "$lib/data-center.svelte";
 import type { IF, Leaf, Node } from "$lib/types/pcr-cloud";

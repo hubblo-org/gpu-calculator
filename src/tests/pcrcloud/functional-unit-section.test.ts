@@ -1,7 +1,7 @@
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { dataCenterCharacteristics } from "../mocks/dc-data";
-import { inventoryWithImpact } from "../mocks/dc-data";
+import { dataCenterCharacteristics } from "$mocks/dc-data";
+import { inventoryWithImpact } from "$mocks/dc-data";
 import { DataCenter } from "$lib/data-center.svelte";
 import FunctionalUnitSection from "$lib/components/FunctionalUnitSection.svelte";
 import { FunctionalUnits, getFunctionalUnitParameters } from "$lib/types/enums";

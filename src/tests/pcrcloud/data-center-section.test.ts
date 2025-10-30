@@ -1,5 +1,5 @@
-import { dataCenterCharacteristics } from "../mocks/dc-data";
-import { inventoryWithImpact } from "../mocks/dc-data";
+import { dataCenterCharacteristics } from "$mocks/dc-data";
+import { inventoryWithImpact } from "$mocks/dc-data";
 import { DataCenter } from "$lib/data-center.svelte";
 import DataCenterSection from "$lib/components/DataCenterSection.svelte";
 import type { DataCenterCharacteristic } from "$lib/types/pcr-cloud";
