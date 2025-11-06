@@ -4,7 +4,7 @@ import type {
   GraphicsCardImpactFactors,
   ImpactFactors,
   ImpactFactorsKeys
-} from "$lib/types/gpu";
+} from "../../lib/types/gpu";
 export function computeAverageModel(
   graphicsCards: GraphicsCard[],
   impactFactors: GraphicsCardImpactFactors[]
@@ -13,13 +13,31 @@ export function computeAverageModel(
     (property) => property != "graphics_card" && property != "component"
   );
 
-  let averageModel = <GraphicsCardImpactFactors>{};
+  let averageModel = {} as GraphicsCardImpactFactors;
   averageModel.graphics_card = "average";
+  averageModel.components = {
+    casing: { graphics_card: "average", component: "casing" },
+    heatsink: { graphics_card: "average", component: "heatsink" },
+    video_ram: { graphics_card: "average", component: "video_ram" },
+    printed_wiring_board: {
+      graphics_card: "average",
+      component: "printed_wiring_board"
+    },
+    graphics_processing_unit: {
+      graphics_card: "average",
+      component: "graphics_processing_unit"
+    },
+    upstream_transport: {
+      graphics_card: "average",
+      component: "upstream_transport"
+    },
+    end_of_life: { graphics_card: "average", component: "end_of_life" }
+  };
 
   const intermediateValues: GraphicsCardComponents[] = impactFactors.map((componentFactors) => {
     const card = graphicsCards.filter((card) => card.name == componentFactors.graphics_card)[0];
     const casing: ImpactFactors = componentFactors.components.casing;
-    const heatsink: ImpactFactors = componentFactors.components.heatsink;
+    const heatsink = componentFactors.components.heatsink;
     const pwb = componentFactors.components.printed_wiring_board;
     const gpu = componentFactors.components.graphics_processing_unit;
     const vram = componentFactors.components.video_ram;
@@ -27,35 +45,46 @@ export function computeAverageModel(
     const eol = componentFactors.components.end_of_life;
 
     computableProperties.forEach((property) => {
-      casing[property] =
-        typeof casing[property] === "number" && casing[property] != 0
-          ? casing[property] / (card.casingWeight * 0.001)
+      let newCasingValue = casing[property as ImpactFactorsKeys] as number;
+      let newHeatsinkValue = heatsink[property as ImpactFactorsKeys] as number;
+      let newPwbValue = pwb[property as ImpactFactorsKeys] as number;
+      let newVramValue = vram[property as ImpactFactorsKeys] as number;
+      let newGpuValue = gpu[property as ImpactFactorsKeys] as number;
+      let newTransportValue = transport[property as ImpactFactorsKeys] as number;
+      let newEolValue = eol[property as ImpactFactorsKeys] as number;
+
+      newCasingValue =
+        typeof newCasingValue === "number" && newCasingValue != 0
+          ? newCasingValue / (card.casingWeight * 0.001)
           : 0;
-      heatsink[property] =
-        typeof heatsink[property] === "number" && heatsink[property] != 0
-          ? heatsink[property] / card.heatsinkWeight
+      newHeatsinkValue =
+        typeof newHeatsinkValue === "number" && newHeatsinkValue != 0
+          ? newHeatsinkValue / (card.heatsinkWeight * 0.001)
           : 0;
-      pwb[property] =
-        typeof pwb[property] === "number" && pwb[property] != 0
-          ? pwb[property] / card.cardSurface
+      newPwbValue =
+        typeof newPwbValue === "number" && newPwbValue != 0 ? newPwbValue / card.cardSurface : 0;
+      newGpuValue =
+        typeof newGpuValue === "number" && newGpuValue != 0 ? newGpuValue / card.gpuSurface : 0;
+      newVramValue =
+        card.videoRamDieSurface && typeof newVramValue === "number" && newVramValue != 0
+          ? newVramValue / card.videoRamDieSurface
           : 0;
-      gpu[property] =
-        typeof gpu[property] === "number" && gpu[property] != 0
-          ? gpu[property] / card.gpuSurface
+      newTransportValue =
+        typeof newTransportValue === "number" && newTransportValue != 0
+          ? newTransportValue / card.totalWeight
           : 0;
-      vram[property] =
-        card.videoRamDieSurface && typeof vram[property] && (vram[property] != 0) === "number"
-          ? vram[property] / card.videoRamDieSurface
-          : 0;
-      transport[property] =
-        typeof transport[property] === "number" && transport[property] != 0
-          ? transport[property] / card.totalWeight
-          : 0;
-      eol[property] =
-        typeof eol[property] === "number" && eol[property] != 0
-          ? eol[property] / card.totalWeight
-          : 0;
+      newEolValue =
+        typeof newEolValue === "number" && newEolValue != 0 ? newEolValue / card.totalWeight : 0;
+
+      (casing[property as ImpactFactorsKeys] as number) = newCasingValue;
+      (heatsink[property as ImpactFactorsKeys] as number) = newHeatsinkValue;
+      (pwb[property as ImpactFactorsKeys] as number) = newPwbValue;
+      (gpu[property as ImpactFactorsKeys] as number) = newGpuValue;
+      (vram[property as ImpactFactorsKeys] as number) = newVramValue;
+      (transport[property as ImpactFactorsKeys] as number) = newTransportValue;
+      (eol[property as ImpactFactorsKeys] as number) = newEolValue;
     });
+
     return {
       name: card.name,
       casing: casing,
@@ -68,16 +97,26 @@ export function computeAverageModel(
     };
   });
 
-  const cardsCasingValues = intermediateValues.map((component) => component.casing);
-  computableProperties.forEach((property) => {
-    const values = cardsCasingValues.map((card) => card[property]).filter((value) => value != 0);
-    const divisionOperand = values.length;
+  const components = Object.keys(intermediateValues[0]).filter((property) => property != "name");
 
-    const sum = values.reduce((total, current) => {
-      return total + current;
-    }, 0);
-    const average = sum != 0 ? sum / divisionOperand : 0;
-    console.log(`${property} : ${average}`);
+  const cardsComponentsValues = components.map((component) =>
+    intermediateValues.map((card) => card[component as keyof GraphicsCardComponents])
+  );
+  computableProperties.forEach((property) => {
+    cardsComponentsValues.forEach((component) => {
+      const componentName = component[0]!.component;
+      const filteredValues = component
+        .map((card) => card![property as ImpactFactorsKeys])
+        .filter((value) => value != 0);
+      const divisionOperand = filteredValues.length;
+      const sum = filteredValues.reduce((total, current) => {
+        return (total as number) + (current as number);
+      }, 0);
+      const average = sum != 0 ? (sum as number) / divisionOperand : 0;
+      (averageModel.components[componentName as keyof GraphicsCardComponents]![
+        property as ImpactFactorsKeys
+      ] as number) = average;
+    });
   });
-  return;
+  return averageModel;
 }
