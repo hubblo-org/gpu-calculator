@@ -11,6 +11,7 @@ const graphicsCardParameters = [
   "Graphics card surface",
   "Video RAM size",
   "Video RAM dies",
+  "Video RAM die surface",
   "GPU surface"
 ];
 

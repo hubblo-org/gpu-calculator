@@ -33,6 +33,8 @@
     <input type="number" id="vram-size" bind:value={selectedCard.videoRamSize} />
     <label for="vram-dies">Video RAM dies</label>
     <input type="number" id="vram-dies" bind:value={selectedCard.videoRamDies} />
+    <label for="vram-die-surface">Video RAM die surface</label>
+    <input type="number" id="vram-die-surface" bind:value={selectedCard.videoRamDieSurface} />
   </form>
   <button>Recalculate</button>
 </section>
