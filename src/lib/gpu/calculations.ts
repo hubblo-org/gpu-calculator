@@ -71,10 +71,12 @@ export function computeAverageModel(
           : 0;
       newTransportValue =
         typeof newTransportValue === "number" && newTransportValue != 0
-          ? newTransportValue / card.totalWeight
+          ? newTransportValue / (card.totalWeight * 0.001)
           : 0;
       newEolValue =
-        typeof newEolValue === "number" && newEolValue != 0 ? newEolValue / card.totalWeight : 0;
+        typeof newEolValue === "number" && newEolValue != 0
+          ? newEolValue / (card.totalWeight * 0.001)
+          : 0;
 
       (casing[property as ImpactFactorsKeys] as number) = newCasingValue;
       (heatsink[property as ImpactFactorsKeys] as number) = newHeatsinkValue;
