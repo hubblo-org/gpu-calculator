@@ -5,6 +5,8 @@ import type {
   ImpactFactors,
   ImpactFactorsKeys
 } from "../../lib/types/gpu";
+import Average from "../../data/gpu/average_model.json" with { type: "json" };
+
 export function computeAverageModel(
   graphicsCards: GraphicsCard[],
   impactFactors: GraphicsCardImpactFactors[]
@@ -121,4 +123,33 @@ export function computeAverageModel(
     });
   });
   return averageModel;
+}
+
+export function computeImpacts(card: GraphicsCard): GraphicsCardImpactFactors {
+  const cardImpacts: GraphicsCardImpactFactors = Average;
+
+  const computableProperties = Object.keys(cardImpacts.components.casing).filter(
+    (property) => property != "graphics_card" && property != "component"
+  );
+
+  let casing = cardImpacts.components.casing;
+  let heatsink = cardImpacts.components.heatsink;
+  let vram = cardImpacts.components.video_ram;
+  let pwb = cardImpacts.components.printed_wiring_board;
+  let gpu = cardImpacts.components.graphics_processing_unit;
+  let transport = cardImpacts.components.upstream_transport;
+  let eol = cardImpacts.components.end_of_life;
+
+  computableProperties.forEach((property) => {
+    casing[property] = casing[property] * (card.casingWeight * 0.001);
+    heatsink[property] = heatsink[property] * (card.heatsinkWeight * 0.001);
+    vram[property] = vram[property] * card.videoRamDieSurface!;
+    pwb[property] = pwb[property] * card.cardSurface;
+    gpu[property] = gpu[property] * card.gpuSurface;
+    transport[property] = transport[property] * (card.totalWeight * 0.001);
+    eol[property] = eol[property] * (card.totalWeight * 0.001);
+  });
+
+  cardImpacts.graphics_card = card.name;
+  return cardImpacts;
 }
