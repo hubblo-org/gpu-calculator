@@ -11,16 +11,16 @@ export declare type GraphicsCard = {
 };
 
 export declare type GraphicsCardComponents = {
-  casing: ImpactFactors;
-  heatsink: ImpactFactors;
-  printed_wiring_board: ImpactFactors;
-  graphics_processing_unit: ImpactFactors;
-  video_ram: ImpactFactors;
-  upstream_transport: ImpactFactors;
-  end_of_life: ImpactFactors;
-  transport_boat?: ImpactFactors;
-  transport_truck?: ImpactFactors;
-  transport_plane?: ImpactFactors;
+  casing: UnorderedImpactFactors;
+  heatsink: UnorderedImpactFactors;
+  printed_wiring_board: UnorderedImpactFactors;
+  graphics_processing_unit: UnorderedImpactFactors;
+  video_ram: UnorderedImpactFactors;
+  upstream_transport: UnorderedImpactFactors;
+  end_of_life: UnorderedImpactFactors;
+  transport_boat?: UnorderedImpactFactors;
+  transport_truck?: UnorderedImpactFactors;
+  transport_plane?: UnorderedImpactFactors;
 };
 
 export declare type GraphicsCardImpactFactors = {
@@ -28,7 +28,7 @@ export declare type GraphicsCardImpactFactors = {
   components: GraphicsCardComponents;
 };
 
-export declare type ImpactFactors = {
+export declare type UnorderedImpactFactors = {
   graphics_card: string;
   component: string;
   manufacturing_ADPe?: number;
@@ -121,6 +121,40 @@ export declare type ImpactFactors = {
   end_of_life_TPE?: number;
 };
 
-export declare type ImpactFactorsKeys = keyof ImpactFactors;
+export declare type ImpactFactorsKeys = keyof UnorderedImpactFactors;
+
+export declare type GraphicsCardLifeCycle = {
+  manufacturing: ImpactFactors;
+  use: ImpactFactors;
+  transport: ImpactFactors;
+  endOfLife: ImpactFactors;
+};
+
+export declare type ImpactFactors = {
+  ADPe?: number;
+  ADPf?: number;
+  AP?: number;
+  CTUe?: number;
+  CTUh?: number;
+  CTUh_c?: number;
+  CTUh_nc?: number;
+  EPF?: number;
+  EPM?: number;
+  EPT?: number;
+  GWP?: number;
+  GWPb?: number;
+  GWPf?: number;
+  GWPlu?: number;
+  IR?: number;
+  LU?: number;
+  MIPS?: number;
+  ODP?: number;
+  PM?: number;
+  POCP?: number;
+  TPE?: number;
+  WU?: number;
+};
+
+export declare type IF = keyof ImpactFactors;
 
 declare module "gpu";

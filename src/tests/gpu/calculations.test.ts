@@ -1,10 +1,26 @@
 import { describe, expect, it } from "vitest";
-import { computeAverageModel, computeImpacts } from "$lib/gpu/calculations";
+import {
+  computeAverageModel,
+  computeImpacts,
+  computeTotalsPerLifeCycleStep,
+  computeTotalsPerCriteria
+} from "$lib/gpu/calculations";
 import type { GraphicsCard, GraphicsCardImpactFactors } from "$lib/types/gpu";
 import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 import Gpus from "../../data/gpu/gpus.json";
 
 describe("graphics card calculator utilitary methods test suite", () => {
+  const testCard: GraphicsCard = {
+    name: "A test graphics card",
+    totalWeight: 1234,
+    gpuSurface: 234,
+    casingWeight: 412,
+    heatsinkWeight: 312,
+    cardSurface: 123.45,
+    videoRamSize: 12,
+    videoRamDies: 4,
+    videoRamDieSurface: 12.34
+  };
   it("computes an average model of a graphics card with impact factors", () => {
     const impactFactors: GraphicsCardImpactFactors[] = GpusImpactFactors;
     const graphicsCards: GraphicsCard[] = Gpus;
@@ -32,18 +48,6 @@ describe("graphics card calculator utilitary methods test suite", () => {
   });
 
   it("computes a graphics card impact factors according to the provided parameters", () => {
-    const testCard: GraphicsCard = {
-      name: "A test graphics card",
-      totalWeight: 1234,
-      gpuSurface: 234,
-      casingWeight: 412,
-      heatsinkWeight: 312,
-      cardSurface: 123.45,
-      videoRamSize: 12,
-      videoRamDies: 4,
-      videoRamDieSurface: 12.34
-    };
-
     const testCardImpacts = computeImpacts(testCard);
     expect(testCardImpacts.graphics_card).toEqual(testCard.name);
     expect(testCardImpacts.components.heatsink.manufacturing_ADPe!).toBeCloseTo(5.83e-4);
@@ -59,6 +63,25 @@ describe("graphics card calculator utilitary methods test suite", () => {
       1.25868e-8
     );
     expect(testCardImpacts.components.end_of_life.manufacturing_ADPe!).toBeCloseTo(0.0);
-    console.log(testCardImpacts);
+  });
+
+  it("computes the total for each life cycle step for each impact criteria", () => {
+    const testCardImpacts = computeImpacts(testCard);
+
+    const totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(testCardImpacts);
+
+    expect(totalsPerLifeCycleStep.manufacturing.ADPe).toBeCloseTo(2.31e-3);
+    expect(totalsPerLifeCycleStep.transport.ADPe).toEqual(0);
+    expect(totalsPerLifeCycleStep.use.ADPe).toEqual(0);
+    expect(totalsPerLifeCycleStep.endOfLife.ADPe).toBeCloseTo(5.66e-6);
+  });
+
+  it("computes the total for each impact criteria", () => {
+    const testCardImpacts = computeImpacts(testCard);
+
+    const totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(testCardImpacts);
+    const totalsPerCriteria = computeTotalsPerCriteria(totalsPerLifeCycleStep);
+
+    expect(totalsPerCriteria.ADPe).toBeCloseTo(2.31e-3);
   });
 });

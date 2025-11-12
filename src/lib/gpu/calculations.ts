@@ -2,8 +2,10 @@ import type {
   GraphicsCard,
   GraphicsCardComponents,
   GraphicsCardImpactFactors,
+  GraphicsCardLifeCycle,
+  IF,
   ImpactFactors,
-  ImpactFactorsKeys
+  ImpactFactorsKeys,
 } from "../../lib/types/gpu";
 import Average from "../../data/gpu/average_model.json" with { type: "json" };
 
@@ -38,7 +40,7 @@ export function computeAverageModel(
 
   const intermediateValues: GraphicsCardComponents[] = impactFactors.map((componentFactors) => {
     const card = graphicsCards.filter((card) => card.name == componentFactors.graphics_card)[0];
-    const casing: ImpactFactors = componentFactors.components.casing;
+    const casing = componentFactors.components.casing;
     const heatsink = componentFactors.components.heatsink;
     const pwb = componentFactors.components.printed_wiring_board;
     const gpu = componentFactors.components.graphics_processing_unit;
@@ -126,30 +128,106 @@ export function computeAverageModel(
 }
 
 export function computeImpacts(card: GraphicsCard): GraphicsCardImpactFactors {
-  const cardImpacts: GraphicsCardImpactFactors = Average;
+  const cardImpacts = {} as GraphicsCardImpactFactors;
 
-  const computableProperties = Object.keys(cardImpacts.components.casing).filter(
+  cardImpacts.graphics_card = card.name;
+  cardImpacts.components = {
+    casing: { graphics_card: card.name, component: "casing" },
+    heatsink: { graphics_card: card.name, component: "heatsink" },
+    video_ram: { graphics_card: card.name, component: "video_ram" },
+    printed_wiring_board: {
+      graphics_card: card.name,
+      component: "printed_wiring_board"
+    },
+    graphics_processing_unit: {
+      graphics_card: card.name,
+      component: "graphics_processing_unit"
+    },
+    upstream_transport: {
+      graphics_card: card.name,
+      component: "upstream_transport"
+    },
+    end_of_life: { graphics_card: card.name, component: "end_of_life" }
+  };
+  const computableProperties = Object.keys(Average.components.casing).filter(
     (property) => property != "graphics_card" && property != "component"
   );
 
-  let casing = cardImpacts.components.casing;
-  let heatsink = cardImpacts.components.heatsink;
-  let vram = cardImpacts.components.video_ram;
-  let pwb = cardImpacts.components.printed_wiring_board;
-  let gpu = cardImpacts.components.graphics_processing_unit;
-  let transport = cardImpacts.components.upstream_transport;
-  let eol = cardImpacts.components.end_of_life;
-
   computableProperties.forEach((property) => {
-    casing[property] = casing[property] * (card.casingWeight * 0.001);
-    heatsink[property] = heatsink[property] * (card.heatsinkWeight * 0.001);
-    vram[property] = vram[property] * card.videoRamDieSurface!;
-    pwb[property] = pwb[property] * card.cardSurface;
-    gpu[property] = gpu[property] * card.gpuSurface;
-    transport[property] = transport[property] * (card.totalWeight * 0.001);
-    eol[property] = eol[property] * (card.totalWeight * 0.001);
+    const p = property as ImpactFactorsKeys;
+    (cardImpacts.components.casing[p] as number) =
+      (Average.components.casing[p] as number) * (card.casingWeight * 0.001);
+    (cardImpacts.components.heatsink[p] as number) =
+      (Average.components.heatsink[p] as number) * (card.heatsinkWeight * 0.001);
+    (cardImpacts.components.video_ram[p] as number) =
+      (Average.components.video_ram[p] as number) * card.videoRamDieSurface!;
+    (cardImpacts.components.printed_wiring_board[p] as number) =
+      (Average.components.printed_wiring_board[p] as number) * card.cardSurface;
+    (cardImpacts.components.graphics_processing_unit[p] as number) =
+      (Average.components.graphics_processing_unit[p] as number) * card.gpuSurface;
+    (cardImpacts.components.upstream_transport[p] as number) =
+      (Average.components.upstream_transport[p] as number) * (card.totalWeight * 0.001);
+    (cardImpacts.components.end_of_life[p] as number) =
+      (Average.components.end_of_life[p] as number) * (card.totalWeight * 0.001);
   });
 
   cardImpacts.graphics_card = card.name;
   return cardImpacts;
+}
+
+export function computeTotalsPerLifeCycleStep(
+  card: GraphicsCardImpactFactors
+): GraphicsCardLifeCycle {
+  const totalsPerLifeCycleStep: GraphicsCardLifeCycle = {
+    manufacturing: {},
+    transport: {},
+    use: {},
+    endOfLife: {}
+  };
+
+  const computableProperties = Object.keys(card.components.casing).filter(
+    (property) => property != "graphics_card" && property != "component"
+  );
+
+  const components = Object.keys(card.components);
+
+  computableProperties.forEach((property) => {
+    const sum = components
+      .map(
+        (component) =>
+          card.components[component as keyof GraphicsCardComponents]![property as ImpactFactorsKeys]
+      )
+      .reduce((total, current) => (total as number)! + (current as number)!, 0);
+
+    if (property.includes("end_of_life")) {
+      const splitProperty = property.split("_");
+      const endOfLife = "endOfLife" as keyof GraphicsCardLifeCycle;
+      const criteria = splitProperty[splitProperty.length - 1] as IF;
+      totalsPerLifeCycleStep[endOfLife][criteria]! = sum as number;
+    } else {
+      const splitProperty = property.split("_");
+      const lifeCycleStep = splitProperty[0] as keyof GraphicsCardLifeCycle;
+      const criteria = splitProperty[1] as IF;
+      totalsPerLifeCycleStep[lifeCycleStep][criteria]! = sum as number;
+    }
+  });
+
+  return totalsPerLifeCycleStep;
+}
+
+export function computeTotalsPerCriteria(
+  totalsPerLifeCycleStep: GraphicsCardLifeCycle
+): ImpactFactors {
+  const totalsPerCriteria = {} as ImpactFactors;
+  const criterias = Object.keys(totalsPerLifeCycleStep.manufacturing);
+  const lifeCycleSteps = Object.keys(totalsPerLifeCycleStep);
+
+  criterias.forEach((criteria) => {
+    const c = criteria as IF;
+    const sum = lifeCycleSteps
+      .map((lcStep) => totalsPerLifeCycleStep[lcStep as keyof GraphicsCardLifeCycle][c])
+      .reduce((total, current) => total! + current!, 0);
+    totalsPerCriteria[c]! = sum as number;
+  });
+  return totalsPerCriteria;
 }
