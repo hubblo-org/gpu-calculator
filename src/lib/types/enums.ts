@@ -4,6 +4,11 @@ import type {
   InventoryCategorySpellings
 } from "./pcr-cloud";
 
+export enum Scopes {
+  Criteria = "Criteria",
+  LifeCycleStep = "Life cycle step"
+}
+
 export enum FunctionalUnits {
   First
 }

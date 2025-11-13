@@ -2,10 +2,14 @@ import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import userEvent from "@testing-library/user-event";
 import GpuPlotsSection from "$lib/components/GpuPlotsSection.svelte";
+import { LifeCycleSteps, Scopes } from "$lib/types/enums";
 
 const gpuPlotsSectionName = "Graphics card impact factors";
 const gpuSelectionLabel = "Display impact factors by:";
-const gpuSelectionOptions = ["Criteria", "Life cycle step"];
+const gpuSelectionOptions = Object.values(Scopes).filter((scope) => typeof scope === "string");
+const lifeCycleSelectionLabel = "Select life cycle step:";
+const lifeCycleSteps = Object.values(LifeCycleSteps).filter((step) => typeof step === "string");
+
 describe("graphics card data visualization static elements test suite", () => {
   beforeEach(() => render(GpuPlotsSection));
   afterEach(() => cleanup());
@@ -28,12 +32,20 @@ describe("graphics card data visualization dynamic elements test suite", () => {
     const gpuPlotsSection = screen.getByRole("region", { name: gpuPlotsSectionName });
     const graphSelection = within(gpuPlotsSection).getByLabelText(gpuSelectionLabel);
 
+    await user.selectOptions(graphSelection, Scopes.LifeCycleStep);
+
     const defaultTitle = within(gpuPlotsSection).getByRole("heading", { name: /Manufacturing/i });
     expect(defaultTitle).toBeVisible();
 
-    await user.selectOptions(graphSelection, "End of life");
+    const lifeCycleStepsSelection = within(gpuPlotsSection).getByLabelText(lifeCycleSelectionLabel);
 
-    const updatedTitle = within(gpuPlotsSection).getByRole("heading", { name: /End of life/i });
-    expect(updatedTitle).toBeVisible();
+    lifeCycleSteps.forEach(async (lcstep) => {
+      await user.selectOptions(lifeCycleStepsSelection, lcstep);
+
+      const updatedTitle = within(gpuPlotsSection).getByRole("heading", {
+        name: (content) => content.includes(lcstep)
+      });
+      expect(updatedTitle).toBeVisible();
+    });
   });
 });
