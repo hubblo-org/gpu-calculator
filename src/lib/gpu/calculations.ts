@@ -6,8 +6,10 @@ import type {
   IF,
   ImpactFactors,
   ImpactFactorsKeys,
+  UnorderedImpactFactors
 } from "../../lib/types/gpu";
 import Average from "../../data/gpu/average_model.json" with { type: "json" };
+import { ImpactCriterion, LifeCycleSteps } from "$lib/types/enums";
 
 export function computeAverageModel(
   graphicsCards: GraphicsCard[],
@@ -230,4 +232,46 @@ export function computeTotalsPerCriteria(
     totalsPerCriteria[c]! = sum as number;
   });
   return totalsPerCriteria;
+}
+
+interface ComponentImpactFactor {
+  component: string;
+  impactCriterion: string;
+  lifeCycleStep: string;
+  value: number;
+}
+export function tidyPerComponent(card: GraphicsCardImpactFactors): ComponentImpactFactor[] {
+  const computableProperties = Object.keys(card.components.casing).filter(
+    (property) => property != "graphics_card" && property != "component"
+  );
+  const components = Object.keys(card.components);
+
+  const componentImpactFactors: ComponentImpactFactor[] = [];
+  computableProperties.forEach((property) => {
+    components.forEach((component) => {
+      const splitProperty = property.split("_");
+      if (property.includes("end_of_life")) {
+        const lifeCycleStep = "endoflife";
+        const impactCriterion = splitProperty[splitProperty.length - 1];
+        const componentImpactFactor = {
+          component,
+          impactCriterion,
+          lifeCycleStep,
+          value: (card.components[component as keyof GraphicsCardComponents]![property as keyof UnorderedImpactFactors] as number)
+        };
+        componentImpactFactors.push(componentImpactFactor);
+      } else {
+        const lifeCycleStep = splitProperty[0].toLowerCase();
+        const impactCriterion = splitProperty[1] as IF;
+        const componentImpactFactor = {
+          component,
+          impactCriterion,
+          lifeCycleStep,
+          value: (card.components[component as keyof GraphicsCardComponents]![property as keyof UnorderedImpactFactors] as number)
+        };
+        componentImpactFactors.push(componentImpactFactor);
+      }
+    });
+  });
+  return componentImpactFactors;
 }
