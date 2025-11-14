@@ -28,13 +28,14 @@ describe("gpu section static elements suite", () => {
     expect(gpuParametersSection).toBeVisible();
   });
 
-  it("should display the graphics card parameters, that can be modified by the user", () => {
+  it("should display the graphics card parameters, that cannot be modified by the user for documented graphics card", () => {
     const gpuParametersSection = screen.getByRole("region", {
       name: gpuSectionName
     });
     graphicsCardParameters.forEach((parameterLabel) => {
       const parameterInput = within(gpuParametersSection).getByLabelText(parameterLabel);
       expect(parameterInput).toBeVisible();
+      expect(parameterInput).toHaveAttribute("readonly");
     });
   });
 
@@ -51,6 +52,17 @@ describe("gpu section static elements suite", () => {
       });
       expect(cardOption).toBeVisible();
     });
+  });
+
+  it("should display a custom option among the graphics card selection, to allow the user to enter new graphics card parameters", () => {
+    const gpuParametersSection = screen.getByRole("region", {
+      name: gpuSectionName
+    });
+    const graphicsCardsSelection =
+      within(gpuParametersSection).getByLabelText("Select a graphics card:");
+
+    const customOption = within(graphicsCardsSelection).getByRole("option", { name: "Custom" });
+    expect(customOption).toBeVisible();
   });
 
   it("should display placeholder values for the default selected graphics card", () => {
@@ -108,6 +120,44 @@ describe("gpu section dynamic elements test suite", () => {
       });
 
       expect(parameterInput).toHaveValue(value);
+    });
+  });
+  it("should allow the user to enter new parameters if the user selected the custom graphics card option", async () => {
+    const user = userEvent.setup();
+
+    const gpuParametersSection = screen.getByRole("region", {
+      name: gpuSectionName
+    });
+
+    const graphicsCardsSelection =
+      within(gpuParametersSection).getByLabelText("Select a graphics card:");
+
+    await user.selectOptions(graphicsCardsSelection, "Custom");
+
+    graphicsCardParameters.forEach((parameterLabel) => {
+      const parameterInput = within(gpuParametersSection).getByLabelText(parameterLabel);
+      expect(parameterInput).toBeVisible();
+      expect(parameterInput).not.toHaveAttribute("readonly");
+    });
+  });
+  it("should not allow the user to modify parameters after selecting again a documented graphics card", async () => {
+    const user = userEvent.setup();
+    const l4 = Gpus.filter((card) => card.name.includes("L4"))[0];
+
+    const gpuParametersSection = screen.getByRole("region", {
+      name: gpuSectionName
+    });
+
+    const graphicsCardsSelection =
+      within(gpuParametersSection).getByLabelText("Select a graphics card:");
+
+    await user.selectOptions(graphicsCardsSelection, "Custom");
+    await user.selectOptions(graphicsCardsSelection, l4.name);
+
+    graphicsCardParameters.forEach((parameterLabel) => {
+      const parameterInput = within(gpuParametersSection).getByLabelText(parameterLabel);
+      expect(parameterInput).toBeVisible();
+      expect(parameterInput).toHaveAttribute("readonly");
     });
   });
 });
