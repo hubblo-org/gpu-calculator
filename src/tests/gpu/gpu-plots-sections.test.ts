@@ -32,6 +32,12 @@ describe("graphics card data visualization static elements test suite", () => {
       expect(displayedOption).toBeVisible();
     });
   });
+
+  it("displays the name of the graphics card", () => {
+    const gpuPlotsSection = screen.getByRole("region", { name: gpuPlotsSectionName });
+    const graphicsCardName = within(gpuPlotsSection).getByRole("heading", { name: card.name });
+    expect(graphicsCardName).toBeVisible();
+  });
 });
 
 describe("graphics card data visualization dynamic elements test suite", () => {
