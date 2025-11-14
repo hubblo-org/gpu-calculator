@@ -4,7 +4,7 @@ import {
   computeImpacts,
   computeTotalsPerLifeCycleStep,
   computeTotalsPerCriteria,
-  tidyPerComponent
+  tidy
 } from "$lib/gpu/calculations";
 import type { GraphicsCard, GraphicsCardImpactFactors } from "$lib/types/gpu";
 import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
@@ -86,19 +86,19 @@ describe("graphics card calculator utilitary methods test suite", () => {
     expect(totalsPerCriteria.ADPe).toBeCloseTo(2.31e-3);
   });
 
-  it("returns a tidy data format for impact factors per component per life cycle step", () => {
+  it("returns a tidy data format for impact factors with columns for life cycle step and graphics card component", () => {
     const testCardImpacts = computeImpacts(testCard);
-    const tidyImpactFactorsPerComponent = tidyPerComponent(testCardImpacts);
+    const tidyImpactFactors = tidy(testCardImpacts);
 
-    const lastIndex = tidyImpactFactorsPerComponent.length - 1;
-    expect(tidyImpactFactorsPerComponent.length).toEqual(616);
-    expect(tidyImpactFactorsPerComponent[0].component).toEqual("casing");
-    expect(tidyImpactFactorsPerComponent[0].lifeCycleStep).toEqual("manufacturing");
-    expect(tidyImpactFactorsPerComponent[0].impactCriterion).toEqual("ADPe");
-    expect(tidyImpactFactorsPerComponent[0].value).toBeCloseTo(1.68e-4);
-    expect(tidyImpactFactorsPerComponent[lastIndex].component).toEqual("end_of_life");
-    expect(tidyImpactFactorsPerComponent[lastIndex].lifeCycleStep).toEqual("endoflife");
-    expect(tidyImpactFactorsPerComponent[lastIndex].impactCriterion).toEqual("TPE");
-    expect(tidyImpactFactorsPerComponent[lastIndex].value).toBeCloseTo(27.58);
+    const lastIndex = tidyImpactFactors.length - 1;
+    expect(tidyImpactFactors.length).toEqual(616);
+    expect(tidyImpactFactors[0].component).toEqual("casing");
+    expect(tidyImpactFactors[0].lifeCycleStep).toEqual("manufacturing");
+    expect(tidyImpactFactors[0].impactCriterion).toEqual("ADPe");
+    expect(tidyImpactFactors[0].value).toBeCloseTo(1.68e-4);
+    expect(tidyImpactFactors[lastIndex].component).toEqual("end_of_life");
+    expect(tidyImpactFactors[lastIndex].lifeCycleStep).toEqual("endoflife");
+    expect(tidyImpactFactors[lastIndex].impactCriterion).toEqual("TPE");
+    expect(tidyImpactFactors[lastIndex].value).toBeCloseTo(27.58);
   });
 });

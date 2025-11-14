@@ -1,4 +1,5 @@
 import type {
+  TidyImpactFactor,
   GraphicsCard,
   GraphicsCardComponents,
   GraphicsCardImpactFactors,
@@ -234,19 +235,13 @@ export function computeTotalsPerCriteria(
   return totalsPerCriteria;
 }
 
-interface ComponentImpactFactor {
-  component: string;
-  impactCriterion: string;
-  lifeCycleStep: string;
-  value: number;
-}
-export function tidyPerComponent(card: GraphicsCardImpactFactors): ComponentImpactFactor[] {
+export function tidy(card: GraphicsCardImpactFactors): TidyImpactFactor[] {
   const computableProperties = Object.keys(card.components.casing).filter(
     (property) => property != "graphics_card" && property != "component"
   );
   const components = Object.keys(card.components);
 
-  const componentImpactFactors: ComponentImpactFactor[] = [];
+  const componentImpactFactors: TidyImpactFactor[] = [];
   computableProperties.forEach((property) => {
     components.forEach((component) => {
       const splitProperty = property.split("_");
@@ -257,7 +252,9 @@ export function tidyPerComponent(card: GraphicsCardImpactFactors): ComponentImpa
           component,
           impactCriterion,
           lifeCycleStep,
-          value: (card.components[component as keyof GraphicsCardComponents]![property as keyof UnorderedImpactFactors] as number)
+          value: card.components[component as keyof GraphicsCardComponents]![
+            property as keyof UnorderedImpactFactors
+          ] as number
         };
         componentImpactFactors.push(componentImpactFactor);
       } else {
@@ -267,7 +264,9 @@ export function tidyPerComponent(card: GraphicsCardImpactFactors): ComponentImpa
           component,
           impactCriterion,
           lifeCycleStep,
-          value: (card.components[component as keyof GraphicsCardComponents]![property as keyof UnorderedImpactFactors] as number)
+          value: card.components[component as keyof GraphicsCardComponents]![
+            property as keyof UnorderedImpactFactors
+          ] as number
         };
         componentImpactFactors.push(componentImpactFactor);
       }

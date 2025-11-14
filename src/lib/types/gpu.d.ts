@@ -1,3 +1,10 @@
+export declare type TidyImpactFactor = {
+  component: string;
+  impactCriterion: string;
+  lifeCycleStep: string;
+  value: number;
+};
+
 export declare type GraphicsCard = {
   name: string;
   totalWeight: number;
