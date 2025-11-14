@@ -22,18 +22,58 @@
       selectedScope = Scopes.LifeCycleStep;
     }
   }
+
+  $effect(() => {
+    const lcSteps = ["manufacturing", "transport", "use", "endoflife"];
+    if (selectedScope === Scopes.Criteria) {
+      const source = "criteria";
+      renderStackedBarPlot(
+        source,
+        1000,
+        600,
+        card.tidyImpactFactors,
+        lcSteps,
+        "impactCriterion",
+        "value",
+        "lifeCycleStep"
+      );
+    } else if (selectedScope === Scopes.LifeCycleStep) {
+      const source = "perlcstep";
+      const components = Object.keys(card.impactFactors?.components);
+      const filteredImpactFactors = card.tidyImpactFactors?.filter((impact) => {
+        const lcStep =
+          selectedLifeCycleStep === LifeCycleSteps.EndOfLife
+            ? "endoflife"
+            : selectedLifeCycleStep.toLowerCase();
+        return impact.lifeCycleStep === lcStep;
+      });
+      renderStackedBarPlot(
+        source,
+        1000,
+        600,
+        filteredImpactFactors,
+        components,
+        "impactCriterion",
+        "value",
+        "component"
+      );
+    }
+  });
 </script>
 
 <section aria-labelledby="gpu-plots-section">
-  <h2 id="gpu-plots-section">Graphics card impact factors</h2>
+  <h2>{card.name}</h2>
   <label for="gpu-plots-selection">Display impact factors by:</label>
   <select bind:value={selectedScope} id="gpu-plots-selection" onselect={switchSelectedScope}
     >{#each options as option}<option>{option}</option>{/each}</select
   >
+  {#if selectedScope === Scopes.Criteria}
+    <h3 id="gpu-plots-section">Graphics card impact factors</h3>
+    <div id="impact-factors-plot-criteria"></div>
+  {/if}
 
-  <div id="impact-factors-plot-criteria"></div>
   {#if selectedScope === Scopes.LifeCycleStep}
-    <h2>{selectedLifeCycleStep} impact factors by component</h2>
+    <h3>{selectedLifeCycleStep} impact factors by component</h3>
     <label for="life-cycle-step-selection">Select life cycle step:</label>
     <select bind:value={selectedLifeCycleStep} id="life-cycle-step-selection"
       >{#each lifeCycleSteps as step}<option>{step}</option>{/each}</select
