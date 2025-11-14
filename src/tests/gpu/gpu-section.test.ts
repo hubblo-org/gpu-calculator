@@ -3,6 +3,15 @@ import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import userEvent from "@testing-library/user-event";
 import Gpus from "../../data/gpu/gpus.json";
+import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
+import { Card } from "$lib/gpu/gpu.svelte";
+
+const defaultCard = Gpus.filter((gpu) => gpu.name === "NVIDIA H100 PCIe 80GB")[0];
+const defaultCardImpactFactors = GpusImpactFactors.filter(
+  (impacts) => impacts.graphics_card === "NVIDIA H100 PCIe 80GB"
+)[0];
+
+const card = new Card(defaultCard, defaultCardImpactFactors);
 
 const gpuSectionName = "Graphics card parameters";
 const graphicsCardParameters = [
@@ -20,7 +29,7 @@ const documentedGraphicsCardsNames = Gpus.map((gpu) => gpu.name);
 const h100 = Gpus.filter((card) => card.name.includes("H100"))[0];
 
 describe("gpu section static elements suite", () => {
-  beforeEach(() => render(GpuSection));
+  beforeEach(() => render(GpuSection, { props: { card } }));
   afterEach(() => cleanup());
 
   it("should have a section for displaying the graphical card parameters", () => {
@@ -95,7 +104,7 @@ describe("gpu section static elements suite", () => {
 });
 
 describe("gpu section dynamic elements test suite", () => {
-  beforeEach(() => render(GpuSection));
+  beforeEach(() => render(GpuSection, { props: { card } }));
   afterEach(() => cleanup());
 
   it("should display the selected graphics card values after the user selected it", async () => {
@@ -140,6 +149,7 @@ describe("gpu section dynamic elements test suite", () => {
       expect(parameterInput).not.toHaveAttribute("readonly");
     });
   });
+
   it("should not allow the user to modify parameters after selecting again a documented graphics card", async () => {
     const user = userEvent.setup();
     const l4 = Gpus.filter((card) => card.name.includes("L4"))[0];

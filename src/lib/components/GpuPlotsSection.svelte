@@ -1,8 +1,17 @@
 <script lang="ts">
   import { LifeCycleSteps, Scopes } from "$lib/types/enums";
+  import { Card } from "$lib/gpu/gpu.svelte";
+  import { renderStackedBarPlot } from "$lib/plots";
 
-  const options = Object.values(Scopes).filter((scope) => typeof scope === "string"); 
+  interface Props {
+    card: InstanceType<typeof Card>;
+  }
+
+  const { card }: Props = $props();
+
+  const options = Object.values(Scopes).filter((scope) => typeof scope === "string");
   const lifeCycleSteps = Object.values(LifeCycleSteps).filter((step) => typeof step === "string");
+
   let selectedScope = $state(Scopes.Criteria);
   let selectedLifeCycleStep = $state(LifeCycleSteps.Manufacturing);
 

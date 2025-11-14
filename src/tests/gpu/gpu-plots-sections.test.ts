@@ -3,6 +3,16 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import userEvent from "@testing-library/user-event";
 import GpuPlotsSection from "$lib/components/GpuPlotsSection.svelte";
 import { LifeCycleSteps, Scopes } from "$lib/types/enums";
+import Gpus from "../../data/gpu/gpus.json";
+import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
+import { Card } from "$lib/gpu/gpu.svelte";
+
+const defaultCard = Gpus.filter((gpu) => gpu.name === "NVIDIA H100 PCIe 80GB")[0];
+const defaultCardImpactFactors = GpusImpactFactors.filter(
+  (impacts) => impacts.graphics_card === "NVIDIA H100 PCIe 80GB"
+)[0];
+
+const card = new Card(defaultCard, defaultCardImpactFactors);
 
 const gpuPlotsSectionName = "Graphics card impact factors";
 const gpuSelectionLabel = "Display impact factors by:";
@@ -11,7 +21,7 @@ const lifeCycleSelectionLabel = "Select life cycle step:";
 const lifeCycleSteps = Object.values(LifeCycleSteps).filter((step) => typeof step === "string");
 
 describe("graphics card data visualization static elements test suite", () => {
-  beforeEach(() => render(GpuPlotsSection));
+  beforeEach(() => render(GpuPlotsSection, { props: { card } }));
   afterEach(() => cleanup());
   it("displays a selection between a bar plot showing every criteria, and a bar plot for a specific life cycle step", () => {
     const gpuPlotsSection = screen.getByRole("region", { name: gpuPlotsSectionName });
@@ -25,7 +35,7 @@ describe("graphics card data visualization static elements test suite", () => {
 });
 
 describe("graphics card data visualization dynamic elements test suite", () => {
-  beforeEach(() => render(GpuPlotsSection));
+  beforeEach(() => render(GpuPlotsSection, { props: { card } }));
   afterEach(() => cleanup());
   it("displays a selection between the different life cycle steps when the user has selected a display by life cycle step", async () => {
     const user = userEvent.setup();
@@ -42,7 +52,7 @@ describe("graphics card data visualization dynamic elements test suite", () => {
     lifeCycleSteps.forEach(async (lcstep) => {
       await user.selectOptions(lifeCycleStepsSelection, lcstep);
 
-      const updatedTitle = within(gpuPlotsSection).getByRole("heading", {
+      const updatedTitle = await within(gpuPlotsSection).findByRole("heading", {
         name: (content) => content.includes(lcstep)
       });
       expect(updatedTitle).toBeVisible();
