@@ -1,5 +1,5 @@
 export declare type TidyImpactFactor = {
-  component: string;
+  component?: string;
   impactCriterion: string;
   lifeCycleStep: string;
   value: number;

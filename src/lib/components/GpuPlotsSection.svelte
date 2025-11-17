@@ -24,14 +24,14 @@
   }
 
   $effect(() => {
-    const lcSteps = ["manufacturing", "transport", "use", "endoflife"];
+    const lcSteps = ["manufacturing", "transport", "use", "endOfLife"];
     if (selectedScope === Scopes.Criteria) {
       const source = "criteria";
       renderStackedBarPlot(
         source,
         1000,
         600,
-        card.tidyImpactFactors,
+        card.tidyTotals,
         lcSteps,
         "impactCriterion",
         "value",
@@ -39,7 +39,7 @@
       );
     } else if (selectedScope === Scopes.LifeCycleStep) {
       const source = "perlcstep";
-      const components = Object.keys(card.impactFactors?.components);
+      const components = Object.keys(card.impactFactors!.components);
       const filteredImpactFactors = card.tidyImpactFactors?.filter((impact) => {
         const lcStep =
           selectedLifeCycleStep === LifeCycleSteps.EndOfLife
@@ -62,7 +62,7 @@
 </script>
 
 <section aria-labelledby="gpu-plots-section">
-  <h2>{card.name}</h2>
+  <h2>{card.parameters!.name}</h2>
   <label for="gpu-plots-selection">Display impact factors by:</label>
   <select bind:value={selectedScope} id="gpu-plots-selection" onselect={switchSelectedScope}
     >{#each options as option}<option>{option}</option>{/each}</select

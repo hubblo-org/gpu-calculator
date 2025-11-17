@@ -241,9 +241,8 @@ export function tidy(card: GraphicsCardImpactFactors): TidyImpactFactor[] {
   );
   const components = Object.keys(card.components);
 
-  const componentImpactFactors: TidyImpactFactor[] = [];
-  computableProperties.forEach((property) => {
-    components.forEach((component) => {
+  const componentImpactFactors = computableProperties.flatMap((property) => {
+    const impactFactors = components.map((component) => {
       const splitProperty = property.split("_");
       if (property.includes("end_of_life")) {
         const lifeCycleStep = "endoflife";
@@ -256,7 +255,7 @@ export function tidy(card: GraphicsCardImpactFactors): TidyImpactFactor[] {
             property as keyof UnorderedImpactFactors
           ] as number
         };
-        componentImpactFactors.push(componentImpactFactor);
+        return componentImpactFactor;
       } else {
         const lifeCycleStep = splitProperty[0].toLowerCase();
         const impactCriterion = splitProperty[1] as IF;
@@ -268,9 +267,28 @@ export function tidy(card: GraphicsCardImpactFactors): TidyImpactFactor[] {
             property as keyof UnorderedImpactFactors
           ] as number
         };
-        componentImpactFactors.push(componentImpactFactor);
+        return componentImpactFactor;
       }
     });
+    return impactFactors;
   });
+
   return componentImpactFactors;
+}
+
+export function tidyTotals(impactFactors: GraphicsCardLifeCycle): TidyImpactFactor[] {
+  const lifeCycleSteps = Object.keys(impactFactors).filter((key) => typeof key === "string");
+  const tidiedImpactFactors = lifeCycleSteps.flatMap((lifeCycleStep) => {
+    const criterias = Object.keys(impactFactors[lifeCycleStep]).filter(
+      (key) => typeof key === "string"
+    );
+    return criterias.map((criteria) => {
+      return {
+        impactCriterion: criteria,
+        lifeCycleStep,
+        value: impactFactors[lifeCycleStep][criteria]
+      };
+    });
+  });
+  return tidiedImpactFactors;
 }

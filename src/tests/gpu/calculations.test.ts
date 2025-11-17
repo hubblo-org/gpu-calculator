@@ -4,7 +4,8 @@ import {
   computeImpacts,
   computeTotalsPerLifeCycleStep,
   computeTotalsPerCriteria,
-  tidy
+  tidy,
+  tidyTotals
 } from "$lib/gpu/calculations";
 import type { GraphicsCard, GraphicsCardImpactFactors } from "$lib/types/gpu";
 import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
@@ -100,5 +101,17 @@ describe("graphics card calculator utilitary methods test suite", () => {
     expect(tidyImpactFactors[lastIndex].lifeCycleStep).toEqual("endoflife");
     expect(tidyImpactFactors[lastIndex].impactCriterion).toEqual("TPE");
     expect(tidyImpactFactors[lastIndex].value).toBeCloseTo(27.58);
+  });
+
+  it("returns a tidy data format for impact factors totals with columns for life cycle step and impact criterion", () => {
+    const testCardImpacts = computeImpacts(testCard);
+    const totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(testCardImpacts);
+    const tidiedTotals = tidyTotals(totalsPerLifeCycleStep);
+    //const lastIndex = tidiedTotals.length - 1;
+    expect(tidiedTotals.length).toEqual(85);
+
+    expect(tidiedTotals[0].lifeCycleStep).toEqual("manufacturing");
+    expect(tidiedTotals[0].impactCriterion).toEqual("ADPe");
+    expect(tidiedTotals[0].value).toBeCloseTo(2.31e-3);
   });
 });

@@ -1,17 +1,26 @@
-import type { GraphicsCard, GraphicsCardImpactFactors, TidyImpactFactor } from "$lib/types/gpu";
+import type {
+  GraphicsCardLifeCycle,
+  GraphicsCard,
+  GraphicsCardImpactFactors,
+  TidyImpactFactor
+} from "$lib/types/gpu.d.ts";
 import GraphicsCards from "../../data/gpu/gpus.json";
 import GraphicsCardsImpactFactors from "../../data/gpu/gpus_impact_factors.json";
-import { computeImpacts, tidy } from "./calculations";
+import { computeImpacts, computeTotalsPerLifeCycleStep, tidy, tidyTotals } from "./calculations";
 
 export class Card {
   impactFactors = $state<GraphicsCardImpactFactors>();
+  totalsPerLifeCycleStep = $state<GraphicsCardLifeCycle>();
   tidyImpactFactors = $state<TidyImpactFactor[]>();
+  tidyTotals = $state<TidyImpactFactor[]>();
   parameters = $state<GraphicsCard>();
 
   constructor(card: GraphicsCard, cardImpactFactors: GraphicsCardImpactFactors) {
     this.parameters = card;
     this.impactFactors = cardImpactFactors;
     this.tidyImpactFactors = tidy(this.impactFactors);
+    this.totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(this.impactFactors);
+    this.tidyTotals = tidyTotals(this.totalsPerLifeCycleStep);
   }
 
   selectDocumentedCard(cardName: string) {
@@ -44,5 +53,7 @@ export class Card {
     const customCardImpactFactors = computeImpacts(this.parameters!);
     this.impactFactors = customCardImpactFactors;
     this.tidyImpactFactors = tidy(customCardImpactFactors);
+    this.totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(this.impactFactors);
+    this.tidyTotals = tidyTotals(this.totalsPerLifeCycleStep);
   }
 }
