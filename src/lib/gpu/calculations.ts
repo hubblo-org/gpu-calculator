@@ -242,34 +242,35 @@ export function tidy(card: GraphicsCardImpactFactors): TidyImpactFactor[] {
   const components = Object.keys(card.components);
 
   const componentImpactFactors = computableProperties.flatMap((property) => {
-    const impactFactors = components.map((component) => {
-      const splitProperty = property.split("_");
-      if (property.includes("end_of_life")) {
-        const lifeCycleStep = "endoflife";
-        const impactCriterion = splitProperty[splitProperty.length - 1];
-        const componentImpactFactor = {
-          component,
-          impactCriterion,
-          lifeCycleStep,
-          value: card.components[component as keyof GraphicsCardComponents]![
-            property as keyof UnorderedImpactFactors
-          ] as number
-        };
-        return componentImpactFactor;
-      } else {
-        const lifeCycleStep = splitProperty[0].toLowerCase();
-        const impactCriterion = splitProperty[1] as IF;
-        const componentImpactFactor = {
-          component,
-          impactCriterion,
-          lifeCycleStep,
-          value: card.components[component as keyof GraphicsCardComponents]![
-            property as keyof UnorderedImpactFactors
-          ] as number
-        };
-        return componentImpactFactor;
-      }
-    });
+    const impactFactors = components
+      .map((component) => {
+        const splitProperty = property.split("_");
+        if (property.includes("end_of_life")) {
+          const lifeCycleStep = "endoflife";
+          const impactCriterion = splitProperty[splitProperty.length - 1];
+          const componentImpactFactor = {
+            component,
+            impactCriterion,
+            lifeCycleStep,
+            value: card.components[component as keyof GraphicsCardComponents]![
+              property as keyof UnorderedImpactFactors
+            ] as number
+          };
+          return componentImpactFactor;
+        } else {
+          const lifeCycleStep = splitProperty[0].toLowerCase();
+          const impactCriterion = splitProperty[1] as IF;
+          const componentImpactFactor = {
+            component,
+            impactCriterion,
+            lifeCycleStep,
+            value: card.components[component as keyof GraphicsCardComponents]![
+              property as keyof UnorderedImpactFactors
+            ] as number
+          };
+          return componentImpactFactor;
+        }
+      });
     return impactFactors;
   });
 
