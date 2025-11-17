@@ -2,6 +2,7 @@
   import { LifeCycleSteps, Scopes } from "$lib/types/enums";
   import { Card } from "$lib/gpu/gpu.svelte";
   import { renderStackedBarPlot } from "$lib/plots";
+  import { isNotATransport } from "$lib/utils";
 
   interface Props {
     card: InstanceType<typeof Card>;
@@ -25,6 +26,7 @@
 
   $effect(() => {
     const lcSteps = ["manufacturing", "transport", "use", "endOfLife"];
+
     if (selectedScope === Scopes.Criteria) {
       const source = "criteria";
       renderStackedBarPlot(
@@ -39,7 +41,7 @@
       );
     } else if (selectedScope === Scopes.LifeCycleStep) {
       const source = "perlcstep";
-      const components = Object.keys(card.impactFactors!.components);
+      const components = Object.keys(card.impactFactors!.components).filter(isNotATransport);
       const filteredImpactFactors = card.tidyImpactFactors?.filter((impact) => {
         const lcStep =
           selectedLifeCycleStep === LifeCycleSteps.EndOfLife

@@ -43,3 +43,10 @@ export async function downloadToPNG(nodeId: string) {
   document.body.removeChild(temporaryLink);
   window.URL.revokeObjectURL(url);
 }
+
+export function isNotATransport(value) {
+  if (value === "transport_boat" || value === "transport_truck" || value === "transport_plane") {
+    return false;
+  }
+  return true;
+}
