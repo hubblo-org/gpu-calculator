@@ -32,6 +32,8 @@ export class Card {
     this.parameters = selectedCard;
     this.impactFactors = selectedCardImpactFactors;
     this.tidyImpactFactors = tidy(this.impactFactors);
+    this.totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(this.impactFactors);
+    this.tidyTotals = tidyTotals(this.totalsPerLifeCycleStep);
   }
 
   new() {
