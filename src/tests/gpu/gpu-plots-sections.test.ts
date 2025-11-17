@@ -35,7 +35,7 @@ describe("graphics card data visualization static elements test suite", () => {
 
   it("displays the name of the graphics card", () => {
     const gpuPlotsSection = screen.getByRole("region", { name: gpuPlotsSectionName });
-    const graphicsCardName = within(gpuPlotsSection).getByRole("heading", { name: card.name });
+    const graphicsCardName = within(gpuPlotsSection).getByRole("heading", { name: card.parameters!.name });
     expect(graphicsCardName).toBeVisible();
   });
 });

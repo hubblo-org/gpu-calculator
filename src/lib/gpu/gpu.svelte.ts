@@ -4,28 +4,12 @@ import GraphicsCardsImpactFactors from "../../data/gpu/gpus_impact_factors.json"
 import { computeImpacts, tidy } from "./calculations";
 
 export class Card {
-  name = $state<string>();
-  totalWeight = $state<number>();
-  casingWeight = $state<number>();
-  heatsinkWeight = $state<number>();
-  cardSurface = $state<number>();
-  videoRamSize = $state<number>();
-  videoRamDies = $state<number>();
-  videoRamDieSurface? = $state<number>();
-  gpuSurface = $state<number>();
   impactFactors = $state<GraphicsCardImpactFactors>();
   tidyImpactFactors = $state<TidyImpactFactor[]>();
+  parameters = $state<GraphicsCard>();
 
   constructor(card: GraphicsCard, cardImpactFactors: GraphicsCardImpactFactors) {
-    this.name = card.name;
-    this.totalWeight = card.totalWeight;
-    this.casingWeight = card.casingWeight;
-    this.heatsinkWeight = card.heatsinkWeight;
-    this.cardSurface = card.cardSurface;
-    this.videoRamDies = card.videoRamDies;
-    this.videoRamSize = card.videoRamSize;
-    this.videoRamDieSurface = card.videoRamDieSurface ? card.videoRamDieSurface : 0;
-    this.gpuSurface = card.gpuSurface;
+    this.parameters = card;
     this.impactFactors = cardImpactFactors;
     this.tidyImpactFactors = tidy(this.impactFactors);
   }
@@ -36,28 +20,29 @@ export class Card {
       (impacts) => impacts.graphics_card === cardName
     )[0];
 
-    this.name = selectedCard.name;
-    this.totalWeight = selectedCard.totalWeight;
-    this.casingWeight = selectedCard.casingWeight;
-    this.heatsinkWeight = selectedCard.heatsinkWeight;
-    this.cardSurface = selectedCard.cardSurface;
-    this.videoRamDies = selectedCard.videoRamDies;
-    this.videoRamSize = selectedCard.videoRamSize;
-    this.videoRamDieSurface = selectedCard.videoRamDieSurface ? selectedCard.videoRamDieSurface : 0;
-    this.gpuSurface = selectedCard.gpuSurface;
+    this.parameters = selectedCard;
     this.impactFactors = selectedCardImpactFactors;
     this.tidyImpactFactors = tidy(this.impactFactors);
   }
 
   new() {
-    this.name = "Custom";
-    this.totalWeight = 0;
-    this.casingWeight = 0;
-    this.heatsinkWeight = 0;
-    this.cardSurface = 0;
-    this.videoRamDies = 0;
-    this.videoRamSize = 0;
-    this.videoRamDieSurface = 0;
-    this.gpuSurface = 0;
+    const customCard: GraphicsCard = {
+      name: "Custom",
+      totalWeight: 0,
+      casingWeight: 0,
+      heatsinkWeight: 0,
+      cardSurface: 0,
+      videoRamSize: 0,
+      videoRamDies: 0,
+      videoRamDieSurface: 0,
+      gpuSurface: 0
+    };
+    this.parameters = customCard;
+  }
+
+  updateImpactFactors() {
+    const customCardImpactFactors = computeImpacts(this.parameters!);
+    this.impactFactors = customCardImpactFactors;
+    this.tidyImpactFactors = tidy(customCardImpactFactors);
   }
 }

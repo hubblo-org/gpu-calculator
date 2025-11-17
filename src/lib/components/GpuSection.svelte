@@ -10,13 +10,13 @@
 
   function handleCardSelection(event: Event) {
     event.preventDefault();
-    if (card.name === "Custom") {
+    if (card.parameters!.name === "Custom") {
       card.new();
 
       const inputs: HTMLInputElement[] = Array.from(document.getElementsByTagName("input"));
       inputs.forEach((input) => input.removeAttribute("readonly"));
     } else {
-      card.selectDocumentedCard(card.name!);
+      card.selectDocumentedCard(card.parameters!.name!);
 
       const inputs: HTMLInputElement[] = Array.from(document.getElementsByTagName("input"));
       inputs.forEach((input) => input.setAttribute("readonly", "true"));
@@ -28,7 +28,7 @@
   <h2 id="graphics-card-parameters">Graphics card parameters</h2>
   <label for="graphics-card-selection">Select a graphics card:</label>
   <form>
-    <select onchange={handleCardSelection} bind:value={card.name} id="graphics-card-selection">
+    <select onchange={handleCardSelection} bind:value={card.parameters!.name} id="graphics-card-selection">
       {#each Gpus as gpu}
         <option>{gpu.name}</option>
       {/each}
@@ -37,25 +37,27 @@
     <div class="grid">
       <div class="field">
         <label for="casing-weight">Casing weight</label>
-        <input type="number" id="casing-weight" bind:value={card.casingWeight} readonly />
+        <input type="number" id="casing-weight" bind:value={card.parameters!.casingWeight} readonly />
         <label for="heatsink-weight">Heatsink weight</label>
-        <input type="number" id="heatsink-weight" bind:value={card.heatsinkWeight} readonly />
-        <label for="graphics-card-surface">Graphics card surface</label>
-        <input type="number" id="graphics-card-surface" bind:value={card.cardSurface} readonly />
+        <input type="number" id="heatsink-weight" bind:value={card.parameters!.heatsinkWeight} readonly />
+        <label for="graphics-card.parameters.surface">Graphics card surface</label>
+        <input type="number" id="graphics-card.parameters.surface" bind:value={card.parameters!.cardSurface} readonly />
         <label for="gpu-surface">GPU surface</label>
-        <input type="number" id="gpu-surface" bind:value={card.gpuSurface} readonly />
+        <input type="number" id="gpu-surface" bind:value={card.parameters!.gpuSurface} readonly />
       </div>
       <div class="field">
         <label for="vram-size">Video RAM size</label>
-        <input type="number" id="vram-size" bind:value={card.videoRamSize} readonly />
+        <input type="number" id="vram-size" bind:value={card.parameters!.videoRamSize} readonly />
         <label for="vram-dies">Video RAM dies</label>
-        <input type="number" id="vram-dies" bind:value={card.videoRamDies} readonly />
+        <input type="number" id="vram-dies" bind:value={card.parameters!.videoRamDies} readonly />
         <label for="vram-die-surface">Video RAM die surface</label>
-        <input type="number" id="vram-die-surface" bind:value={card.videoRamDieSurface} readonly />
+        <input type="number" id="vram-die-surface" bind:value={card.parameters!.videoRamDieSurface} readonly />
       </div>
     </div>
   </form>
-  <button class="btn btn-primary btn-sm">Recalculate</button>
+  {#if card.parameters!.name === "Custom"}
+    <button onclick={() => card.updateImpactFactors()} class="btn btn-primary btn-sm">Recalculate</button>
+  {/if}
 </section>
 
 <style>

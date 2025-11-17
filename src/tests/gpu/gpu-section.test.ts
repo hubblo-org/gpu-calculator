@@ -91,16 +91,6 @@ describe("gpu section static elements suite", () => {
       expect(parameterInput).toHaveValue(value);
     });
   });
-
-  it("should display a button allowing the user to recalculate the graphics card impacts", () => {
-    const gpuParametersSection = screen.getByRole("region", {
-      name: gpuSectionName
-    });
-    const cardImpactsCalculationButton = within(gpuParametersSection).getByRole("button", {
-      name: "Recalculate"
-    });
-    expect(cardImpactsCalculationButton).toBeVisible();
-  });
 });
 
 describe("gpu section dynamic elements test suite", () => {
@@ -169,5 +159,28 @@ describe("gpu section dynamic elements test suite", () => {
       expect(parameterInput).toBeVisible();
       expect(parameterInput).toHaveAttribute("readonly");
     });
+  });
+
+  it("should display a button allowing the user to recalculate the graphics card impacts when the custom option has been selected", async () => {
+    const user = userEvent.setup();
+
+    const gpuParametersSection = screen.getByRole("region", {
+      name: gpuSectionName
+    });
+    expect(
+      within(gpuParametersSection).queryByRole("button", {
+        name: "Recalculate"
+      })
+    ).not.toBeInTheDocument();
+
+    const graphicsCardsSelection =
+      within(gpuParametersSection).getByLabelText("Select a graphics card:");
+
+    await user.selectOptions(graphicsCardsSelection, "Custom");
+
+    const cardImpactsCalculationButton = within(gpuParametersSection).getByRole("button", {
+      name: "Recalculate"
+    });
+    expect(cardImpactsCalculationButton).toBeVisible();
   });
 });
