@@ -145,9 +145,9 @@ export declare type ImpactFactors = {
   CTUh?: number;
   CTUh_c?: number;
   CTUh_nc?: number;
-  EPF?: number;
-  EPM?: number;
-  EPT?: number;
+  Epf?: number;
+  Epm?: number;
+  Ept?: number;
   GWP?: number;
   GWPb?: number;
   GWPf?: number;

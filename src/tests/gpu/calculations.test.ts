@@ -5,7 +5,9 @@ import {
   computeTotalsPerLifeCycleStep,
   computeTotalsPerCriteria,
   tidy,
-  tidyTotals
+  tidyPlanetBoundaries,
+  tidyTotals,
+  computePlanetBoundaries
 } from "$lib/gpu/calculations";
 import type { GraphicsCard, GraphicsCardImpactFactors } from "$lib/types/gpu";
 import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
@@ -107,10 +109,47 @@ describe("graphics card calculator utilitary methods test suite", () => {
     const testCardImpacts = computeImpacts(testCard);
     const totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(testCardImpacts);
     const tidiedTotals = tidyTotals(totalsPerLifeCycleStep);
-    expect(tidiedTotals.length).toEqual(85);
+    expect(tidiedTotals.length).toEqual(88);
 
     expect(tidiedTotals[0].lifeCycleStep).toEqual("manufacturing");
     expect(tidiedTotals[0].impactCriterion).toEqual("ADPe");
     expect(tidiedTotals[0].value).toBeCloseTo(2.31e-3);
+  });
+
+  it("computes the planet boundaries factors related to human population for the provided graphics card impact factors", () => {
+    const h100Impacts = GpusImpactFactors.filter((card) => card.graphics_card.includes("H100"))[0];
+    const totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(h100Impacts);
+    const totalsPerCriteria = computeTotalsPerCriteria(totalsPerLifeCycleStep);
+
+    const planetBoundariesFactors = computePlanetBoundaries(totalsPerCriteria);
+
+    expect(planetBoundariesFactors.ADPe).toBeCloseTo(0.21);
+    expect(planetBoundariesFactors.ADPf).toBeCloseTo(0.08);
+    expect(planetBoundariesFactors.AP).toBeCloseTo(0.01);
+    expect(planetBoundariesFactors.CTUe).toBeCloseTo(0.24);
+    expect(planetBoundariesFactors.CTUh_c).toBeCloseTo(0.17);
+    expect(planetBoundariesFactors.CTUh_nc).toBeCloseTo(0.01);
+    expect(planetBoundariesFactors.Epf).toBeCloseTo(0.0);
+    expect(planetBoundariesFactors.Epm).toBeCloseTo(0.01);
+    expect(planetBoundariesFactors.Ept).toBeCloseTo(0.0);
+    expect(planetBoundariesFactors.GWP).toBeCloseTo(0.2);
+    expect(planetBoundariesFactors.IR).toBeCloseTo(0.0);
+    expect(planetBoundariesFactors.ODP).toBeCloseTo(0.0);
+    expect(planetBoundariesFactors.PM).toBeCloseTo(0.1);
+    expect(planetBoundariesFactors.POCP).toBeCloseTo(0.01);
+    expect(planetBoundariesFactors.WU).toBeCloseTo(0.06);
+  });
+  it("returns a tidy data format for the ratios of graphics cards impact factors to planet boundaries", () => {
+    const h100Impacts = GpusImpactFactors.filter((card) => card.graphics_card.includes("H100"))[0];
+    const totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(h100Impacts);
+    const totalsPerCriteria = computeTotalsPerCriteria(totalsPerLifeCycleStep);
+
+    const tidiedFactors = tidyPlanetBoundaries(totalsPerCriteria);
+
+    expect(tidiedFactors.length).toEqual(15);
+    expect(tidiedFactors[0].impactCriterion).toEqual("ADPe");
+    expect(tidiedFactors[0].ratioNumber).toBeCloseTo(0.21);
+    expect(tidiedFactors[0].ratioPercentage).toBeCloseTo(18.9, 1);
+    expect(tidiedFactors[0].totalImpactFactor).toBeCloseTo(5.81e-3);
   });
 });

@@ -10,7 +10,7 @@ import type {
   UnorderedImpactFactors
 } from "../../lib/types/gpu";
 import Average from "../../data/gpu/average_model.json" with { type: "json" };
-import { ImpactCriterion, LifeCycleSteps } from "$lib/types/enums";
+import { PlanetBoundaries } from "$lib/types/enums";
 
 export function computeAverageModel(
   graphicsCards: GraphicsCard[],
@@ -292,4 +292,99 @@ export function tidyTotals(impactFactors: GraphicsCardLifeCycle): TidyImpactFact
     });
   });
   return tidiedImpactFactors;
+}
+
+function isNotExcludedCriterion(value: string) {
+  if (
+    value === "GWPb" ||
+    value === "GWPf" ||
+    value === "GWPlu" ||
+    value === "LU" ||
+    value === "MIPS" ||
+    value === "DEEE" ||
+    value === "TPE"
+  ) {
+    return false;
+  }
+  return true;
+}
+export function computePlanetBoundaries(impactFactors: ImpactFactors): ImpactFactors {
+  const ignoredCriteria = ["GWPb", "GWPf", "GWPlu", "LU", "MIPS", "DEEE", "TPE"];
+  const planetBoundaries = Object.assign({}, impactFactors);
+  ignoredCriteria.forEach((criterion) => delete planetBoundaries[criterion]);
+
+  const criteria = Object.keys(impactFactors).filter(isNotExcludedCriterion);
+
+  criteria.forEach((criterion) => {
+    switch (criterion) {
+      case "ADPe":
+        planetBoundaries.ADPe! =
+          impactFactors.ADPe! / PlanetBoundaries.AbioticDepletionPotentialElements;
+      case "ADPf":
+        planetBoundaries.ADPf! =
+          impactFactors.ADPf! / PlanetBoundaries.AbioticDepletionPotentialFossilFuels;
+      case "AP":
+        planetBoundaries.AP! = impactFactors.AP! / PlanetBoundaries.AcidificationPotential;
+      case "CTUe":
+        planetBoundaries.CTUe! =
+          impactFactors.CTUe! / PlanetBoundaries.ComparativeToxicityUnitsForEcosystems;
+      case "CTUh_c":
+        planetBoundaries.CTUh_c! =
+          impactFactors.CTUh_c! / PlanetBoundaries.ComparativeToxicityUnitsForHumansCarcinogenic;
+      case "CTUh_nc":
+        planetBoundaries.CTUh_nc! =
+          impactFactors.CTUh_nc! /
+          PlanetBoundaries.ComparativeToxicityUnitsForHumansNonCarcinogenic;
+      case "Epf":
+        planetBoundaries.Epf! =
+          impactFactors.Epf! / PlanetBoundaries.EutrophicationPotentialFreshWater;
+      case "Epm":
+        planetBoundaries.Epm! = impactFactors.Epm! / PlanetBoundaries.EutrophicationPotentialMarine;
+      case "Ept":
+        planetBoundaries.Ept! =
+          impactFactors.Ept! / PlanetBoundaries.EutrophicationPotentialTerrestrial;
+      case "GWP":
+        planetBoundaries.GWP! = impactFactors.GWP! / PlanetBoundaries.GlobalWarmingPotential;
+      case "IR":
+        planetBoundaries.IR! = impactFactors.IR! / PlanetBoundaries.IonisingRadiation;
+      case "ODP":
+        planetBoundaries.ODP! = impactFactors.ODP! / PlanetBoundaries.OzoneDepletionPotential;
+      case "PM":
+        planetBoundaries.PM! = impactFactors.PM! / PlanetBoundaries.ParticulateMatter;
+      case "POCP":
+        planetBoundaries.POCP! =
+          impactFactors.POCP! / PlanetBoundaries.PhotochemicalOzoneFormationPotential;
+      case "WU":
+        planetBoundaries.WU! = impactFactors.WU! / PlanetBoundaries.WaterUse;
+    }
+  });
+
+  return planetBoundaries;
+}
+
+interface TidyRatio {
+  totalImpactFactor: number;
+  impactCriterion: string;
+  ratioNumber: number;
+  ratioPercentage: number;
+}
+
+export function tidyPlanetBoundaries(impactFactors: ImpactFactors): TidyRatio[] {
+  const planetBoundariesValues = computePlanetBoundaries(impactFactors);
+  const criteria = Object.keys(planetBoundariesValues).filter(isNotExcludedCriterion);
+  const totalPerInhabitant = Object.values(planetBoundariesValues).reduce(
+    (total, current) => total + current,
+    0
+  );
+  const tidiedFactors = criteria.flatMap((criterion) => {
+    const ratio: TidyRatio = {
+      totalImpactFactor: impactFactors[criterion],
+      impactCriterion: criterion,
+      ratioNumber: planetBoundariesValues[criterion],
+      ratioPercentage: (planetBoundariesValues[criterion] / totalPerInhabitant) * 100
+    };
+    return ratio;
+  });
+
+  return tidiedFactors;
 }

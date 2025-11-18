@@ -6,7 +6,8 @@ import type {
 
 export enum Scopes {
   Criteria = "Criteria",
-  LifeCycleStep = "Life cycle step"
+  LifeCycleStep = "Life cycle step";
+  PlanetBoundary = "Planet boundary"
 }
 
 export enum FunctionalUnits {
@@ -56,6 +57,26 @@ export enum CoolingSystems {
   WaterCooling = "Water cooling",
   LiquidCooling = "Liquid cooling",
   FreeCooling = "Free cooling"
+}
+
+const humanPopulation = 8e9;
+
+export enum PlanetBoundaries {
+  AbioticDepletionPotentialElements = 2.19e8 / humanPopulation,
+  AbioticDepletionPotentialFossilFuels = 2.24e14 / humanPopulation,
+  AcidificationPotential = 1e12 / humanPopulation,
+  ComparativeToxicityUnitsForEcosystems = 1.31e14 / humanPopulation,
+  ComparativeToxicityUnitsForHumansCarcinogenic = 9.62e5 / humanPopulation,
+  ComparativeToxicityUnitsForHumansNonCarcinogenic = 4.1e6 / humanPopulation,
+  EutrophicationPotentialFreshWater = 5.81e9 / humanPopulation,
+  EutrophicationPotentialMarine = 2.01e11 / humanPopulation,
+  EutrophicationPotentialTerrestrial = 613e12 / humanPopulation,
+  GlobalWarmingPotential = 6.81e12 / humanPopulation,
+  IonisingRadiation = 5.27e14 / humanPopulation,
+  OzoneDepletionPotential = 5.39e8 / humanPopulation,
+  ParticulateMatter = 5.16e5 / humanPopulation,
+  PhotochemicalOzoneFormationPotential = 4.07e11 / humanPopulation,
+  WaterUse = 1.82e14 / humanPopulation
 }
 
 // For reverse mapping between impact criteria acronyms and associated values, just using ImpactCriterionAcronym could be enough with a method returning
