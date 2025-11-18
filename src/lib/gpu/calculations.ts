@@ -196,21 +196,31 @@ export function computeTotalsPerLifeCycleStep(
 
   computableProperties.forEach((property) => {
     const sum = components
-      .map(
-        (component) =>
-          card.components[component as keyof GraphicsCardComponents]![property as ImpactFactorsKeys]
-      )
+      .map((component) => {
+        const value =
+          card.components[component as keyof GraphicsCardComponents]![
+            property as ImpactFactorsKeys
+          ];
+        return value;
+      })
       .reduce((total, current) => (total as number)! + (current as number)!, 0);
 
     if (property.includes("end_of_life")) {
       const splitProperty = property.split("_");
       const endOfLife = "endOfLife" as keyof GraphicsCardLifeCycle;
-      const criteria = splitProperty[splitProperty.length - 1] as IF;
+      const lastIndex = splitProperty.length - 1;
+      const criteria =
+        splitProperty[lastIndex] === "c" || splitProperty[lastIndex] === "nc"
+          ? "CTUh_".concat(splitProperty[lastIndex])
+          : (splitProperty[lastIndex] as IF);
       totalsPerLifeCycleStep[endOfLife][criteria]! = sum as number;
     } else {
       const splitProperty = property.split("_");
       const lifeCycleStep = splitProperty[0] as keyof GraphicsCardLifeCycle;
-      const criteria = splitProperty[1] as IF;
+      const criteria =
+        splitProperty[2] === "c" || splitProperty[2] === "nc"
+          ? "CTUh_".concat(splitProperty[2])
+          : (splitProperty[1] as IF);
       totalsPerLifeCycleStep[lifeCycleStep][criteria]! = sum as number;
     }
   });
@@ -242,35 +252,34 @@ export function tidy(card: GraphicsCardImpactFactors): TidyImpactFactor[] {
   const components = Object.keys(card.components);
 
   const componentImpactFactors = computableProperties.flatMap((property) => {
-    const impactFactors = components
-      .map((component) => {
-        const splitProperty = property.split("_");
-        if (property.includes("end_of_life")) {
-          const lifeCycleStep = "endoflife";
-          const impactCriterion = splitProperty[splitProperty.length - 1];
-          const componentImpactFactor = {
-            component,
-            impactCriterion,
-            lifeCycleStep,
-            value: card.components[component as keyof GraphicsCardComponents]![
-              property as keyof UnorderedImpactFactors
-            ] as number
-          };
-          return componentImpactFactor;
-        } else {
-          const lifeCycleStep = splitProperty[0].toLowerCase();
-          const impactCriterion = splitProperty[1] as IF;
-          const componentImpactFactor = {
-            component,
-            impactCriterion,
-            lifeCycleStep,
-            value: card.components[component as keyof GraphicsCardComponents]![
-              property as keyof UnorderedImpactFactors
-            ] as number
-          };
-          return componentImpactFactor;
-        }
-      });
+    const impactFactors = components.map((component) => {
+      const splitProperty = property.split("_");
+      if (property.includes("end_of_life")) {
+        const lifeCycleStep = "endoflife";
+        const impactCriterion = splitProperty[splitProperty.length - 1];
+        const componentImpactFactor = {
+          component,
+          impactCriterion,
+          lifeCycleStep,
+          value: card.components[component as keyof GraphicsCardComponents]![
+            property as keyof UnorderedImpactFactors
+          ] as number
+        };
+        return componentImpactFactor;
+      } else {
+        const lifeCycleStep = splitProperty[0].toLowerCase();
+        const impactCriterion = splitProperty[1] as IF;
+        const componentImpactFactor = {
+          component,
+          impactCriterion,
+          lifeCycleStep,
+          value: card.components[component as keyof GraphicsCardComponents]![
+            property as keyof UnorderedImpactFactors
+          ] as number
+        };
+        return componentImpactFactor;
+      }
+    });
     return impactFactors;
   });
 
