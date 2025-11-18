@@ -13,22 +13,12 @@ import type { GraphicsCard, GraphicsCardImpactFactors } from "$lib/types/gpu";
 import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 import Gpus from "../../data/gpu/gpus.json";
 
-describe("graphics card calculator utilitary methods test suite", () => {
-  const testCard: GraphicsCard = {
-    name: "A test graphics card",
-    totalWeight: 1234,
-    gpuSurface: 234,
-    casingWeight: 412,
-    heatsinkWeight: 312,
-    cardSurface: 123.45,
-    videoRamSize: 12,
-    videoRamDies: 4,
-    videoRamDieSurface: 12.34
-  };
+describe("average model calculation test suite", () => {
   it("computes an average model of a graphics card with impact factors", () => {
-    const impactFactors: GraphicsCardImpactFactors[] = GpusImpactFactors;
-    const graphicsCards: GraphicsCard[] = Gpus;
+    const impactFactors: GraphicsCardImpactFactors[] = GpusImpactFactors.slice();
+    const graphicsCards: GraphicsCard[] = Gpus.slice();
     const averageModel = computeAverageModel(graphicsCards, impactFactors);
+
     expect(averageModel.graphics_card).toEqual("average");
 
     expect(averageModel.components.casing.manufacturing_ADPe!).toBeCloseTo(4.08e-4);
@@ -50,6 +40,19 @@ describe("graphics card calculator utilitary methods test suite", () => {
     expect(averageModel.components.upstream_transport.manufacturing_GWP!).toBeCloseTo(2.6e-1);
     expect(averageModel.components.end_of_life.manufacturing_GWP!).toBeCloseTo(0);
   });
+});
+describe("graphics card calculator utilitary methods test suite", () => {
+  const testCard: GraphicsCard = {
+    name: "A test graphics card",
+    totalWeight: 1234,
+    gpuSurface: 234,
+    casingWeight: 412,
+    heatsinkWeight: 312,
+    cardSurface: 123.45,
+    videoRamSize: 12,
+    videoRamDies: 4,
+    videoRamDieSurface: 12.34
+  };
 
   it("computes a graphics card impact factors according to the provided parameters", () => {
     const testCardImpacts = computeImpacts(testCard);
@@ -78,6 +81,8 @@ describe("graphics card calculator utilitary methods test suite", () => {
     expect(totalsPerLifeCycleStep.transport.ADPe).toEqual(0);
     expect(totalsPerLifeCycleStep.use.ADPe).toEqual(0);
     expect(totalsPerLifeCycleStep.endOfLife.ADPe).toBeCloseTo(5.66e-6);
+    expect(totalsPerLifeCycleStep.manufacturing.CTUh_c).not.toBe(undefined);
+    expect(totalsPerLifeCycleStep.manufacturing.CTUh_nc).not.toBe(undefined);
   });
 
   it("computes the total for each impact criteria", () => {

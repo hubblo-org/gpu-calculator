@@ -43,13 +43,13 @@ export function computeAverageModel(
 
   const intermediateValues: GraphicsCardComponents[] = impactFactors.map((componentFactors) => {
     const card = graphicsCards.filter((card) => card.name == componentFactors.graphics_card)[0];
-    const casing = componentFactors.components.casing;
-    const heatsink = componentFactors.components.heatsink;
-    const pwb = componentFactors.components.printed_wiring_board;
-    const gpu = componentFactors.components.graphics_processing_unit;
-    const vram = componentFactors.components.video_ram;
-    const transport = componentFactors.components.upstream_transport;
-    const eol = componentFactors.components.end_of_life;
+    const casing = Object.assign({}, componentFactors.components.casing);
+    const heatsink = Object.assign({}, componentFactors.components.heatsink);
+    const pwb = Object.assign({}, componentFactors.components.printed_wiring_board);
+    const gpu = Object.assign({}, componentFactors.components.graphics_processing_unit);
+    const vram = Object.assign({}, componentFactors.components.video_ram);
+    const transport = Object.assign({}, componentFactors.components.upstream_transport);
+    const eol = Object.assign({}, componentFactors.components.end_of_life);
 
     computableProperties.forEach((property) => {
       let newCasingValue = casing[property as ImpactFactorsKeys] as number;
@@ -115,7 +115,10 @@ export function computeAverageModel(
     cardsComponentsValues.forEach((component) => {
       const componentName = component[0]!.component;
       const filteredValues = component
-        .map((card) => card![property as ImpactFactorsKeys])
+        .map((card) => {
+          const value = card![property as ImpactFactorsKeys];
+          return value;
+        })
         .filter((value) => value != 0);
       const divisionOperand = filteredValues.length;
       const sum = filteredValues.reduce((total, current) => {
