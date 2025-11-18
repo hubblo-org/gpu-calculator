@@ -5,6 +5,13 @@ export declare type TidyImpactFactor = {
   value: number;
 };
 
+export declare type TidyRatio = {
+  totalImpactFactor: number;
+  impactCriterion: string;
+  ratioNumber: number;
+  ratioPercentage: number;
+};
+
 export declare type GraphicsCard = {
   name: string;
   totalWeight: number;

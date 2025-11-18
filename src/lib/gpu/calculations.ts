@@ -1,5 +1,6 @@
 import type {
   TidyImpactFactor,
+  TidyRatio,
   GraphicsCard,
   GraphicsCardComponents,
   GraphicsCardImpactFactors,
@@ -372,13 +373,6 @@ export function computePlanetBoundaries(impactFactors: ImpactFactors): ImpactFac
   });
 
   return planetBoundaries;
-}
-
-interface TidyRatio {
-  totalImpactFactor: number;
-  impactCriterion: string;
-  ratioNumber: number;
-  ratioPercentage: number;
 }
 
 export function tidyPlanetBoundaries(impactFactors: ImpactFactors): TidyRatio[] {

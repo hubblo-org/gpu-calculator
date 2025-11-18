@@ -25,12 +25,15 @@ export function assignAxes(impactFactor: ImpactFactor | ImpactFactorWithScope) {
 }
 
 export function renderHorizontalBarPlot(
+  source: string,
+  width: number,
+  height: number,
   impactFactors: ImpactFactor[] | ImpactFactorWithScope[],
   xLabel: string,
   yLabel: string,
   lollipop: boolean
 ) {
-  let div = document.querySelector("#impact-factors-plot");
+  let div = document.querySelector(`#impact-factors-plot-${source}`);
   div?.firstChild?.remove();
   if (div) {
     const lollipopMarks = [
@@ -59,8 +62,8 @@ export function renderHorizontalBarPlot(
       })
     ];
     const barPlot = plot({
-      width: 1600,
-      height: 800,
+      width: width,
+      height: height,
       y: { grid: true },
       marks: lollipop ? lollipopMarks : barMarks
     });

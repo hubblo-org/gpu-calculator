@@ -1,8 +1,7 @@
 <script lang="ts">
   import { LifeCycleSteps, Scopes } from "$lib/types/enums";
   import { Card } from "$lib/gpu/gpu.svelte";
-  import { renderStackedBarPlot } from "$lib/plots";
-  import { isNotATransport } from "$lib/utils";
+  import { renderHorizontalBarPlot, renderStackedBarPlot } from "$lib/plots";
 
   interface Props {
     card: InstanceType<typeof Card>;
@@ -13,8 +12,11 @@
   const options = Object.values(Scopes).filter((scope) => typeof scope === "string");
   const lifeCycleSteps = Object.values(LifeCycleSteps).filter((step) => typeof step === "string");
 
+  const planetBoundaryFormats = ["By number of inhabitants", "By percentage"];
+
   let selectedScope = $state(Scopes.Criteria);
   let selectedLifeCycleStep = $state(LifeCycleSteps.Manufacturing);
+  let selectedFormat = $state(planetBoundaryFormats[0]);
 
   function switchSelectedScope() {
     if (selectedScope === Scopes.LifeCycleStep) {
@@ -24,41 +26,21 @@
     }
   }
 
-  $effect(() => {
-    const lcSteps = ["manufacturing", "transport", "use", "endOfLife"];
+  function switchFormat() {
+    if (selectedFormat === planetBoundaryFormats[0]) {
+      selectedFormat = planetBoundaryFormats[1];
+    } else if (selectedFormat === planetBoundaryFormats[1]) {
+      selectedFormat = planetBoundaryFormats[0];
+    }
+  }
 
+  $effect(() => {
     if (selectedScope === Scopes.Criteria) {
-      const source = "criteria";
-      renderStackedBarPlot(
-        source,
-        1000,
-        600,
-        card.tidyTotals,
-        lcSteps,
-        "impactCriterion",
-        "value",
-        "lifeCycleStep"
-      );
+      card.updatePlotPerCriteria();
     } else if (selectedScope === Scopes.LifeCycleStep) {
-      const source = "perlcstep";
-      const components = Object.keys(card.impactFactors!.components).filter(isNotATransport);
-      const filteredImpactFactors = card.tidyImpactFactors?.filter((impact) => {
-        const lcStep =
-          selectedLifeCycleStep === LifeCycleSteps.EndOfLife
-            ? "endoflife"
-            : selectedLifeCycleStep.toLowerCase();
-        return impact.lifeCycleStep === lcStep;
-      });
-      renderStackedBarPlot(
-        source,
-        1000,
-        600,
-        filteredImpactFactors,
-        components,
-        "impactCriterion",
-        "value",
-        "component"
-      );
+      card.updatePlotPerLifeCycleStep(selectedLifeCycleStep);
+    } else if (selectedScope === Scopes.PlanetBoundary) {
+      card.updatePlotPerPlanetBoundary(selectedFormat);
     }
   });
 </script>
@@ -81,5 +63,14 @@
       >{#each lifeCycleSteps as step}<option>{step}</option>{/each}</select
     >
     <div id="impact-factors-plot-perlcstep"></div>
+  {/if}
+
+  {#if selectedScope === Scopes.PlanetBoundary}
+    <h3 id="gpu-plots-section">Graphics card impact factors related to planet boundaries</h3>
+
+    <select bind:value={selectedFormat} id="planet-boundary-selection" onselect={switchFormat}
+      >{#each planetBoundaryFormats as format}<option>{format}</option>{/each}</select
+    >
+    <div id="impact-factors-plot-planetboundary"></div>
   {/if}
 </section>

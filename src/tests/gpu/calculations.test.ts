@@ -144,6 +144,7 @@ describe("graphics card calculator utilitary methods test suite", () => {
     expect(planetBoundariesFactors.POCP).toBeCloseTo(0.01);
     expect(planetBoundariesFactors.WU).toBeCloseTo(0.06);
   });
+
   it("returns a tidy data format for the ratios of graphics cards impact factors to planet boundaries", () => {
     const h100Impacts = GpusImpactFactors.filter((card) => card.graphics_card.includes("H100"))[0];
     const totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(h100Impacts);

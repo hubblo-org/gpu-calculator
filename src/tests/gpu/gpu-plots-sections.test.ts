@@ -35,7 +35,9 @@ describe("graphics card data visualization static elements test suite", () => {
 
   it("displays the name of the graphics card", () => {
     const gpuPlotsSection = screen.getByRole("region", { name: gpuPlotsSectionName });
-    const graphicsCardName = within(gpuPlotsSection).getByRole("heading", { name: card.parameters!.name });
+    const graphicsCardName = within(gpuPlotsSection).getByRole("heading", {
+      name: card.parameters!.name
+    });
     expect(graphicsCardName).toBeVisible();
   });
 });
@@ -43,6 +45,7 @@ describe("graphics card data visualization static elements test suite", () => {
 describe("graphics card data visualization dynamic elements test suite", () => {
   beforeEach(() => render(GpuPlotsSection, { props: { card } }));
   afterEach(() => cleanup());
+
   it("displays a selection between the different life cycle steps when the user has selected a display by life cycle step", async () => {
     const user = userEvent.setup();
     const gpuPlotsSection = screen.getByRole("region", { name: gpuPlotsSectionName });
@@ -62,6 +65,32 @@ describe("graphics card data visualization dynamic elements test suite", () => {
         name: (content) => content.includes(lcstep)
       });
       expect(updatedTitle).toBeVisible();
+    });
+  });
+
+  it("displays a title for the plot showing impact factors related to planet boundaries", async () => {
+    const user = userEvent.setup();
+    const gpuPlotsSection = screen.getByRole("region", { name: gpuPlotsSectionName });
+
+    const graphSelection = within(gpuPlotsSection).getByLabelText(gpuSelectionLabel);
+    await user.selectOptions(graphSelection, Scopes.PlanetBoundary);
+
+    const title = within(gpuPlotsSection).getByRole("heading", {
+      name: "Graphics card impact factors related to planet boundaries"
+    });
+    expect(title).toBeVisible();
+  });
+
+  it("displays a selection between absolute value and percentage for displaying impact factors related to planet boundaries", async () => {
+    const user = userEvent.setup();
+    const gpuPlotsSection = screen.getByRole("region", { name: gpuPlotsSectionName });
+
+    const graphSelection = within(gpuPlotsSection).getByLabelText(gpuSelectionLabel);
+    await user.selectOptions(graphSelection, Scopes.PlanetBoundary);
+
+    const options = ["By number of inhabitants", "By percentage"];
+    options.forEach(async (option) => {
+      expect(await within(graphSelection).findByRole("option", { name: option })).toBeVisible();
     });
   });
 });
