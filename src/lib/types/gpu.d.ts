@@ -144,6 +144,8 @@ export declare type GraphicsCardLifeCycle = {
   endOfLife: ImpactFactors;
 };
 
+export declare type GCLC = keyof GraphicsCardLifeCycle;
+
 export declare type ImpactFactors = {
   ADPe?: number;
   ADPf?: number;
@@ -170,5 +172,11 @@ export declare type ImpactFactors = {
 };
 
 export declare type IF = keyof ImpactFactors;
+
+export declare type ImpactCriteria = {
+  name: string;
+  acronym: ImpactCriterionAcronym;
+  unit: string;
+};
 
 declare module "gpu";

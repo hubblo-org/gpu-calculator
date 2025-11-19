@@ -1,24 +1,14 @@
 import type { Data } from "@observablehq/plot";
-import type { ImpactFactorShare, OrderedImpactFactors } from "./types/pcr-cloud";
+import type { TidyImpactFactor, TidyRatio } from "./types/gpu";
 import { select } from "d3";
 import { axisX, axisY, barX, dot, plot, ruleX, ruleY } from "@observablehq/plot";
-
-interface ImpactFactor {
-  impactCriterion: string;
-  amount: number;
-}
-
-interface ImpactFactorWithScope {
-  scope: string;
-  amount: number;
-}
 
 interface Axes {
   x: string;
   y: string;
 }
 
-export function assignAxes(impactFactor: ImpactFactor | ImpactFactorWithScope) {
+export function assignAxes(impactFactor: TidyImpactFactor) {
   const keys = Object.keys(impactFactor);
   const axes: Axes = { x: keys[1], y: keys[0] };
   return axes;
@@ -28,7 +18,7 @@ export function renderHorizontalBarPlot(
   source: string,
   width: number,
   height: number,
-  impactFactors: ImpactFactor[] | ImpactFactorWithScope[],
+  impactFactors: TidyImpactFactor[] | TidyRatio[],
   xLabel: string,
   yLabel: string,
   lollipop: boolean
@@ -53,6 +43,7 @@ export function renderHorizontalBarPlot(
     const barMarks = [
       ruleX([0]),
       axisX({ tickSpacing: 100 }),
+      axisY({ labelAnchor: "top" }),
       barX(impactFactors, {
         x: xLabel,
         y: yLabel,
@@ -64,7 +55,9 @@ export function renderHorizontalBarPlot(
     const barPlot = plot({
       width: width,
       height: height,
-      y: { grid: true },
+      style: { overflow: "visible" },
+      y: { grid: true, label: "Criterion" },
+      x: { label: "Ratio" },
       marks: lollipop ? lollipopMarks : barMarks
     });
     div.append(barPlot);
@@ -84,7 +77,7 @@ export function renderStackedBarPlot(
   source: string,
   width: number,
   height: number,
-  impactFactors: ImpactFactorShare[] | OrderedImpactFactors,
+  impactFactors: TidyImpactFactor[] | TidyRatio[],
   domains: string[],
   yLabel: string,
   xLabel: string,
@@ -92,16 +85,17 @@ export function renderStackedBarPlot(
 ) {
   let div = document.querySelector(`#impact-factors-plot-${source}`);
   div?.firstChild?.remove();
+
   if (div) {
     const barPlot = plot({
       width: width,
       height: height,
       className: "plot",
-      color: { legend: true, domain: domains },
+      color: { legend: "swatches", domain: domains },
       x: { percent: true },
       marks: [
         axisY({ fontSize: 12, label: null, marginLeft: 60 }),
-        axisX({ marginBottom: 48 }),
+        axisX({ marginBottom: 48, label: "Value (%)" }),
         barX(impactFactors as Data, {
           y: yLabel,
           x: xLabel,

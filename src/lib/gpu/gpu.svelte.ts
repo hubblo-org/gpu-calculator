@@ -7,14 +7,13 @@ import type {
   TidyRatio
 } from "$lib/types/gpu.d.ts";
 
-import { LifeCycleSteps, Scopes } from "$lib/types/enums";
+import { LifeCycleSteps } from "$lib/types/enums";
 import GraphicsCards from "../../data/gpu/gpus.json";
 import GraphicsCardsImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 
 import { renderHorizontalBarPlot, renderStackedBarPlot } from "$lib/plots";
 import {
   computeImpacts,
-  computePlanetBoundaries,
   computeTotalsPerCriteria,
   computeTotalsPerLifeCycleStep,
   tidy,
@@ -83,13 +82,13 @@ export class Card {
   }
 
   updatePlotPerCriteria() {
-    const lcSteps = ["manufacturing", "transport", "use", "endOfLife"];
+    const lcSteps = Object.values(LifeCycleSteps).filter((lcstep) => typeof lcstep === "string");
     const source = "criteria";
     renderStackedBarPlot(
       source,
       1000,
       600,
-      this.tidyTotals,
+      this.tidyTotals!,
       lcSteps,
       "impactCriterion",
       "value",
@@ -112,7 +111,7 @@ export class Card {
       source,
       1000,
       600,
-      filteredImpactFactors,
+      filteredImpactFactors!,
       components,
       "impactCriterion",
       "value",
@@ -126,7 +125,7 @@ export class Card {
         source,
         1000,
         600,
-        this.tidyRatiosPerPlanetBoundary,
+        this.tidyRatiosPerPlanetBoundary!,
         "ratioNumber",
         "impactCriterion",
         false
@@ -136,7 +135,7 @@ export class Card {
         source,
         1000,
         600,
-        this.tidyRatiosPerPlanetBoundary,
+        this.tidyRatiosPerPlanetBoundary!,
         "ratioPercentage",
         "impactCriterion",
         false

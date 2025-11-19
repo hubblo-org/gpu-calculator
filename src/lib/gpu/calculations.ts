@@ -8,8 +8,10 @@ import type {
   IF,
   ImpactFactors,
   ImpactFactorsKeys,
-  UnorderedImpactFactors
+  UnorderedImpactFactors,
+  GCLC
 } from "../../lib/types/gpu";
+import { isNotExcludedCriterion } from "$lib/utils";
 import Average from "../../data/gpu/average_model.json" with { type: "json" };
 import { PlanetBoundaries } from "$lib/types/enums";
 
@@ -217,7 +219,7 @@ export function computeTotalsPerLifeCycleStep(
         splitProperty[lastIndex] === "c" || splitProperty[lastIndex] === "nc"
           ? "CTUh_".concat(splitProperty[lastIndex])
           : (splitProperty[lastIndex] as IF);
-      totalsPerLifeCycleStep[endOfLife][criteria]! = sum as number;
+      totalsPerLifeCycleStep[endOfLife][criteria as IF]! = sum as number;
     } else {
       const splitProperty = property.split("_");
       const lifeCycleStep = splitProperty[0] as keyof GraphicsCardLifeCycle;
@@ -225,7 +227,7 @@ export function computeTotalsPerLifeCycleStep(
         splitProperty[2] === "c" || splitProperty[2] === "nc"
           ? "CTUh_".concat(splitProperty[2])
           : (splitProperty[1] as IF);
-      totalsPerLifeCycleStep[lifeCycleStep][criteria]! = sum as number;
+      totalsPerLifeCycleStep[lifeCycleStep][criteria as IF]! = sum as number;
     }
   });
 
@@ -293,38 +295,26 @@ export function tidy(card: GraphicsCardImpactFactors): TidyImpactFactor[] {
 export function tidyTotals(impactFactors: GraphicsCardLifeCycle): TidyImpactFactor[] {
   const lifeCycleSteps = Object.keys(impactFactors).filter((key) => typeof key === "string");
   const tidiedImpactFactors = lifeCycleSteps.flatMap((lifeCycleStep) => {
-    const criterias = Object.keys(impactFactors[lifeCycleStep]).filter(
+    const criterias = Object.keys(impactFactors[lifeCycleStep as GCLC]).filter(
       (key) => typeof key === "string"
     );
     return criterias.map((criteria) => {
       return {
         impactCriterion: criteria,
-        lifeCycleStep,
-        value: impactFactors[lifeCycleStep][criteria]
+        lifeCycleStep: lifeCycleStep
+          .replace("endOfLife", "End-of-life")
+          .replace(/^./, (char) => char.toUpperCase()),
+        value: impactFactors[lifeCycleStep as GCLC][criteria as IF]!
       };
     });
   });
   return tidiedImpactFactors;
 }
 
-function isNotExcludedCriterion(value: string) {
-  if (
-    value === "GWPb" ||
-    value === "GWPf" ||
-    value === "GWPlu" ||
-    value === "LU" ||
-    value === "MIPS" ||
-    value === "DEEE" ||
-    value === "TPE"
-  ) {
-    return false;
-  }
-  return true;
-}
 export function computePlanetBoundaries(impactFactors: ImpactFactors): ImpactFactors {
   const ignoredCriteria = ["GWPb", "GWPf", "GWPlu", "LU", "MIPS", "DEEE", "TPE"];
   const planetBoundaries = Object.assign({}, impactFactors);
-  ignoredCriteria.forEach((criterion) => delete planetBoundaries[criterion]);
+  ignoredCriteria.forEach((criterion) => delete planetBoundaries[criterion as IF]);
 
   const criteria = Object.keys(impactFactors).filter(isNotExcludedCriterion);
 
@@ -384,10 +374,10 @@ export function tidyPlanetBoundaries(impactFactors: ImpactFactors): TidyRatio[] 
   );
   const tidiedFactors = criteria.flatMap((criterion) => {
     const ratio: TidyRatio = {
-      totalImpactFactor: impactFactors[criterion],
+      totalImpactFactor: impactFactors[criterion as IF]!,
       impactCriterion: criterion,
-      ratioNumber: planetBoundariesValues[criterion],
-      ratioPercentage: (planetBoundariesValues[criterion] / totalPerInhabitant) * 100
+      ratioNumber: planetBoundariesValues[criterion as IF]!,
+      ratioPercentage: (planetBoundariesValues[criterion as IF]! / totalPerInhabitant) * 100
     };
     return ratio;
   });

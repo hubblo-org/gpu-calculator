@@ -15,7 +15,7 @@ export function convertTableToCSV(table: HTMLTableElement) {
 export function downloadToCSV(nodeId: string) {
   const table = document.getElementById(nodeId)?.getElementsByTagName("table")[0];
   const csvRaw = convertTableToCSV(table!);
-  const csvFile = new File([csvRaw], { type: "text/csv" });
+  const csvFile = new File([csvRaw], "text/csv");
   const temporaryLink = document.createElement("a");
   const url = window.URL.createObjectURL(csvFile);
 
@@ -44,8 +44,23 @@ export async function downloadToPNG(nodeId: string) {
   window.URL.revokeObjectURL(url);
 }
 
-export function isNotATransport(value) {
+export function isNotATransport(value: string) {
   if (value === "transport_boat" || value === "transport_truck" || value === "transport_plane") {
+    return false;
+  }
+  return true;
+}
+
+export function isNotExcludedCriterion(value: string) {
+  if (
+    value === "GWPb" ||
+    value === "GWPf" ||
+    value === "GWPlu" ||
+    value === "LU" ||
+    value === "MIPS" ||
+    value === "DEEE" ||
+    value === "TPE"
+  ) {
     return false;
   }
   return true;
