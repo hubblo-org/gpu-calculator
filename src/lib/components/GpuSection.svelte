@@ -79,9 +79,6 @@
       height: 40px;
       width: 100%;
     }
-    input {
-      margin-top: auto;
-    }
     input,
     select {
       height: 50px;

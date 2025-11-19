@@ -1,7 +1,6 @@
 <script lang="ts">
   import { LifeCycleSteps, Scopes } from "$lib/types/enums";
   import { Card } from "$lib/gpu/gpu.svelte";
-  import { renderHorizontalBarPlot, renderStackedBarPlot } from "$lib/plots";
 
   interface Props {
     card: InstanceType<typeof Card>;
