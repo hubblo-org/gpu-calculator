@@ -36,21 +36,21 @@
     </select>
     <div class="grid">
       <div class="field">
-        <label for="casing-weight">Casing weight</label>
+        <label for="casing-weight">Casing weight (grams)</label>
         <input type="number" id="casing-weight" bind:value={card.parameters!.casingWeight} readonly />
-        <label for="heatsink-weight">Heatsink weight</label>
+        <label for="heatsink-weight">Heatsink weight (grams)</label>
         <input type="number" id="heatsink-weight" bind:value={card.parameters!.heatsinkWeight} readonly />
-        <label for="graphics-card.parameters.surface">Graphics card surface</label>
-        <input type="number" id="graphics-card.parameters.surface" bind:value={card.parameters!.cardSurface} readonly />
-        <label for="gpu-surface">GPU surface</label>
+        <label for="graphics-card-surface">Graphics card surface (cm²)</label>
+        <input type="number" id="graphics-card-surface" bind:value={card.parameters!.cardSurface} readonly />
+        <label for="gpu-surface">GPU surface (mm²)</label>
         <input type="number" id="gpu-surface" bind:value={card.parameters!.gpuSurface} readonly />
       </div>
       <div class="field">
-        <label for="vram-size">Video RAM size</label>
+        <label for="vram-size">Video RAM capacity (GB)</label>
         <input type="number" id="vram-size" bind:value={card.parameters!.videoRamSize} readonly />
         <label for="vram-dies">Video RAM dies</label>
         <input type="number" id="vram-dies" bind:value={card.parameters!.videoRamDies} readonly />
-        <label for="vram-die-surface">Video RAM die surface</label>
+        <label for="vram-die-surface">Video RAM die surface (mm²)</label>
         <input type="number" id="vram-die-surface" bind:value={card.parameters!.videoRamDieSurface} readonly />
       </div>
     </div>
