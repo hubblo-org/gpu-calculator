@@ -1,10 +1,7 @@
-# Product Category Rules (PCR) for Cloud services
+# Graphics card environmental impact calculator
 
-This project aims at helping spread the environmental evaluation methodology of the Product Category Rules of Cloud services
-edited by the *Agence de l'environnement et de la maîtrise de l'énergie* (ADEME), available [here](https://librairie.ademe.fr/produire-autrement/6105-methodological-standard-for-the-environmental-assessment-of-datacenter-it-hosting-services-and-cloud-services.html).
+This project aims at documenting the environmental impacts of graphics cards, and allowing an easy evaluation of the environmental impacts of a graphics card if needed parameters are provided. 
 
-The calculator, based on common parameters used in life-cycle analysis of data centers and their inventories, computes the impact factors. Those are then rendered in different graphical representations, both for the whole of the data center and for the selected FU.
+The calculator, based on several and generally public parameters of graphics cards, computes and displays through bar plots their environmental impacts through several life-cycle analysis criteria.
 
-## TODO
-- [ ] script getting ademe base empreinte data as json
-- [ ]
+This calculator is an auxillary tool to the research paper funded by ADEME on the environmental impacts of generative artificial intelligence training on GPUs, to be published by the end of 2025, and to [Falk et al., 2025, "More than Carbon: Cradle-to-Grave environmental impacts of GenAI training on the Nvidia A100 GPU"](https://arxiv.org/abs/2509.00093).
