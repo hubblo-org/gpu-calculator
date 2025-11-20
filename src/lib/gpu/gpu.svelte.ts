@@ -81,7 +81,7 @@ export class Card {
     this.tidyRatiosPerPlanetBoundary = tidyPlanetBoundaries(this.totalsPerCriteria);
   }
 
-  updatePlotPerCriteria() {
+  updatePlotPerLifeCycleStep() {
     const lcSteps = Object.values(LifeCycleSteps).filter((lcstep) => typeof lcstep === "string");
     const source = "criteria";
     renderStackedBarPlot(
@@ -95,18 +95,14 @@ export class Card {
       "lifeCycleStep"
     );
   }
-  updatePlotPerLifeCycleStep(selectedLifeCycleStep: string) {
+  updatePlotPerComponent() {
     const source = "perlcstep";
     const components = Object.keys(this.impactFactors!.components).filter(
       (component) => component != "transport_boat" || "transport_truck"
     );
-    const filteredImpactFactors = this.tidyImpactFactors?.filter((impact) => {
-      const lcStep =
-        selectedLifeCycleStep === LifeCycleSteps.EndOfLife
-          ? "endoflife"
-          : selectedLifeCycleStep.toLowerCase();
-      return impact.lifeCycleStep === lcStep;
-    });
+    const filteredImpactFactors = this.tidyImpactFactors?.filter(
+      (impact) => impact.lifeCycleStep === LifeCycleSteps.Manufacturing
+    );
     renderStackedBarPlot(
       source,
       1000,

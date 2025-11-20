@@ -1,10 +1,8 @@
-import type {
-  ImpactCriteria,
-} from "./gpu";
+import type { ImpactCriteria } from "./gpu";
 
 export enum Scopes {
-  Criteria = "Criteria",
   LifeCycleStep = "Life cycle step",
+  Component = "Component",
   PlanetBoundary = "Planet boundary"
 }
 

@@ -9,21 +9,11 @@
   const { card }: Props = $props();
 
   const options = Object.values(Scopes).filter((scope) => typeof scope === "string");
-  const lifeCycleSteps = Object.values(LifeCycleSteps).filter((step) => typeof step === "string");
 
   const planetBoundaryFormats = ["By number of inhabitants", "By percentage"];
 
-  let selectedScope = $state(Scopes.Criteria);
-  let selectedLifeCycleStep = $state(LifeCycleSteps.Manufacturing);
+  let selectedScope = $state(Scopes.LifeCycleStep);
   let selectedFormat = $state(planetBoundaryFormats[0]);
-
-  function switchSelectedScope() {
-    if (selectedScope === Scopes.LifeCycleStep) {
-      selectedScope = Scopes.Criteria;
-    } else if (selectedScope === Scopes.Criteria) {
-      selectedScope = Scopes.LifeCycleStep;
-    }
-  }
 
   function switchFormat() {
     if (selectedFormat === planetBoundaryFormats[0]) {
@@ -34,10 +24,10 @@
   }
 
   $effect(() => {
-    if (selectedScope === Scopes.Criteria) {
-      card.updatePlotPerCriteria();
-    } else if (selectedScope === Scopes.LifeCycleStep) {
-      card.updatePlotPerLifeCycleStep(selectedLifeCycleStep);
+    if (selectedScope === Scopes.LifeCycleStep) {
+      card.updatePlotPerLifeCycleStep();
+    } else if (selectedScope === Scopes.Component) {
+      card.updatePlotPerComponent();
     } else if (selectedScope === Scopes.PlanetBoundary) {
       card.updatePlotPerPlanetBoundary(selectedFormat);
     }
@@ -47,20 +37,16 @@
 <section aria-labelledby="gpu-plots-section">
   <h2>{card.parameters!.name}</h2>
   <label for="gpu-plots-selection">Display impact factors by:</label>
-  <select bind:value={selectedScope} id="gpu-plots-selection" onselect={switchSelectedScope}
+  <select bind:value={selectedScope} id="gpu-plots-selection" 
     >{#each options as option}<option>{option}</option>{/each}</select
   >
-  {#if selectedScope === Scopes.Criteria}
+  {#if selectedScope === Scopes.LifeCycleStep}
     <h3 id="gpu-plots-section">Graphics card impact factors</h3>
     <div id="impact-factors-plot-criteria"></div>
   {/if}
 
-  {#if selectedScope === Scopes.LifeCycleStep}
-    <h3>{selectedLifeCycleStep} impact factors by component</h3>
-    <label for="life-cycle-step-selection">Select life cycle step:</label>
-    <select bind:value={selectedLifeCycleStep} id="life-cycle-step-selection"
-      >{#each lifeCycleSteps as step}<option>{step}</option>{/each}</select
-    >
+  {#if selectedScope === Scopes.Component}
+    <h3>Manufacturing impact factors by component</h3>
     <div id="impact-factors-plot-perlcstep"></div>
   {/if}
 

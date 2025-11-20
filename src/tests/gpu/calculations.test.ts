@@ -116,7 +116,7 @@ describe("graphics card calculator utilitary methods test suite", () => {
     const tidiedTotals = tidyTotals(totalsPerLifeCycleStep);
     expect(tidiedTotals.length).toEqual(88);
 
-    expect(tidiedTotals[0].lifeCycleStep).toEqual("manufacturing");
+    expect(tidiedTotals[0].lifeCycleStep).toEqual("Manufacturing");
     expect(tidiedTotals[0].impactCriterion).toEqual("ADPe");
     expect(tidiedTotals[0].value).toBeCloseTo(2.31e-3);
   });
