@@ -18,7 +18,7 @@ const graphicsCardParameters = [
   "Casing weight",
   "Heatsink weight",
   "Graphics card surface",
-  "Video RAM size",
+  "Video RAM capacity",
   "Video RAM dies",
   "Video RAM die surface",
   "GPU surface"
@@ -42,7 +42,9 @@ describe("gpu section static elements suite", () => {
       name: gpuSectionName
     });
     graphicsCardParameters.forEach((parameterLabel) => {
-      const parameterInput = within(gpuParametersSection).getByLabelText(parameterLabel);
+      const parameterInput = within(gpuParametersSection).getByLabelText(parameterLabel, {
+        exact: false
+      });
       expect(parameterInput).toBeVisible();
       expect(parameterInput).toHaveAttribute("readonly");
     });
@@ -134,7 +136,9 @@ describe("gpu section dynamic elements test suite", () => {
     await user.selectOptions(graphicsCardsSelection, "Custom");
 
     graphicsCardParameters.forEach((parameterLabel) => {
-      const parameterInput = within(gpuParametersSection).getByLabelText(parameterLabel);
+      const parameterInput = within(gpuParametersSection).getByLabelText(parameterLabel, {
+        exact: false
+      });
       expect(parameterInput).toBeVisible();
       expect(parameterInput).not.toHaveAttribute("readonly");
     });
@@ -155,7 +159,9 @@ describe("gpu section dynamic elements test suite", () => {
     await user.selectOptions(graphicsCardsSelection, l4.name);
 
     graphicsCardParameters.forEach((parameterLabel) => {
-      const parameterInput = within(gpuParametersSection).getByLabelText(parameterLabel);
+      const parameterInput = within(gpuParametersSection).getByLabelText(parameterLabel, {
+        exact: false
+      });
       expect(parameterInput).toBeVisible();
       expect(parameterInput).toHaveAttribute("readonly");
     });

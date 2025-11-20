@@ -18,7 +18,7 @@ export declare type GraphicsCard = {
   casingWeight: number;
   heatsinkWeight: number;
   cardSurface: number;
-  videoRamSize: number;
+  videoRamCapacity: number;
   videoRamDies: number;
   videoRamDieSurface?: number;
   gpuSurface: number;

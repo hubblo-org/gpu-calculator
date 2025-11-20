@@ -49,7 +49,7 @@ describe("graphics card calculator utilitary methods test suite", () => {
     casingWeight: 412,
     heatsinkWeight: 312,
     cardSurface: 123.45,
-    videoRamSize: 12,
+    videoRamCapacity: 12,
     videoRamDies: 4,
     videoRamDieSurface: 12.34
   };

@@ -47,7 +47,7 @@
       </div>
       <div class="field">
         <label for="vram-size">Video RAM capacity (GB)</label>
-        <input type="number" id="vram-size" bind:value={card.parameters!.videoRamSize} readonly />
+        <input type="number" id="vram-size" bind:value={card.parameters!.videoRamCapacity} readonly />
         <label for="vram-dies">Video RAM dies</label>
         <input type="number" id="vram-dies" bind:value={card.parameters!.videoRamDies} readonly />
         <label for="vram-die-surface">Video RAM die surface (mm²)</label>

@@ -1,10 +1,10 @@
 [
-	{"name": "NVIDIA H100 PCIe 80GB", "totalWeight":1690, "casingWeight":790,"heatsinkWeight":900,"cardSurface":296,"videoRamSize":80,"videoRamDies":6,"videoRamDieSurface":326, "gpuSurface":2010},
-	{"name": "NVIDIA GeForce GTX 1080 Ti", "totalWeight":881, "casingWeight":252,"heatsinkWeight":427,"cardSurface":312.14,"videoRamSize":11,"videoRamDies":11, "gpuSurface":740.57},
-	{"name": "NVIDIA RTX A4500", "totalWeight":1060, "casingWeight":197,"heatsinkWeight":714,"cardSurface":230.04,"videoRamSize":20,"videoRamDies":10, "gpuSurface":1135.82},
-	{"name": "NVIDIA TITAN RTX", "totalWeight":936, "casingWeight":682,"heatsinkWeight":53.7,"cardSurface":307.72,"videoRamSize":20,"videoRamDies":12, "gpuSurface":1528.87},
-	{"name": "NVIDIA Tesla P100 PCIe 16GB", "totalWeight":888, "casingWeight":175,"heatsinkWeight":538,"cardSurface":295.26,"videoRamSize":16,"videoRamDies":4, "videoRamDieSurface":89.58, "gpuSurface":1088.7},
-	{"name": "NVIDIA L4", "totalWeight":142, "casingWeight":0,"heatsinkWeight":87.1,"cardSurface":93.13,"videoRamSize":24,"videoRamDies":12, "gpuSurface":390.96},
-	{"name": "NVIDIA A100 PCIe 40GB", "totalWeight":1230, "casingWeight":387,"heatsinkWeight":609,"cardSurface":234.36,"videoRamSize":40,"videoRamDies":6, "videoRamDieSurface":93.96, "gpuSurface":1798},
-	{"name": "NVIDIA A100 SXM4 40GB", "totalWeight":1560, "casingWeight":90,"heatsinkWeight":1250,"cardSurface":105,"videoRamSize":40,"videoRamDies":6, "videoRamDieSurface":93.96, "gpuSurface":1798}
+	{"name": "NVIDIA H100 PCIe 80GB", "totalWeight":1690, "casingWeight":790,"heatsinkWeight":900,"cardSurface":296,"videoRamCapacity":80,"videoRamDies":6,"videoRamDieSurface":326, "gpuSurface":2010},
+	{"name": "NVIDIA GeForce GTX 1080 Ti", "totalWeight":881, "casingWeight":252,"heatsinkWeight":427,"cardSurface":312.14,"videoRamCapacity":11,"videoRamDies":11, "gpuSurface":740.57},
+	{"name": "NVIDIA RTX A4500", "totalWeight":1060, "casingWeight":197,"heatsinkWeight":714,"cardSurface":230.04,"videoRamCapacity":20,"videoRamDies":10, "gpuSurface":1135.82},
+	{"name": "NVIDIA TITAN RTX", "totalWeight":936, "casingWeight":682,"heatsinkWeight":53.7,"cardSurface":307.72,"videoRamCapacity":20,"videoRamDies":12, "gpuSurface":1528.87},
+	{"name": "NVIDIA Tesla P100 PCIe 16GB", "totalWeight":888, "casingWeight":175,"heatsinkWeight":538,"cardSurface":295.26,"videoRamCapacity":16,"videoRamDies":4, "videoRamDieSurface":89.58, "gpuSurface":1088.7},
+	{"name": "NVIDIA L4", "totalWeight":142, "casingWeight":0,"heatsinkWeight":87.1,"cardSurface":93.13,"videoRamCapacity":24,"videoRamDies":12, "gpuSurface":390.96},
+	{"name": "NVIDIA A100 PCIe 40GB", "totalWeight":1230, "casingWeight":387,"heatsinkWeight":609,"cardSurface":234.36,"videoRamCapacity":40,"videoRamDies":6, "videoRamDieSurface":93.96, "gpuSurface":1798},
+	{"name": "NVIDIA A100 SXM4 40GB", "totalWeight":1560, "casingWeight":90,"heatsinkWeight":1250,"cardSurface":105,"videoRamCapacity":40,"videoRamDies":6, "videoRamDieSurface":93.96, "gpuSurface":1798}
 ]
