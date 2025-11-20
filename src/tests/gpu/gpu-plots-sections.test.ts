@@ -2,7 +2,7 @@ import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import userEvent from "@testing-library/user-event";
 import GpuPlotsSection from "$lib/components/GpuPlotsSection.svelte";
-import { LifeCycleSteps, Scopes } from "$lib/types/enums";
+import { Scopes } from "$lib/types/enums";
 import Gpus from "../../data/gpu/gpus.json";
 import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 import { Card } from "$lib/gpu/gpu.svelte";
@@ -21,7 +21,8 @@ const gpuSelectionOptions = Object.values(Scopes).filter((scope) => typeof scope
 describe("graphics card data visualization static elements test suite", () => {
   beforeEach(() => render(GpuPlotsSection, { props: { card } }));
   afterEach(() => cleanup());
-  it("displays a selection between a bar plot showing every criteria, and a bar plot for a specific life cycle step", () => {
+
+  it("displays a selection between a bar plot for each criteria by life cycle step, a bar plot for each criteria by component, and a bar plot for each criteria related to planet boundaries", () => {
     const gpuPlotsSection = screen.getByRole("region", { name: gpuPlotsSectionName });
     const graphSelection = within(gpuPlotsSection).getByLabelText(gpuSelectionLabel);
 
@@ -69,16 +70,4 @@ describe("graphics card data visualization dynamic elements test suite", () => {
     expect(title).toBeVisible();
   });
 
-  it("displays a selection between absolute value and percentage for displaying impact factors related to planet boundaries", async () => {
-    const user = userEvent.setup();
-    const gpuPlotsSection = screen.getByRole("region", { name: gpuPlotsSectionName });
-
-    const graphSelection = within(gpuPlotsSection).getByLabelText(gpuSelectionLabel);
-    await user.selectOptions(graphSelection, Scopes.PlanetBoundary);
-
-    const options = ["By number of inhabitants", "By percentage"];
-    options.forEach(async (option) => {
-      expect(await within(graphSelection).findByRole("option", { name: option })).toBeVisible();
-    });
-  });
 });

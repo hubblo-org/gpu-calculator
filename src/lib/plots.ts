@@ -1,7 +1,7 @@
 import type { Data } from "@observablehq/plot";
 import type { TidyImpactFactor, TidyRatio } from "./types/gpu";
 import { select } from "d3";
-import { axisX, axisY, barX, dot, plot, ruleX, ruleY } from "@observablehq/plot";
+import { axisX, axisY, barX, dot, plot, pointerY, ruleX, ruleY, tip } from "@observablehq/plot";
 
 interface Axes {
   x: string;
@@ -48,16 +48,19 @@ export function renderHorizontalBarPlot(
         x: xLabel,
         y: yLabel,
         fill: xLabel,
-        tip: { format: { y: (d) => `${d.replace("\n", " ")}` }, lineWidth: 100 },
         sort: { y: "x", order: "descending" }
-      })
+      }),
+      tip(
+        impactFactors,
+        pointerY({ x: xLabel, y: yLabel, channels: { Ratio: "ratioNumber" } })
+      )
     ];
     const barPlot = plot({
       width: width,
       height: height,
       style: { overflow: "visible" },
       y: { grid: true, label: "Criterion" },
-      x: { label: "Ratio" },
+      x: { label: "Percentage (%)" },
       marks: lollipop ? lollipopMarks : barMarks
     });
     div.append(barPlot);

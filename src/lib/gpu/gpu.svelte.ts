@@ -121,28 +121,17 @@ export class Card {
       "component"
     );
   }
-  updatePlotPerPlanetBoundary(selectedFormat: string) {
+
+  updatePlotPerPlanetBoundary() {
     const source = "planetboundary";
-    if (selectedFormat === "By number of inhabitants") {
-      renderHorizontalBarPlot(
-        source,
-        1000,
-        600,
-        this.tidyRatiosPerPlanetBoundary!,
-        "ratioNumber",
-        "impactCriterion",
-        false
-      );
-    } else if (selectedFormat === "By percentage") {
-      renderHorizontalBarPlot(
-        source,
-        1000,
-        600,
-        this.tidyRatiosPerPlanetBoundary!,
-        "ratioPercentage",
-        "impactCriterion",
-        false
-      );
-    }
+    renderHorizontalBarPlot(
+      source,
+      1000,
+      600,
+      this.tidyRatiosPerPlanetBoundary!,
+      "ratioPercentage",
+      "impactCriterion",
+      false
+    );
   }
 }
