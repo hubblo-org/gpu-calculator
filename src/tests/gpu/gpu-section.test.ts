@@ -37,7 +37,7 @@ describe("gpu section static elements suite", () => {
     expect(gpuParametersSection).toBeVisible();
   });
 
-  it("should display the graphics card parameters, that cannot be modified by the user for documented graphics card", () => {
+  it("should display the graphics card parameters", () => {
     const gpuParametersSection = screen.getByRole("region", {
       name: gpuSectionName
     });
@@ -46,7 +46,6 @@ describe("gpu section static elements suite", () => {
         exact: false
       });
       expect(parameterInput).toBeVisible();
-      expect(parameterInput).toHaveAttribute("readonly");
     });
   });
 
@@ -99,7 +98,7 @@ describe("gpu section dynamic elements test suite", () => {
   beforeEach(() => render(GpuSection, { props: { card } }));
   afterEach(() => cleanup());
 
-  it("should display the selected graphics card values after the user selected it", async () => {
+  it("should display the selected graphics card values after the user clicked on the calculation button", async () => {
     const user = userEvent.setup();
     const l4 = Gpus.filter((card) => card.name.includes("L4"))[0];
     const gpuParametersSection = screen.getByRole("region", {
@@ -109,7 +108,12 @@ describe("gpu section dynamic elements test suite", () => {
     const graphicsCardsSelection =
       within(gpuParametersSection).getByLabelText("Select a graphics card:");
 
+    const recalculateButton = within(gpuParametersSection).getByRole("button", {
+      name: "Recalculate"
+    });
+
     await user.selectOptions(graphicsCardsSelection, l4.name);
+    await user.click(recalculateButton);
 
     Object.entries(l4).forEach(async ([key, value]) => {
       if (key == "name" || key == "totalWeight") {
@@ -123,6 +127,7 @@ describe("gpu section dynamic elements test suite", () => {
       expect(parameterInput).toHaveValue(value);
     });
   });
+
   it("should allow the user to enter new parameters if the user selected the custom graphics card option", async () => {
     const user = userEvent.setup();
 
@@ -140,13 +145,14 @@ describe("gpu section dynamic elements test suite", () => {
         exact: false
       });
       expect(parameterInput).toBeVisible();
-      expect(parameterInput).not.toHaveAttribute("readonly");
+      expect(parameterInput).toHaveValue(0);
     });
   });
 
-  it("should not allow the user to modify parameters after selecting again a documented graphics card", async () => {
+  it("should display again a documented card parameters when the user selects a card after selecting the custom option", async () => {
     const user = userEvent.setup();
-    const l4 = Gpus.filter((card) => card.name.includes("L4"))[0];
+
+    const h100 = Gpus.filter((card) => card.name.includes("H100"))[0];
 
     const gpuParametersSection = screen.getByRole("region", {
       name: gpuSectionName
@@ -156,37 +162,13 @@ describe("gpu section dynamic elements test suite", () => {
       within(gpuParametersSection).getByLabelText("Select a graphics card:");
 
     await user.selectOptions(graphicsCardsSelection, "Custom");
-    await user.selectOptions(graphicsCardsSelection, l4.name);
+    await user.selectOptions(graphicsCardsSelection, h100.name);
 
     graphicsCardParameters.forEach((parameterLabel) => {
       const parameterInput = within(gpuParametersSection).getByLabelText(parameterLabel, {
         exact: false
       });
       expect(parameterInput).toBeVisible();
-      expect(parameterInput).toHaveAttribute("readonly");
     });
-  });
-
-  it("should display a button allowing the user to recalculate the graphics card impacts when the custom option has been selected", async () => {
-    const user = userEvent.setup();
-
-    const gpuParametersSection = screen.getByRole("region", {
-      name: gpuSectionName
-    });
-    expect(
-      within(gpuParametersSection).queryByRole("button", {
-        name: "Recalculate"
-      })
-    ).not.toBeInTheDocument();
-
-    const graphicsCardsSelection =
-      within(gpuParametersSection).getByLabelText("Select a graphics card:");
-
-    await user.selectOptions(graphicsCardsSelection, "Custom");
-
-    const cardImpactsCalculationButton = within(gpuParametersSection).getByRole("button", {
-      name: "Recalculate"
-    });
-    expect(cardImpactsCalculationButton).toBeVisible();
   });
 });

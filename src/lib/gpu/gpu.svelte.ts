@@ -23,6 +23,7 @@ import {
 } from "./calculations";
 
 export class Card {
+  name = $state<string>();
   impactFactors = $state<GraphicsCardImpactFactors>();
   totalsPerLifeCycleStep = $state<GraphicsCardLifeCycle>();
   totalsPerCriteria = $state<ImpactFactors>();
@@ -34,6 +35,7 @@ export class Card {
 
   constructor(card: GraphicsCard, cardImpactFactors: GraphicsCardImpactFactors) {
     this.parameters = card;
+    this.name = this.parameters.name;
     this.impactFactors = cardImpactFactors;
     this.tidyImpactFactors = tidy(this.impactFactors);
     this.totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(this.impactFactors);
@@ -44,17 +46,7 @@ export class Card {
 
   selectDocumentedCard(cardName: string) {
     const selectedCard = GraphicsCards.filter((gc) => gc.name === cardName)[0];
-    const selectedCardImpactFactors = GraphicsCardsImpactFactors.filter(
-      (impacts) => impacts.graphics_card === cardName
-    )[0];
-
     this.parameters = selectedCard;
-    this.impactFactors = selectedCardImpactFactors;
-    this.tidyImpactFactors = tidy(this.impactFactors);
-    this.totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(this.impactFactors);
-    this.totalsPerCriteria = computeTotalsPerCriteria(this.totalsPerLifeCycleStep);
-    this.tidyTotals = tidyTotals(this.totalsPerLifeCycleStep);
-    this.tidyRatiosPerPlanetBoundary = tidyPlanetBoundaries(this.totalsPerCriteria);
   }
 
   new() {
@@ -72,14 +64,29 @@ export class Card {
     this.parameters = customCard;
   }
 
-  updateImpactFactors() {
-    const customCardImpactFactors = computeImpacts(this.parameters!);
-    this.impactFactors = customCardImpactFactors;
-    this.tidyImpactFactors = tidy(customCardImpactFactors);
-    this.totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(this.impactFactors);
-    this.totalsPerCriteria = computeTotalsPerCriteria(this.totalsPerLifeCycleStep);
-    this.tidyTotals = tidyTotals(this.totalsPerLifeCycleStep);
-    this.tidyRatiosPerPlanetBoundary = tidyPlanetBoundaries(this.totalsPerCriteria);
+  updateImpactFactors(cardName: string) {
+    if (cardName === "Custom") {
+      const customCardImpactFactors = computeImpacts(this.parameters!);
+      this.name = cardName;
+      this.impactFactors = customCardImpactFactors;
+      this.tidyImpactFactors = tidy(customCardImpactFactors);
+      this.totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(this.impactFactors);
+      this.totalsPerCriteria = computeTotalsPerCriteria(this.totalsPerLifeCycleStep);
+      this.tidyTotals = tidyTotals(this.totalsPerLifeCycleStep);
+      this.tidyRatiosPerPlanetBoundary = tidyPlanetBoundaries(this.totalsPerCriteria);
+    } else {
+      this.name = cardName;
+      const selectedCardImpactFactors = GraphicsCardsImpactFactors.filter(
+        (impacts) => impacts.graphics_card === cardName
+      )[0];
+
+      this.impactFactors = selectedCardImpactFactors;
+      this.tidyImpactFactors = tidy(this.impactFactors);
+      this.totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(this.impactFactors);
+      this.totalsPerCriteria = computeTotalsPerCriteria(this.totalsPerLifeCycleStep);
+      this.tidyTotals = tidyTotals(this.totalsPerLifeCycleStep);
+      this.tidyRatiosPerPlanetBoundary = tidyPlanetBoundaries(this.totalsPerCriteria);
+    }
   }
 
   updatePlotPerLifeCycleStep() {
