@@ -1,4 +1,6 @@
 import html2canvas from "html2canvas";
+import type { TidyImpactFactor } from "./types/gpu";
+import { ImpactCriterionAcronym } from "./types/enums";
 
 export function convertTableToCSV(table: HTMLTableElement) {
   const rows = Array.from(table.getElementsByTagName("tr"));
@@ -64,4 +66,12 @@ export function isNotExcludedCriterion(value: string) {
     return false;
   }
   return true;
+}
+
+export function isNotMipsOrDeee(value: TidyImpactFactor) {
+  if (value.impactCriterion === ImpactCriterionAcronym.MIPS || value.impactCriterion === "DEEE") {
+    return false;
+  } else {
+    return true;
+  }
 }

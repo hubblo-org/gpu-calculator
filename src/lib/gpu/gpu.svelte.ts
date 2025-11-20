@@ -12,6 +12,7 @@ import GraphicsCards from "../../data/gpu/gpus.json";
 import GraphicsCardsImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 
 import { renderHorizontalBarPlot, renderStackedBarPlot } from "$lib/plots";
+import { isNotMipsOrDeee } from "$lib/utils";
 import {
   computeImpacts,
   computeTotalsPerCriteria,
@@ -63,7 +64,7 @@ export class Card {
       casingWeight: 0,
       heatsinkWeight: 0,
       cardSurface: 0,
-      videoRamSize: 0,
+      videoRamCapacity: 0,
       videoRamDies: 0,
       videoRamDieSurface: 0,
       gpuSurface: 0
@@ -84,25 +85,31 @@ export class Card {
   updatePlotPerLifeCycleStep() {
     const lcSteps = Object.values(LifeCycleSteps).filter((lcstep) => typeof lcstep === "string");
     const source = "criteria";
+
+    const filteredImpactFactors = this.tidyTotals!.filter(isNotMipsOrDeee);
+
     renderStackedBarPlot(
       source,
       1000,
       600,
-      this.tidyTotals!,
+      filteredImpactFactors!,
       lcSteps,
       "impactCriterion",
       "value",
       "lifeCycleStep"
     );
   }
+
   updatePlotPerComponent() {
     const source = "perlcstep";
+
     const components = Object.keys(this.impactFactors!.components).filter(
       (component) => component != "transport_boat" || "transport_truck"
     );
-    const filteredImpactFactors = this.tidyImpactFactors?.filter(
-      (impact) => impact.lifeCycleStep === LifeCycleSteps.Manufacturing
-    );
+    const filteredImpactFactors = this.tidyImpactFactors
+      ?.filter((impact) => impact.lifeCycleStep === "manufacturing")
+      .filter(isNotMipsOrDeee);
+
     renderStackedBarPlot(
       source,
       1000,
