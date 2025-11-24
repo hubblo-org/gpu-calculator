@@ -13,6 +13,16 @@ export enum LifeCycleSteps {
   EndOfLife = "End-of-life"
 }
 
+export enum Components {
+  Casing = "casing",
+  Heatsink = "heatsink",
+  PWB = "printed_wiring_board",
+  GPU = "graphics_processing_unit",
+  VRAM = "video_ram",
+  Transport = "upstream_transport",
+  EndOfLife = "end_of_life"
+}
+
 const humanPopulation = 8e9;
 
 export enum PlanetBoundaries {

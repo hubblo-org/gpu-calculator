@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { Scopes } from "$lib/types/enums";
+  import { getAllImpactCriteria, Scopes } from "$lib/types/enums";
   import { Card } from "$lib/gpu/gpu.svelte";
+  import AbsoluteValuesTable from "./AbsoluteValuesTable.svelte";
 
   interface Props {
     card: InstanceType<typeof Card>;
@@ -26,7 +27,7 @@
 <section aria-labelledby="gpu-plots-section">
   <h2>{card.name}</h2>
   <label for="gpu-plots-selection">Display impact factors by:</label>
-  <select bind:value={selectedScope} id="gpu-plots-selection" 
+  <select bind:value={selectedScope} id="gpu-plots-selection"
     >{#each options as option}<option>{option}</option>{/each}</select
   >
   {#if selectedScope === Scopes.LifeCycleStep}
@@ -43,4 +44,6 @@
     <h3 id="gpu-plots-section">Graphics card impact factors related to planet boundaries</h3>
     <div id="impact-factors-plot-planetboundary"></div>
   {/if}
+
+  <AbsoluteValuesTable impacts={card.tidyImpactFactors!} />
 </section>
