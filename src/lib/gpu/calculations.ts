@@ -262,7 +262,13 @@ export function tidy(card: GraphicsCardImpactFactors): TidyImpactFactor[] {
       const splitProperty = property.split("_");
       if (property.includes("end_of_life")) {
         const lifeCycleStep = "endoflife";
-        const impactCriterion = splitProperty[splitProperty.length - 1];
+
+        const lastIndex = splitProperty.length - 1;
+        const impactCriterion =
+          splitProperty[lastIndex] === "c" || splitProperty[lastIndex] === "nc"
+            ? "CTUh_".concat(splitProperty[lastIndex])
+            : (splitProperty[lastIndex] as IF);
+        //const impactCriterion = splitProperty[splitProperty.length - 1];
         const componentImpactFactor = {
           component,
           impactCriterion,
@@ -274,7 +280,10 @@ export function tidy(card: GraphicsCardImpactFactors): TidyImpactFactor[] {
         return componentImpactFactor;
       } else {
         const lifeCycleStep = splitProperty[0].toLowerCase();
-        const impactCriterion = splitProperty[1] as IF;
+        const impactCriterion =
+          splitProperty[2] === "c" || splitProperty[2] === "nc"
+            ? "CTUh_".concat(splitProperty[2])
+            : (splitProperty[1] as IF);
         const componentImpactFactor = {
           component,
           impactCriterion,
