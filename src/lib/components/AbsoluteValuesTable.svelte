@@ -1,56 +1,98 @@
 <script lang="ts">
-  import type { ImpactCriteria, TidyImpactFactor } from "$lib/types/gpu";
-  import { Components } from "$lib/types/enums";
-  import { downloadToCSV, isNotMipsOrDeee } from "$lib/utils";
+  import type { TidyImpactFactor, TidyRatio } from "$lib/types/gpu";
+  import { downloadToCSV } from "$lib/utils";
+  import { onMount } from "svelte";
 
   interface Props {
-    /* impactCriterionValues: ImpactCriteria;
-    source: string;
-    selectedGraph: string; */
-    impacts: TidyImpactFactor[];
+    caption: string;
+    columns: string[];
+    keyColumn: string;
+    keyRow: string;
+    rows: string[];
+    data: TidyImpactFactor[] | TidyRatio[];
   }
 
-  const { impacts }: Props = $props();
+  const { caption, columns, rows, keyColumn, keyRow, data }: Props = $props();
 
-  const components = Object.values(Components);
-  const tableId = `absolute-values-table`;
-  const manufacturingImpacts = impacts
-    .filter((impact) => impact.lifeCycleStep === "manufacturing")
-    .filter(isNotMipsOrDeee);
+  const tableId = "absolute-values-table";
 
-  const criteria = [...new Set(manufacturingImpacts.map((impact) => impact.impactCriterion))];
+  function isTidyImpact(obj: any): obj is TidyImpactFactor {
+    if ("value" in obj) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function isTidyRatio(obj: any): obj is TidyRatio {
+    if ("ratioPercentage" in obj) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function appendCells() {
+    if (isTidyImpact(data[0])) {
+      rows.forEach((row) => {
+        columns.forEach((column, index) => {
+          const value = data
+            .filter(
+              (datum: TidyImpactFactor) => datum[keyColumn] === column && datum[keyRow] === row
+            )[0]
+            .value.toExponential(2);
+          const rowId = `${row}-header`;
+          const rowElement: HTMLTableRowElement = document.getElementById(rowId);
+          rowElement!.insertCell(index + 1).innerText = value;
+        });
+      });
+    } else if (isTidyRatio(data[0])) {
+      rows.forEach((row) => {
+        columns.forEach((column, index) => {
+          const value = data
+            .filter((datum: TidyRatio) => datum[keyColumn] === column)[0]
+            .ratioPercentage.toExponential(2);
+          const rowId = `${row}-header`;
+          const rowElement: HTMLTableRowElement = document.getElementById(rowId);
+          rowElement!.insertCell(index + 1).innerText = value;
+        });
+      });
+    }
+  }
+
+  onMount(() => appendCells());
 </script>
 
-<div class="absolute-values-table" id={tableId}>
+<div id={tableId}>
   <table>
-    <caption>Impact factors as absolute values</caption><thead
-      ><tr
-        ><th>Component</th>{#each criteria as impactCriterion}<th>{impactCriterion}</th>{/each}</tr
+    <caption id="table-caption">{caption}</caption><thead>
+      <tr
+        ><th scope="col">{keyRow}</th>{#each columns as column}<th scope="col" id="{column}-header"
+            >{column}</th
+          >{/each}</tr
       ></thead
     >
     <tbody>
-      {#each components as component}<tr
-          ><th scope="row">{component}</th>
-
-          {#each manufacturingImpacts as impact}{#each criteria as impactCriterion}{#if impact.component === component && impact.impactCriterion === impactCriterion}<td
-                  >{(impact as TidyImpactFactor).value}</td
-                >{/if}{/each}{/each}
-        </tr>{/each}
+      {#each rows as row}<tr id="{row}-header"><th scope="row">{row}</th></tr>{/each}
     </tbody>
   </table>
-  <button
-    class="btn-download"
-    aria-label="Download data in CSV format"
-    onclick={() => downloadToCSV(tableId)}>csv</button
-  >
 </div>
+
+<button
+  class="btn-download"
+  aria-label="Download data in CSV format"
+  onclick={() => downloadToCSV(tableId)}>csv</button
+>
 
 <style>
   #absolute-values-table {
-    width: 800px;
+    width: 1200px;
   }
   #absolute-values-table table {
     display: flow;
     overflow-x: auto;
+  }
+  button {
+    margin-left: auto;
   }
 </style>
