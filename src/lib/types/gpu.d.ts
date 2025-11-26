@@ -10,6 +10,7 @@ export declare type TidyRatio = {
   impactCriterion: string;
   ratioNumber: number;
   ratioPercentage: number;
+  planetBoundaryValue: number;
 };
 
 export declare type GraphicsCard = {

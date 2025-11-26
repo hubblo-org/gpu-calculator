@@ -13,7 +13,7 @@ import type {
 } from "../../lib/types/gpu";
 import { isNotExcludedCriterion } from "$lib/utils";
 import Average from "../../data/gpu/average_model.json" with { type: "json" };
-import { PlanetBoundaries } from "$lib/types/enums";
+import { getImpactCriterion, getPlanetBoundary, ImpactCriterionAcronym, PlanetBoundaries } from "$lib/types/enums";
 
 export function computeAverageModel(
   graphicsCards: GraphicsCard[],
@@ -382,11 +382,13 @@ export function tidyPlanetBoundaries(impactFactors: ImpactFactors): TidyRatio[] 
     0
   );
   const tidiedFactors = criteria.flatMap((criterion) => {
+    const planetBoundaryTotal = getPlanetBoundary(criterion as ImpactCriterionAcronym);
     const ratio: TidyRatio = {
       totalImpactFactor: impactFactors[criterion as IF]!,
       impactCriterion: criterion,
       ratioNumber: planetBoundariesValues[criterion as IF]!,
-      ratioPercentage: (planetBoundariesValues[criterion as IF]! / totalPerInhabitant) * 100
+      ratioPercentage: (planetBoundariesValues[criterion as IF]! / totalPerInhabitant) * 100,
+      planetBoundaryValue: planetBoundaryTotal
     };
     return ratio;
   });

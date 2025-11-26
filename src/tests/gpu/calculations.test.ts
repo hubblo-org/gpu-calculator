@@ -12,6 +12,7 @@ import {
 import type { GraphicsCard, GraphicsCardImpactFactors } from "$lib/types/gpu";
 import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 import Gpus from "../../data/gpu/gpus.json";
+import { PlanetBoundaries } from "$lib/types/enums";
 
 describe("average model calculation test suite", () => {
   it("computes an average model of a graphics card with impact factors", () => {
@@ -157,5 +158,8 @@ describe("graphics card calculator utilitary methods test suite", () => {
     expect(tidiedFactors[0].ratioNumber).toBeCloseTo(0.21);
     expect(tidiedFactors[0].ratioPercentage).toBeCloseTo(18.9, 1);
     expect(tidiedFactors[0].totalImpactFactor).toBeCloseTo(5.81e-3);
+    expect(tidiedFactors[0].planetBoundaryValue).toBeCloseTo(
+      PlanetBoundaries.AbioticDepletionPotentialElements
+    );
   });
 });
