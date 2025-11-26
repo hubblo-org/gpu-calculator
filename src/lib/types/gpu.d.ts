@@ -33,9 +33,9 @@ export declare type GraphicsCardComponents = {
   video_ram: UnorderedImpactFactors;
   upstream_transport: UnorderedImpactFactors;
   end_of_life: UnorderedImpactFactors;
-  transport_boat?: UnorderedImpactFactors;
-  transport_truck?: UnorderedImpactFactors;
-  transport_plane?: UnorderedImpactFactors;
+  transport_boat?: UnorderedImpactFactors | ImpactFactors;
+  transport_truck?: UnorderedImpactFactors | ImpactFactors;
+  transport_plane?: UnorderedImpactFactors | ImpactFactors;
 };
 
 export declare type GraphicsCardImpactFactors = {

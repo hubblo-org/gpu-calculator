@@ -13,6 +13,7 @@ import type {
 } from "../../lib/types/gpu";
 import { isNotExcludedCriterion } from "$lib/utils";
 import Average from "../../data/gpu/average_model.json" with { type: "json" };
+import TransportImpacts from "../../data/gpu/transports_impacts.json" with { type: "json" };
 import { getPlanetBoundary, ImpactCriterionAcronym, PlanetBoundaries } from "$lib/types/enums";
 
 export function computeAverageModel(
@@ -152,6 +153,9 @@ export function computeImpacts(card: GraphicsCard): GraphicsCardImpactFactors {
       graphics_card: card.name,
       component: "graphics_processing_unit"
     },
+    transport_boat: {},
+    transport_plane: {},
+    transport_truck: {},
     upstream_transport: {
       graphics_card: card.name,
       component: "upstream_transport"
@@ -180,6 +184,25 @@ export function computeImpacts(card: GraphicsCard): GraphicsCardImpactFactors {
       (Average.components.end_of_life[p] as number) * (card.totalWeight * 0.001);
   });
 
+  const criteria = Object.values(ImpactCriterionAcronym).filter((criterion) => criterion != "CTUh");
+  const distanceByBoat = 19000;
+  const distanceByTruck = 1000;
+  const distanceByPlane = 0;
+
+  criteria.forEach((criteria) => {
+    const c = criteria as keyof ImpactFactors;
+    (cardImpacts.components.transport_boat![c] as number) =
+      (TransportImpacts.transport_boat![c] as number) * (card.totalWeight * 0.001) * distanceByBoat;
+    (cardImpacts.components.transport_plane![c] as number) =
+      (TransportImpacts.transport_plane![c] as number) *
+      (card.totalWeight * 0.001) *
+      distanceByPlane;
+    (cardImpacts.components.transport_truck![c] as number) =
+      (TransportImpacts.transport_truck![c] as number) *
+      (card.totalWeight * 0.001) *
+      distanceByTruck;
+  });
+
   cardImpacts.graphics_card = card.name;
   return cardImpacts;
 }
@@ -198,10 +221,12 @@ export function computeTotalsPerLifeCycleStep(
     (property) => property != "graphics_card" && property != "component"
   );
 
-  const components = Object.keys(card.components);
+  const componentsWithoutTransport = Object.keys(card.components).filter(
+    (component) => component.includes("transport_") === false
+  );
 
   computableProperties.forEach((property) => {
-    const sum = components
+    const sum = componentsWithoutTransport
       .map((component) => {
         const value =
           card.components[component as keyof GraphicsCardComponents]![
@@ -229,6 +254,19 @@ export function computeTotalsPerLifeCycleStep(
           : (splitProperty[1] as IF);
       totalsPerLifeCycleStep[lifeCycleStep][criteria as IF]! = sum as number;
     }
+  });
+
+  const criteriaForTransport = Object.values(ImpactCriterionAcronym).filter(
+    (criterion) => criterion != "CTUh"
+  );
+  const transportModes = Object.keys(card.components).filter((component) =>
+    component.includes("transport_")
+  );
+
+  transportModes.forEach((transportMode) => {
+    criteriaForTransport.forEach((criteria) => {
+      totalsPerLifeCycleStep.transport[criteria] += card.components[transportMode][criteria];
+    });
   });
 
   return totalsPerLifeCycleStep;
