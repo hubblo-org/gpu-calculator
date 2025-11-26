@@ -313,6 +313,8 @@ export function getPlanetBoundary(acronym: ImpactCriterionAcronym): PlanetBounda
       return PlanetBoundaries.PhotochemicalOzoneFormationPotential;
     case ImpactCriterionAcronym.WU:
       return PlanetBoundaries.WaterUse;
+    default:
+      throw new Error("Unknown acronym!");
   }
 }
 
