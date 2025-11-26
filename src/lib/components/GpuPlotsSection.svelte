@@ -2,6 +2,7 @@
   import { getAllImpactCriteria, Scopes } from "$lib/types/enums";
   import { Card } from "$lib/gpu/gpu.svelte";
   import AbsoluteValuesTable from "./AbsoluteValuesTable.svelte";
+    import { isNotMipsOrDeee } from "$lib/utils";
 
   interface Props {
     card: InstanceType<typeof Card>;
@@ -14,11 +15,13 @@
   let selectedScope = $state(Scopes.LifeCycleStep);
 
   const criteria = [...new Set(card.tidyTotals!.map((total) => total.impactCriterion))];
-  const criteriaPlanetBoundaries = [...new Set(card.tidyRatiosPerPlanetBoundary!.map((ratio) => ratio.impactCriterion))];
+  const criteriaPlanetBoundaries = [
+    ...new Set(card.tidyRatiosPerPlanetBoundary!.map((ratio) => ratio.impactCriterion))
+  ];
   const lifeCycleSteps = [...new Set(card.tidyTotals!.map((total) => total.lifeCycleStep))];
   const components = [
     ...new Set(card.tidyImpactFactors!.map((impactFactor) => impactFactor.component))
-  ];
+  ].filter((component) => component.includes("transport_") === false);
   const manufacturingImpactFactors = card.tidyImpactFactors!.filter(
     (impactFactor) => impactFactor.lifeCycleStep === "manufacturing"
   );
@@ -45,7 +48,7 @@
     <div id="impact-factors-plot-criteria"></div>
 
     <AbsoluteValuesTable
-      caption="Impact factors per life cycle step, absolute values"
+      caption={`${card.name} impact factors per life cycle step, absolute values`}
       columns={criteria}
       rows={lifeCycleSteps}
       keyColumn="impactCriterion"
@@ -59,12 +62,12 @@
     <div id="impact-factors-plot-perlcstep"></div>
 
     <AbsoluteValuesTable
-      caption="Manufacturing impact factors per component, absolute values"
+      caption={`${card.name} manufacturing impact factors per component, absolute values`}
       columns={criteria}
       rows={components}
       keyColumn="impactCriterion"
       keyRow="component"
-      data={manufacturingImpactFactors!}
+      data={manufacturingImpactFactors}
     />
   {/if}
 
@@ -73,11 +76,13 @@
     <div id="impact-factors-plot-planetboundary"></div>
 
     <AbsoluteValuesTable
-      caption="Impact factors related to planet boundaries, absolute values"
+      caption={`${card.name} impact factors related to planet boundaries, absolute values`}
       columns={criteriaPlanetBoundaries}
-      rows={["ratioPercentage"]}
+      rows={Object.keys(card.tidyRatiosPerPlanetBoundary[0]).filter(
+        (key) => key != "impactCriterion"
+      )}
       keyColumn="impactCriterion"
-      keyRow="ratioPercentage"
+      firstColumnName="Values"
       data={card.tidyRatiosPerPlanetBoundary!}
     />
   {/if}

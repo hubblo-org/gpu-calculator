@@ -111,7 +111,7 @@ export class Card {
     const source = "perlcstep";
 
     const components = Object.keys(this.impactFactors!.components).filter(
-      (component) => component != "transport_boat" || "transport_truck"
+      (component) => component.includes("transport_") === false
     );
     const filteredImpactFactors = this.tidyImpactFactors
       ?.filter((impact) => impact.lifeCycleStep === "manufacturing")
