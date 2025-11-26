@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { TidyImpactFactor, TidyRatio } from "$lib/types/gpu";
   import { downloadToCSV } from "$lib/utils";
-  import { onMount } from "svelte";
 
   interface Props {
     data: TidyImpactFactor[] | TidyRatio[];
@@ -40,7 +39,9 @@
         columns.forEach((column, index) => {
           const value = data
             .filter(
-              (datum: TidyImpactFactor) => datum[keyColumn] === column && datum[keyRow] === row
+              (datum: TidyImpactFactor) =>
+                datum[keyColumn as keyof TidyImpactFactor] === column &&
+                datum[keyRow as keyof TidyImpactFactor] === row
             )[0]
             .value.toExponential(2);
           const rowId = `${row}-header`;
@@ -67,36 +68,42 @@
   onMount(() => appendCells());
 </script>
 
-<div id={tableId}>
-  <table>
-    <caption id="table-caption">{caption}</caption><thead>
-      <tr
-        ><th scope="col">{firstColumnTitle}</th>{#each columns as column}<th scope="col" id="{column}-header"
-            >{column}</th
-          >{/each}</tr
-      ></thead
-    >
-    <tbody>
-      {#each rows as row}<tr id="{row}-header"><th scope="row">{row}</th></tr>{/each}
-    </tbody>
-  </table>
-</div>
+<details>
+  <summary>Show absolute values table</summary>
+  <div id={tableId}>
+    <table>
+      <caption id="table-caption">{caption}</caption><thead>
+        <tr
+          ><th scope="col">{firstColumnTitle}</th>{#each columns as column}<th
+              scope="col"
+              id="{column}-header">{column}</th
+            >{/each}</tr
+        ></thead
+      >
+      <tbody>
+        {#each rows as row}<tr id="{row}-header"><th scope="row">{row}</th></tr>{/each}
+      </tbody>
+    </table>
 
-<button
-  class="btn-download"
-  aria-label="Download data in CSV format"
-  onclick={() => downloadToCSV(tableId)}>csv</button
->
+    <button
+      class="btn-download"
+      aria-label="Download data in CSV format"
+      onclick={() => downloadToCSV(tableId)}>csv</button
+    >
+  </div>
+</details>
 
 <style>
   #absolute-values-table {
+    display: flex;
+    flex-direction: column;
     width: 1200px;
   }
   #absolute-values-table table {
     display: flow;
     overflow-x: auto;
   }
-  button {
+  #absolute-values-table button {
     margin-left: auto;
   }
 </style>

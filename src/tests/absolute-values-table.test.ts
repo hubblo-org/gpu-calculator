@@ -4,6 +4,7 @@ import AbsoluteValuesTables from "$lib/components/AbsoluteValuesTable.svelte";
 import Gpus from "../data/gpu/gpus.json";
 import GpusImpactFactors from "../data/gpu/gpus_impact_factors.json";
 import { Card } from "$lib/gpu/gpu.svelte";
+import type { TidyRatio } from "$lib/types/gpu";
 
 const defaultCard = Gpus.filter((gpu) => gpu.name === "NVIDIA H100 PCIe 80GB")[0];
 const defaultCardImpactFactors = GpusImpactFactors.filter(
@@ -66,12 +67,17 @@ describe("absolute values table test suite", () => {
       });
     });
   });
+  it("displays a clickable element allowing the user to show or hide the absolute values table", () => {
+    const details = screen.getByRole("group");
+    const summary = within(details).getByText("Show absolute values table");
+    expect(summary).toBeVisible();
+  });
 });
 
 describe("absolute values table for planet boundaries test suite", () => {
   const planetBoundariesCaption = `${card.name} impact factors related to planet boundaries, absolute values`;
   const firstColumnName = "Values";
-  const rows = Object.keys(card.tidyRatiosPerPlanetBoundary[0]).filter(
+  const rows = Object.keys(card.tidyRatiosPerPlanetBoundary![0]).filter(
     (key) => key != "impactCriterion"
   );
 
@@ -105,11 +111,11 @@ describe("absolute values table for planet boundaries test suite", () => {
       const rowElement = within(table).getByRole("row", { name: row });
       const cells = within(rowElement).getAllByRole("cell");
       criteria.forEach((criterion, index) => {
-        const value = card.tidyRatiosPerPlanetBoundary.filter(
+        const value = card.tidyRatiosPerPlanetBoundary!.filter(
           (ratio) => ratio.impactCriterion === criterion
-        )[0][row];
+        )[0][row as keyof TidyRatio];
         screen.debug();
-        expect(cells[index + 1]).toHaveTextContent(value);
+        expect(cells[index + 1]).toHaveTextContent(value.toString());
       });
     });
   });
