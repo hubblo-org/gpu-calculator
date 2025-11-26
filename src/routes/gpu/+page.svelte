@@ -5,9 +5,11 @@
   import GpuSection from "$lib/components/GpuSection.svelte";
   import { Card } from "$lib/gpu/gpu.svelte";
 
-  let defaultCard = GraphicsCards.filter((gc) => gc.name === "NVIDIA H100 PCIe 80GB")[0];
+  const defaultCardName = "NVIDIA A100 PCIe 40GB";
+
+  let defaultCard = GraphicsCards.filter((gc) => gc.name === defaultCardName)[0];
   let defaultCardImpactsFactors = GraphicsCardsImpactFactors.filter(
-    (gc) => gc.graphics_card === "NVIDIA H100 PCIe 80GB"
+    (gc) => gc.graphics_card === defaultCardName 
   )[0];
   let card = new Card(defaultCard, defaultCardImpactsFactors);
 </script>

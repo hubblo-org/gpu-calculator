@@ -65,7 +65,9 @@ export class Card {
   }
 
   updateImpactFactors(cardName: string) {
-    if (cardName === "Custom") {
+    if (cardName === "Custom" || cardName === "NVIDIA H100 PCIe 80GB") {
+      // In both cases, the graphics cards were not subject to a simplified or complete life-cycle analysis, 
+      // therefore the impact factors are calculated from the parametric model.
       const customCardImpactFactors = computeImpacts(this.parameters!);
       this.name = cardName;
       this.impactFactors = customCardImpactFactors;
