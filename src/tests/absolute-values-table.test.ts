@@ -5,6 +5,7 @@ import Gpus from "../data/gpu/gpus.json";
 import GpusImpactFactors from "../data/gpu/gpus_impact_factors.json";
 import { Card } from "$lib/gpu/gpu.svelte";
 import type { TidyRatio } from "$lib/types/gpu";
+import userEvent from "@testing-library/user-event";
 
 const defaultCard = Gpus.filter((gpu) => gpu.name === "NVIDIA H100 PCIe 80GB")[0];
 const defaultCardImpactFactors = GpusImpactFactors.filter(
@@ -18,7 +19,7 @@ describe("absolute values table test suite", () => {
 
   const defaultCaption = `${card.name} impact factors per life cycle step, absolute values`;
 
-  beforeEach(() =>
+  beforeEach(async () => {
     render(AbsoluteValuesTables, {
       props: {
         caption: defaultCaption,
@@ -28,11 +29,15 @@ describe("absolute values table test suite", () => {
         rows: lifeCycleSteps,
         data: card.tidyTotals
       }
-    })
-  );
+    });
+
+    const user = userEvent.setup();
+    const summary = screen.getByText("Show absolute values table");
+    await user.click(summary);
+  });
   afterEach(() => cleanup());
 
-  it("displays a title for the rendered table", () => {
+  it("displays a title for the rendered table", async () => {
     const table = screen.getByRole("table", { name: defaultCaption });
     expect(table).toBeVisible();
   });
