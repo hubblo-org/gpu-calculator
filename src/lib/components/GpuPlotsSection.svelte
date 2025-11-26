@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { getAllImpactCriteria, Scopes } from "$lib/types/enums";
+  import { Scopes } from "$lib/types/enums";
   import { Card } from "$lib/gpu/gpu.svelte";
   import AbsoluteValuesTable from "./AbsoluteValuesTable.svelte";
-    import { isNotMipsOrDeee } from "$lib/utils";
+  import DropdownButton from "./DropdownButton.svelte";
 
   interface Props {
     card: InstanceType<typeof Card>;
@@ -14,16 +14,21 @@
 
   let selectedScope = $state(Scopes.LifeCycleStep);
 
-  const criteria = [...new Set(card.tidyTotals!.map((total) => total.impactCriterion))];
-  const criteriaPlanetBoundaries = [
+  const detailsSummary = "Show absolute values table";
+  const criteria = $derived([...new Set(card.tidyTotals!.map((total) => total.impactCriterion))]);
+  const criteriaPlanetBoundaries = $derived([
     ...new Set(card.tidyRatiosPerPlanetBoundary!.map((ratio) => ratio.impactCriterion))
-  ];
-  const lifeCycleSteps = [...new Set(card.tidyTotals!.map((total) => total.lifeCycleStep))];
-  const components = [
-    ...new Set(card.tidyImpactFactors!.map((impactFactor) => impactFactor.component))
-  ].filter((component) => component.includes("transport_") === false);
-  const manufacturingImpactFactors = card.tidyImpactFactors!.filter(
-    (impactFactor) => impactFactor.lifeCycleStep === "manufacturing"
+  ]);
+  const lifeCycleSteps = $derived([
+    ...new Set(card.tidyTotals!.map((total) => total.lifeCycleStep))
+  ]);
+  const components = $derived(
+    [...new Set(card.tidyImpactFactors!.map((impactFactor) => impactFactor.component))].filter(
+      (component) => component!.includes("transport_") === false
+    )
+  );
+  const manufacturingImpactFactors = $derived(
+    card.tidyImpactFactors!.filter((impactFactor) => impactFactor.lifeCycleStep === "manufacturing")
   );
 
   $effect(() => {
@@ -78,7 +83,7 @@
     <AbsoluteValuesTable
       caption={`${card.name} impact factors related to planet boundaries, absolute values`}
       columns={criteriaPlanetBoundaries}
-      rows={Object.keys(card.tidyRatiosPerPlanetBoundary[0]).filter(
+      rows={Object.keys(card.tidyRatiosPerPlanetBoundary![0]).filter(
         (key) => key != "impactCriterion"
       )}
       keyColumn="impactCriterion"

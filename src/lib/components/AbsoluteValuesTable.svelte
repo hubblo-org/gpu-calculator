@@ -65,7 +65,7 @@
     }
   }
 
-  onMount(() => appendCells());
+  $effect(() => appendCells());
 </script>
 
 <details>
