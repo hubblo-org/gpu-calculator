@@ -1,23 +1,22 @@
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import AbsoluteValuesTables from "$lib/components/AbsoluteValuesTable.svelte";
-import { LifeCycleSteps } from "$lib/types/enums";
 import Gpus from "../data/gpu/gpus.json";
 import GpusImpactFactors from "../data/gpu/gpus_impact_factors.json";
 import { Card } from "$lib/gpu/gpu.svelte";
-import { tidyTotals } from "$lib/gpu/calculations";
 
 const defaultCard = Gpus.filter((gpu) => gpu.name === "NVIDIA H100 PCIe 80GB")[0];
 const defaultCardImpactFactors = GpusImpactFactors.filter(
   (impacts) => impacts.graphics_card === "NVIDIA H100 PCIe 80GB"
 )[0];
 const card = new Card(defaultCard, defaultCardImpactFactors);
-const criteria = [...new Set(card.tidyTotals!.map((total) => total.impactCriterion))];
-const lifeCycleSteps = [...new Set(card.tidyTotals!.map((total) => total.lifeCycleStep))];
-
-const defaultCaption = "Impact factors per life cycle step, absolute values";
 
 describe("absolute values table test suite", () => {
+  const criteria = [...new Set(card.tidyTotals!.map((total) => total.impactCriterion))];
+  const lifeCycleSteps = [...new Set(card.tidyTotals!.map((total) => total.lifeCycleStep))];
+
+  const defaultCaption = `${card.name} impact factors per life cycle step, absolute values`;
+
   beforeEach(() =>
     render(AbsoluteValuesTables, {
       props: {
@@ -34,6 +33,7 @@ describe("absolute values table test suite", () => {
 
   it("displays a title for the rendered table", () => {
     const table = screen.getByRole("table", { name: defaultCaption });
+    screen.debug();
     expect(table).toBeVisible();
   });
 
@@ -61,9 +61,55 @@ describe("absolute values table test suite", () => {
       const filteredTotals = card.tidyTotals!.filter((total) => total.lifeCycleStep === lcStep);
       cells.forEach((cell) => {
         filteredTotals.forEach((total) => {
-          screen.debug();
           expect(cell).toHaveTextContent(total.value.toString());
         });
+      });
+    });
+  });
+});
+
+describe("absolute values table for planet boundaries test suite", () => {
+  const planetBoundariesCaption = `${card.name} impact factors related to planet boundaries, absolute values`;
+  const firstColumnName = "Values";
+  const rows = Object.keys(card.tidyRatiosPerPlanetBoundary[0]).filter(
+    (key) => key != "impactCriterion"
+  );
+
+  const criteria = [
+    ...new Set(card.tidyRatiosPerPlanetBoundary!.map((ratio) => ratio.impactCriterion))
+  ];
+
+  beforeEach(() =>
+    render(AbsoluteValuesTables, {
+      props: {
+        caption: planetBoundariesCaption,
+        keyColumn: "impactCriterion",
+        firstColumnName,
+        columns: criteria,
+        rows,
+        data: card.tidyRatiosPerPlanetBoundary
+      }
+    })
+  );
+  afterEach(() => cleanup());
+
+  it("displays a title for the first column of the table related to each row", () => {
+    const table = screen.getByRole("table", { name: planetBoundariesCaption });
+    const columnTitles = within(table).getAllByRole("columnheader");
+    expect(columnTitles[0]).toHaveTextContent(firstColumnName);
+  });
+
+  it("displays each value as cells of the table related to relevant column and row", () => {
+    const table = screen.getByRole("table", { name: planetBoundariesCaption });
+    rows.forEach((row) => {
+      const rowElement = within(table).getByRole("row", { name: row });
+      const cells = within(rowElement).getAllByRole("cell");
+      criteria.forEach((criterion, index) => {
+        const value = card.tidyRatiosPerPlanetBoundary.filter(
+          (ratio) => ratio.impactCriterion === criterion
+        )[0][row];
+        screen.debug();
+        expect(cells[index + 1]).toHaveTextContent(value);
       });
     });
   });

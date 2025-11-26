@@ -4,17 +4,19 @@
   import { onMount } from "svelte";
 
   interface Props {
+    data: TidyImpactFactor[] | TidyRatio[];
     caption: string;
     columns: string[];
-    keyColumn: string;
-    keyRow: string;
     rows: string[];
-    data: TidyImpactFactor[] | TidyRatio[];
+    keyColumn: string;
+    keyRow?: string;
+    firstColumnName?: string;
   }
 
-  const { caption, columns, rows, keyColumn, keyRow, data }: Props = $props();
+  const { caption, columns, rows, keyColumn, keyRow, data, firstColumnName }: Props = $props();
 
   const tableId = "absolute-values-table";
+  const firstColumnTitle = keyRow ? keyRow : firstColumnName;
 
   function isTidyImpact(obj: any): obj is TidyImpactFactor {
     if ("value" in obj) {
@@ -49,12 +51,14 @@
     } else if (isTidyRatio(data[0])) {
       rows.forEach((row) => {
         columns.forEach((column, index) => {
-          const value = data
-            .filter((datum: TidyRatio) => datum[keyColumn] === column)[0]
-            .ratioPercentage.toExponential(2);
+          const value = data.filter((datum: TidyRatio) => datum[keyColumn] === column)[0][row];
           const rowId = `${row}-header`;
           const rowElement: HTMLTableRowElement = document.getElementById(rowId);
-          rowElement!.insertCell(index + 1).innerText = value;
+          if (row === "ratioPercentage") {
+            rowElement!.insertCell(index + 1).innerText = value.toFixed(2);
+          } else {
+            rowElement!.insertCell(index + 1).innerText = value.toExponential(2);
+          }
         });
       });
     }
@@ -67,7 +71,7 @@
   <table>
     <caption id="table-caption">{caption}</caption><thead>
       <tr
-        ><th scope="col">{keyRow}</th>{#each columns as column}<th scope="col" id="{column}-header"
+        ><th scope="col">{firstColumnTitle}</th>{#each columns as column}<th scope="col" id="{column}-header"
             >{column}</th
           >{/each}</tr
       ></thead
