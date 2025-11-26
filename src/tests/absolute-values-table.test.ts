@@ -34,7 +34,6 @@ describe("absolute values table test suite", () => {
 
   it("displays a title for the rendered table", () => {
     const table = screen.getByRole("table", { name: defaultCaption });
-    screen.debug();
     expect(table).toBeVisible();
   });
 
@@ -114,7 +113,6 @@ describe("absolute values table for planet boundaries test suite", () => {
         const value = card.tidyRatiosPerPlanetBoundary!.filter(
           (ratio) => ratio.impactCriterion === criterion
         )[0][row as keyof TidyRatio];
-        screen.debug();
         expect(cells[index + 1]).toHaveTextContent(value.toString());
       });
     });
