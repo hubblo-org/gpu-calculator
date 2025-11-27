@@ -14,7 +14,6 @@
 
   let selectedScope = $state(Scopes.LifeCycleStep);
 
-  const detailsSummary = "Show absolute values table";
   const criteria = $derived([...new Set(card.tidyTotals!.map((total) => total.impactCriterion))]);
   const criteriaPlanetBoundaries = $derived([
     ...new Set(card.tidyRatiosPerPlanetBoundary!.map((ratio) => ratio.impactCriterion))

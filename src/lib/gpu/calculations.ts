@@ -306,7 +306,6 @@ export function tidy(card: GraphicsCardImpactFactors): TidyImpactFactor[] {
           splitProperty[lastIndex] === "c" || splitProperty[lastIndex] === "nc"
             ? "CTUh_".concat(splitProperty[lastIndex])
             : (splitProperty[lastIndex] as IF);
-        //const impactCriterion = splitProperty[splitProperty.length - 1];
         const componentImpactFactor = {
           component,
           impactCriterion,
