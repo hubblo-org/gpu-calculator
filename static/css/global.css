@@ -202,6 +202,9 @@ section header p {
   color: var(--color-gray-500);
 }
 
+span {
+  color: var(--color-primary);
+}
 table {
   --accent-bg: var(--color-gray-100);
   border-collapse: collapse;
