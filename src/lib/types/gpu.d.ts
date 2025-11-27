@@ -23,6 +23,7 @@ export declare type GraphicsCard = {
   videoRamDies: number;
   videoRamDieSurface?: number;
   gpuSurface: number;
+  impactFactorsSource: string;
 };
 
 export declare type GraphicsCardComponents = {

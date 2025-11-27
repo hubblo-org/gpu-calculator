@@ -43,7 +43,7 @@
 </script>
 
 <section aria-labelledby="gpu-plots-section">
-  <h2>{card.name}</h2>
+  <h2>{card.name} ({card.parameters?.impactFactorsSource})</h2>
   <label for="gpu-plots-selection">Display impact factors by:</label>
   <select bind:value={selectedScope} id="gpu-plots-selection"
     >{#each options as option}<option>{option}</option>{/each}</select

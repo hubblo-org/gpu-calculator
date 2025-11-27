@@ -12,11 +12,10 @@ import {
 import type {
   GraphicsCard,
   GraphicsCardImpactFactors,
-  UnorderedImpactFactors
 } from "$lib/types/gpu";
 import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 import Gpus from "../../data/gpu/gpus.json";
-import { PlanetBoundaries } from "$lib/types/enums";
+import { ImpactFactorsSource, PlanetBoundaries } from "$lib/types/enums";
 
 describe("average model calculation test suite", () => {
   it("computes an average model of a graphics card with impact factors", () => {
@@ -56,7 +55,8 @@ describe("graphics card calculator utilitary methods test suite", () => {
     cardSurface: 123.45,
     videoRamCapacity: 12,
     videoRamDies: 4,
-    videoRamDieSurface: 12.34
+    videoRamDieSurface: 12.34,
+    impactFactorsSource: ImpactFactorsSource.ParametricModel
   };
 
   it("computes a graphics card impact factors according to the provided parameters", () => {
@@ -130,9 +130,7 @@ describe("graphics card calculator utilitary methods test suite", () => {
   });
 
   it("computes the planet boundaries factors related to human population for the provided graphics card impact factors", () => {
-    const h100Parameters = Gpus.filter((card) =>
-      card.name.includes("H100")
-    )[0];
+    const h100Parameters = Gpus.filter((card) => card.name.includes("H100"))[0];
     const h100Impacts = computeImpacts(h100Parameters);
     const totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(h100Impacts);
     const totalsPerCriteria = computeTotalsPerCriteria(totalsPerLifeCycleStep);
@@ -157,9 +155,7 @@ describe("graphics card calculator utilitary methods test suite", () => {
   });
 
   it("returns a tidy data format for the ratios of graphics cards impact factors to planet boundaries", () => {
-    const h100Parameters = Gpus.filter((card) =>
-      card.name.includes("H100")
-    )[0];
+    const h100Parameters = Gpus.filter((card) => card.name.includes("H100"))[0];
     const h100Impacts = computeImpacts(h100Parameters);
     const totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(h100Impacts);
     const totalsPerCriteria = computeTotalsPerCriteria(totalsPerLifeCycleStep);

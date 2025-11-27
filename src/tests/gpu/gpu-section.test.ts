@@ -81,7 +81,7 @@ describe("gpu section static elements suite", () => {
     });
 
     Object.entries(h100).forEach(([key, value]) => {
-      if (key == "name" || key == "totalWeight") {
+      if (key == "name" || key == "totalWeight" || key == "impactFactorsSource") {
         return;
       }
       const formattedKey = key.split(/(?=[A-Z])/).join(" ");

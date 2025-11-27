@@ -7,7 +7,7 @@ import type {
   TidyRatio
 } from "$lib/types/gpu.d.ts";
 
-import { LifeCycleSteps } from "$lib/types/enums";
+import { LifeCycleSteps, ImpactFactorsSource } from "$lib/types/enums";
 import GraphicsCards from "../../data/gpu/gpus.json";
 import GraphicsCardsImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 
@@ -59,14 +59,15 @@ export class Card {
       videoRamCapacity: 0,
       videoRamDies: 0,
       videoRamDieSurface: 0,
-      gpuSurface: 0
+      gpuSurface: 0,
+      impactFactorsSource: ImpactFactorsSource.ParametricModel
     };
     this.parameters = customCard;
   }
 
   updateImpactFactors(cardName: string) {
     if (cardName === "Custom" || cardName === "NVIDIA H100 PCIe 80GB") {
-      // In both cases, the graphics cards were not subject to a simplified or complete life-cycle analysis, 
+      // In both cases, the graphics cards were not subject to a simplified or complete life-cycle analysis,
       // therefore the impact factors are calculated from the parametric model.
       const customCardImpactFactors = computeImpacts(this.parameters!);
       this.name = cardName;

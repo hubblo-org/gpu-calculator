@@ -1,5 +1,11 @@
 import type { ImpactCriteria } from "./gpu";
 
+export enum ImpactFactorsSource {
+  LCASimple = "Life-cycle assessment, simple",
+  LCAComplete = "Life-cycle assessment, complete",
+  ParametricModel = "Parametric model"
+}
+
 export enum Scopes {
   LifeCycleStep = "Life cycle step",
   Component = "Component",
