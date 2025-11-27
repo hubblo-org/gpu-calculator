@@ -37,7 +37,7 @@ export class Card {
   constructor(card: GraphicsCard, cardImpactFactors: GraphicsCardImpactFactors) {
     this.parameters = card;
     this.name = this.parameters.name;
-    this.source = (this.parameters.impactFactorsSource as ImpactFactorsSource);
+    this.source = this.parameters.impactFactorsSource as ImpactFactorsSource;
     this.impactFactors = cardImpactFactors;
     this.tidyImpactFactors = tidy(this.impactFactors);
     this.totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(this.impactFactors);
@@ -73,7 +73,7 @@ export class Card {
       // therefore the impact factors are calculated from the parametric model.
       const customCardImpactFactors = computeImpacts(this.parameters!);
       this.name = cardName;
-      this.source = (this.parameters?.impactFactorsSource as ImpactFactorsSource);
+      this.source = this.parameters?.impactFactorsSource as ImpactFactorsSource;
       this.impactFactors = customCardImpactFactors;
       this.tidyImpactFactors = tidy(customCardImpactFactors);
       this.totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(this.impactFactors);
@@ -82,6 +82,7 @@ export class Card {
       this.tidyRatiosPerPlanetBoundary = tidyPlanetBoundaries(this.totalsPerCriteria);
     } else {
       this.name = cardName;
+      this.source = this.parameters?.impactFactorsSource as ImpactFactorsSource;
       const selectedCardImpactFactors = GraphicsCardsImpactFactors.filter(
         (impacts) => impacts.graphics_card === cardName
       )[0];
@@ -119,6 +120,7 @@ export class Card {
     const components = Object.keys(this.impactFactors!.components).filter(
       (component) => component.includes("transport_") === false
     );
+
     const filteredImpactFactors = this.tidyImpactFactors
       ?.filter((impact) => impact.lifeCycleStep === "manufacturing")
       .filter(isNotMipsOrDeee);
