@@ -13,7 +13,7 @@ import type {
 } from "../../lib/types/gpu";
 import { isNotExcludedCriterion } from "$lib/utils";
 import Average from "../../data/gpu/average_model.json" with { type: "json" };
-import TransportImpacts from "../../data/gpu/transports_impacts.json" with { type: "json" };
+import TransportImpacts from "../../data/gpu/transport_impacts.json" with { type: "json" };
 import { getPlanetBoundary, ImpactCriterionAcronym, PlanetBoundaries } from "$lib/types/enums";
 
 export function computeAverageModel(
