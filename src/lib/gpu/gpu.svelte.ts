@@ -24,6 +24,7 @@ import {
 
 export class Card {
   name = $state<string>();
+  source = $state<ImpactFactorsSource>();
   impactFactors = $state<GraphicsCardImpactFactors>();
   totalsPerLifeCycleStep = $state<GraphicsCardLifeCycle>();
   totalsPerCriteria = $state<ImpactFactors>();
@@ -36,6 +37,7 @@ export class Card {
   constructor(card: GraphicsCard, cardImpactFactors: GraphicsCardImpactFactors) {
     this.parameters = card;
     this.name = this.parameters.name;
+    this.source = (this.parameters.impactFactorsSource as ImpactFactorsSource);
     this.impactFactors = cardImpactFactors;
     this.tidyImpactFactors = tidy(this.impactFactors);
     this.totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(this.impactFactors);
@@ -71,6 +73,7 @@ export class Card {
       // therefore the impact factors are calculated from the parametric model.
       const customCardImpactFactors = computeImpacts(this.parameters!);
       this.name = cardName;
+      this.source = (this.parameters?.impactFactorsSource as ImpactFactorsSource);
       this.impactFactors = customCardImpactFactors;
       this.tidyImpactFactors = tidy(customCardImpactFactors);
       this.totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(this.impactFactors);
