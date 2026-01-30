@@ -16,6 +16,22 @@ import Average from "../../data/gpu/average_model.json" with { type: "json" };
 import TransportImpacts from "../../data/gpu/transport_impacts.json" with { type: "json" };
 import { getPlanetBoundary, ImpactCriterionAcronym, PlanetBoundaries } from "$lib/types/enums";
 
+export function computeDieSurface(chipSurface: number) {
+  const kerfWidth = 0.2;
+  const siliciumSurfaceBeforeLoss = (Math.sqrt(chipSurface) + kerfWidth) ** 2;
+  const numberOfChipsOnWafer = Math.round(
+    (Math.PI * (300 / 2) * (300 / 2)) / siliciumSurfaceBeforeLoss -
+      (Math.PI * 300) / Math.sqrt(2 * siliciumSurfaceBeforeLoss)
+  );
+
+  const waferSurfaceCoveredByChips = chipSurface * numberOfChipsOnWafer;
+  const waferSurface = (((300 / 2) * 300) / 2) * Math.PI;
+  const totalYieldBeforeLosses = waferSurfaceCoveredByChips / waferSurface;
+  const usableChipsPercentage = Math.E ** -Math.sqrt((chipSurface / 100) * 0.1) * 100;
+  const totalYieldAfterLosses = totalYieldBeforeLosses * usableChipsPercentage;
+  const dieSurfaceBeforeLosses = Math.round((chipSurface / totalYieldAfterLosses) * 100);
+  return dieSurfaceBeforeLosses;
+}
 export function computeAverageModel(
   graphicsCards: GraphicsCard[],
   impactFactors: GraphicsCardImpactFactors[]

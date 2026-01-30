@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   computeAverageModel,
+  computeDieSurface,
   computeImpacts,
   computeTotalsPerLifeCycleStep,
   computeTotalsPerCriteria,
@@ -9,10 +10,7 @@ import {
   tidyTotals,
   computePlanetBoundaries
 } from "$lib/gpu/calculations";
-import type {
-  GraphicsCard,
-  GraphicsCardImpactFactors,
-} from "$lib/types/gpu";
+import type { GraphicsCard, GraphicsCardImpactFactors } from "$lib/types/gpu";
 import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 import Gpus from "../../data/gpu/gpus.json";
 import { ImpactFactorsSource, PlanetBoundaries } from "$lib/types/enums";
@@ -43,6 +41,14 @@ describe("average model calculation test suite", () => {
     expect(averageModel.components.video_ram.manufacturing_GWP!).toBeCloseTo(1.84e-1);
     expect(averageModel.components.upstream_transport.manufacturing_GWP!).toBeCloseTo(2.6e-1);
     expect(averageModel.components.end_of_life.manufacturing_GWP!).toBeCloseTo(0);
+  });
+});
+
+describe("die surface computing methods test suite", () => {
+  it("computes the GPU die surface, including losses, for a given graphics card", () => {
+    const h100GpuSurface = 8.14e2;
+    const dieSurface = computeDieSurface(h100GpuSurface);
+    expect(dieSurface).toBeCloseTo(2.81e3);
   });
 });
 describe("graphics card calculator utilitary methods test suite", () => {
