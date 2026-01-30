@@ -67,10 +67,9 @@ export class Card {
     this.parameters = customCard;
   }
 
-  updateImpactFactors(cardName: string) {
-    if (cardName === "Custom" || cardName === "NVIDIA H100 PCIe 80GB") {
-      // In both cases, the graphics cards were not subject to a simplified or complete life-cycle analysis,
-      // therefore the impact factors are calculated from the parametric model.
+  updateImpactFactors(cardName: string, useParametricModel: boolean) {
+    if (useParametricModel) {
+      console.log("Custom !");
       const customCardImpactFactors = computeImpacts(this.parameters!);
       this.name = cardName;
       this.source = this.parameters?.impactFactorsSource as ImpactFactorsSource;
@@ -81,6 +80,7 @@ export class Card {
       this.tidyTotals = tidyTotals(this.totalsPerLifeCycleStep);
       this.tidyRatiosPerPlanetBoundary = tidyPlanetBoundaries(this.totalsPerCriteria);
     } else {
+      console.log("Not custom !");
       this.name = cardName;
       this.source = this.parameters?.impactFactorsSource as ImpactFactorsSource;
       const selectedCardImpactFactors = GraphicsCardsImpactFactors.filter(
