@@ -45,7 +45,9 @@
             )[0]
             .value.toExponential(2);
           const rowId = `${row}-header`;
-          const rowElement: HTMLTableRowElement = document.getElementById(rowId);
+          const rowElement: HTMLTableRowElement = document.getElementById(
+            rowId
+          ) as HTMLTableRowElement;
           rowElement!.insertCell(index + 1).innerText = value;
         });
       });
@@ -65,7 +67,9 @@
     }
   }
 
-  $effect(() => appendCells());
+  $effect(() => {
+    appendCells();
+  });
 </script>
 
 <details>

@@ -4,12 +4,13 @@ import AbsoluteValuesTables from "$lib/components/AbsoluteValuesTable.svelte";
 import Gpus from "../data/gpu/gpus.json";
 import GpusImpactFactors from "../data/gpu/gpus_impact_factors.json";
 import { Card } from "$lib/gpu/gpu.svelte";
-import type { TidyRatio } from "$lib/types/gpu";
+import type { TidyImpactFactor, TidyRatio } from "$lib/types/gpu";
 import userEvent from "@testing-library/user-event";
 
-const defaultCard = Gpus.filter((gpu) => gpu.name === "NVIDIA H100 PCIe 80GB")[0];
+const defaultCardName = "NVIDIA A100 PCIe 40GB";
+const defaultCard = Gpus.filter((gpu) => gpu.name === defaultCardName)[0];
 const defaultCardImpactFactors = GpusImpactFactors.filter(
-  (impacts) => impacts.graphics_card === "NVIDIA H100 PCIe 80GB"
+  (impacts) => impacts.graphics_card === defaultCardName
 )[0];
 const card = new Card(defaultCard, defaultCardImpactFactors);
 
@@ -64,10 +65,9 @@ describe("absolute values table test suite", () => {
       const row = within(table).getByRole("row", { name: lcStep });
       const cells = within(row).getAllByRole("cell");
       const filteredTotals = card.tidyTotals!.filter((total) => total.lifeCycleStep === lcStep);
-      cells.forEach((cell) => {
-        filteredTotals.forEach((total) => {
-          expect(cell).toHaveTextContent(total.value.toString());
-        });
+
+      cells.forEach((cell, index) => {
+        expect(cell.innerText).toBeCloseTo(filteredTotals[index].value.toExponential(2).toString());
       });
     });
   });
@@ -82,7 +82,7 @@ describe("absolute values table for planet boundaries test suite", () => {
   const planetBoundariesCaption = `${card.name} impact factors related to planet boundaries, absolute values`;
   const firstColumnName = "Values";
   const rows = Object.keys(card.tidyRatiosPerPlanetBoundary![0]).filter(
-    (key) => key != "impactCriterion"
+    (key) => key != "impactCriterion" && key != "ratioPercentage"
   );
 
   const criteria = [
@@ -118,7 +118,7 @@ describe("absolute values table for planet boundaries test suite", () => {
         const value = card.tidyRatiosPerPlanetBoundary!.filter(
           (ratio) => ratio.impactCriterion === criterion
         )[0][row as keyof TidyRatio];
-        expect(cells[index + 1]).toHaveTextContent(value.toString());
+        expect(cells[index].innerText).toBeCloseTo((value as number).toExponential(2));
       });
     });
   });
