@@ -172,8 +172,9 @@ export function computeImpacts(card: GraphicsCard): GraphicsCardImpactFactors {
       (Average.components.casing[p] as number) * (card.casingWeight * 0.001);
     (cardImpacts.components.heatsink[p] as number) =
       (Average.components.heatsink[p] as number) * (card.heatsinkWeight * 0.001);
-    (cardImpacts.components.video_ram[p] as number) =
-      (Average.components.video_ram[p] as number) * card.videoRamDieSurface!;
+    (cardImpacts.components.video_ram[p] as number) = card.videoRamDieSurface
+      ? (Average.components.video_ram[p] as number) * card.videoRamDieSurface!
+      : (Average.components.video_ram[p] as number) * 0;
     (cardImpacts.components.printed_wiring_board[p] as number) =
       (Average.components.printed_wiring_board[p] as number) * card.cardSurface;
     (cardImpacts.components.graphics_processing_unit[p] as number) =
