@@ -13,8 +13,22 @@ import type {
 } from "../../lib/types/gpu";
 import { isNotExcludedCriterion } from "$lib/utils";
 import Average from "../../data/gpu/average_model.json" with { type: "json" };
+import Gpus from "../../data/gpu/gpus.json" with { type: "json" };
 import TransportImpacts from "../../data/gpu/transport_impacts.json" with { type: "json" };
 import { getPlanetBoundary, ImpactCriterionAcronym, PlanetBoundaries } from "$lib/types/enums";
+
+export function computeYieldPercentage(chipSurfaceBeforeLosses: number) {
+  // Defects per square centimeter
+  const defectDensity = 0.1;
+
+  const chipSurfaceInSquareCentimeters = chipSurfaceBeforeLosses / 100;
+
+  // Murphy Model (even distribution)
+  const yieldPercentage =
+    (1 - Math.exp(-2 * defectDensity * chipSurfaceInSquareCentimeters)) /
+    (2 * defectDensity * chipSurfaceInSquareCentimeters);
+  return yieldPercentage;
+}
 
 export function computeDieSurface(chipSurface: number) {
   const kerfWidth = 0.2;
@@ -29,9 +43,22 @@ export function computeDieSurface(chipSurface: number) {
   const totalYieldBeforeLosses = waferSurfaceCoveredByChips / waferSurface;
   const usableChipsPercentage = Math.E ** -Math.sqrt((chipSurface / 100) * 0.1) * 100;
   const totalYieldAfterLosses = totalYieldBeforeLosses * usableChipsPercentage;
-  const dieSurfaceBeforeLosses = Math.round((chipSurface / totalYieldAfterLosses) * 100);
+  const dieSurfaceBeforeLosses = (chipSurface / totalYieldAfterLosses) * 100;
   return dieSurfaceBeforeLosses;
 }
+
+function averageVramDieSurface() {
+  // Documented VRAM die surfaces in the JSON source file do not include losses
+  const cardsWithDocumentedVramDieSurface = Gpus.filter((card) => card.videoRamDieSurface);
+  const dieSurfaces = cardsWithDocumentedVramDieSurface.map((card) => {
+    return (card.videoRamDieSurface! * card.videoRamDies) / card.videoRamCapacity;
+  });
+
+  const average = (array: Array<number>) => array.reduce((a, b) => a + b) / array.length;
+  const result = average(dieSurfaces);
+  return result;
+}
+
 export function computeAverageModel(
   graphicsCards: GraphicsCard[],
   impactFactors: GraphicsCardImpactFactors[]
@@ -94,7 +121,8 @@ export function computeAverageModel(
         typeof newGpuValue === "number" && newGpuValue != 0 ? newGpuValue / card.gpuSurface : 0;
       newVramValue =
         card.videoRamDieSurface && typeof newVramValue === "number" && newVramValue != 0
-          ? newVramValue / card.videoRamDieSurface
+          ? newVramValue /
+            (card.videoRamDieSurface / computeYieldPercentage(card.videoRamDieSurface))
           : 0;
       newTransportValue =
         typeof newTransportValue === "number" && newTransportValue != 0
@@ -182,6 +210,9 @@ export function computeImpacts(card: GraphicsCard): GraphicsCardImpactFactors {
     (property) => property != "graphics_card" && property != "component"
   );
 
+  const vramDieSurfaceWithLosses = computeDieSurface(
+    Math.round((averageVramDieSurface() * card.videoRamCapacity) / card.videoRamDies)
+  );
   computableProperties.forEach((property) => {
     const p = property as ImpactFactorsKeys;
     (cardImpacts.components.casing[p] as number) =
@@ -190,11 +221,12 @@ export function computeImpacts(card: GraphicsCard): GraphicsCardImpactFactors {
       (Average.components.heatsink[p] as number) * (card.heatsinkWeight * 0.001);
     (cardImpacts.components.video_ram[p] as number) = card.videoRamDieSurface
       ? (Average.components.video_ram[p] as number) * card.videoRamDieSurface!
-      : (Average.components.video_ram[p] as number) * 0;
+      : (Average.components.video_ram[p] as number) * vramDieSurfaceWithLosses * card.videoRamDies;
     (cardImpacts.components.printed_wiring_board[p] as number) =
       (Average.components.printed_wiring_board[p] as number) * card.cardSurface;
     (cardImpacts.components.graphics_processing_unit[p] as number) =
-      (Average.components.graphics_processing_unit[p] as number) * card.gpuSurface;
+      (Average.components.graphics_processing_unit[p] as number) *
+      computeDieSurface(card.gpuSurface);
     (cardImpacts.components.upstream_transport[p] as number) =
       (Average.components.upstream_transport[p] as number) * (card.totalWeight * 0.001);
     (cardImpacts.components.end_of_life[p] as number) =

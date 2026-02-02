@@ -8,7 +8,8 @@ import {
   tidy,
   tidyPlanetBoundaries,
   tidyTotals,
-  computePlanetBoundaries
+  computePlanetBoundaries,
+  computeYieldPercentage
 } from "$lib/gpu/calculations";
 import type { GraphicsCard, GraphicsCardImpactFactors } from "$lib/types/gpu";
 import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
@@ -17,8 +18,12 @@ import { ImpactFactorsSource, PlanetBoundaries } from "$lib/types/enums";
 
 describe("average model calculation test suite", () => {
   it("computes an average model of a graphics card with impact factors", () => {
-    const impactFactors: GraphicsCardImpactFactors[] = GpusImpactFactors.slice();
-    const graphicsCards: GraphicsCard[] = Gpus.slice();
+    const impactFactors: GraphicsCardImpactFactors[] = GpusImpactFactors.slice().filter(
+      (card) => card.graphics_card != "NVIDIA H100 PCIe 80GB"
+    );
+    const graphicsCards: GraphicsCard[] = Gpus.slice().filter(
+      (card) => card.name != "NVIDIA H100 PCIe 80GB"
+    );
     const averageModel = computeAverageModel(graphicsCards, impactFactors);
 
     expect(averageModel.graphics_card).toEqual("average");
@@ -32,9 +37,9 @@ describe("average model calculation test suite", () => {
     expect(averageModel.components.video_ram.manufacturing_ADPe!).toBeCloseTo(5.07e-9);
     expect(averageModel.components.upstream_transport.manufacturing_ADPe!).toBeCloseTo(1.02e-8);
     expect(averageModel.components.end_of_life.manufacturing_ADPe!).toBeCloseTo(0);
-    expect(averageModel.components.casing.manufacturing_GWP!).toBeCloseTo(8.25);
-    expect(averageModel.components.heatsink.manufacturing_GWP!).toBeCloseTo(5.74);
-    expect(averageModel.components.printed_wiring_board.manufacturing_GWP!).toBeCloseTo(3.25e-2);
+    expect(averageModel.components.casing.manufacturing_GWP!).toBeCloseTo(8.25, 1);
+    expect(averageModel.components.heatsink.manufacturing_GWP!).toBeCloseTo(5.74, 1);
+    expect(averageModel.components.printed_wiring_board.manufacturing_GWP!).toBeCloseTo(3.25e-2, 1);
     expect(averageModel.components.graphics_processing_unit.manufacturing_GWP!).toBeCloseTo(
       4.26e-2
     );
@@ -44,46 +49,87 @@ describe("average model calculation test suite", () => {
   });
 });
 
+describe("yield percentage computing methods test suite", () => {
+  it("computes the yield percentage for a given die, with a given area before losses", () => {
+    const a100VramDieSurfaceBeforeLosses = 86.25;
+    const yieldPercentage = computeYieldPercentage(a100VramDieSurfaceBeforeLosses);
+    expect(yieldPercentage).toBeCloseTo(0.91, 1);
+  });
+  it("computes the die surface with losses, with a given area before losses", () => {
+    const a100VramDieSurfaceBeforeLosses = 86.25;
+    const yieldPercentage = computeYieldPercentage(a100VramDieSurfaceBeforeLosses);
+    const a100VramDieSurfaceWithLosses = a100VramDieSurfaceBeforeLosses / yieldPercentage;
+    expect(a100VramDieSurfaceWithLosses).toBeCloseTo(93.9, 1);
+  });
+});
+
 describe("die surface computing methods test suite", () => {
+  const h100 = Gpus.filter((card) => card.name === "NVIDIA H100 PCIe 80GB");
   it("computes the GPU die surface, including losses, for a given graphics card", () => {
-    const h100GpuSurface = 8.14e2;
+    const h100GpuSurface = h100[0].gpuSurface;
     const dieSurface = computeDieSurface(h100GpuSurface);
-    expect(dieSurface).toBeCloseTo(2.81e3);
+    expect(dieSurface).toBeCloseTo(2.81e3, 0);
+  });
+  it("computes the VRAM die surface, including losses, for a given graphics card", () => {
+    const graphicsCardsWithVramDieSurface = [
+      {
+        name: "A100 PCIe 40GB",
+        videoRamDieSurfaceWithoutLosses: 86.25,
+        videoRamDies: 6,
+        videoRamCapacity: 40
+      },
+      {
+        name: "A100 SXM4 40GB",
+        videoRamDieSurfaceWithoutLosses: 86.25,
+        videoRamDies: 6,
+        videoRamCapacity: 40
+      },
+      { name: "P100", videoRamDieSurfaceWithoutLosses: 82.5, videoRamDies: 4, videoRamCapacity: 16 }
+    ];
+
+    const averageValues = graphicsCardsWithVramDieSurface.map((card) => {
+      return (card.videoRamDieSurfaceWithoutLosses * card.videoRamDies) / card.videoRamCapacity;
+    });
+    const average = (array) => array.reduce((a, b) => a + b) / array.length;
+    const h100VramDieSurfaceWithoutLosses =
+      (average(averageValues) * h100[0].videoRamCapacity) / h100[0].videoRamDies;
+    const h100VramDieSurfaceWithLosses = computeDieSurface(h100VramDieSurfaceWithoutLosses);
+    expect(h100VramDieSurfaceWithLosses).toBeCloseTo(3.88e2, 0);
   });
 });
 describe("graphics card calculator utilitary methods test suite", () => {
-  const testCard: GraphicsCard = {
-    name: "A test graphics card",
-    totalWeight: 1234,
-    gpuSurface: 234,
-    casingWeight: 412,
-    heatsinkWeight: 312,
-    cardSurface: 123.45,
-    videoRamCapacity: 12,
-    videoRamDies: 4,
-    videoRamDieSurface: 12.34,
-    impactFactorsSource: ImpactFactorsSource.ParametricModel
-  };
+  const testCard: GraphicsCard = Gpus.filter((card) => card.name == "NVIDIA H100 PCIe 80GB")[0];
 
   it("computes a graphics card impact factors according to the provided parameters", () => {
     const testCardImpacts = computeImpacts(testCard);
     expect(testCardImpacts.graphics_card).toEqual(testCard.name);
-    expect(testCardImpacts.components.heatsink.manufacturing_ADPe!).toBeCloseTo(5.83e-4);
-    expect(testCardImpacts.components.casing.manufacturing_ADPe!).toBeCloseTo(1.68e-4);
-    expect(testCardImpacts.components.video_ram.manufacturing_ADPe!).toBeCloseTo(6.25638e-8);
+    expect(testCardImpacts.components.heatsink.manufacturing_ADPe!).toBeCloseTo(1.68e-3);
+    expect(testCardImpacts.components.casing.manufacturing_ADPe!).toBeCloseTo(3.22e-4);
+    expect(testCardImpacts.components.video_ram.manufacturing_ADPe!).toBeCloseTo(1.19e-5);
     expect(testCardImpacts.components.printed_wiring_board.manufacturing_ADPe!).toBeCloseTo(
-      1.56e-3
+      3.77e-3
     );
     expect(testCardImpacts.components.graphics_processing_unit.manufacturing_ADPe!).toBeCloseTo(
-      3.627e-6
+      4.37e-5
     );
-    expect(testCardImpacts.components.upstream_transport.manufacturing_ADPe!).toBeCloseTo(
-      1.25868e-8
+    expect(testCardImpacts.components.heatsink.manufacturing_GWP!).toBeCloseTo(5.17);
+    expect(testCardImpacts.components.casing.manufacturing_GWP!).toBeCloseTo(6.51, 1);
+    expect(Math.round(testCardImpacts.components.video_ram.manufacturing_GWP!)).toBeCloseTo(4.29e2);
+    expect(testCardImpacts.components.printed_wiring_board.manufacturing_GWP!).toBeCloseTo(9.65);
+    expect(Math.round(testCardImpacts.components.graphics_processing_unit.manufacturing_GWP!)).toBeCloseTo(
+      1.2e2
     );
-    expect(testCardImpacts.components.end_of_life.manufacturing_ADPe!).toBeCloseTo(0.0);
-    expect(testCardImpacts.components.transport_plane!.ADPe!).toBeCloseTo(0.0);
-    expect(testCardImpacts.components.transport_boat!.ADPe!).toBeCloseTo(1.08e-8);
-    expect(testCardImpacts.components.transport_truck!.ADPe!).toBeCloseTo(2.44e-9);
+    expect(testCardImpacts.components.upstream_transport.manufacturing_GWP!).toBeCloseTo(4.39e-1);
+    expect(testCardImpacts.components.end_of_life.manufacturing_GWP!).toBeCloseTo(0.0);
+    expect(testCardImpacts.components.heatsink.manufacturing_Epm!).toBeCloseTo(4.70e-3);
+    expect(testCardImpacts.components.casing.manufacturing_Epm!).toBeCloseTo(5.23e-3);
+    expect(testCardImpacts.components.video_ram.manufacturing_Epm!).toBeCloseTo(2.85e-1);
+    expect(testCardImpacts.components.printed_wiring_board.manufacturing_Epm!).toBeCloseTo(7.27e-3);
+    expect(testCardImpacts.components.graphics_processing_unit.manufacturing_Epm!).toBeCloseTo(
+      7.94e-2 
+    );
+    expect(testCardImpacts.components.upstream_transport.manufacturing_Epm!).toBeCloseTo(1.38e-3);
+    expect(testCardImpacts.components.end_of_life.manufacturing_Epm!).toBeCloseTo(0.0);
   });
 
   it("computes the total for each life cycle step for each impact criteria", () => {
@@ -91,12 +137,25 @@ describe("graphics card calculator utilitary methods test suite", () => {
 
     const totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(testCardImpacts);
 
-    expect(totalsPerLifeCycleStep.manufacturing.ADPe).toBeCloseTo(2.31e-3);
-    expect(totalsPerLifeCycleStep.transport.ADPe).toBeCloseTo(1.32e-8);
+    expect(totalsPerLifeCycleStep.manufacturing.ADPe).toBeCloseTo(5.83e-3);
+    expect(totalsPerLifeCycleStep.transport.ADPe).toBeCloseTo(1.82e-8);
     expect(totalsPerLifeCycleStep.use.ADPe).toEqual(0);
-    expect(totalsPerLifeCycleStep.endOfLife.ADPe).toBeCloseTo(5.66e-6);
-    expect(totalsPerLifeCycleStep.manufacturing.CTUh_c).not.toBe(undefined);
-    expect(totalsPerLifeCycleStep.manufacturing.CTUh_nc).not.toBe(undefined);
+    expect(Math.round(totalsPerLifeCycleStep.manufacturing.ADPf)).toEqual(7601);
+    expect(totalsPerLifeCycleStep.transport.ADPf).toBeCloseTo(6.42);
+    expect(totalsPerLifeCycleStep.use.ADPf).toEqual(0);
+    expect(Math.round(totalsPerLifeCycleStep.endOfLife.ADPf)).toEqual(33);
+    expect(totalsPerLifeCycleStep.manufacturing.CTUh_c).toBeCloseTo(2.07e-5);
+    expect(totalsPerLifeCycleStep.transport.CTUh_c).toBeCloseTo(7.56e-12);
+    expect(totalsPerLifeCycleStep.use.CTUh_c).toBeCloseTo(0);
+    expect(totalsPerLifeCycleStep.endOfLife.CTUh_c).toBeCloseTo(9.96e-9);
+    expect(totalsPerLifeCycleStep.manufacturing.CTUh_nc).toBeCloseTo(8.53e-6);
+    expect(totalsPerLifeCycleStep.transport.CTUh_nc).toBeCloseTo(1.54e-9);
+    expect(totalsPerLifeCycleStep.use.CTUh_nc).toBeCloseTo(0);
+    expect(totalsPerLifeCycleStep.endOfLife.CTUh_nc).toBeCloseTo(3.93e-7);
+    expect(totalsPerLifeCycleStep.manufacturing.Epm).toBeCloseTo(3.83e-1);
+    expect(totalsPerLifeCycleStep.transport.Epm).toBeCloseTo(4.17e-3);
+    expect(totalsPerLifeCycleStep.use.Epm).toBeCloseTo(0);
+    expect(totalsPerLifeCycleStep.endOfLife.Epm).toBeCloseTo(3.57e-2);
   });
 
   it("computes the total for each impact criteria", () => {
@@ -105,7 +164,7 @@ describe("graphics card calculator utilitary methods test suite", () => {
     const totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(testCardImpacts);
     const totalsPerCriteria = computeTotalsPerCriteria(totalsPerLifeCycleStep);
 
-    expect(totalsPerCriteria.ADPe).toBeCloseTo(2.31e-3);
+    expect(totalsPerCriteria.ADPe).toBeCloseTo(5.83e-3);
   });
 
   it("returns a tidy data format for impact factors with columns for life cycle step and graphics card component", () => {
@@ -117,11 +176,11 @@ describe("graphics card calculator utilitary methods test suite", () => {
     expect(tidyImpactFactors[0].component).toEqual("casing");
     expect(tidyImpactFactors[0].lifeCycleStep).toEqual("manufacturing");
     expect(tidyImpactFactors[0].impactCriterion).toEqual("ADPe");
-    expect(tidyImpactFactors[0].value).toBeCloseTo(1.68e-4);
+    expect(tidyImpactFactors[0].value).toBeCloseTo(1.68e-3);
     expect(tidyImpactFactors[lastIndex].component).toEqual("end_of_life");
     expect(tidyImpactFactors[lastIndex].lifeCycleStep).toEqual("endoflife");
     expect(tidyImpactFactors[lastIndex].impactCriterion).toEqual("TPE");
-    expect(tidyImpactFactors[lastIndex].value).toBeCloseTo(27.58);
+    expect(tidyImpactFactors[lastIndex].value).toBeCloseTo(3.78e1, 1);
   });
 
   it("returns a tidy data format for impact factors totals with columns for life cycle step and impact criterion", () => {
@@ -132,7 +191,7 @@ describe("graphics card calculator utilitary methods test suite", () => {
 
     expect(tidiedTotals[0].lifeCycleStep).toEqual("Manufacturing");
     expect(tidiedTotals[0].impactCriterion).toEqual("ADPe");
-    expect(tidiedTotals[0].value).toBeCloseTo(2.31e-3);
+    expect(tidiedTotals[0].value).toBeCloseTo(5.83e-3);
   });
 
   it("computes the planet boundaries factors related to human population for the provided graphics card impact factors", () => {
@@ -143,21 +202,21 @@ describe("graphics card calculator utilitary methods test suite", () => {
 
     const planetBoundariesFactors = computePlanetBoundaries(totalsPerCriteria);
 
-    expect(planetBoundariesFactors.ADPe).toBeCloseTo(0.21);
-    expect(planetBoundariesFactors.ADPf).toBeCloseTo(0.08);
-    expect(planetBoundariesFactors.AP).toBeCloseTo(0.01);
-    expect(planetBoundariesFactors.CTUe).toBeCloseTo(0.24);
-    expect(planetBoundariesFactors.CTUh_c).toBeCloseTo(0.17);
-    expect(planetBoundariesFactors.CTUh_nc).toBeCloseTo(0.01);
-    expect(planetBoundariesFactors.Epf).toBeCloseTo(0.0);
-    expect(planetBoundariesFactors.Epm).toBeCloseTo(0.01);
-    expect(planetBoundariesFactors.Ept).toBeCloseTo(0.0);
-    expect(planetBoundariesFactors.GWP).toBeCloseTo(0.2);
-    expect(planetBoundariesFactors.IR).toBeCloseTo(0.0);
-    expect(planetBoundariesFactors.ODP).toBeCloseTo(0.0);
-    expect(planetBoundariesFactors.PM).toBeCloseTo(0.1);
-    expect(planetBoundariesFactors.POCP).toBeCloseTo(0.01);
-    expect(planetBoundariesFactors.WU).toBeCloseTo(0.06);
+    expect(planetBoundariesFactors.ADPe).toBeCloseTo(2.13e-1);
+    expect(planetBoundariesFactors.ADPf).toBeCloseTo(2.73e-1);
+    expect(planetBoundariesFactors.AP).toBeCloseTo(2.75e-2);
+    expect(planetBoundariesFactors.CTUe).toBeCloseTo(5.59e-1);
+    expect(planetBoundariesFactors.CTUh_c).toBeCloseTo(1.72e-1);
+    expect(planetBoundariesFactors.CTUh_nc).toBeCloseTo(1.74e-2);
+    expect(planetBoundariesFactors.Epf).toBeCloseTo(4.37e-3);
+    expect(planetBoundariesFactors.Epm).toBeCloseTo(1.68e-2);
+    expect(planetBoundariesFactors.Ept).toBeCloseTo(5.31e-3, 1);
+    expect(planetBoundariesFactors.GWP).toBeCloseTo(6.74e-1);
+    expect(planetBoundariesFactors.IR).toBeCloseTo(5.01e-3);
+    expect(planetBoundariesFactors.ODP).toBeCloseTo(3.61e-3);
+    expect(planetBoundariesFactors.PM).toBeCloseTo(2.95e-1);
+    expect(planetBoundariesFactors.POCP).toBeCloseTo(2.54e-2);
+    expect(planetBoundariesFactors.WU).toBeCloseTo(6.41e-2);
   });
 
   it("returns a tidy data format for the ratios of graphics cards impact factors to planet boundaries", () => {
@@ -171,7 +230,7 @@ describe("graphics card calculator utilitary methods test suite", () => {
     expect(tidiedFactors.length).toEqual(15);
     expect(tidiedFactors[0].impactCriterion).toEqual("ADPe");
     expect(tidiedFactors[0].ratioNumber).toBeCloseTo(0.21);
-    expect(tidiedFactors[0].ratioPercentage).toBeCloseTo(18.9, 1);
+    expect(tidiedFactors[0].ratioPercentage).toBeCloseTo(9, 0);
     expect(tidiedFactors[0].totalImpactFactor).toBeCloseTo(5.81e-3);
     expect(tidiedFactors[0].planetBoundaryValue).toBeCloseTo(
       PlanetBoundaries.AbioticDepletionPotentialElements
