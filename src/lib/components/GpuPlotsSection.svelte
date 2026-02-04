@@ -91,6 +91,11 @@
 
   {#if selectedScope === Scopes.Component}
     <h3>Manufacturing impact factors by component</h3>
+    <p>
+      This plot shows the graphics card impacts by component, only for the manufacturing phase
+      (including raw material extraction), for all impact criteria. Upstream transport corresponds
+      to transport between the different stages of manufacturing.
+    </p>
     <div id="impact-factors-plot-perlcstep"></div>
 
     {#key updateTable}
@@ -107,6 +112,11 @@
 
   {#if selectedScope === Scopes.PlanetBoundary}
     <h3 id="gpu-plots-section">Graphics card impact factors related to planet boundaries</h3>
+    <p>
+      This plot shows the graphics card impacts (excluding use) in relation to planetary boundaries
+      per capita. The values can be read as the share of a sustainable human's annual budget for
+      each impact criterion.
+    </p>
     <div id="impact-factors-plot-planetboundary"></div>
 
     {#key updateTable}
