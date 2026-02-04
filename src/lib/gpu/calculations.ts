@@ -11,12 +11,28 @@ import type {
   UnorderedImpactFactors,
   GCLC
 } from "../../lib/types/gpu";
-import { isNotExcludedCriterion } from "$lib/utils";
+import { isNotExcludedCriterion } from "../utils.ts";
 import Average from "../../data/gpu/average_model.json" with { type: "json" };
 import Gpus from "../../data/gpu/gpus.json" with { type: "json" };
 import TransportImpacts from "../../data/gpu/transport_impacts.json" with { type: "json" };
-import { getPlanetBoundary, ImpactCriterionAcronym, PlanetBoundaries } from "$lib/types/enums";
+import { getPlanetBoundary, ImpactCriterionAcronym, PlanetBoundaries } from "../types/enums.ts";
 
+const microjoulesPerLiterOfCrudeOil = 37;
+const carbonDioxydeEquivalentPerKilometerTravelledByCar = 0.25;
+const antimonyEquivalentPerKilogramOfCopper = 0.00137;
+
+export function computeEquivalent(criterion: ImpactCriterionAcronym, value: number): number {
+  if (criterion === ImpactCriterionAcronym.ADPf) {
+    const equivalent = value / microjoulesPerLiterOfCrudeOil;
+    return Math.round(equivalent);
+  } else if (criterion === ImpactCriterionAcronym.GWP) {
+    const equivalent = value / carbonDioxydeEquivalentPerKilometerTravelledByCar;
+    return Math.round(equivalent);
+  } else if (criterion === ImpactCriterionAcronym.ADPe) {
+    const equivalent = value / antimonyEquivalentPerKilogramOfCopper;
+    return Math.round(equivalent);
+  }
+}
 export function computeYieldPercentage(chipSurfaceBeforeLosses: number) {
   // Defects per square centimeter
   const defectDensity = 0.1;

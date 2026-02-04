@@ -7,7 +7,7 @@ import type {
   TidyRatio
 } from "$lib/types/gpu.d.ts";
 
-import { LifeCycleSteps, ImpactFactorsSource } from "$lib/types/enums";
+import { LifeCycleSteps, ImpactFactorsSource, ImpactCriterionAcronym } from "$lib/types/enums";
 import GraphicsCards from "../../data/gpu/gpus.json";
 import GraphicsCardsImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 
@@ -19,9 +19,15 @@ import {
   computeTotalsPerLifeCycleStep,
   tidy,
   tidyTotals,
-  tidyPlanetBoundaries
+  tidyPlanetBoundaries,
+  computeEquivalent
 } from "./calculations";
 
+interface Equivalents {
+  inCrudeOil: number;
+  inKilometersByCar: number;
+  inCopper: number;
+}
 export class Card {
   name = $state<string>();
   source = $state<ImpactFactorsSource>();
@@ -33,6 +39,7 @@ export class Card {
   tidyTotals = $state<TidyImpactFactor[]>();
   tidyRatiosPerPlanetBoundary = $state<TidyRatio[]>();
   parameters = $state<GraphicsCard>();
+  equivalents = $state<Equivalents>();
 
   constructor(card: GraphicsCard, cardImpactFactors: GraphicsCardImpactFactors) {
     this.parameters = card;
@@ -44,6 +51,7 @@ export class Card {
     this.totalsPerCriteria = computeTotalsPerCriteria(this.totalsPerLifeCycleStep);
     this.tidyTotals = tidyTotals(this.totalsPerLifeCycleStep);
     this.tidyRatiosPerPlanetBoundary = tidyPlanetBoundaries(this.totalsPerCriteria);
+    this.equivalents = this.computeEquivalents();
   }
 
   selectDocumentedCard(cardName: string) {
@@ -67,9 +75,19 @@ export class Card {
     this.parameters = customCard;
   }
 
+  computeEquivalents(): Equivalents {
+    const equivalents = {
+      inCrudeOil: computeEquivalent(ImpactCriterionAcronym.ADPf, this.totalsPerCriteria?.ADPf!),
+      inKilometersByCar: computeEquivalent(
+        ImpactCriterionAcronym.GWP,
+        this.totalsPerCriteria?.GWP!
+      ),
+      inCopper: computeEquivalent(ImpactCriterionAcronym.ADPe, this.totalsPerCriteria?.ADPe!)
+    };
+    return equivalents;
+  }
   updateImpactFactors(cardName: string, useParametricModel: boolean) {
     if (useParametricModel) {
-      console.log("Custom !");
       const customCardImpactFactors = computeImpacts(this.parameters!);
       this.name = cardName;
       this.source = this.parameters?.impactFactorsSource as ImpactFactorsSource;
@@ -79,8 +97,8 @@ export class Card {
       this.totalsPerCriteria = computeTotalsPerCriteria(this.totalsPerLifeCycleStep);
       this.tidyTotals = tidyTotals(this.totalsPerLifeCycleStep);
       this.tidyRatiosPerPlanetBoundary = tidyPlanetBoundaries(this.totalsPerCriteria);
+      this.equivalents = this.computeEquivalents();
     } else {
-      console.log("Not custom !");
       this.name = cardName;
       this.source = this.parameters?.impactFactorsSource as ImpactFactorsSource;
       const selectedCardImpactFactors = GraphicsCardsImpactFactors.filter(
@@ -93,6 +111,7 @@ export class Card {
       this.totalsPerCriteria = computeTotalsPerCriteria(this.totalsPerLifeCycleStep);
       this.tidyTotals = tidyTotals(this.totalsPerLifeCycleStep);
       this.tidyRatiosPerPlanetBoundary = tidyPlanetBoundaries(this.totalsPerCriteria);
+      this.equivalents = this.computeEquivalents();
     }
   }
 

@@ -9,12 +9,13 @@ import {
   tidyPlanetBoundaries,
   tidyTotals,
   computePlanetBoundaries,
-  computeYieldPercentage
+  computeYieldPercentage,
+  computeEquivalent
 } from "$lib/gpu/calculations";
 import type { GraphicsCard, GraphicsCardImpactFactors } from "$lib/types/gpu";
 import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 import Gpus from "../../data/gpu/gpus.json";
-import { PlanetBoundaries } from "$lib/types/enums";
+import { ImpactCriterionAcronym, PlanetBoundaries } from "$lib/types/enums";
 
 describe("average model calculation test suite", () => {
   it("computes an average model of a graphics card with impact factors", () => {
@@ -91,6 +92,42 @@ describe("average model calculation test suite", () => {
     expect(averageModel.components.video_ram.manufacturing_GWP!).toBeCloseTo(1.84e-1);
     expect(averageModel.components.upstream_transport.manufacturing_GWP!).toBeCloseTo(2.6e-1);
     expect(averageModel.components.end_of_life.manufacturing_GWP!).toBeCloseTo(0);
+  });
+});
+
+describe("equivalency calculation test suite", () => {
+  const impactFactors: GraphicsCardImpactFactors[] = GpusImpactFactors.slice().filter(
+    (card) => card.graphics_card != "NVIDIA H100 PCIe 80GB"
+  );
+  const graphicsCards: GraphicsCard[] = Gpus.slice().filter(
+    (card) => card.name != "NVIDIA H100 PCIe 80GB"
+  );
+  const averageModel = computeAverageModel(graphicsCards, impactFactors);
+  const totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(averageModel);
+  const totals = computeTotalsPerCriteria(totalsPerLifeCycleStep);
+  it("computes an equivalent in liters of crude oil for an average graphics card", () => {
+    const averageTotalDepletionOfFossilResources = totals.ADPf!;
+    const equivalentToLitersOfCrudeOil = computeEquivalent(
+      ImpactCriterionAcronym.ADPf,
+      averageTotalDepletionOfFossilResources
+    );
+    expect(Math.round(equivalentToLitersOfCrudeOil)).toEqual(10);
+  });
+  it("computes an equivalent in distance travelled by car for an average graphics card", () => {
+    const averageTotalGlobalWarmingPotential = totals.GWP!;
+    const equivalentInDistanceByCar = computeEquivalent(
+      ImpactCriterionAcronym.GWP,
+      averageTotalGlobalWarmingPotential
+    );
+    expect(Math.round(equivalentInDistanceByCar)).toEqual(64);
+  });
+  it("computes an equivalent in kilograms of copper for an average graphics card", () => {
+    const averageTotalDepletionOfMinerals = totals.ADPe!;
+    const equivalentInCopper = computeEquivalent(
+      ImpactCriterionAcronym.ADPe,
+      averageTotalDepletionOfMinerals
+    );
+    expect(Math.round(equivalentInCopper)).toEqual(2);
   });
 });
 
@@ -180,10 +217,6 @@ describe("graphics card calculator utilitary methods test suite", () => {
   it("computes the total for each life cycle step for each impact criteria", () => {
     const testCardImpacts = computeImpacts(testCard);
 
-    const components = Object.keys(testCardImpacts.components);
-    components.forEach((component) => {
-      console.log(testCardImpacts.components[component].manufacturing_ADPf);
-    });
     const totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(testCardImpacts);
 
     expect(totalsPerLifeCycleStep.manufacturing.ADPe).toBeCloseTo(5.83e-3);
