@@ -47,20 +47,25 @@ export function computeYieldPercentage(chipSurfaceBeforeLosses: number) {
 }
 
 export function computeDieSurface(chipSurface: number) {
-  const kerfWidth = 0.2;
-  const siliciumSurfaceBeforeLoss = (Math.sqrt(chipSurface) + kerfWidth) ** 2;
-  const numberOfChipsOnWafer = Math.round(
-    (Math.PI * (300 / 2) * (300 / 2)) / siliciumSurfaceBeforeLoss -
-      (Math.PI * 300) / Math.sqrt(2 * siliciumSurfaceBeforeLoss)
-  );
+  // Division by zero incoming otherwise
+  if (chipSurface < 1) {
+    return 0;
+  } else {
+    const kerfWidth = 0.2;
+    const siliciumSurfaceBeforeLoss = (Math.sqrt(chipSurface) + kerfWidth) ** 2;
+    const numberOfChipsOnWafer = Math.round(
+      (Math.PI * (300 / 2) * (300 / 2)) / siliciumSurfaceBeforeLoss -
+        (Math.PI * 300) / Math.sqrt(2 * siliciumSurfaceBeforeLoss)
+    );
 
-  const waferSurfaceCoveredByChips = chipSurface * numberOfChipsOnWafer;
-  const waferSurface = (((300 / 2) * 300) / 2) * Math.PI;
-  const totalYieldBeforeLosses = waferSurfaceCoveredByChips / waferSurface;
-  const usableChipsPercentage = Math.E ** -Math.sqrt((chipSurface / 100) * 0.1) * 100;
-  const totalYieldAfterLosses = totalYieldBeforeLosses * usableChipsPercentage;
-  const dieSurfaceBeforeLosses = (chipSurface / totalYieldAfterLosses) * 100;
-  return dieSurfaceBeforeLosses;
+    const waferSurfaceCoveredByChips = chipSurface * numberOfChipsOnWafer;
+    const waferSurface = (((300 / 2) * 300) / 2) * Math.PI;
+    const totalYieldBeforeLosses = waferSurfaceCoveredByChips / waferSurface;
+    const usableChipsPercentage = Math.E ** -Math.sqrt((chipSurface / 100) * 0.1) * 100;
+    const totalYieldAfterLosses = totalYieldBeforeLosses * usableChipsPercentage;
+    const dieSurfaceBeforeLosses = (chipSurface / totalYieldAfterLosses) * 100;
+    return dieSurfaceBeforeLosses;
+  }
 }
 
 function averageVramDieSurface() {
@@ -226,20 +231,27 @@ export function computeImpacts(card: GraphicsCard): GraphicsCardImpactFactors {
     (property) => property != "graphics_card" && property != "component"
   );
 
-  const vramDieSurfaceWithLosses = computeDieSurface(
-    Math.round((averageVramDieSurface() * card.videoRamCapacity) / card.videoRamDies)
-  );
+  const avgVramDieSurface = averageVramDieSurface();
+  const vramDieSurfaceWithLosses =
+    (card.videoRamDies != 0) && (card.videoRamCapacity != 0)
+      ? computeDieSurface(
+          Math.round((avgVramDieSurface * card.videoRamCapacity) / card.videoRamDies)
+        )
+      : 0;
+
   computableProperties.forEach((property) => {
     const p = property as ImpactFactorsKeys;
     (cardImpacts.components.casing[p] as number) =
       (Average.components.casing[p] as number) * (card.casingWeight * 0.001);
     (cardImpacts.components.heatsink[p] as number) =
       (Average.components.heatsink[p] as number) * (card.heatsinkWeight * 0.001);
+    // If the VRAM die surface without losses is documented, add the losses ; otherwise, use an average VRAM die surface from the available data
     (cardImpacts.components.video_ram[p] as number) = card.videoRamDieSurface
-      ? (Average.components.video_ram[p] as number) * card.videoRamDieSurface!
+      ? (Average.components.video_ram[p] as number) * computeDieSurface(card.videoRamDieSurface!)
       : (Average.components.video_ram[p] as number) * vramDieSurfaceWithLosses * card.videoRamDies;
     (cardImpacts.components.printed_wiring_board[p] as number) =
       (Average.components.printed_wiring_board[p] as number) * card.cardSurface;
+    // Same as VRAM die surface: we need to add the losses to the documented GPU surface
     (cardImpacts.components.graphics_processing_unit[p] as number) =
       (Average.components.graphics_processing_unit[p] as number) *
       computeDieSurface(card.gpuSurface);

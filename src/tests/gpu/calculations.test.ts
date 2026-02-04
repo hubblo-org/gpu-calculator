@@ -152,6 +152,13 @@ describe("die surface computing methods test suite", () => {
     const dieSurface = computeDieSurface(h100GpuSurface);
     expect(dieSurface).toBeCloseTo(2.81e3, 0);
   });
+
+  it("returns zero if the given GPU surface is zero", () => {
+    const dieSurface = computeDieSurface(0);
+    expect(dieSurface).not.toBeNaN();
+    const newDieSurface = computeDieSurface(0.5);
+    expect(newDieSurface).not.toBeNaN();
+  });
   it("computes the VRAM die surface, including losses, for a given graphics card", () => {
     const graphicsCardsWithVramDieSurface = [
       {
