@@ -1,5 +1,5 @@
 <footer>
-  <p><strong>© Hubblo <time>2025</time></strong></p>
+  <p><strong>© Hubblo <time>2026</time></strong></p>
   <div id="hubblo-social">
     <a href="https://gitlab.com/hubblo" aria-label="Navigate to Hubblo Gitlab repository"
       ><svg
