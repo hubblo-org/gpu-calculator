@@ -1,6 +1,7 @@
 <script lang="ts">
   import GraphicsCards from "../../../src/data/gpu/gpus.json";
   import GraphicsCardsImpactFactors from "../../../src/data/gpu/gpus_impact_factors.json";
+  import Introduction from "$lib/components/Introduction.svelte";
   import GpuPlotsSection from "$lib/components/GpuPlotsSection.svelte";
   import GpuSection from "$lib/components/GpuSection.svelte";
   import { Card } from "$lib/gpu/gpu.svelte";
@@ -16,6 +17,7 @@
 </script>
 
 <div>
+  <Introduction />
   <GpuSection {card} />
   <GpuPlotsSection {card} />
   <Partners />
