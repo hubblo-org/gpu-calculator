@@ -1,12 +1,12 @@
 import { computeAverageModel } from "../../lib/gpu/calculations.ts";
-import { readFileSync, writeFile } from "node:fs";
+import { writeFile } from "node:fs";
+import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json" with { type: "json" };
+import Gpus from "../../data/gpu/gpus.json" with { type: "json" };
 
-const gpusFile = "gpus.json";
-const impactFactorsFile = "gpus_impact_factors.json";
-
-const impactFactors = JSON.parse(readFileSync(impactFactorsFile, {encoding: "utf8"}));
-const graphicsCards = JSON.parse(readFileSync(gpusFile, {encoding: "utf8"}));
-
+const impactFactors = GpusImpactFactors.slice().filter(
+  (card) => card.graphics_card != "NVIDIA H100 PCIe 80GB"
+);
+const graphicsCards = Gpus.slice().filter((card) => card.name != "NVIDIA H100 PCIe 80GB");
 const averageModel = JSON.stringify(computeAverageModel(graphicsCards, impactFactors));
 
 const averageModelFileName = "average_model.json";
