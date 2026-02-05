@@ -50,19 +50,19 @@ export function renderHorizontalBarPlot(
         fill: xLabel,
         sort: { y: "x", order: "descending" }
       }),
-      tip(
-        impactFactors,
-        pointerY({ x: xLabel, y: yLabel, channels: { Ratio: "ratioNumber" } })
-      )
+      tip(impactFactors, pointerY({ x: xLabel, y: yLabel, channels: { Ratio: "ratioNumber" } }))
     ];
     const barPlot = plot({
       width: width,
       height: height,
+      className: "plot",
       style: { overflow: "visible" },
       y: { grid: true, label: "Criterion" },
       x: { label: "Percentage (%)" },
       marks: lollipop ? lollipopMarks : barMarks
     });
+
+    addLogo(`#impact-factors-plot-${source}`);
     div.append(barPlot);
   }
 }
@@ -70,10 +70,21 @@ export function renderHorizontalBarPlot(
 function addLogo(nodeId: string) {
   // When a legend is created with the generated plot, a figure element is added to the selected div.
   // The first child is then the div with the legend elements.
-  const logoDiv = select(nodeId).select("figure").select("div").append("div").attr("class", "logo");
+  const figure = select(nodeId).select("figure");
+  if (!figure.empty()) {
+    const logoDiv = select(nodeId)
+      .select("figure")
+      .select("div")
+      .append("div")
+      .attr("class", "logo");
 
-  logoDiv.append("img").attr("src", "/media/logo.svg");
-  logoDiv.append("span").text("Hubblo").attr("class", "logo");
+    logoDiv.append("img").attr("src", "/media/logo.svg");
+    logoDiv.append("span").text("Hubblo");
+  } else {
+    const logoDiv = select(nodeId).append("div").attr("class", "logo");
+    logoDiv.append("img").attr("src", "/media/logo.svg");
+    logoDiv.append("span").text("Hubblo");
+  }
 }
 
 export function renderStackedBarPlot(

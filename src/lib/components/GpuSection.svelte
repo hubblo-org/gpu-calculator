@@ -97,6 +97,7 @@
   </form>
   <button
     onclick={() => card.updateImpactFactors(card.parameters!.name, toComputeWithParametricModel)}
+    id="btn-recalculate"
     class="btn btn-primary btn-sm">Recalculate</button
   >
 </section>
@@ -109,17 +110,10 @@
     display: flex;
     flex-direction: column;
     width: 80%;
-    gap: 16px;
+    gap: 12px;
     margin-top: 12px;
   }
-  input:read-only {
-    background-color: silver;
-  }
   @media (width >= 481px) {
-    label {
-      height: 40px;
-      width: 100%;
-    }
     input,
     select {
       height: 50px;
@@ -130,8 +124,10 @@
     }
     .grid {
       display: flex;
-      padding-top: 10px;
       gap: 50px;
+    }
+    #btn-recalculate {
+      margin: 24px 24px 0px 24px;
     }
   }
 </style>
