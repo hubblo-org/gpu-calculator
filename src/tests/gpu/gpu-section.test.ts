@@ -3,15 +3,11 @@ import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import userEvent from "@testing-library/user-event";
 import Gpus from "../../data/gpu/gpus.json";
-import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 import { Card } from "$lib/gpu/gpu.svelte";
 
 const defaultCard = Gpus.filter((gpu) => gpu.name === "NVIDIA H100 PCIe 80GB")[0];
-const defaultCardImpactFactors = GpusImpactFactors.filter(
-  (impacts) => impacts.graphics_card === "NVIDIA H100 PCIe 80GB"
-)[0];
 
-const card = new Card(defaultCard, defaultCardImpactFactors);
+const card = new Card(defaultCard);
 
 const gpuSectionName = "Graphics card parameters";
 const graphicsCardParameters = [

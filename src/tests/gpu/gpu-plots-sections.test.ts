@@ -4,15 +4,11 @@ import userEvent from "@testing-library/user-event";
 import GpuPlotsSection from "$lib/components/GpuPlotsSection.svelte";
 import { Scopes } from "$lib/types/enums";
 import Gpus from "../../data/gpu/gpus.json";
-import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 import { Card } from "$lib/gpu/gpu.svelte";
 
 const defaultCard = Gpus.filter((gpu) => gpu.name === "NVIDIA A100 PCIe 40GB")[0];
-const defaultCardImpactFactors = GpusImpactFactors.filter(
-  (impacts) => impacts.graphics_card === "NVIDIA A100 PCIe 40GB"
-)[0];
 
-const card = new Card(defaultCard, defaultCardImpactFactors);
+const card = new Card(defaultCard);
 
 const gpuPlotsSectionName = "Graphics card impact factors";
 const gpuSelectionLabel = "Display impact factors by:";
@@ -66,8 +62,8 @@ describe("graphics card data visualization static elements test suite", () => {
     expect(shownEquivalentInCopper).toBeVisible();
 
 
-    expect(shownEquivalentInOil).toHaveTextContent("Depletion of fossil resources: 44 liters of crude oil");
-    expect(shownEquivalentInKilometers).toHaveTextContent("Global warming potential: 488 kilometers traveled by car");
+    expect(shownEquivalentInOil).toHaveTextContent("Depletion of fossil resources: 193 liters of crude oil");
+    expect(shownEquivalentInKilometers).toHaveTextContent("Global warming potential: 2166 kilometers traveled by car");
     expect(shownEquivalentInCopper).toHaveTextContent("Depletion of mineral resources: 3 kilograms of copper");
   });
 });

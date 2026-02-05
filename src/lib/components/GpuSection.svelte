@@ -8,18 +8,11 @@
 
   const { card }: Props = $props();
 
-  let toComputeWithParametricModel = $state(false);
-
   function handleCardSelection(event: Event) {
     event.preventDefault();
     if (card.parameters!.name === "Custom") {
-      toComputeWithParametricModel = true;
       card.new();
-    } else if (card.parameters!.name === "NVIDIA H100 PCIe 80GB") {
-      toComputeWithParametricModel = true;
-      card.selectDocumentedCard(card.parameters!.name);
     } else {
-      toComputeWithParametricModel = false;
       card.selectDocumentedCard(card.parameters!.name);
     }
   }
@@ -46,28 +39,24 @@
           type="number"
           id="casing-weight"
           bind:value={card.parameters!.casingWeight}
-          onchange={() => (toComputeWithParametricModel = true)}
         />
         <label for="heatsink-weight">Heatsink weight (grams)</label>
         <input
           type="number"
           id="heatsink-weight"
           bind:value={card.parameters!.heatsinkWeight}
-          onchange={() => (toComputeWithParametricModel = true)}
         />
         <label for="graphics-card-surface">Graphics card surface (cm²)</label>
         <input
           type="number"
           id="graphics-card-surface"
           bind:value={card.parameters!.cardSurface}
-          onchange={() => (toComputeWithParametricModel = true)}
         />
         <label for="gpu-surface">GPU surface (mm²)</label>
         <input
           type="number"
           id="gpu-surface"
           bind:value={card.parameters!.gpuSurface}
-          onchange={() => (toComputeWithParametricModel = true)}
         />
       </div>
       <div class="field">
@@ -76,27 +65,24 @@
           type="number"
           id="vram-size"
           bind:value={card.parameters!.videoRamCapacity}
-          onchange={() => (toComputeWithParametricModel = true)}
         />
         <label for="vram-dies">Video RAM dies</label>
         <input
           type="number"
           id="vram-dies"
           bind:value={card.parameters!.videoRamDies}
-          onchange={() => (toComputeWithParametricModel = true)}
         />
         <label for="vram-die-surface">Video RAM die surface (mm²)</label>
         <input
           type="number"
           id="vram-die-surface"
           bind:value={card.parameters!.videoRamDieSurface}
-          onchange={() => (toComputeWithParametricModel = true)}
         />
       </div>
     </div>
   </form>
   <button
-    onclick={() => card.updateImpactFactors(card.parameters!.name, toComputeWithParametricModel)}
+    onclick={() => card.updateImpactFactors(card.parameters!.name)}
     id="btn-recalculate"
     class="btn btn-primary btn-sm">Recalculate</button
   >
