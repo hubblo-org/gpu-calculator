@@ -42,8 +42,8 @@ export function renderHorizontalBarPlot(
 
     const barMarks = [
       ruleX([0]),
-      axisX({ tickSpacing: 100 }),
-      axisY({ labelAnchor: "top" }),
+      axisX({ fontSize: 16, tickSpacing: 100, marginBottom: 50 }),
+      axisY({ fontSize: 16, labelAnchor: "top" }),
       barX(impactFactors, {
         x: xLabel,
         y: yLabel,
@@ -56,6 +56,7 @@ export function renderHorizontalBarPlot(
       width: width,
       height: height,
       className: "plot",
+      color: { scheme: "Reds" },
       style: { overflow: "visible" },
       y: { grid: true, label: "Criterion" },
       x: { label: "Percentage (%)" },
@@ -105,11 +106,12 @@ export function renderStackedBarPlot(
       width: width,
       height: height,
       className: "plot",
-      color: { legend: "swatches", domain: domains },
+      color: { legend: "swatches", domain: domains, scheme: "Observable10" },
+      style: { overflow: "visible" },
       x: { percent: true },
       marks: [
-        axisY({ fontSize: 12, label: null, marginLeft: 60 }),
-        axisX({ marginBottom: 48, label: "Value (%)" }),
+        axisY({ fontSize: 16, label: null, marginLeft: 50 }),
+        axisX({ fontSize: 16, marginBottom: 50, label: "Value (%)" }),
         barX(impactFactors as Data, {
           y: yLabel,
           x: xLabel,

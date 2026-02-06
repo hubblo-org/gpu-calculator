@@ -56,26 +56,7 @@
       criteria.
     </p>
 
-    <div id="plot-and-equivalence">
-      <div id="impact-factors-plot-criteria"></div>
-      <div id="equivalence">
-        <h4 id="equivalent-list">Other products equivalents:</h4>
-        <ul aria-labelledby="equivalent-list">
-          <li title="adpf">
-            <p>Depletion of fossil resources:</p>
-            <p>{card.equivalents?.inCrudeOil} liters of crude oil</p>
-          </li>
-          <li title="gwp">
-            <p>Global warming potential:</p>
-            <p>{card.equivalents?.inKilometersByCar} kilometers traveled by car</p>
-          </li>
-          <li title="adpe">
-            <p>Depletion of mineral resources:</p>
-            <p>{card.equivalents?.inCopper} kilograms of copper</p>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <div id="impact-factors-plot-criteria"></div>
 
     {#key updateTable}
       <AbsoluteValuesTable
@@ -133,14 +114,3 @@
     {/key}
   {/if}
 </section>
-
-<style>
-  #plot-and-equivalence {
-    display: flex;
-    flex-direction: row;
-  }
-  #equivalence {
-    width: 200px;
-    height: 200px;
-  }
-</style>
