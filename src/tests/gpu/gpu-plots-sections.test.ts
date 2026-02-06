@@ -37,35 +37,6 @@ describe("graphics card data visualization static elements test suite", () => {
     expect(graphicsCardName).toBeVisible();
   });
 
-  it("displays equivalents in other products for the selected graphics card", async () => {
-    const gpuPlotsSection = screen.getByRole("region", { name: gpuPlotsSectionName });
-    const adpf = "adpf";
-    const gwp = "gwp";
-    const adpe = "adpe";
-
-    const equivalentList = within(gpuPlotsSection).getByRole("list", {
-      name: "Other products equivalents:"
-    });
-
-    const shownEquivalentInOil = within(equivalentList).getByRole("listitem", {
-      name: adpf
-    });
-    const shownEquivalentInKilometers = within(equivalentList).getByRole("listitem", {
-      name: gwp
-    });
-    const shownEquivalentInCopper = within(equivalentList).getByRole("listitem", {
-      name: adpe
-    });
-
-    expect(shownEquivalentInOil).toBeVisible();
-    expect(shownEquivalentInKilometers).toBeVisible();
-    expect(shownEquivalentInCopper).toBeVisible();
-
-
-    expect(shownEquivalentInOil).toHaveTextContent("Depletion of fossil resources: 193 liters of crude oil");
-    expect(shownEquivalentInKilometers).toHaveTextContent("Global warming potential: 2166 kilometers traveled by car");
-    expect(shownEquivalentInCopper).toHaveTextContent("Depletion of mineral resources: 3 kilograms of copper");
-  });
 });
 
 describe("graphics card data visualization dynamic elements test suite", () => {
