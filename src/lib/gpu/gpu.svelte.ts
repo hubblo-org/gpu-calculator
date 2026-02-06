@@ -100,7 +100,7 @@ export class Card {
   }
 
   updatePlotPerLifeCycleStep() {
-    const lcSteps = Object.values(LifeCycleSteps).filter((lcstep) => typeof lcstep === "string");
+    const lcSteps = Object.values(LifeCycleSteps).filter((lcstep) => typeof lcstep === "string").filter((lcstep) => lcstep != "Use");
     const source = "criteria";
 
     const filteredImpactFactors = this.tidyTotals!.filter(isNotMipsOrDeee);
