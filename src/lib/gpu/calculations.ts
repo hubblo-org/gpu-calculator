@@ -33,16 +33,16 @@ export function computeEquivalent(criterion: ImpactCriterionAcronym, value: numb
     return Math.round(equivalent);
   }
 }
+
+// Useful for computing die surface with losses
 export function computeYieldPercentage(chipSurfaceBeforeLosses: number) {
   // Defects per square centimeter
   const defectDensity = 0.1;
 
-  const chipSurfaceInSquareCentimeters = chipSurfaceBeforeLosses / 100;
+  const defects = (chipSurfaceBeforeLosses * defectDensity) / 100;
 
-  // Murphy Model (even distribution)
-  const yieldPercentage =
-    (1 - Math.exp(-2 * defectDensity * chipSurfaceInSquareCentimeters)) /
-    (2 * defectDensity * chipSurfaceInSquareCentimeters);
+  // Murphy's model used by SemiAnalysis Die Yield Calculator
+  const yieldPercentage = Math.pow((1 - Math.exp(-defects)) / defects, 2);
   return yieldPercentage;
 }
 
@@ -119,6 +119,7 @@ export function computeAverageModel(
     const transport = Object.assign({}, componentFactors.components.upstream_transport);
     const eol = Object.assign({}, componentFactors.components.end_of_life);
 
+    const gpuSurfaceWithLosses = card.gpuSurface / computeYieldPercentage(card.gpuSurface);
     computableProperties.forEach((property) => {
       let newCasingValue = casing[property as ImpactFactorsKeys] as number;
       let newHeatsinkValue = heatsink[property as ImpactFactorsKeys] as number;
@@ -139,11 +140,14 @@ export function computeAverageModel(
       newPwbValue =
         typeof newPwbValue === "number" && newPwbValue != 0 ? newPwbValue / card.cardSurface : 0;
       newGpuValue =
-        typeof newGpuValue === "number" && newGpuValue != 0 ? newGpuValue / card.gpuSurface : 0;
+        typeof newGpuValue === "number" && newGpuValue != 0
+          ? newGpuValue / gpuSurfaceWithLosses 
+          : 0;
       newVramValue =
         card.videoRamDieSurface && typeof newVramValue === "number" && newVramValue != 0
           ? newVramValue /
-            (card.videoRamDieSurface / computeYieldPercentage(card.videoRamDieSurface))
+            ((card.videoRamDieSurface / computeYieldPercentage(card.videoRamDieSurface)) *
+              card.videoRamDies)
           : 0;
       newTransportValue =
         typeof newTransportValue === "number" && newTransportValue != 0
@@ -233,7 +237,7 @@ export function computeImpacts(card: GraphicsCard): GraphicsCardImpactFactors {
 
   const avgVramDieSurface = averageVramDieSurface();
   const vramDieSurfaceWithLosses =
-    (card.videoRamDies != 0) && (card.videoRamCapacity != 0)
+    card.videoRamDies != 0 && card.videoRamCapacity != 0
       ? computeDieSurface(
           Math.round((avgVramDieSurface * card.videoRamCapacity) / card.videoRamDies)
         )

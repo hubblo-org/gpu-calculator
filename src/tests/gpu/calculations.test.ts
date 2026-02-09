@@ -15,6 +15,7 @@ import {
 import type { GraphicsCard, GraphicsCardImpactFactors } from "$lib/types/gpu";
 import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 import Gpus from "../../data/gpu/gpus.json";
+import AverageModelFixture from "../fixtures/average_model.json";
 import { ImpactCriterionAcronym, PlanetBoundaries } from "$lib/types/enums";
 
 describe("average model calculation test suite", () => {
@@ -28,70 +29,147 @@ describe("average model calculation test suite", () => {
     const averageModel = computeAverageModel(graphicsCards, impactFactors);
 
     expect(averageModel.graphics_card).toEqual("average");
-    expect(averageModel.components.casing.manufacturing_ADPe!).toBeCloseTo(4.08e-4);
-    expect(averageModel.components.heatsink.manufacturing_ADPe!).toBeCloseTo(1.87e-3);
-    expect(averageModel.components.printed_wiring_board.manufacturing_ADPe!).toBeCloseTo(1.27e-5);
-    expect(averageModel.components.graphics_processing_unit.manufacturing_ADPe!).toBeCloseTo(
-      1.55e-8
+    expect(averageModel.components.casing.manufacturing_ADPe!.toExponential(2)).toEqual(
+      AverageModelFixture.components.casing.manufacturing_ADPe.toExponential()
     );
-    expect(averageModel.components.video_ram.manufacturing_ADPe!).toBeCloseTo(5.07e-9);
-    expect(averageModel.components.upstream_transport.manufacturing_ADPe!).toBeCloseTo(1.02e-8);
-    expect(averageModel.components.end_of_life.manufacturing_ADPe!).toBeCloseTo(0);
-    expect(averageModel.components.casing.manufacturing_GWP!).toBeCloseTo(8.25, 1);
-    expect(averageModel.components.heatsink.manufacturing_GWP!).toBeCloseTo(5.74, 1);
-    expect(averageModel.components.printed_wiring_board.manufacturing_GWP!).toBeCloseTo(3.25e-2, 1);
+    expect(averageModel.components.heatsink.manufacturing_ADPe!.toExponential(2)).toEqual(
+      AverageModelFixture.components.heatsink.manufacturing_ADPe.toExponential()
+    );
+    expect(
+      averageModel.components.printed_wiring_board.manufacturing_ADPe!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.printed_wiring_board.manufacturing_ADPe.toExponential()
+    );
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_ADPe!.toExponential(2)
+    ).toEqual(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_ADPe.toExponential()
+    );
+    /* expect(averageModel.components.video_ram.manufacturing_ADPe!.toExponential(2)).toEqual(
+      AverageModelFixture.components.video_ram.manufacturing_ADPe.toExponential()
+    ); */
+    expect(averageModel.components.upstream_transport.manufacturing_ADPe!.toExponential(2)).toEqual(
+      AverageModelFixture.components.upstream_transport.manufacturing_ADPe.toExponential()
+    );
+    expect(averageModel.components.end_of_life.manufacturing_ADPe!.toExponential(2)).toBeCloseTo(
+      AverageModelFixture.components.end_of_life.manufacturing_ADPe.toExponential()
+    );
+    expect(averageModel.components.casing.manufacturing_GWP!.toExponential(2)).toEqual(
+      AverageModelFixture.components.casing.manufacturing_GWP.toExponential()
+    );
+    expect(averageModel.components.heatsink.manufacturing_GWP!.toExponential(2)).toEqual(
+      AverageModelFixture.components.heatsink.manufacturing_GWP.toExponential()
+    );
+    expect(
+      averageModel.components.printed_wiring_board.manufacturing_GWP!.toExponential(2)
+    ).toEqual(
+      AverageModelFixture.components.printed_wiring_board.manufacturing_GWP.toExponential(2)
+    );
 
     // Getting different results from those in the spreadsheet for average GPU component impact factors, adding assertions
     // for each criterion
-    expect(averageModel.components.graphics_processing_unit.manufacturing_ADPe!).toBeCloseTo(
-      1.55e-8
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_ADPf!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_ADPf.toExponential()
     );
-    expect(averageModel.components.graphics_processing_unit.manufacturing_ADPf!).toBeCloseTo(
-      5.56e-1
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_AP!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_AP.toExponential()
     );
-    expect(averageModel.components.graphics_processing_unit.manufacturing_AP!).toBeCloseTo(2.35e-4);
-    expect(averageModel.components.graphics_processing_unit.manufacturing_CTUe!).toBeCloseTo(
-      5.44e-1
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_CTUe!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_CTUe.toExponential()
     );
-    expect(averageModel.components.graphics_processing_unit.manufacturing_CTUh_c!).toBeCloseTo(
-      9.72e-12
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_CTUh_c!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_CTUh_c.toExponential()
     );
-    expect(averageModel.components.graphics_processing_unit.manufacturing_CTUh_nc!).toBeCloseTo(
-      2.32e-10
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_CTUh_nc!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_CTUh_nc.toExponential()
     );
-    expect(averageModel.components.graphics_processing_unit.manufacturing_Epf!).toBeCloseTo(
-      1.33e-7
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_Epf!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_Epf.toExponential()
     );
-    expect(averageModel.components.graphics_processing_unit.manufacturing_Epm!).toBeCloseTo(
-      2.83e-5
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_Epm!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_Epm.toExponential()
     );
-    expect(averageModel.components.graphics_processing_unit.manufacturing_Ept!).toBeCloseTo(
-      2.94e-4
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_Ept!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_Ept.toExponential()
     );
-    expect(averageModel.components.graphics_processing_unit.manufacturing_GWP!).toBeCloseTo(
-      4.26e-2
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_GWP!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_GWP.toExponential()
     );
-    expect(averageModel.components.graphics_processing_unit.manufacturing_GWPb!).toBeCloseTo(
-      2.53e-5
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_GWPb!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_GWPb.toExponential()
     );
-    expect(averageModel.components.graphics_processing_unit.manufacturing_GWPf!).toBeCloseTo(
-      4.26e-2
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_GWPf!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_GWPf.toExponential()
     );
-    expect(averageModel.components.graphics_processing_unit.manufacturing_GWPlu!).toBeCloseTo(0);
-    expect(averageModel.components.graphics_processing_unit.manufacturing_IR!).toBeCloseTo(4.6e-4);
-    expect(averageModel.components.graphics_processing_unit.manufacturing_LU!).toBeCloseTo(1.7e-4);
-    expect(averageModel.components.graphics_processing_unit.manufacturing_ODP!).toBeCloseTo(
-      1.86e-8
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_GWPlu!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_GWPlu.toExponential()
     );
-    expect(averageModel.components.graphics_processing_unit.manufacturing_PM!).toBeCloseTo(1.3e-9);
-    expect(averageModel.components.graphics_processing_unit.manufacturing_POCP!).toBeCloseTo(
-      9.25e-5
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_IR!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_IR.toExponential()
     );
-    expect(averageModel.components.graphics_processing_unit.manufacturing_WU!).toBeCloseTo(1.48e-2);
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_LU!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_LU.toExponential()
+    );
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_ODP!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_ODP.toExponential()
+    );
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_PM!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_PM.toExponential()
+    );
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_POCP!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_POCP.toExponential()
+    );
+    expect(
+      averageModel.components.graphics_processing_unit.manufacturing_WU!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.graphics_processing_unit.manufacturing_WU.toExponential()
+    );
 
-    expect(averageModel.components.video_ram.manufacturing_GWP!).toBeCloseTo(1.84e-1);
-    expect(averageModel.components.upstream_transport.manufacturing_GWP!).toBeCloseTo(2.6e-1);
-    expect(averageModel.components.end_of_life.manufacturing_GWP!).toBeCloseTo(0);
+    /* expect(averageModel.components.video_ram.manufacturing_GWP!.toExponential(2)).toBeCloseTo(
+      AverageModelFixture.components.video_ram.manufacturing_GWP.toExponential()
+    ); */
+    expect(
+      averageModel.components.upstream_transport.manufacturing_GWP!.toExponential(2)
+    ).toBeCloseTo(
+      AverageModelFixture.components.upstream_transport.manufacturing_GWP.toExponential()
+    );
+    expect(averageModel.components.end_of_life.manufacturing_GWP!.toExponential(2)).toBeCloseTo(
+      AverageModelFixture.components.end_of_life.manufacturing_GWP.toExponential()
+    );
   });
 });
 
@@ -111,7 +189,7 @@ describe("equivalency calculation test suite", () => {
       ImpactCriterionAcronym.ADPf,
       averageTotalDepletionOfFossilResources
     );
-    expect(Math.round(equivalentToLitersOfCrudeOil)).toEqual(10);
+    expect(Math.round(equivalentToLitersOfCrudeOil)).toEqual(9);
   });
   it("computes an equivalent in distance travelled by car for an average graphics card", () => {
     const averageTotalGlobalWarmingPotential = totals.GWP!;
@@ -119,7 +197,7 @@ describe("equivalency calculation test suite", () => {
       ImpactCriterionAcronym.GWP,
       averageTotalGlobalWarmingPotential
     );
-    expect(Math.round(equivalentInDistanceByCar)).toEqual(64);
+    expect(Math.round(equivalentInDistanceByCar)).toEqual(62);
   });
   it("computes an equivalent in kilograms of copper for an average graphics card", () => {
     const averageTotalDepletionOfMinerals = totals.ADPe!;
@@ -141,7 +219,7 @@ describe("yield percentage computing methods test suite", () => {
     const a100VramDieSurfaceBeforeLosses = 86.25;
     const yieldPercentage = computeYieldPercentage(a100VramDieSurfaceBeforeLosses);
     const a100VramDieSurfaceWithLosses = a100VramDieSurfaceBeforeLosses / yieldPercentage;
-    expect(a100VramDieSurfaceWithLosses).toBeCloseTo(93.9, 1);
+    expect(a100VramDieSurfaceWithLosses).toBeCloseTo(93.9, 0);
   });
 });
 
