@@ -45,9 +45,9 @@ describe("average model calculation test suite", () => {
     ).toEqual(
       AverageModelFixture.components.graphics_processing_unit.manufacturing_ADPe.toExponential()
     );
-    /* expect(averageModel.components.video_ram.manufacturing_ADPe!.toExponential(2)).toEqual(
+    expect(averageModel.components.video_ram.manufacturing_ADPe!.toExponential(2)).toEqual(
       AverageModelFixture.components.video_ram.manufacturing_ADPe.toExponential()
-    ); */
+    );
     expect(averageModel.components.upstream_transport.manufacturing_ADPe!.toExponential(2)).toEqual(
       AverageModelFixture.components.upstream_transport.manufacturing_ADPe.toExponential()
     );
@@ -158,10 +158,9 @@ describe("average model calculation test suite", () => {
     ).toBeCloseTo(
       AverageModelFixture.components.graphics_processing_unit.manufacturing_WU.toExponential()
     );
-
-    /* expect(averageModel.components.video_ram.manufacturing_GWP!.toExponential(2)).toBeCloseTo(
+    expect(averageModel.components.video_ram.manufacturing_GWP!.toExponential(2)).toBeCloseTo(
       AverageModelFixture.components.video_ram.manufacturing_GWP.toExponential()
-    ); */
+    );
     expect(
       averageModel.components.upstream_transport.manufacturing_GWP!.toExponential(2)
     ).toBeCloseTo(
@@ -220,6 +219,12 @@ describe("yield percentage computing methods test suite", () => {
     const yieldPercentage = computeYieldPercentage(a100VramDieSurfaceBeforeLosses);
     const a100VramDieSurfaceWithLosses = a100VramDieSurfaceBeforeLosses / yieldPercentage;
     expect(a100VramDieSurfaceWithLosses).toBeCloseTo(93.9, 0);
+
+    const gh200VramDieSurfaceBeforeLosses = 100;
+    const gh200VramDieSurfaceYield = computeYieldPercentage(gh200VramDieSurfaceBeforeLosses);
+    const gh200VramDieSurfaceWithLosses =
+      gh200VramDieSurfaceBeforeLosses / gh200VramDieSurfaceYield;
+    expect(gh200VramDieSurfaceWithLosses).toBeCloseTo(110.425);
   });
 });
 

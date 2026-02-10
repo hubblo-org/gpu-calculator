@@ -1,6 +1,6 @@
 [
 	{"name": "NVIDIA H100 PCIe 80GB", "totalWeight":1690, "casingWeight":790,"heatsinkWeight":900,"cardSurface":296,"videoRamCapacity":80,"videoRamDies":6, "gpuSurface":814,"impactFactorsSource":"Parametric model"},
-	{"name": "NVIDIA GH200", "totalWeight":1420, "casingWeight":802,"heatsinkWeight":0,"cardSurface":280,"videoRamCapacity":80,"videoRamDies":6, "gpuSurface":814,"impactFactorsSource":"Parametric model"},
+	{"name": "NVIDIA GH200", "totalWeight":1420, "casingWeight":802,"heatsinkWeight":0,"cardSurface":280,"videoRamCapacity":80,"videoRamDies":6, "gpuSurface":814,"videoRamDieSurface":100,"impactFactorsSource":"Parametric model"},
 	{"name": "NVIDIA GeForce GTX 1080 Ti", "totalWeight":881, "casingWeight":252,"heatsinkWeight":427,"cardSurface":312.14,"videoRamCapacity":11,"videoRamDies":11, "gpuSurface":471,"impactFactorsSource":"Parametric model"},
 	{"name": "NVIDIA RTX A4500", "totalWeight":1060, "casingWeight":197,"heatsinkWeight":714,"cardSurface":230.04,"videoRamCapacity":20,"videoRamDies":10, "gpuSurface":628,"impactFactorsSource":"Parametric model"},
 	{"name": "NVIDIA TITAN RTX", "totalWeight":936, "casingWeight":682,"heatsinkWeight":53.7,"cardSurface":307.72,"videoRamCapacity":20,"videoRamDies":12, "gpuSurface":754,"impactFactorsSource":"Parametric model"},
