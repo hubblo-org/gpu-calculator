@@ -39,7 +39,7 @@
     font-weight: bold;
   }
   .symbol {
-    border: 2px solid var(--color-primary-100);
+    border: 2px solid var(--color-primary-40);
     border-radius: 25%;
     font-size: 1.5rem;
   }
