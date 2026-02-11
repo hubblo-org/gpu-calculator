@@ -9,7 +9,7 @@ The calculator is based on the parametric model developed for ADEME by Tide, Hub
 
 ## Objective
 
-This parametric model was developed to make available a simple quantitative framework useful in the evaluation of embedded environmental impacts of graphics cards. *Embedded* impacts are the impacts for raw materials extraction and transformation, manufacturing, distribution and end-of-life.
+This parametric model was developed to produce a simple quantitative framework useful for evaluating embedded environmental impacts of graphics cards. *Embedded* impacts are the impacts for raw materials extraction and transformation, manufacturing, distribution and end-of-life.
 
 Through the analysis of seven graphics cards performed during research (ADEME, 2026 ; Falk et al., 2025), we have been able to identify key parameters useful in sizing the environmental impacts of a given graphics card. These parameters can be found rather easily, without extensive data collection such as the one accomplished in our research.
 
@@ -39,57 +39,55 @@ The key parameters are detailed in the following table. Default parameters are s
 
 ### Manufacturing
 
-The cards manufacturing impacts equal the sums of the following components impacts.
+The cards' manufacturing impacts equal the sums of the following components impacts.
 
 #### Casing
 
-The casing impacts are the ratio of its weight to the average impact of all casings (by kilogram) from the cards analyzed during research. The casing impacts by kilogram are summarized in table 2.
+The casing's impacts are the ratio of its weight to the average impact of all casings (per kilogram) from the cards analyzed during research. The casing impacts per kilogram are summarized in table 2.
 
 #### Heatsink
 
-The heatsink impacts are the ratio of its weight to the average impact of all heatsinks (by kilogram) from the cards analyzed during research. On average, heatsink represents 53% of the card total weight. The heatsink impacts by kilogram are summarized in table 2.
+The heatsink's impacts are the ratio of its weight to the average impact of all heatsinks (per kilogram) from the cards analyzed during research. On average, heatsink represents 53% of the card total weight. The heatsink impacts per kilogram are summarized in table 2.
 
 #### Printed Wiring Board (PWB) without GPU and VRAM
 
-The PWB impacts, composed of electronic and digital components aside from the GPU and VRAM, are the ratio of its surface to the average impacts of all PWBs (by square centimeter) from the cards analyzed during research. The PWB impacts by square centimeter are summarized in table 2.
+The PWB's impacts, composed of electronic and digital components aside from the GPU and VRAM, are the ratio of its surface to the average impacts of all PWBs (per square centimeter) from the cards analyzed during research. The PWB impacts per square centimeter are summarized in table 2.
 
-#### GPU
+#### Graphics Processing Unit (GPU)
 
-The GPU impacts are the ratio of its surface to the average impacts of all GPUs (by square millimeter) from the cards analyzed during research, including losses. The total surface, including losses, is calculated from the surface of the chips provided as parameters.
-
+The GPU's impacts are the ratio of its surface to the average impacts of all GPUs (per square millimeter) from the cards analyzed during research, including losses. The total surface, including losses, is calculated from the surface of the chips provided as parameters.
 
 Semiconductor manufacturing is a complex process, even more so for the more advanced and larger chips.
 Losses occur on three occasions:
 - Wafer edge losses, where the dies are on the edge of the wafer and are therefore incomplete;
-- Kerf losses, due to the kerf width when cutting the dies;
+- Kerf losses, due to the kerf width when the kerf is cutting the dies;
 - Defect losses, such as dust, mistakes, etc.
 
-The whole accounting for losses result in the dies yield rate, according to their dimensions. Yield rate can be calculated according to different models, in the absence of primary data coming from the manufacturer.
+The whole accounting for losses result in the die yield rate, according to its dimensions. Yield rate can be calculated according to different models, in the absence of primary data coming from the manufacturer.
 
-In our model, losses are accounted through Murphy's model, with a defect rate of O.1/cm².
+In our model, losses are accounted through Murphy's model, with a defect rate of 0.1/cm².
 
 GPU impacts, per square centimeter and including losses, are summarized in table 2.
 
-#### VRAM
+#### Video RAM (VRAM)
 
-The VRAM impacts are the ratio of its surface to the average impacts of all VRAMs (by square millimeter) from the cards analyzed during research. The total surface, including losses, is calculated from the chips surface provided as parameters, in the same manner as detailed in the previous section related to GPUs. VRAM impacts, per square millimeter and including losses, are summarized in table 2.
+The VRAM's impacts are the ratio of its surface to the average impacts of all VRAMs (per square millimeter) from the cards analyzed during research. The total surface, including losses, is calculated from the chip's surface provided as parameters, in the same manner as detailed in the previous section related to GPUs. VRAM impacts, per square millimeter and including losses, are summarized in table 2.
 
 #### Upstream transport
 
-The upstream transport impacts, meaning the impacts of the different transport operations needed from the manufacturing process to the card assembly, are the ratio of its weight to the average impacts (by kilogram) of all cards analyzed during research. Upstream transport by kilogram are summarized in table 2.
+The upstream transport impacts, meaning the impacts of the different transport operations needed from the manufacturing process to the card assembly, are the ratio of its weight to the average impacts (per kilogram) of all cards analyzed during research. Upstream transport impacts per kilogram are summarized in table 2.
 
 #### Distribution
 
-The distribution impacts, from the assembly plant to the final destination, are the sum of impacts for transport by plane, by boat and by truck, based on a ratio kilogram / kilometer. The distribution impacts by kilogram / kilometer for each mean of transportation are documented in the [EIME database](https://www.cps.bureauveritas.com/electronics/services/innovation-digital-leadership/eco-design-software) and are summarized in table 2. The default parameters are a distance of 19.000 kilometers by plane and 1000 kilometers by truck.
-
+The distribution impacts, from the assembly plant to the final destination, are the sum of impacts calculated for transportation by plane, by boat and by truck, based on a ratio kilogram / kilometer. The distribution impacts per kilogram / kilometer for each mean of transportation are documented in the [EIME database](https://www.cps.bureauveritas.com/electronics/services/innovation-digital-leadership/eco-design-software) and are summarized in table 2. The default parameters are a distance of 19.000 kilometers by plane and 1000 kilometers by truck.
 
 #### Use
 
-Use impacts are not considered in our parametric model. They can nonetheless be evaluated by accounting the cards energy consumption across their life-cycle, along with the local energy mix. Electrical consumption can be established from the average consumption calculated through benchmarks or measures, or can be based on the card Thermal Design Power documented by the manufacturer.
+Use impacts are not considered in our parametric model. They can nonetheless be evaluated by accounting the card's energy consumption its life-cycle, along with the local energy mix. Electrical consumption can be established from the average consumption calculated through benchmarks or measures, or can be based on the card's Thermal Design Power documented by the manufacturer.
 
 #### End-of-life
 
-End-of-life impacts are the ratio of the card weight to the average impacts (by kilogram) of all cards analyzed during research. End-of-life impacts (by kilogram) are summarized in table 2.
+End-of-life impacts are the ratio of the card's weight to the average impacts (per kilogram) of all cards analyzed during research. End-of-life impacts (per kilogram) are summarized in table 2.
 
 |     Name                     |           Unit           |     PEF-AP (mol H+ eq.)    |     PEF-GWP (kg CO2 eq.)    |     PEF-CTUe (CTUe)    |     PEF-PM (Disease occurrence)    |     PEF-Epf (kg P eq.)    |     PEF-Epm (kg N eq.)    |     PEF-Ept (mol N eq.)    |     PEF-CTUh-c (CTUh)    |     PEF-CTUh-nc (CTUh)    |     PEF-IR (kBq U235 eq.)    |     PEF-LU (No dimension)    |     PEF-ODP (kg CFC-11 eq.)    |     PEF-POCP (kg NMVOC eq.)    |     PEF-ADPf (MJ)    |     PEF-ADPe (kg SB eq.)    |     PEF-WU (m3 eq.)    |
 |------------------------------|---------------------------|----------------------------|-----------------------------|------------------------|------------------------------------|---------------------------|---------------------------|----------------------------|--------------------------|---------------------------|------------------------------|------------------------------|--------------------------------|--------------------------------|----------------------|-----------------------------|------------------------|
