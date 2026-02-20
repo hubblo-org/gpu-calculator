@@ -1,15 +1,43 @@
 <script lang="ts">
+  import { VERSION } from "svelte/compiler";
   import Logo from "./Logo.svelte";
 </script>
 
 <header>
+  <div id="banner-container">
+    <div id="beta-banner">BETA</div>
+  </div>
   <div id="header-logo">
     <a class="logo" href="https://hubblo.org/en/" aria-label="Navigate to the Hubblo website">
       <Logo />
       <span>Hubblo</span>
     </a>
   </div>
-  <a id="contact" href="https://hubblo.org/en/contact/" class="btn btn-primary btn-sm"> Contact </a>
+  <div id="top-buttons">
+    <div id="documentation-top-btn">
+      <a
+              id="documentation"
+              href="https://data.hubblo.org/gpu/docs"
+              class="simple-link"
+      >
+        📖 Documentation
+      </a>
+    </div>
+    <div id="code-top-btn">
+      <a
+              id="code"
+              href="https://github.com/hubblo-org/gpu-calculator"
+              class="simple-link"
+      >
+        👩‍💻 Code
+      </a>
+    </div>
+    <div id="contact-top-btn">
+      <a id="contact" href="https://hubblo.org/en/contact/" class="simple-link">
+        ✉️ Contact
+      </a>
+    </div>
+  </div>
 </header>
 
 <style>
@@ -33,8 +61,34 @@
     border-inline: var(--border);
   }
 
-  #contact,
-  #contact:visited {
-    color: var(--color-white);
+  #banner-container {
+    width: 200px;
+    height: 200px;
+    margin: -26px;
+    position: absolute;
+    overflow: hidden;
+    z-index: -1;
+  }
+  #beta-banner {
+    width: 300px;
+    padding-top: 10px;
+    padding-right: 48px;
+    background-color: var(--color-secondary-30);
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: rotateZ(-45deg);
+    text-align: center;
+    transform-origin: 150px 180px;
+  }
+  @media (min-width: 480px) {
+    #banner-container {
+      margin: -32px;
+    }
+    #beta-banner {
+      padding: 6px;
+      padding-right: 12px;
+    }
   }
 </style>
