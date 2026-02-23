@@ -6,6 +6,7 @@
   import { Card } from "$lib/gpu/gpu.svelte";
   import Partners from "$lib/components/Partners.svelte";
   import Equivalents from "$lib/components/Equivalents.svelte";
+  import Results from "$lib/components/Results.svelte";
   import LicenceCite from "$lib/components/LicenceCite.svelte";
 
   const defaultCardName = "NVIDIA A100 PCIe 40GB";
@@ -17,6 +18,7 @@
 <div>
   <Introduction />
   <GpuSection {card} />
+  <Results {card} />
   <Equivalents {card} />
   <GpuPlotsSection {card} />
   <LicenceCite />

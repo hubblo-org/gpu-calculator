@@ -10,7 +10,7 @@
   <h2 id="equivalent-list">Equivalents</h2>
   <p>
     Equivalents in other products are given for several impact criteria for the computed graphics
-    card impacts across its life-cycle.
+    card impacts across its life-cycle (excluding use phase).
   </p>
   <div id="equivalence">
     <ul aria-labelledby="equivalent-list">
@@ -27,7 +27,6 @@
       </li>
       <li title="adpe">
         <p class="criterion">Depletion of mineral resources</p>
-
         <p><span class="symbol">Cu</span> {card.equivalents?.inCopper} kilograms of copper</p>
       </li>
     </ul>
