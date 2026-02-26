@@ -38,12 +38,12 @@ describe("equivalents component test suite", () => {
     expect(totalGwp).toBeVisible();
     expect(totalAdpf).toBeVisible();
 
-    expect(totalAdpf).toHaveTextContent(`Depletion of fossil resources ${card.totalsPerCriteria?.ADPf?.toFixed(2)} microjoules`);
+    expect(totalAdpf).toHaveTextContent(`Depletion of fossil resources ${Math.round(card.totalsPerCriteria?.ADPf!)} MJ`);
     expect(totalGwp).toHaveTextContent(
-      `Global warming potential ${card.totalsPerCriteria?.GWP?.toFixed(2)} kilograms CO² equivalent`
+      `Global warming potential ${Math.round(card.totalsPerCriteria?.GWP!)} kg CO²eq`
     );
     expect(totalAdpe).toHaveTextContent(
-      `Depletion of mineral resources ${card.totalsPerCriteria?.ADPe?.toFixed(5)} kilograms antimony equivalent`
+      `Depletion of mineral resources ${card.totalsPerCriteria?.ADPe?.toFixed(5)} kg SBeq`
     );
   });
 });

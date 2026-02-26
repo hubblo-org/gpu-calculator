@@ -34,18 +34,22 @@ describe("equivalents component test suite", () => {
       name: adpe
     });
 
+    const oilEquivalent = card.equivalents?.inCrudeOil;
+    const copperEquivalent = card.equivalents?.inCopper;
+    const kilometersEquivalent = card.equivalents?.inKilometersByCar;
+
     expect(shownEquivalentInOil).toBeVisible();
     expect(shownEquivalentInKilometers).toBeVisible();
     expect(shownEquivalentInCopper).toBeVisible();
 
     expect(shownEquivalentInOil).toHaveTextContent(
-      "Depletion of fossil resources 🛢 193 liters of crude oil"
+      `Depletion of fossil resources 🛢 ${oilEquivalent} liters of crude oil`
     );
     expect(shownEquivalentInKilometers).toHaveTextContent(
-      "Global warming potential 🚗 2166 kilometers traveled by car"
+      `Global warming potential 🚗 ${kilometersEquivalent} kilometers traveled by car`
     );
     expect(shownEquivalentInCopper).toHaveTextContent(
-      "Depletion of mineral resources Cu 3 kilograms of copper"
+      `Depletion of mineral resources Cu ${copperEquivalent} kilograms of copper`
     );
   });
 });
