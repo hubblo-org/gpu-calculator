@@ -69,8 +69,11 @@ export function computeDieSurface(chipSurface: number) {
 }
 
 function averageVramDieSurface() {
-  // Documented VRAM die surfaces in the JSON source file do not include losses
-  const cardsWithDocumentedVramDieSurface = Gpus.filter((card) => card.videoRamDieSurface);
+  // Documented VRAM die surfaces in the JSON source file do not include losses 
+  // and the source parametric model does not take GH200 into account
+  const cardsWithDocumentedVramDieSurface = Gpus.filter(
+    (card) => card.name != "NVIDIA GH200" && card.videoRamDieSurface
+  );
   const dieSurfaces = cardsWithDocumentedVramDieSurface.map((card) => {
     return (card.videoRamDieSurface! * card.videoRamDies) / card.videoRamCapacity;
   });
@@ -141,7 +144,7 @@ export function computeAverageModel(
         typeof newPwbValue === "number" && newPwbValue != 0 ? newPwbValue / card.cardSurface : 0;
       newGpuValue =
         typeof newGpuValue === "number" && newGpuValue != 0
-          ? newGpuValue / gpuSurfaceWithLosses 
+          ? newGpuValue / gpuSurfaceWithLosses
           : 0;
       newVramValue =
         card.videoRamDieSurface && typeof newVramValue === "number" && newVramValue != 0
@@ -266,9 +269,9 @@ export function computeImpacts(card: GraphicsCard): GraphicsCardImpactFactors {
   });
 
   const criteria = Object.values(ImpactCriterionAcronym).filter((criterion) => criterion != "CTUh");
-  const distanceByBoat = 19000;
+  const distanceByBoat = 0;
   const distanceByTruck = 1000;
-  const distanceByPlane = 0;
+  const distanceByPlane = 9908;
 
   criteria.forEach((criteria) => {
     const c = criteria as keyof ImpactFactors;

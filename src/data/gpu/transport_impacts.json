@@ -2,7 +2,7 @@
     "transport_truck": {
         "transport_mode": "transport_truck",
         "ADPe": 1.98e-12,
-        "ADPf": 0.000703,
+        "ADPf": 7.03e-4,
         "AP": 3.19e-07,
         "CTUe": 3.39e-05,
         "CTUh_c": 8.85e-16,
@@ -27,7 +27,7 @@
     "transport_boat": {
         "transport_mode": "transport_boat",
         "ADPe": 4.62e-13,
-        "ADPf": 0.000163,
+        "ADPf": 1.63e-4,
         "AP": 5.34e-07,
         "CTUe": 7.92e-06,
         "CTUh_c": 1.89e-16,
@@ -52,9 +52,9 @@
     "transport_plane": {
         "transport_mode": "transport_plane",
         "ADPe": 8.31e-11,
-        "ADPf": 0.0295,
-        "AP": 8.77e-06,
-        "CTUe": 0.00137,
+        "ADPf": 2.95e-2,
+        "AP": 8.77e-6,
+        "CTUe": 1.37e-3,
         "CTUh_c": 3.19e-14,
         "CTUh_nc": 1.67e-12,
         "Epf": 7.44e-10,
