@@ -1,5 +1,6 @@
 import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { formatString } from "../lib/utils";
 import AbsoluteValuesTables from "$lib/components/AbsoluteValuesTable.svelte";
 import Gpus from "../data/gpu/gpus.json";
 import GpusImpactFactors from "../data/gpu/gpus_impact_factors.json";
@@ -112,7 +113,8 @@ describe("absolute values table for planet boundaries test suite", () => {
   it("displays each value as cells of the table related to relevant column and row", () => {
     const table = screen.getByRole("table", { name: planetBoundariesCaption });
     rows.forEach((row) => {
-      const rowElement = within(table).getByRole("row", { name: row });
+      const expectedRowHeader = formatString(row);
+      const rowElement = within(table).getByRole("row", { name: expectedRowHeader });
       const cells = within(rowElement).getAllByRole("cell");
       criteria.forEach((criterion, index) => {
         const value = card.tidyRatiosPerPlanetBoundary!.filter(
