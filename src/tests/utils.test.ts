@@ -44,5 +44,15 @@ describe("string formatting test suite", () => {
     const expectedLcStep = "Manufacturing";
     const resultLcStep = formatString(lcStep);
     expect(resultLcStep).toEqual(expectedLcStep);
+
+    const vramComponent = "video_ram";
+    const expectedVram = "Video RAM";
+    const resultVram = formatString(vramComponent);
+    expect(resultVram).toEqual(expectedVram);
+
+    const gpuComponent = "graphics_processing_unit";
+    const expectedComponent = "Graphics processing unit";
+    const resultComponent = formatString(gpuComponent);
+    expect(resultComponent).toEqual(expectedComponent);
   });
 });

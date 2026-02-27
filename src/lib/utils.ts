@@ -85,11 +85,42 @@ function replaceFirstLetter(match: string) {
   return match.toUpperCase();
 }
 
-export function formatString(value: string) {
+function isUppercased(value: string): boolean {
   if (value[0].match(/[A-Z]/)?.length == 1) {
-    return value;
+    return true;
   } else {
-    const result = value.replace(/[A-Z]/g, replaceUppercase).replace(/[^]/, replaceFirstLetter);
-    return result;
+    return false;
+  }
+}
+
+function isGpuComponent(value: string): boolean {
+  if (value.includes("_")) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function formatGpuComponent(value: string): string {
+  const gpuComponent = value
+    .replaceAll(/[_]/g, " ")
+    .replace("ram", "RAM")
+    .replace(/[^]/, replaceFirstLetter);
+  return gpuComponent;
+}
+
+function formatDefault(value: string): string {
+  const result = value.replace(/[A-Z]/g, replaceUppercase).replace(/[^]/, replaceFirstLetter);
+  return result;
+}
+
+export function formatString(value: string) {
+  switch (true) {
+    case isUppercased(value):
+      return value;
+    case isGpuComponent(value):
+      return formatGpuComponent(value);
+    default:
+      return formatDefault(value);
   }
 }
