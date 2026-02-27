@@ -7,21 +7,30 @@ import type {
   TidyRatio
 } from "$lib/types/gpu.d.ts";
 
-import { LifeCycleSteps } from "$lib/types/enums";
+import { LifeCycleSteps, ImpactFactorsSource, ImpactCriterionAcronym } from "$lib/types/enums";
 import GraphicsCards from "../../data/gpu/gpus.json";
 import GraphicsCardsImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 
 import { renderHorizontalBarPlot, renderStackedBarPlot } from "$lib/plots";
+import { isNotMipsOrDeee } from "$lib/utils";
 import {
   computeImpacts,
   computeTotalsPerCriteria,
   computeTotalsPerLifeCycleStep,
   tidy,
   tidyTotals,
-  tidyPlanetBoundaries
+  tidyPlanetBoundaries,
+  computeEquivalent
 } from "./calculations";
 
+interface Equivalents {
+  inCrudeOil: number;
+  inKilometersByCar: number;
+  inCopper: number;
+}
 export class Card {
+  name = $state<string>();
+  source = $state<ImpactFactorsSource>();
   impactFactors = $state<GraphicsCardImpactFactors>();
   totalsPerLifeCycleStep = $state<GraphicsCardLifeCycle>();
   totalsPerCriteria = $state<ImpactFactors>();
@@ -30,30 +39,24 @@ export class Card {
   tidyTotals = $state<TidyImpactFactor[]>();
   tidyRatiosPerPlanetBoundary = $state<TidyRatio[]>();
   parameters = $state<GraphicsCard>();
+  equivalents = $state<Equivalents>();
 
-  constructor(card: GraphicsCard, cardImpactFactors: GraphicsCardImpactFactors) {
+  constructor(card: GraphicsCard) {
     this.parameters = card;
-    this.impactFactors = cardImpactFactors;
+    this.name = this.parameters.name;
+    this.source = this.parameters.impactFactorsSource as ImpactFactorsSource;
+    this.impactFactors = computeImpacts(this.parameters);
     this.tidyImpactFactors = tidy(this.impactFactors);
     this.totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(this.impactFactors);
     this.totalsPerCriteria = computeTotalsPerCriteria(this.totalsPerLifeCycleStep);
     this.tidyTotals = tidyTotals(this.totalsPerLifeCycleStep);
     this.tidyRatiosPerPlanetBoundary = tidyPlanetBoundaries(this.totalsPerCriteria);
+    this.equivalents = this.computeEquivalents();
   }
 
   selectDocumentedCard(cardName: string) {
     const selectedCard = GraphicsCards.filter((gc) => gc.name === cardName)[0];
-    const selectedCardImpactFactors = GraphicsCardsImpactFactors.filter(
-      (impacts) => impacts.graphics_card === cardName
-    )[0];
-
     this.parameters = selectedCard;
-    this.impactFactors = selectedCardImpactFactors;
-    this.tidyImpactFactors = tidy(this.impactFactors);
-    this.totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(this.impactFactors);
-    this.totalsPerCriteria = computeTotalsPerCriteria(this.totalsPerLifeCycleStep);
-    this.tidyTotals = tidyTotals(this.totalsPerLifeCycleStep);
-    this.tidyRatiosPerPlanetBoundary = tidyPlanetBoundaries(this.totalsPerCriteria);
   }
 
   new() {
@@ -63,50 +66,68 @@ export class Card {
       casingWeight: 0,
       heatsinkWeight: 0,
       cardSurface: 0,
-      videoRamSize: 0,
+      videoRamCapacity: 0,
       videoRamDies: 0,
       videoRamDieSurface: 0,
-      gpuSurface: 0
+      gpuSurface: 0,
+      impactFactorsSource: ImpactFactorsSource.ParametricModel
     };
     this.parameters = customCard;
   }
 
-  updateImpactFactors() {
-    const customCardImpactFactors = computeImpacts(this.parameters!);
-    this.impactFactors = customCardImpactFactors;
-    this.tidyImpactFactors = tidy(customCardImpactFactors);
+  computeEquivalents(): Equivalents {
+    const equivalents = {
+      inCrudeOil: computeEquivalent(ImpactCriterionAcronym.ADPf, this.totalsPerCriteria?.ADPf!),
+      inKilometersByCar: computeEquivalent(
+        ImpactCriterionAcronym.GWP,
+        this.totalsPerCriteria?.GWP!
+      ),
+      inCopper: computeEquivalent(ImpactCriterionAcronym.ADPe, this.totalsPerCriteria?.ADPe!)
+    };
+    return equivalents;
+  }
+  updateImpactFactors(cardName: string) {
+    const newCardImpactFactors = computeImpacts(this.parameters!);
+    this.name = cardName;
+    this.source = this.parameters?.impactFactorsSource as ImpactFactorsSource;
+    this.impactFactors = newCardImpactFactors;
+    this.tidyImpactFactors = tidy(newCardImpactFactors);
     this.totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(this.impactFactors);
     this.totalsPerCriteria = computeTotalsPerCriteria(this.totalsPerLifeCycleStep);
     this.tidyTotals = tidyTotals(this.totalsPerLifeCycleStep);
     this.tidyRatiosPerPlanetBoundary = tidyPlanetBoundaries(this.totalsPerCriteria);
+    this.equivalents = this.computeEquivalents();
   }
 
-  updatePlotPerCriteria() {
-    const lcSteps = Object.values(LifeCycleSteps).filter((lcstep) => typeof lcstep === "string");
+  updatePlotPerLifeCycleStep() {
+    const lcSteps = Object.values(LifeCycleSteps).filter((lcstep) => typeof lcstep === "string").filter((lcstep) => lcstep != "Use");
     const source = "criteria";
+
+    const filteredImpactFactors = this.tidyTotals!.filter(isNotMipsOrDeee);
+
     renderStackedBarPlot(
       source,
       1000,
       600,
-      this.tidyTotals!,
+      filteredImpactFactors!,
       lcSteps,
       "impactCriterion",
       "value",
       "lifeCycleStep"
     );
   }
-  updatePlotPerLifeCycleStep(selectedLifeCycleStep: string) {
+
+  updatePlotPerComponent() {
     const source = "perlcstep";
+
     const components = Object.keys(this.impactFactors!.components).filter(
-      (component) => component != "transport_boat" || "transport_truck"
+      (component) => component.includes("transport_") === false
     );
-    const filteredImpactFactors = this.tidyImpactFactors?.filter((impact) => {
-      const lcStep =
-        selectedLifeCycleStep === LifeCycleSteps.EndOfLife
-          ? "endoflife"
-          : selectedLifeCycleStep.toLowerCase();
-      return impact.lifeCycleStep === lcStep;
-    });
+
+    const filteredImpactFactors = this.tidyImpactFactors
+      ?.filter((impact) => impact.lifeCycleStep === "manufacturing")
+      .filter(isNotMipsOrDeee);
+
     renderStackedBarPlot(
       source,
       1000,
@@ -118,28 +139,17 @@ export class Card {
       "component"
     );
   }
-  updatePlotPerPlanetBoundary(selectedFormat: string) {
+
+  updatePlotPerPlanetBoundary() {
     const source = "planetboundary";
-    if (selectedFormat === "By number of inhabitants") {
-      renderHorizontalBarPlot(
-        source,
-        1000,
-        600,
-        this.tidyRatiosPerPlanetBoundary!,
-        "ratioNumber",
-        "impactCriterion",
-        false
-      );
-    } else if (selectedFormat === "By percentage") {
-      renderHorizontalBarPlot(
-        source,
-        1000,
-        600,
-        this.tidyRatiosPerPlanetBoundary!,
-        "ratioPercentage",
-        "impactCriterion",
-        false
-      );
-    }
+    renderHorizontalBarPlot(
+      source,
+      1000,
+      600,
+      this.tidyRatiosPerPlanetBoundary!,
+      "ratioPercentage",
+      "impactCriterion",
+      false
+    );
   }
 }

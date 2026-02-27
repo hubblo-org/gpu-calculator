@@ -1,82 +1,111 @@
 <script lang="ts">
-  import type {
-    ImpactCriteria,
-    ImpactFactorShare,
-    Leaf,
-    Node,
-    SectionText
-  } from "$lib/types/pcr-cloud";
-  import { Graph, InventoryCategories, LifeCycleSteps } from "$lib/types/enums";
-  import { downloadToCSV } from "$lib/utils";
+  import type { TidyImpactFactor, TidyRatio } from "$lib/types/gpu";
+  import { downloadToCSV, formatString } from "$lib/utils";
 
   interface Props {
-    displayedCriteria: ImpactCriteria[];
-    impactCriterionValues: ImpactCriteria;
-    source: string;
-    selectedGraph: string;
-    sectionTexts: SectionText;
-    groupedImpacts?: ImpactFactorShare[][];
-    treemapImpacts?: Node;
+    data: TidyImpactFactor[] | TidyRatio[];
+    caption: string;
+    columns: string[];
+    rows: string[];
+    keyColumn: string;
+    keyRow?: string;
+    firstColumnName?: string;
   }
 
-  const {
-    displayedCriteria,
-    groupedImpacts,
-    impactCriterionValues,
-    source,
-    selectedGraph,
-    sectionTexts,
-    treemapImpacts
-  }: Props = $props();
+  const { caption, columns, rows, keyColumn, keyRow, data, firstColumnName }: Props = $props();
 
-  const lifeCycleSteps = Object.values(LifeCycleSteps);
-  const inventoryCategories = Object.values(InventoryCategories).filter(
-    (category) => category != "Energy backup"
-  );
-  const tableId = `${source}-table`;
+  const tableId = "absolute-values-table";
+  const firstColumnTitle = keyRow ? keyRow : firstColumnName;
+
+  function isTidyImpact(obj: any): obj is TidyImpactFactor {
+    if ("value" in obj) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function isTidyRatio(obj: any): obj is TidyRatio {
+    if ("ratioPercentage" in obj) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function appendCells() {
+    if (isTidyImpact(data[0])) {
+      rows.forEach((row) => {
+        columns.forEach((column, index) => {
+          const value = data
+            .filter(
+              (datum: TidyImpactFactor) =>
+                datum[keyColumn as keyof TidyImpactFactor] === column &&
+                datum[keyRow as keyof TidyImpactFactor] === row
+            )[0]
+            .value.toExponential(2);
+          const rowId = `${row}-header`;
+          const rowElement: HTMLTableRowElement = document.getElementById(
+            rowId
+          ) as HTMLTableRowElement;
+          rowElement!.insertCell(index + 1).innerText = value;
+        });
+      });
+    } else if (isTidyRatio(data[0])) {
+      rows.forEach((row) => {
+        columns.forEach((column, index) => {
+          const value = data.filter((datum: TidyRatio) => datum[keyColumn] === column)[0][row];
+          const rowId = `${row}-header`;
+          const rowElement: HTMLTableRowElement = document.getElementById(rowId);
+          if (row === "ratioPercentage") {
+            rowElement!.insertCell(index + 1).innerText = value.toFixed(2);
+          } else {
+            rowElement!.insertCell(index + 1).innerText = value.toExponential(2);
+          }
+        });
+      });
+    }
+  }
+
+  $effect(() => {
+    appendCells();
+  });
 </script>
 
-<div class="absolute-values-table" id={tableId}>
-  {#if selectedGraph === Graph.BarPlot}
+<details>
+  <summary>Show absolute values table</summary>
+  <div id={tableId}>
     <table>
-      <caption>{sectionTexts!.tableCaption}</caption><thead
-        ><tr
-          ><th>Impact criterion</th>{#each lifeCycleSteps as lifeCycleStep}<th>{lifeCycleStep}</th
-            >{/each}<th>Unit</th></tr
+      <caption id="table-caption">{caption}</caption><thead>
+        <tr
+          ><th scope="col">{formatString(firstColumnTitle as string)}</th
+          >{#each columns as column}<th scope="col" id="{column}-header">{column}</th>{/each}</tr
         ></thead
       >
       <tbody>
-        {#each displayedCriteria! as impactCriterion}<tr
-            ><th scope="row">{impactCriterion.acronym}</th>
-            {#each groupedImpacts! as impacts}{#each impacts as impact}{#if impact.impactCriterion === impactCriterion.acronym}<td
-                    >{(impact as ImpactFactorShare).share}</td
-                  >{/if}{/each}{/each}<td>{impactCriterion.unit}</td>
-          </tr>{/each}
+        {#each rows as row}<tr id="{row}-header"><th scope="row">{formatString(row)}</th></tr>{/each}
       </tbody>
     </table>
-  {/if}
-  {#if selectedGraph === Graph.Treemap}
-    <table>
-      <caption>{sectionTexts!.tableCaption}</caption><thead
-        ><tr
-          ><th>Inventory category</th>{#each lifeCycleSteps as lifeCycleStep}<th>{lifeCycleStep}</th
-            >{/each}<th>Unit</th></tr
-        ></thead
-      >
-      <tbody
-        >{#each inventoryCategories as category}<tr
-            ><th scope="row">{category}</th
-            >{#each treemapImpacts!.children as Array<Node> as impacts}{#each impacts.children as Array<Leaf> as impact}{#if (impact as Leaf).category === category.toLowerCase()}<td
-                    >{impact.value}</td
-                  >{/if}{/each}
-            {/each}<td>{impactCriterionValues.unit}</td></tr
-          >{/each}</tbody
-      >
-    </table>
-  {/if}
-  <button
-    class="btn-download"
-    aria-label="Download data in CSV format"
-    onclick={() => downloadToCSV(tableId)}>csv</button
-  >
-</div>
+
+    <button
+      class="btn-download"
+      aria-label="Download data in CSV format"
+      onclick={() => downloadToCSV(tableId)}>csv</button
+    >
+  </div>
+</details>
+
+<style>
+  #absolute-values-table {
+    display: flex;
+    flex-direction: column;
+    width: 1200px;
+  }
+  #absolute-values-table table {
+    display: flow;
+    overflow-x: auto;
+  }
+  #absolute-values-table button {
+    margin-left: auto;
+  }
+</style>

@@ -2,28 +2,23 @@ import { cleanup, render, screen, within } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import userEvent from "@testing-library/user-event";
 import GpuPlotsSection from "$lib/components/GpuPlotsSection.svelte";
-import { LifeCycleSteps, Scopes } from "$lib/types/enums";
+import { Scopes } from "$lib/types/enums";
 import Gpus from "../../data/gpu/gpus.json";
-import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 import { Card } from "$lib/gpu/gpu.svelte";
 
-const defaultCard = Gpus.filter((gpu) => gpu.name === "NVIDIA H100 PCIe 80GB")[0];
-const defaultCardImpactFactors = GpusImpactFactors.filter(
-  (impacts) => impacts.graphics_card === "NVIDIA H100 PCIe 80GB"
-)[0];
+const defaultCard = Gpus.filter((gpu) => gpu.name === "NVIDIA A100 PCIe 40GB")[0];
 
-const card = new Card(defaultCard, defaultCardImpactFactors);
+const card = new Card(defaultCard);
 
 const gpuPlotsSectionName = "Graphics card impact factors";
 const gpuSelectionLabel = "Display impact factors by:";
 const gpuSelectionOptions = Object.values(Scopes).filter((scope) => typeof scope === "string");
-const lifeCycleSelectionLabel = "Select life cycle step:";
-const lifeCycleSteps = Object.values(LifeCycleSteps).filter((step) => typeof step === "string");
 
 describe("graphics card data visualization static elements test suite", () => {
   beforeEach(() => render(GpuPlotsSection, { props: { card } }));
   afterEach(() => cleanup());
-  it("displays a selection between a bar plot showing every criteria, and a bar plot for a specific life cycle step", () => {
+
+  it("displays a selection between a bar plot for each criteria by life cycle step, a bar plot for each criteria by component, and a bar plot for each criteria related to planet boundaries", () => {
     const gpuPlotsSection = screen.getByRole("region", { name: gpuPlotsSectionName });
     const graphSelection = within(gpuPlotsSection).getByLabelText(gpuSelectionLabel);
 
@@ -34,38 +29,30 @@ describe("graphics card data visualization static elements test suite", () => {
   });
 
   it("displays the name of the graphics card", () => {
+    const graphicsCardHeading = `${card.name} (${card.parameters?.impactFactorsSource})`;
     const gpuPlotsSection = screen.getByRole("region", { name: gpuPlotsSectionName });
     const graphicsCardName = within(gpuPlotsSection).getByRole("heading", {
-      name: card.parameters!.name
+      name: graphicsCardHeading
     });
     expect(graphicsCardName).toBeVisible();
   });
+
 });
 
 describe("graphics card data visualization dynamic elements test suite", () => {
   beforeEach(() => render(GpuPlotsSection, { props: { card } }));
   afterEach(() => cleanup());
 
-  it("displays a selection between the different life cycle steps when the user has selected a display by life cycle step", async () => {
+  it("displays a title for the plot showing manufacturing impact factors by component", async () => {
     const user = userEvent.setup();
     const gpuPlotsSection = screen.getByRole("region", { name: gpuPlotsSectionName });
+
     const graphSelection = within(gpuPlotsSection).getByLabelText(gpuSelectionLabel);
-
-    await user.selectOptions(graphSelection, Scopes.LifeCycleStep);
-
-    const defaultTitle = within(gpuPlotsSection).getByRole("heading", { name: /Manufacturing/i });
-    expect(defaultTitle).toBeVisible();
-
-    const lifeCycleStepsSelection = within(gpuPlotsSection).getByLabelText(lifeCycleSelectionLabel);
-
-    lifeCycleSteps.forEach(async (lcstep) => {
-      await user.selectOptions(lifeCycleStepsSelection, lcstep);
-
-      const updatedTitle = await within(gpuPlotsSection).findByRole("heading", {
-        name: (content) => content.includes(lcstep)
-      });
-      expect(updatedTitle).toBeVisible();
+    await user.selectOptions(graphSelection, Scopes.Component);
+    const title = within(gpuPlotsSection).getByRole("heading", {
+      name: "Manufacturing impact factors by component"
     });
+    expect(title).toBeVisible();
   });
 
   it("displays a title for the plot showing impact factors related to planet boundaries", async () => {
@@ -79,18 +66,5 @@ describe("graphics card data visualization dynamic elements test suite", () => {
       name: "Graphics card impact factors related to planet boundaries"
     });
     expect(title).toBeVisible();
-  });
-
-  it("displays a selection between absolute value and percentage for displaying impact factors related to planet boundaries", async () => {
-    const user = userEvent.setup();
-    const gpuPlotsSection = screen.getByRole("region", { name: gpuPlotsSectionName });
-
-    const graphSelection = within(gpuPlotsSection).getByLabelText(gpuSelectionLabel);
-    await user.selectOptions(graphSelection, Scopes.PlanetBoundary);
-
-    const options = ["By number of inhabitants", "By percentage"];
-    options.forEach(async (option) => {
-      expect(await within(graphSelection).findByRole("option", { name: option })).toBeVisible();
-    });
   });
 });

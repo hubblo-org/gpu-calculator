@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { LifeCycleSteps, Scopes } from "$lib/types/enums";
+  import { Scopes } from "$lib/types/enums";
   import { Card } from "$lib/gpu/gpu.svelte";
+  import AbsoluteValuesTable from "./AbsoluteValuesTable.svelte";
 
   interface Props {
     card: InstanceType<typeof Card>;
@@ -9,67 +10,107 @@
   const { card }: Props = $props();
 
   const options = Object.values(Scopes).filter((scope) => typeof scope === "string");
-  const lifeCycleSteps = Object.values(LifeCycleSteps).filter((step) => typeof step === "string");
 
-  const planetBoundaryFormats = ["By number of inhabitants", "By percentage"];
+  let selectedScope = $state(Scopes.LifeCycleStep);
 
-  let selectedScope = $state(Scopes.Criteria);
-  let selectedLifeCycleStep = $state(LifeCycleSteps.Manufacturing);
-  let selectedFormat = $state(planetBoundaryFormats[0]);
+  // Recreate table on user selection of graphics card
+  let updateTable = $derived(card.name);
 
-  function switchSelectedScope() {
-    if (selectedScope === Scopes.LifeCycleStep) {
-      selectedScope = Scopes.Criteria;
-    } else if (selectedScope === Scopes.Criteria) {
-      selectedScope = Scopes.LifeCycleStep;
-    }
-  }
-
-  function switchFormat() {
-    if (selectedFormat === planetBoundaryFormats[0]) {
-      selectedFormat = planetBoundaryFormats[1];
-    } else if (selectedFormat === planetBoundaryFormats[1]) {
-      selectedFormat = planetBoundaryFormats[0];
-    }
-  }
+  const criteria = $derived([...new Set(card.tidyTotals!.map((total) => total.impactCriterion))]);
+  const criteriaPlanetBoundaries = $derived([
+    ...new Set(card.tidyRatiosPerPlanetBoundary!.map((ratio) => ratio.impactCriterion))
+  ]);
+  const lifeCycleSteps = $derived([
+    ...new Set(card.tidyTotals!.map((total) => total.lifeCycleStep))
+  ]);
+  const components = $derived(
+    [...new Set(card.tidyImpactFactors!.map((impactFactor) => impactFactor.component))].filter(
+      (component) => component!.includes("transport_") === false
+    )
+  );
+  const manufacturingImpactFactors = $derived(
+    card.tidyImpactFactors!.filter((impactFactor) => impactFactor.lifeCycleStep === "manufacturing")
+  );
 
   $effect(() => {
-    if (selectedScope === Scopes.Criteria) {
-      card.updatePlotPerCriteria();
-    } else if (selectedScope === Scopes.LifeCycleStep) {
-      card.updatePlotPerLifeCycleStep(selectedLifeCycleStep);
+    if (selectedScope === Scopes.LifeCycleStep) {
+      card.updatePlotPerLifeCycleStep();
+    } else if (selectedScope === Scopes.Component) {
+      card.updatePlotPerComponent();
     } else if (selectedScope === Scopes.PlanetBoundary) {
-      card.updatePlotPerPlanetBoundary(selectedFormat);
+      card.updatePlotPerPlanetBoundary();
     }
   });
 </script>
 
 <section aria-labelledby="gpu-plots-section">
-  <h2>{card.parameters!.name}</h2>
+  <h2>{card.name} ({card.source})</h2>
   <label for="gpu-plots-selection">Display impact factors by:</label>
-  <select bind:value={selectedScope} id="gpu-plots-selection" onselect={switchSelectedScope}
+  <select bind:value={selectedScope} id="gpu-plots-selection"
     >{#each options as option}<option>{option}</option>{/each}</select
   >
-  {#if selectedScope === Scopes.Criteria}
+  {#if selectedScope === Scopes.LifeCycleStep}
     <h3 id="gpu-plots-section">Graphics card impact factors</h3>
+    <p>
+      This plot shows the graphics card impacts by life cycle phase (excluding use) for all impact
+      criteria.
+    </p>
+
     <div id="impact-factors-plot-criteria"></div>
+
+    {#key updateTable}
+      <AbsoluteValuesTable
+        caption={`${card.name} impact factors per life cycle step, absolute values`}
+        columns={criteria}
+        rows={lifeCycleSteps}
+        keyColumn="impactCriterion"
+        keyRow="lifeCycleStep"
+        data={card.tidyTotals!}
+      />
+    {/key}
   {/if}
 
-  {#if selectedScope === Scopes.LifeCycleStep}
-    <h3>{selectedLifeCycleStep} impact factors by component</h3>
-    <label for="life-cycle-step-selection">Select life cycle step:</label>
-    <select bind:value={selectedLifeCycleStep} id="life-cycle-step-selection"
-      >{#each lifeCycleSteps as step}<option>{step}</option>{/each}</select
-    >
+  {#if selectedScope === Scopes.Component}
+    <h3>Manufacturing impact factors by component</h3>
+    <p>
+      This plot shows the graphics card impacts by component, only for the manufacturing phase
+      (including raw material extraction), for all impact criteria. Upstream transport corresponds
+      to transport between the different stages of manufacturing.
+    </p>
     <div id="impact-factors-plot-perlcstep"></div>
+
+    {#key updateTable}
+      <AbsoluteValuesTable
+        caption={`${card.name} manufacturing impact factors per component, absolute values`}
+        columns={criteria}
+        rows={components}
+        keyColumn="impactCriterion"
+        keyRow="component"
+        data={manufacturingImpactFactors}
+      />
+    {/key}
   {/if}
 
   {#if selectedScope === Scopes.PlanetBoundary}
     <h3 id="gpu-plots-section">Graphics card impact factors related to planet boundaries</h3>
-
-    <select bind:value={selectedFormat} id="planet-boundary-selection" onselect={switchFormat}
-      >{#each planetBoundaryFormats as format}<option>{format}</option>{/each}</select
-    >
+    <p>
+      This plot shows the graphics card impacts (excluding use) in relation to planetary boundaries
+      per capita. The values can be read as the share of a sustainable human's annual budget for
+      each impact criterion.
+    </p>
     <div id="impact-factors-plot-planetboundary"></div>
+
+    {#key updateTable}
+      <AbsoluteValuesTable
+        caption={`${card.name} impact factors related to planet boundaries, absolute values`}
+        columns={criteriaPlanetBoundaries}
+        rows={Object.keys(card.tidyRatiosPerPlanetBoundary![0]).filter(
+          (key) => key != "impactCriterion"
+        )}
+        keyColumn="impactCriterion"
+        firstColumnName="Values"
+        data={card.tidyRatiosPerPlanetBoundary!}
+      />
+    {/key}
   {/if}
 </section>

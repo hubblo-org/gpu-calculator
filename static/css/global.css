@@ -153,6 +153,11 @@ select {
   font: inherit;
 }
 
+label {
+  width: 100%;
+  margin-bottom: 4px;
+}
+
 main {
   position: relative;
 }
@@ -194,12 +199,16 @@ section header {
 }
 
 section header h2,
-p {
+section header p {
   padding-left: 24px;
 }
 
 section header p {
   color: var(--color-gray-500);
+}
+
+a span {
+  color: var(--color-primary);
 }
 
 table {
@@ -302,11 +311,15 @@ tr:nth-child(even) {
 .logo {
   display: flex;
   column-gap: 0.5rem;
-  font-size: 1.4375rem;
-  font-weight: 500;
   height: var(--space-32);
   margin-left: auto;
+  width: 120px;
+}
+
+.logo span {
+  font-size: 1.4375rem;
   color: var(--color-headings);
+  font-weight: 500;
 }
 
 .options {
@@ -332,16 +345,28 @@ tr:nth-child(even) {
   height: 15px;
 }
 
+.plot {
+  margin: auto;
+}
+
 .plot text {
   margin-left: 12px;
 }
 
 .plot-swatches {
   font-family: var(--main-font-family);
+  position: relative;
+}
+
+.plot-swatches .logo {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .plot-swatch {
   font-size: 1.1rem;
+  flex-basis: 40%;
 }
 
 .swatch::before {
@@ -352,49 +377,38 @@ tr:nth-child(even) {
   background: var(--color);
 }
 
-.toggletip-container .toggletip-bubble {
-  position: absolute;
-  z-index: 1;
-  right: 30%;
-  width: 300px;
-  background-color: var(--color-secondary-opaque);
-  padding: 12px;
+
+.simple-link {
+  display: inline-flex;
+  border-style: none;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75em 1em 0.8em;
+  text-align: center;
+  text-decoration: none;
+  font-size: var(--text-md);
+  font-weight: 500;
+  border-radius: var(--rounded-xl);
+  cursor: pointer;
+  user-select: none;
 }
 
-.toggletip-container {
-  margin-left: auto;
-}
 
-.toggletip-container button {
-  border-radius: var(--rounded-sm);
-  appearance: none;
-  background-color: var(--color-secondary-30);
-  border: var(--border);
-  margin: initial;
-}
-
-.toggletip-bubble {
-  border: var(--border);
-  border-radius: 0% var(--rounded-xl) var(--rounded-xl);
-  color: var(--color-gray-700);
+#top-buttons {
   display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }
 
-.toggletip-bubble button {
-  max-height: 24px;
+#community-top-btn,
+#documentation-top-btn,
+#contact-top-btn,
+#code-top-btn {
+  margin-right: 10px;
 }
 
-.treemap-wrapper {
-  display: flex;
-  flex-direction: column;
-  margin-top: 12px;
-}
 
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
+
 
 ::selection {
   background: var(--color-secondary-30, Highlight);
@@ -415,7 +429,7 @@ tr:nth-child(even) {
     max-height: 2.25rem;
   }
 
-  .field:last-child .label-wrapper .toggletip-container .toggletip-bubble {
+  .field:last-child .label-wrapper  {
     left: initial;
     right: 100%;
     top: -110%;
@@ -429,16 +443,6 @@ tr:nth-child(even) {
     font-size: initial;
   }
 
-  .toggletip-container {
-    position: relative;
-    display: inline-block;
-  }
-
-  .toggletip-container .toggletip-bubble {
-    right: initial;
-    left: 100%;
-    top: 0;
-  }
 }
 
 @media (hover: hover) {

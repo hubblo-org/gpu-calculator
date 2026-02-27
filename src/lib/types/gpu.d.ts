@@ -10,6 +10,7 @@ export declare type TidyRatio = {
   impactCriterion: string;
   ratioNumber: number;
   ratioPercentage: number;
+  planetBoundaryValue: number;
 };
 
 export declare type GraphicsCard = {
@@ -18,10 +19,11 @@ export declare type GraphicsCard = {
   casingWeight: number;
   heatsinkWeight: number;
   cardSurface: number;
-  videoRamSize: number;
+  videoRamCapacity: number;
   videoRamDies: number;
   videoRamDieSurface?: number;
   gpuSurface: number;
+  impactFactorsSource: string;
 };
 
 export declare type GraphicsCardComponents = {
@@ -32,9 +34,9 @@ export declare type GraphicsCardComponents = {
   video_ram: UnorderedImpactFactors;
   upstream_transport: UnorderedImpactFactors;
   end_of_life: UnorderedImpactFactors;
-  transport_boat?: UnorderedImpactFactors;
-  transport_truck?: UnorderedImpactFactors;
-  transport_plane?: UnorderedImpactFactors;
+  transport_boat?: UnorderedImpactFactors | ImpactFactors;
+  transport_truck?: UnorderedImpactFactors | ImpactFactors;
+  transport_plane?: UnorderedImpactFactors | ImpactFactors;
 };
 
 export declare type GraphicsCardImpactFactors = {

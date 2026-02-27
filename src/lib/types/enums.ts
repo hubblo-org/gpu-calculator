@@ -1,10 +1,14 @@
-import type {
-  ImpactCriteria,
-} from "./gpu";
+import type { ImpactCriteria } from "./gpu";
+
+export enum ImpactFactorsSource {
+  LCASimple = "Life-cycle assessment, simple",
+  LCAComplete = "Life-cycle assessment, complete",
+  ParametricModel = "Parametric model"
+}
 
 export enum Scopes {
-  Criteria = "Criteria",
   LifeCycleStep = "Life cycle step",
+  Component = "Component",
   PlanetBoundary = "Planet boundary"
 }
 
@@ -13,6 +17,16 @@ export enum LifeCycleSteps {
   Transport = "Transport",
   Use = "Use",
   EndOfLife = "End-of-life"
+}
+
+export enum Components {
+  Casing = "casing",
+  Heatsink = "heatsink",
+  PWB = "printed_wiring_board",
+  GPU = "graphics_processing_unit",
+  VRAM = "video_ram",
+  Transport = "upstream_transport",
+  EndOfLife = "end_of_life"
 }
 
 const humanPopulation = 8e9;
@@ -71,9 +85,9 @@ export enum ImpactCriterionAcronym {
   CTUh = "CTUh",
   CTUh_c = "CTUh_c",
   CTUh_nc = "CTUh_nc",
-  EPF = "EPF",
-  EPM = "EPM",
-  EPT = "EPT",
+  EPF = "Epf",
+  EPM = "Epm",
+  EPT = "Ept",
   GWP = "GWP",
   GWPb = "GWPb",
   GWPf = "GWPf",
@@ -269,6 +283,44 @@ export function getImpactCriterion(acronym: ImpactCriterionAcronym): ImpactCrite
       return ImpactCriterion.TotalPrimaryEnergy;
     case ImpactCriterionAcronym.WU:
       return ImpactCriterion.WaterUse;
+  }
+}
+
+export function getPlanetBoundary(acronym: ImpactCriterionAcronym): PlanetBoundaries {
+  switch (acronym) {
+    case ImpactCriterionAcronym.ADPe:
+      return PlanetBoundaries.AbioticDepletionPotentialElements;
+    case ImpactCriterionAcronym.ADPf:
+      return PlanetBoundaries.AbioticDepletionPotentialFossilFuels;
+    case ImpactCriterionAcronym.AP:
+      return PlanetBoundaries.AcidificationPotential;
+    case ImpactCriterionAcronym.CTUe:
+      return PlanetBoundaries.ComparativeToxicityUnitsForEcosystems;
+    case ImpactCriterionAcronym.CTUh_c:
+      return PlanetBoundaries.ComparativeToxicityUnitsForHumansCarcinogenic;
+    case ImpactCriterionAcronym.CTUh_nc:
+      return PlanetBoundaries.ComparativeToxicityUnitsForHumansNonCarcinogenic;
+    case ImpactCriterionAcronym.EPF:
+      return PlanetBoundaries.EutrophicationPotentialFreshWater;
+    case ImpactCriterionAcronym.EPM:
+      return PlanetBoundaries.EutrophicationPotentialMarine;
+    case ImpactCriterionAcronym.EPT:
+      return PlanetBoundaries.EutrophicationPotentialTerrestrial;
+    case ImpactCriterionAcronym.GWP:
+      return PlanetBoundaries.GlobalWarmingPotential;
+    case ImpactCriterionAcronym.IR:
+      return PlanetBoundaries.IonisingRadiation;
+    case ImpactCriterionAcronym.LU:
+    case ImpactCriterionAcronym.ODP:
+      return PlanetBoundaries.OzoneDepletionPotential;
+    case ImpactCriterionAcronym.PM:
+      return PlanetBoundaries.ParticulateMatter;
+    case ImpactCriterionAcronym.POCP:
+      return PlanetBoundaries.PhotochemicalOzoneFormationPotential;
+    case ImpactCriterionAcronym.WU:
+      return PlanetBoundaries.WaterUse;
+    default:
+      throw new Error("Unknown acronym!");
   }
 }
 

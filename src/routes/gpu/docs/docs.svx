@@ -1,0 +1,113 @@
+# Methodology
+
+## Introduction
+
+The calculator is based on the parametric model developed for ADEME by Tide, Hubblo, and TND as part of research published in 2025 (Falk et al., 2025). The model is the result of extensive data collection, including the dismantling of a dozen graphics cards and a dozen elemental analyses. The following references give more detail on the data collected in question.
+
+- [ADEME report](TBD)
+- [Research paper](https://arxiv.org/abs/2509.00093)
+
+## Objective
+
+This parametric model was developed to produce a simple quantitative framework useful for evaluating embedded environmental impacts of graphics cards. *Embedded* impacts are the impacts for raw materials extraction and transformation, manufacturing, distribution and end-of-life.
+
+Through the analysis of seven graphics cards performed during research (ADEME, 2026 ; Falk et al., 2025), we have been able to identify key parameters useful in sizing the environmental impacts of a given graphics card. These parameters can be found rather easily, without extensive data collection such as the one accomplished in our research.
+
+The upstream impacts (raw material extraction and transformation, manufacturing) are sized to the scale of a component, in order to distinguish their discrete characteristics. Transport and end-of-life impacts are sized to the scale of a whole card, given that these steps are linked to the assembled graphics card.
+
+The methodology and data are detailed in the following sections.
+
+## Parameters
+
+The key parameters are detailed in the following table. Default parameters are suggested when data is not publicly available.
+
+|      Parameter                          |     Default value                                |     Note                                                             |
+|-----------------------------------------|--------------------------------------------------|----------------------------------------------------------------------|
+|     Card weight                         |     This should be public                        |     Usually documented in product information                        |
+|     Heatsink weight share               |     53%                                          |                                                                      |
+|     Electronic card surface             |     Graphics card surface                        |                                                                      |
+|     Video memory capacity (VRAM)        |     This should be public                        |     Usually found in https://www.techpowerup.com/                    |
+|     Number of VRAM dies                 |     This should be public                        |     Usually found in https://www.techpowerup.com/                    |
+|     GPU chip surface                    |     This should be public                        |     Usually found in https://www.techpowerup.com/                    |
+|     Travel distance - plane             |     19,000 km                                    |     Distance between Shenzhen and Paris                              |
+|     Travel distance - truck             |     1,000 km                                     |     Default inland distance                                          |
+|     Travel distance - boat              |     0 km                                         |                                                                      |
+
+**Table 1:** Model parameters 
+
+## Model by component
+
+### Manufacturing
+
+The cards' manufacturing impacts equal the sums of the following components impacts.
+
+#### Casing
+
+The casing's impacts are the ratio of its weight to the average impact of all casings (per kilogram) from the cards analyzed during research. The casing impacts per kilogram are summarized in table 2.
+
+#### Heatsink
+
+The heatsink's impacts are the ratio of its weight to the average impact of all heatsinks (per kilogram) from the cards analyzed during research. On average, heatsink represents 53% of the card total weight. The heatsink impacts per kilogram are summarized in table 2.
+
+#### Printed Wiring Board (PWB) without GPU and VRAM
+
+The PWB's impacts, composed of electronic and digital components aside from the GPU and VRAM, are the ratio of its surface to the average impacts of all PWBs (per square centimeter) from the cards analyzed during research. The PWB impacts per square centimeter are summarized in table 2.
+
+#### Graphics Processing Unit (GPU)
+
+The GPU's impacts are the ratio of its surface to the average impacts of all GPUs (per square millimeter) from the cards analyzed during research, including losses. The total surface, including losses, is calculated from the surface of the chips provided as parameters.
+
+Semiconductor manufacturing is a complex process, even more so for the more advanced and larger chips.
+Losses occur on three occasions:
+- Wafer edge losses, where the dies are on the edge of the wafer and are therefore incomplete;
+- Kerf losses, due to the kerf width when the kerf is cutting the dies;
+- Defect losses, such as dust, mistakes, etc.
+
+The whole accounting for losses result in the die yield rate, according to its dimensions. Yield rate can be calculated according to different models, in the absence of primary data coming from the manufacturer.
+
+In our model, losses are accounted through Murphy's model, with a defect rate of 0.1/cm².
+
+GPU impacts, per square centimeter and including losses, are summarized in table 2.
+
+#### Video RAM (VRAM)
+
+The VRAM's impacts are the ratio of its surface to the average impacts of all VRAMs (per square millimeter) from the cards analyzed during research. The total surface, including losses, is calculated from the chip's surface provided as parameters, in the same manner as detailed in the previous section related to GPUs. VRAM impacts, per square millimeter and including losses, are summarized in table 2.
+
+#### Upstream transport
+
+The upstream transport impacts, meaning the impacts of the different transport operations needed from the manufacturing process to the card assembly, are the ratio of its weight to the average impacts (per kilogram) of all cards analyzed during research. Upstream transport impacts per kilogram are summarized in table 2.
+
+#### Distribution
+
+The distribution impacts, from the assembly plant to the final destination, are the sum of impacts calculated for transportation by plane, by boat and by truck, based on a ratio kilogram / kilometer. The distribution impacts per kilogram / kilometer for each mean of transportation are documented in the [EIME database](https://www.cps.bureauveritas.com/electronics/services/innovation-digital-leadership/eco-design-software) and are summarized in table 2. The default parameters are a distance of 19.000 kilometers by plane and 1000 kilometers by truck.
+
+#### Use
+
+Use impacts are not considered in our parametric model. They can nonetheless be evaluated by accounting the card's energy consumption its life-cycle, along with the local energy mix. Electrical consumption can be established from the average consumption calculated through benchmarks or measures, or can be based on the card's Thermal Design Power documented by the manufacturer.
+
+#### End-of-life
+
+End-of-life impacts are the ratio of the card's weight to the average impacts (per kilogram) of all cards analyzed during research. End-of-life impacts (per kilogram) are summarized in table 2.
+
+|     Name                     |           Unit           |     PEF-AP (mol H+ eq.)    |     PEF-GWP (kg CO2 eq.)    |     PEF-CTUe (CTUe)    |     PEF-PM (Disease occurrence)    |     PEF-Epf (kg P eq.)    |     PEF-Epm (kg N eq.)    |     PEF-Ept (mol N eq.)    |     PEF-CTUh-c (CTUh)    |     PEF-CTUh-nc (CTUh)    |     PEF-IR (kBq U235 eq.)    |     PEF-LU (No dimension)    |     PEF-ODP (kg CFC-11 eq.)    |     PEF-POCP (kg NMVOC eq.)    |     PEF-ADPf (MJ)    |     PEF-ADPe (kg SB eq.)    |     PEF-WU (m3 eq.)    |
+|------------------------------|---------------------------|----------------------------|-----------------------------|------------------------|------------------------------------|---------------------------|---------------------------|----------------------------|--------------------------|---------------------------|------------------------------|------------------------------|--------------------------------|--------------------------------|----------------------|-----------------------------|------------------------|
+|     Casing                  |     1 kilogram        |     5,96E-02               |     8,25E+00                |     4,09E+02           |     3,74E-07                       |     3,90E-05              |     6,62E-03              |     7,24E-02               |     3,47E-08             |     3,22E-06              |     4,78E+00                 |     5,07E-01                 |     1,26E-06                   |     2,51E-02                   |     2,43E+02         |     4,08E-04                |     3,89E+00           |
+|     Heatsink                |     1 kilogram      |     2,18E-01               |     5,74E+00                |     4,20E+02           |     1,36E-06                       |     1,50E-03              |     5,22E-03              |     6,04E-02               |     2,15E-05             |     2,78E-06              |     3,25E+02                 |     3,54E+00                 |     1,15E-06                   |     2,99E-02                   |     8,50E+01         |     1,87E-03                |     1,05E+01           |
+|     PCB                      |     1 square centimeter          |     3,16E-04               |     3,25E-02                |     5,24E-01           |     1,70E-09                       |     1,21E-07              |     2,45E-05              |     2,64E-04               |     4,22E-09             |     1,69E-09              |     9,69E-02                 |     1,39E-04                 |     4,80E-09                   |     9,71E-05                   |     5,10E-01         |     1,27E-05                |     1,62E-02           |
+|     GPU                      |     1 square millimeter     |     2,35E-04               |     4,26E-02                |     5,44E-01           |     1,30E-09                       |     1,33E-07              |     2,83E-05              |     2,94E-04               |     9,72E-12             |     2,32E-10              |     4,60E-04                 |     1,70E-04                 |     1,86E-08                   |     9,25E-05                   |     5,56E-01         |     1,55E-08                |     1,48E-02           |
+|     VRAM                     |     1 square millimeter    |     1,01E-03               |     1,84E-01                |     2,35E+00           |     5,59E-09                       |     5,72E-07              |     1,22E-04              |     1,27E-03               |     1,72E-11             |     9,95E-10              |     1,54E-03                 |     7,31E-04                 |     8,01E-08                   |     3,99E-04                   |     2,40E+00         |     5,07E-09                |     7,08E-02           |
+|     Upstream transport          |     1 kilogram          |     1,73E-03               |     2,60E-01                |     1,75E-01           |     1,50E-08                       |     9,71E-08              |     8,16E-04              |     8,96E-03               |     4,63E-12             |     5,73E-10              |     6,31E-04                 |     0,00E+00                 |     3,97E-10                   |     2,27E-03                   |     3,61E+00         |     1,02E-08                |     9,84E-04           |
+|     Transport - truck       |     1 kg.km               |     3,19E-07               |     5,04E-05                |     3,39E-05           |     2,59E-12                       |     1,89E-11              |     1,50E-07              |     1,64E-06               |     8,85E-16             |     9,58E-14              |     1,23E-07                 |     0,00E+00                 |     7,72E-14                   |     4,14E-07                   |     7,03E-04         |     1,98E-12                |     1,91E-07           |
+|     Transport - boat       |     1 kg.km               |     5,34E-07               |     1,33E-05                |     7,92E-06           |     2,76E-12                       |     4,46E-12              |     1,22E-07              |     1,34E-06               |     1,89E-16             |     4,28E-14              |     2,63E-08                 |     0,00E+00                 |     1,65E-14                   |     3,45E-07                   |     1,63E-04         |     4,62E-13                |     4,20E-08           |
+|     Transport - plane        |     1 kg.km               |     8,77E-06               |     2,11E-03                |     1,37E-03           |     5,44E-11                       |     7,44E-10              |     3,95E-06              |     4,32E-05               |     3,19E-14             |     1,67E-12              |     3,89E-06                 |     0,00E+00                 |     2,44E-12                   |     1,06E-05                   |     2,95E-02         |     8,31E-11                |     8,38E-06           |
+|     End-of-life               |     1 kilogram          |     3,17E-02               |     1,51E+00                |     7,62E+02           |     9,63E-08                       |     3,11E-05              |     2,11E-02              |     1,47E-02               |     5,89E-09             |     2,33E-07              |     1,23E-01                 |     6,74E+00                 |     1,39E-07                   |     5,37E-03                   |     1,95E+01         |     3,71E-06                |     7,30E+02           |
+
+**Table 2:** Average impact factors by component 
+
+<style>
+
+a {
+  color: var(--color-primary);
+}
+
+</style>

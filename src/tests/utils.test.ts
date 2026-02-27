@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { convertTableToCSV } from "$lib/utils";
+import { convertTableToCSV, formatString } from "$lib/utils";
 
 describe("data conversion and downloading test suite", () => {
   function createTableInDOM() {
@@ -26,5 +26,33 @@ describe("data conversion and downloading test suite", () => {
 
     expect(columns).toEqual(expectedColumns);
     expect(rowsLength).toEqual(expectedRowsLength);
+  });
+});
+
+describe("string formatting test suite", () => {
+  it("formats a given string to the expected word group", () => {
+    const string = "lifeCycleStep";
+
+    const expectedResult = "Life cycle step";
+
+    const result = formatString(string);
+
+    expect(result).toEqual(expectedResult);
+
+    const lcStep = "Manufacturing";
+
+    const expectedLcStep = "Manufacturing";
+    const resultLcStep = formatString(lcStep);
+    expect(resultLcStep).toEqual(expectedLcStep);
+
+    const vramComponent = "video_ram";
+    const expectedVram = "Video RAM";
+    const resultVram = formatString(vramComponent);
+    expect(resultVram).toEqual(expectedVram);
+
+    const gpuComponent = "graphics_processing_unit";
+    const expectedComponent = "Graphics processing unit";
+    const resultComponent = formatString(gpuComponent);
+    expect(resultComponent).toEqual(expectedComponent);
   });
 });

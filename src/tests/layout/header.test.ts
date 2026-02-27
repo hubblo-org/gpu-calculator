@@ -1,4 +1,4 @@
-import { cleanup, render, screen, within } from "@testing-library/svelte";
+import { cleanup, render, screen } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import Header from "$lib/components/Header.svelte";
 
@@ -14,8 +14,19 @@ describe("header component test suite", () => {
     expect(hubbloLink).toBeVisible();
   });
 
-  it("should display a contact button", () => {
-    const contactButton = screen.getByRole("link", { name: "Contact" });
-    expect(contactButton).toBeVisible();
+  it("should display links to the documentation, the repository and to the contact form", () => {
+    const documentationLink = screen.getByRole("link", {
+      name: "Navigate to the calculator documentation page"
+    });
+
+    const repositoryLink = screen.getByRole("link", {
+      name: "Navigate to the calculator code repository"
+    });
+
+    const contactLink = screen.getByRole("link", { name: "Navigate to the Hubblo contact form" });
+
+    expect(documentationLink).toBeVisible();
+    expect(repositoryLink).toBeVisible();
+    expect(contactLink).toBeVisible();
   });
 });

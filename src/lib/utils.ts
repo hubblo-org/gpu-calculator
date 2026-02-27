@@ -1,4 +1,6 @@
 import html2canvas from "html2canvas";
+import type { TidyImpactFactor } from "./types/gpu";
+import { ImpactCriterionAcronym } from "./types/enums.ts";
 
 export function convertTableToCSV(table: HTMLTableElement) {
   const rows = Array.from(table.getElementsByTagName("tr"));
@@ -64,4 +66,61 @@ export function isNotExcludedCriterion(value: string) {
     return false;
   }
   return true;
+}
+
+export function isNotMipsOrDeee(value: TidyImpactFactor) {
+  if (value.impactCriterion === ImpactCriterionAcronym.MIPS || value.impactCriterion === "DEEE") {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+function replaceUppercase(match: string) {
+  const lowercase = match.toLowerCase();
+  return ` ${lowercase}`;
+}
+
+function replaceFirstLetter(match: string) {
+  return match.toUpperCase();
+}
+
+function isUppercased(value: string): boolean {
+  if (value[0].match(/[A-Z]/)?.length == 1) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function isGpuComponent(value: string): boolean {
+  if (value.includes("_")) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function formatGpuComponent(value: string): string {
+  const gpuComponent = value
+    .replaceAll(/[_]/g, " ")
+    .replace("ram", "RAM")
+    .replace(/[^]/, replaceFirstLetter);
+  return gpuComponent;
+}
+
+function formatDefault(value: string): string {
+  const result = value.replace(/[A-Z]/g, replaceUppercase).replace(/[^]/, replaceFirstLetter);
+  return result;
+}
+
+export function formatString(value: string) {
+  switch (true) {
+    case isUppercased(value):
+      return value;
+    case isGpuComponent(value):
+      return formatGpuComponent(value);
+    default:
+      return formatDefault(value);
+  }
 }

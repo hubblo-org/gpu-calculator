@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { VERSION } from "svelte/compiler";
   import Logo from "./Logo.svelte";
 </script>
 
@@ -12,7 +13,35 @@
       <span>Hubblo</span>
     </a>
   </div>
-  <a id="contact" href="https://hubblo.org/en/contact/" class="btn btn-primary btn-sm"> Contact </a>
+  <div id="top-buttons">
+    <div id="documentation-top-btn">
+      <a
+        href="https://data.hubblo.org/gpu/docs"
+        class="simple-link"
+        aria-label="Navigate to the calculator documentation page"
+      >
+        📖 Documentation
+      </a>
+    </div>
+    <div id="code-top-btn">
+      <a
+        href="https://github.com/hubblo-org/gpu-calculator"
+        class="simple-link"
+        aria-label="Navigate to the calculator code repository"
+      >
+        👩‍💻 Code
+      </a>
+    </div>
+    <div id="contact-top-btn">
+      <a
+        href="https://hubblo.org/en/contact/"
+        class="simple-link"
+        aria-label="Navigate to the Hubblo contact form"
+      >
+        ✉️ Contact
+      </a>
+    </div>
+  </div>
 </header>
 
 <style>
@@ -34,11 +63,6 @@
     justify-content: space-between;
     border-bottom: var(--border);
     border-inline: var(--border);
-  }
-
-  #contact,
-  #contact:visited {
-    color: var(--color-white);
   }
 
   #banner-container {

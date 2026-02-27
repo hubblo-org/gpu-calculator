@@ -1,7 +1,7 @@
 import type { Data } from "@observablehq/plot";
 import type { TidyImpactFactor, TidyRatio } from "./types/gpu";
 import { select } from "d3";
-import { axisX, axisY, barX, dot, plot, ruleX, ruleY } from "@observablehq/plot";
+import { axisX, axisY, barX, dot, plot, pointerY, ruleX, ruleY, tip } from "@observablehq/plot";
 
 interface Axes {
   x: string;
@@ -42,24 +42,28 @@ export function renderHorizontalBarPlot(
 
     const barMarks = [
       ruleX([0]),
-      axisX({ tickSpacing: 100 }),
-      axisY({ labelAnchor: "top" }),
+      axisX({ fontSize: 16, tickSpacing: 100, marginBottom: 50 }),
+      axisY({ fontSize: 16, labelAnchor: "top" }),
       barX(impactFactors, {
         x: xLabel,
         y: yLabel,
         fill: xLabel,
-        tip: { format: { y: (d) => `${d.replace("\n", " ")}` }, lineWidth: 100 },
         sort: { y: "x", order: "descending" }
-      })
+      }),
+      tip(impactFactors, pointerY({ x: xLabel, y: yLabel, channels: { Ratio: "ratioNumber" } }))
     ];
     const barPlot = plot({
       width: width,
       height: height,
+      className: "plot",
+      color: { scheme: "Reds" },
       style: { overflow: "visible" },
       y: { grid: true, label: "Criterion" },
-      x: { label: "Ratio" },
+      x: { label: "Percentage (%)" },
       marks: lollipop ? lollipopMarks : barMarks
     });
+
+    addLogo(`#impact-factors-plot-${source}`);
     div.append(barPlot);
   }
 }
@@ -67,10 +71,21 @@ export function renderHorizontalBarPlot(
 function addLogo(nodeId: string) {
   // When a legend is created with the generated plot, a figure element is added to the selected div.
   // The first child is then the div with the legend elements.
-  const logoDiv = select(nodeId).select("figure").select("div").append("div").attr("class", "logo");
+  const figure = select(nodeId).select("figure");
+  if (!figure.empty()) {
+    const logoDiv = select(nodeId)
+      .select("figure")
+      .select("div")
+      .append("div")
+      .attr("class", "logo");
 
-  logoDiv.append("img").attr("src", "/media/logo.svg");
-  logoDiv.append("span").text("Hubblo").attr("class", "logo");
+    logoDiv.append("img").attr("src", "/media/logo.svg");
+    logoDiv.append("span").text("Hubblo");
+  } else {
+    const logoDiv = select(nodeId).append("div").attr("class", "logo");
+    logoDiv.append("img").attr("src", "/media/logo.svg");
+    logoDiv.append("span").text("Hubblo");
+  }
 }
 
 export function renderStackedBarPlot(
@@ -91,11 +106,12 @@ export function renderStackedBarPlot(
       width: width,
       height: height,
       className: "plot",
-      color: { legend: "swatches", domain: domains },
+      color: { legend: "swatches", domain: domains, scheme: "Observable10" },
+      style: { overflow: "visible" },
       x: { percent: true },
       marks: [
-        axisY({ fontSize: 12, label: null, marginLeft: 60 }),
-        axisX({ marginBottom: 48, label: "Value (%)" }),
+        axisY({ fontSize: 16, label: null, marginLeft: 50 }),
+        axisX({ fontSize: 16, marginBottom: 50, label: "Value (%)" }),
         barX(impactFactors as Data, {
           y: yLabel,
           x: xLabel,
