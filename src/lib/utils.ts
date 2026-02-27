@@ -1,6 +1,6 @@
 import html2canvas from "html2canvas";
 import type { TidyImpactFactor } from "./types/gpu";
-import { ImpactCriterionAcronym } from "./types/enums";
+import { ImpactCriterionAcronym } from "./types/enums.ts";
 
 export function convertTableToCSV(table: HTMLTableElement) {
   const rows = Array.from(table.getElementsByTagName("tr"));
@@ -73,5 +73,23 @@ export function isNotMipsOrDeee(value: TidyImpactFactor) {
     return false;
   } else {
     return true;
+  }
+}
+
+function replaceUppercase(match: string) {
+  const lowercase = match.toLowerCase();
+  return ` ${lowercase}`;
+}
+
+function replaceFirstLetter(match: string) {
+  return match.toUpperCase();
+}
+
+export function formatString(value: string) {
+  if (value[0].match(/[A-Z]/)?.length == 1) {
+    return value;
+  } else {
+    const result = value.replace(/[A-Z]/g, replaceUppercase).replace(/[^]/, replaceFirstLetter);
+    return result;
   }
 }

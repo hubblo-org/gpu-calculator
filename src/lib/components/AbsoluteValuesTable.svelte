@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { TidyImpactFactor, TidyRatio } from "$lib/types/gpu";
-  import { downloadToCSV } from "$lib/utils";
+  import { downloadToCSV, formatString } from "$lib/utils";
 
   interface Props {
     data: TidyImpactFactor[] | TidyRatio[];
@@ -78,14 +78,12 @@
     <table>
       <caption id="table-caption">{caption}</caption><thead>
         <tr
-          ><th scope="col">{firstColumnTitle}</th>{#each columns as column}<th
-              scope="col"
-              id="{column}-header">{column}</th
-            >{/each}</tr
+          ><th scope="col">{formatString(firstColumnTitle as string)}</th
+          >{#each columns as column}<th scope="col" id="{column}-header">{column}</th>{/each}</tr
         ></thead
       >
       <tbody>
-        {#each rows as row}<tr id="{row}-header"><th scope="row">{row}</th></tr>{/each}
+        {#each rows as row}<tr id="{row}-header"><th scope="row">{formatString(row)}</th></tr>{/each}
       </tbody>
     </table>
 
