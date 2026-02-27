@@ -1,12 +1,8 @@
 <script lang="ts">
-  import { VERSION } from "svelte/compiler";
   import Logo from "./Logo.svelte";
 </script>
 
 <header>
-  <div id="banner-container">
-    <div id="beta-banner">BETA</div>
-  </div>
   <div id="header-logo">
     <a class="logo" href="https://hubblo.org/en/" aria-label="Navigate to the Hubblo website">
       <Logo />
@@ -63,36 +59,5 @@
     justify-content: space-between;
     border-bottom: var(--border);
     border-inline: var(--border);
-  }
-
-  #banner-container {
-    width: 200px;
-    height: 200px;
-    margin: -26px;
-    position: absolute;
-    overflow: hidden;
-    z-index: -1;
-  }
-  #beta-banner {
-    width: 300px;
-    padding-top: 10px;
-    padding-right: 48px;
-    background-color: var(--color-secondary-30);
-    box-sizing: border-box;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: rotateZ(-45deg);
-    text-align: center;
-    transform-origin: 150px 180px;
-  }
-  @media (min-width: 480px) {
-    #banner-container {
-      margin: -32px;
-    }
-    #beta-banner {
-      padding: 6px;
-      padding-right: 12px;
-    }
   }
 </style>
