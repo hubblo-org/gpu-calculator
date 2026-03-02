@@ -10,7 +10,16 @@
     </a>
   </div>
   <div id="top-buttons">
-    <div id="documentation-top-btn">
+    <div class="top-button">
+      <a
+        href="https://data.hubblo.org/gpu"
+        class="simple-link"
+        aria-label="Navigate to the calculator page"
+      >
+        🧮 Calculator
+      </a>
+    </div>
+    <div class="top-button">
       <a
         href="https://data.hubblo.org/gpu/docs"
         class="simple-link"
@@ -19,7 +28,7 @@
         📖 Documentation
       </a>
     </div>
-    <div id="code-top-btn">
+    <div class="top-button">
       <a
         href="https://github.com/hubblo-org/gpu-calculator"
         class="simple-link"
@@ -28,7 +37,7 @@
         👩‍💻 Code
       </a>
     </div>
-    <div id="contact-top-btn">
+    <div class="top-button">
       <a
         href="https://hubblo.org/en/contact/"
         class="simple-link"

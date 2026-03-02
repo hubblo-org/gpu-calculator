@@ -393,22 +393,15 @@ tr:nth-child(even) {
   user-select: none;
 }
 
+.top-button {
+  margin-right: 10px;
+}
 
 #top-buttons {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
 }
-
-#community-top-btn,
-#documentation-top-btn,
-#contact-top-btn,
-#code-top-btn {
-  margin-right: 10px;
-}
-
-
-
 
 ::selection {
   background: var(--color-secondary-30, Highlight);
