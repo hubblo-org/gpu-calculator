@@ -14,7 +14,11 @@ describe("header component test suite", () => {
     expect(hubbloLink).toBeVisible();
   });
 
-  it("should display links to the documentation, the repository and to the contact form", () => {
+  it("should display links to the calculator, the documentation, the repository and to the contact form", () => {
+    const calculatorLink = screen.getByRole("link", {
+      name: "Navigate to the calculator page"
+    });
+
     const documentationLink = screen.getByRole("link", {
       name: "Navigate to the calculator documentation page"
     });
@@ -25,6 +29,7 @@ describe("header component test suite", () => {
 
     const contactLink = screen.getByRole("link", { name: "Navigate to the Hubblo contact form" });
 
+    expect(calculatorLink).toBeVisible();
     expect(documentationLink).toBeVisible();
     expect(repositoryLink).toBeVisible();
     expect(contactLink).toBeVisible();
