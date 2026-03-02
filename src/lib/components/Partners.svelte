@@ -35,6 +35,6 @@
   #logos img {
     margin-right: 30px;
     min-width: 120px;
-    max-height: 120px;
+    max-height: 100px;
   }
 </style>
