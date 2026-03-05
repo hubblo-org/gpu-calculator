@@ -24,12 +24,14 @@
     ...new Set(card.tidyTotals!.map((total) => total.lifeCycleStep))
   ]);
   const components = $derived(
-    [...new Set(card.tidyImpactFactors!.map((impactFactor) => impactFactor.component))].filter(
-      (component) => component!.includes("transport_") === false
-    )
+    [...new Set(card.tidyImpactFactors!.map((impactFactor) => impactFactor.component))]
+      .filter((component) => component!.includes("transport_") === false && component != "end_of_life")
   );
   const manufacturingImpactFactors = $derived(
-    card.tidyImpactFactors!.filter((impactFactor) => impactFactor.lifeCycleStep === "manufacturing")
+    card.tidyImpactFactors!.filter(
+      (impactFactor) =>
+        impactFactor.lifeCycleStep === "manufacturing" && impactFactor.component != "end_of_life"
+    )
   );
 
   $effect(() => {

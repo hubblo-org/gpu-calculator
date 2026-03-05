@@ -100,7 +100,9 @@ export class Card {
   }
 
   updatePlotPerLifeCycleStep() {
-    const lcSteps = Object.values(LifeCycleSteps).filter((lcstep) => typeof lcstep === "string").filter((lcstep) => lcstep != "Use");
+    const lcSteps = Object.values(LifeCycleSteps)
+      .filter((lcstep) => typeof lcstep === "string")
+      .filter((lcstep) => lcstep != "Use");
     const source = "criteria";
 
     const filteredImpactFactors = this.tidyTotals!.filter(isNotMipsOrDeee);
@@ -120,9 +122,9 @@ export class Card {
   updatePlotPerComponent() {
     const source = "perlcstep";
 
-    const components = Object.keys(this.impactFactors!.components).filter(
-      (component) => component.includes("transport_") === false
-    );
+    const components = Object.keys(this.impactFactors!.components)
+      .filter((component) => component.includes("transport_") === false)
+      .filter((component) => component != "end_of_life");
 
     const filteredImpactFactors = this.tidyImpactFactors
       ?.filter((impact) => impact.lifeCycleStep === "manufacturing")
