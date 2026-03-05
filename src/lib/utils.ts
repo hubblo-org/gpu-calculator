@@ -68,8 +68,12 @@ export function isNotExcludedCriterion(value: string) {
   return true;
 }
 
-export function isNotMipsOrDeee(value: TidyImpactFactor) {
-  if (value.impactCriterion === ImpactCriterionAcronym.MIPS || value.impactCriterion === "DEEE") {
+export function isNotMipsDeeeOrCtuh(value: TidyImpactFactor) {
+  if (
+    value.impactCriterion === ImpactCriterionAcronym.MIPS ||
+    value.impactCriterion === ImpactCriterionAcronym.DEEE ||
+    value.impactCriterion === ImpactCriterionAcronym.CTUh
+  ) {
     return false;
   } else {
     return true;

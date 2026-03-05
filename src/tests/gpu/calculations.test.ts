@@ -10,7 +10,8 @@ import {
   tidyTotals,
   computePlanetBoundaries,
   computeYieldPercentage,
-  computeEquivalent
+  computeEquivalent,
+  tidyTotalsPerComponent
 } from "$lib/gpu/calculations";
 import type {
   GraphicsCard,
@@ -301,6 +302,7 @@ describe("graphics card calculator utilitary methods test suite", () => {
       Math.round(testCardImpacts.components.graphics_processing_unit.manufacturing_GWP!)
     ).toBeCloseTo(1.22e2);
     expect(testCardImpacts.components.upstream_transport.manufacturing_GWP!).toBeCloseTo(4.41e-1);
+    expect(testCardImpacts.components.end_of_life.end_of_life_GWP!).toBeCloseTo(2.5);
     expect(testCardImpacts.components.end_of_life.manufacturing_GWP!).toBeCloseTo(0.0);
     expect(testCardImpacts.components.heatsink.manufacturing_Epm!).toBeCloseTo(4.7e-3);
     expect(testCardImpacts.components.casing.manufacturing_Epm!).toBeCloseTo(4.99e-3);
@@ -311,6 +313,7 @@ describe("graphics card calculator utilitary methods test suite", () => {
     );
     expect(testCardImpacts.components.upstream_transport.manufacturing_Epm!).toBeCloseTo(1.39e-3);
     expect(testCardImpacts.components.end_of_life.manufacturing_Epm!).toBeCloseTo(0.0);
+    expect(testCardImpacts.components.end_of_life.end_of_life_Epm!).toBeCloseTo(3.57e-2);
 
     expect((testCardImpacts.components.transport_boat! as ImpactFactors).ADPe).toBeCloseTo(0);
     expect((testCardImpacts.components.transport_truck! as ImpactFactors).ADPe).toBeCloseTo(
@@ -320,12 +323,10 @@ describe("graphics card calculator utilitary methods test suite", () => {
       1.39e-6
     );
     expect((testCardImpacts.components.transport_boat! as ImpactFactors).ADPf).toBeCloseTo(0);
-    expect((testCardImpacts.components.transport_truck! as ImpactFactors).ADPf).toBeCloseTo(
-      1.19e0 
-    );
-    expect(Math.round((testCardImpacts.components.transport_plane! as ImpactFactors).ADPf)).toBeCloseTo(
-      4.94e2 
-    );
+    expect((testCardImpacts.components.transport_truck! as ImpactFactors).ADPf).toBeCloseTo(1.19);
+    expect(
+      Math.round((testCardImpacts.components.transport_plane! as ImpactFactors).ADPf)
+    ).toBeCloseTo(4.94e2);
   });
 
   it("computes the total for each life cycle step for each impact criteria", () => {
@@ -360,7 +361,9 @@ describe("graphics card calculator utilitary methods test suite", () => {
     const totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(testCardImpacts);
     const totalsPerCriteria = computeTotalsPerCriteria(totalsPerLifeCycleStep);
 
-    expect(totalsPerCriteria.ADPe).toBeCloseTo(5.83e-3);
+    expect(totalsPerCriteria.ADPe).toBeCloseTo(8.95e-3);
+    expect(Math.round(totalsPerCriteria.ADPf)).toBeCloseTo(3.721e3);
+    expect(totalsPerCriteria.AP).toBeCloseTo(1.75);
   });
 
   it("returns a tidy data format for impact factors with columns for life cycle step and graphics card component", () => {
@@ -377,6 +380,22 @@ describe("graphics card calculator utilitary methods test suite", () => {
     expect(tidyImpactFactors[lastIndex].lifeCycleStep).toEqual("endoflife");
     expect(tidyImpactFactors[lastIndex].impactCriterion).toEqual("TPE");
     expect(tidyImpactFactors[lastIndex].value).toBeCloseTo(3.67e1, 1);
+  });
+
+  it("returns a tidy data format for impact factors with columns for impact criteria total and graphics card component", () => {
+    const testCardImpacts = computeImpacts(testCard);
+    const tidyImpactFactors = tidy(testCardImpacts);
+    const tidyImpactFactorsPerComponent = tidyTotalsPerComponent(tidyImpactFactors);
+
+    const lastIndex = tidyImpactFactorsPerComponent.length - 1;
+
+    console.log(tidyImpactFactorsPerComponent);
+    expect(tidyImpactFactorsPerComponent[0].component).toEqual("casing");
+    expect(tidyImpactFactorsPerComponent[0].impactCriterion).toEqual("ADPe");
+    expect(tidyImpactFactorsPerComponent[0].value).toBeCloseTo(3.91e-4);
+    expect(tidyImpactFactorsPerComponent[lastIndex].component).toEqual("end_of_life");
+    expect(tidyImpactFactorsPerComponent[lastIndex].impactCriterion).toEqual("WU");
+    expect(Math.round(tidyImpactFactorsPerComponent[lastIndex].value)).toBeCloseTo(1.187e3, 1);
   });
 
   it("returns a tidy data format for impact factors totals with columns for life cycle step and impact criterion", () => {
@@ -400,11 +419,11 @@ describe("graphics card calculator utilitary methods test suite", () => {
 
     expect(planetBoundariesFactors.ADPe).toBeCloseTo(3.27e-1);
     expect(planetBoundariesFactors.ADPf).toBeCloseTo(1.33e-1);
-    expect(planetBoundariesFactors.AP).toBeCloseTo(1.40e-2);
+    expect(planetBoundariesFactors.AP).toBeCloseTo(1.4e-2);
     expect(planetBoundariesFactors.CTUe).toBeCloseTo(2.99e-1);
-    expect(planetBoundariesFactors.CTUh_c).toBeCloseTo(1.90e-1);
+    expect(planetBoundariesFactors.CTUh_c).toBeCloseTo(1.9e-1);
     expect(planetBoundariesFactors.CTUh_nc).toBeCloseTo(1.44e-2);
-    expect(planetBoundariesFactors.Epf).toBeCloseTo(3.10e-3);
+    expect(planetBoundariesFactors.Epf).toBeCloseTo(3.1e-3);
     expect(planetBoundariesFactors.Epm).toBeCloseTo(1.05e-2);
     expect(planetBoundariesFactors.Ept).toBeCloseTo(3.18e-3, 1);
     expect(planetBoundariesFactors.GWP).toBeCloseTo(3.21e-1);

@@ -85,6 +85,7 @@ export enum ImpactCriterionAcronym {
   CTUh = "CTUh",
   CTUh_c = "CTUh_c",
   CTUh_nc = "CTUh_nc",
+  DEEE = "DEEE",
   EPF = "Epf",
   EPM = "Epm",
   EPT = "Ept",

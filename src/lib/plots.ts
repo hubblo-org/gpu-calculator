@@ -2,6 +2,7 @@ import type { Data } from "@observablehq/plot";
 import type { TidyImpactFactor, TidyRatio } from "./types/gpu";
 import { select } from "d3";
 import { axisX, axisY, barX, dot, plot, pointerY, ruleX, ruleY, tip } from "@observablehq/plot";
+import { formatString } from "./utils";
 
 interface Axes {
   x: string;
@@ -108,14 +109,15 @@ export function renderStackedBarPlot(
       className: "plot",
       color: { legend: "swatches", domain: domains, scheme: "Observable10" },
       style: { overflow: "visible" },
-      x: { percent: true },
+      x: { label: `${formatString(xLabel)} (%)`, percent: true },
+      y: { label: formatString(yLabel) },
       marks: [
         axisY({ fontSize: 16, label: null, marginLeft: 50 }),
         axisX({ fontSize: 16, marginBottom: 50, label: "Value (%)" }),
         barX(impactFactors as Data, {
           y: yLabel,
           x: xLabel,
-          fill: domainColor,
+          fill: { value: domainColor, scale: "color", label: formatString(domainColor) },
           order: domains,
           offset: "normalize",
           tip: true

@@ -15,7 +15,12 @@ import { isNotExcludedCriterion } from "../utils.ts";
 import Average from "../../data/gpu/average_model.json" with { type: "json" };
 import Gpus from "../../data/gpu/gpus.json" with { type: "json" };
 import TransportImpacts from "../../data/gpu/transport_impacts.json" with { type: "json" };
-import { getPlanetBoundary, ImpactCriterionAcronym, PlanetBoundaries } from "../types/enums.ts";
+import {
+  Components,
+  getPlanetBoundary,
+  ImpactCriterionAcronym,
+  PlanetBoundaries
+} from "../types/enums.ts";
 
 const microjoulesPerLiterOfCrudeOil = 37;
 const carbonDioxydeEquivalentPerKilometerTravelledByCar = 0.25;
@@ -69,7 +74,7 @@ export function computeDieSurface(chipSurface: number) {
 }
 
 function averageVramDieSurface() {
-  // Documented VRAM die surfaces in the JSON source file do not include losses 
+  // Documented VRAM die surfaces in the JSON source file do not include losses
   // and the source parametric model does not take GH200 into account
   const cardsWithDocumentedVramDieSurface = Gpus.filter(
     (card) => card.name != "NVIDIA GH200" && card.videoRamDieSurface
@@ -439,6 +444,24 @@ export function tidyTotals(impactFactors: GraphicsCardLifeCycle): TidyImpactFact
     });
   });
   return tidiedImpactFactors;
+}
+
+export function tidyTotalsPerComponent(impactFactors: TidyImpactFactor[]): TidyImpactFactor[] {
+  const components = Object.values(Components);
+  const criteria = Object.values(ImpactCriterionAcronym);
+  const totalsPerComponent = components.flatMap((component) => {
+    const filteredImpactFactors = impactFactors.filter(
+      (impactFactor) => impactFactor.component === component
+    );
+    return criteria.map((criterion) => {
+      const valuesForCriterion = filteredImpactFactors
+        .filter((impactFactor) => impactFactor.impactCriterion === criterion)
+        .map((impactFactor) => impactFactor.value);
+      const total = valuesForCriterion.reduce((total, current) => total + current, 0);
+      return { component, impactCriterion: criterion, value: total };
+    });
+  });
+  return totalsPerComponent;
 }
 
 export function computePlanetBoundaries(impactFactors: ImpactFactors): ImpactFactors {

@@ -9,10 +9,9 @@ import type {
 
 import { LifeCycleSteps, ImpactFactorsSource, ImpactCriterionAcronym } from "$lib/types/enums";
 import GraphicsCards from "../../data/gpu/gpus.json";
-import GraphicsCardsImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 
 import { renderHorizontalBarPlot, renderStackedBarPlot } from "$lib/plots";
-import { isNotMipsOrDeee } from "$lib/utils";
+import { isNotMipsDeeeOrCtuh } from "$lib/utils";
 import {
   computeImpacts,
   computeTotalsPerCriteria,
@@ -20,7 +19,8 @@ import {
   tidy,
   tidyTotals,
   tidyPlanetBoundaries,
-  computeEquivalent
+  computeEquivalent,
+  tidyTotalsPerComponent
 } from "./calculations";
 
 interface Equivalents {
@@ -37,6 +37,7 @@ export class Card {
   resultsPerPlanetBoundary = $state<ImpactFactors>();
   tidyImpactFactors = $state<TidyImpactFactor[]>();
   tidyTotals = $state<TidyImpactFactor[]>();
+  tidyTotalsPerComponent = $state<TidyImpactFactor[]>();
   tidyRatiosPerPlanetBoundary = $state<TidyRatio[]>();
   parameters = $state<GraphicsCard>();
   equivalents = $state<Equivalents>();
@@ -50,6 +51,7 @@ export class Card {
     this.totalsPerLifeCycleStep = computeTotalsPerLifeCycleStep(this.impactFactors);
     this.totalsPerCriteria = computeTotalsPerCriteria(this.totalsPerLifeCycleStep);
     this.tidyTotals = tidyTotals(this.totalsPerLifeCycleStep);
+    this.tidyTotalsPerComponent = tidyTotalsPerComponent(this.tidyImpactFactors);
     this.tidyRatiosPerPlanetBoundary = tidyPlanetBoundaries(this.totalsPerCriteria);
     this.equivalents = this.computeEquivalents();
   }
@@ -96,14 +98,17 @@ export class Card {
     this.totalsPerCriteria = computeTotalsPerCriteria(this.totalsPerLifeCycleStep);
     this.tidyTotals = tidyTotals(this.totalsPerLifeCycleStep);
     this.tidyRatiosPerPlanetBoundary = tidyPlanetBoundaries(this.totalsPerCriteria);
+    this.tidyTotalsPerComponent = tidyTotalsPerComponent(this.tidyImpactFactors);
     this.equivalents = this.computeEquivalents();
   }
 
   updatePlotPerLifeCycleStep() {
-    const lcSteps = Object.values(LifeCycleSteps).filter((lcstep) => typeof lcstep === "string").filter((lcstep) => lcstep != "Use");
+    const lcSteps = Object.values(LifeCycleSteps)
+      .filter((lcstep) => typeof lcstep === "string")
+      .filter((lcstep) => lcstep != "Use");
     const source = "criteria";
 
-    const filteredImpactFactors = this.tidyTotals!.filter(isNotMipsOrDeee);
+    const filteredImpactFactors = this.tidyTotals!.filter(isNotMipsDeeeOrCtuh);
 
     renderStackedBarPlot(
       source,
@@ -125,14 +130,16 @@ export class Card {
     );
 
     const filteredImpactFactors = this.tidyImpactFactors
-      ?.filter((impact) => impact.lifeCycleStep === "manufacturing")
-      .filter(isNotMipsOrDeee);
+      ?.filter(
+        (impact) => impact.lifeCycleStep === "manufacturing" || impact.lifeCycleStep === "endoflife"
+      )
+      .filter(isNotMipsDeeeOrCtuh);
 
     renderStackedBarPlot(
       source,
       1000,
       600,
-      filteredImpactFactors!,
+      this.tidyTotalsPerComponent!.filter(isNotMipsDeeeOrCtuh),
       components,
       "impactCriterion",
       "value",

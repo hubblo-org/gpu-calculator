@@ -2,6 +2,7 @@
   import { Scopes } from "$lib/types/enums";
   import { Card } from "$lib/gpu/gpu.svelte";
   import AbsoluteValuesTable from "./AbsoluteValuesTable.svelte";
+    import { isNotMipsDeeeOrCtuh } from "$lib/utils";
 
   interface Props {
     card: InstanceType<typeof Card>;
@@ -27,9 +28,6 @@
     [...new Set(card.tidyImpactFactors!.map((impactFactor) => impactFactor.component))].filter(
       (component) => component!.includes("transport_") === false
     )
-  );
-  const manufacturingImpactFactors = $derived(
-    card.tidyImpactFactors!.filter((impactFactor) => impactFactor.lifeCycleStep === "manufacturing")
   );
 
   $effect(() => {
@@ -86,7 +84,7 @@
         rows={components}
         keyColumn="impactCriterion"
         keyRow="component"
-        data={manufacturingImpactFactors}
+        data={card.tidyTotalsPerComponent!}
       />
     {/key}
   {/if}
