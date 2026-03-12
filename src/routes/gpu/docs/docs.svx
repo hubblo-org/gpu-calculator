@@ -4,7 +4,7 @@
 
 The calculator is based on the parametric model developed for ADEME by Tide, Hubblo, and TND as part of research published in 2025 (Falk et al., 2025). The model is the result of extensive data collection, including the dismantling of a dozen graphics cards and a dozen elemental analyses. The following references give more detail on the data collected in question.
 
-- [ADEME report](TBD)
+- [ADEME report](https://librairie.ademe.fr/economie-circulaire-et-dechets/9103-analyse-de-cycle-de-vie-de-gpu-cartes-graphiques-pour-l-intelligence-artificielle.html)
 - [Research paper](https://arxiv.org/abs/2509.00093)
 
 ## Objective

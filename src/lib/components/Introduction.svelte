@@ -19,7 +19,7 @@
       graphics cards and the performance of a dozen elemental analyses.
     </p>
 
-    <p><a href="https://ademe.fr"><span>Read the full report</span></a></p>
+    <p><a href="https://librairie.ademe.fr/economie-circulaire-et-dechets/9103-analyse-de-cycle-de-vie-de-gpu-cartes-graphiques-pour-l-intelligence-artificielle.html"><span>Read the full report</span></a></p>
   </div>
   <div id="introduction-gpu-sketch">
     <img
