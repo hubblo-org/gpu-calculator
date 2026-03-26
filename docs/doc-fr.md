@@ -29,8 +29,8 @@ Les paramètres clés identifiés sont détaillés dans le tableau suivant. Des 
 |     Quantité de mémoire vidéo (VRAM)    |     Cette information devrait être   publique    |     Est généralement documenté dans https://www.techpowerup.com/     |
 |     Nombre de puce VRAM                 |     Cette information devrait être   publique    |     Est généralement documenté dans https://www.techpowerup.com/     |
 |     Surface de la puce GPU              |     Cette information devrait être   publique    |     Est généralement documenté dans https://www.techpowerup.com/     |
-|     Distance de transport - avion       |     19,000 km                                    |     Distance entre Shenzhen et Paris                                 |
-|     Distance de transport - camion      |     1,000 km                                     |     Distance par défaut intracontinentale                            |
+|     Distance de transport - avion       |     9 908 km                                    |     Distance entre Shenzhen et Paris                                 |
+|     Distance de transport - camion      |     1 000 km                                     |     Distance par défaut intracontinentale                            |
 |     Distance de transport - bateau      |     0 km                                         |                                                                      |
 
 Tableau 1 - Paramètres du modèle
