@@ -29,7 +29,7 @@ The key parameters are detailed in the following table. Default parameters are s
 |     Video memory capacity (VRAM)        |     This should be public                        |     Usually found in https://www.techpowerup.com/                    |
 |     Number of VRAM dies                 |     This should be public                        |     Usually found in https://www.techpowerup.com/                    |
 |     GPU chip surface                    |     This should be public                        |     Usually found in https://www.techpowerup.com/                    |
-|     Travel distance - plane             |     19,000 km                                    |     Distance between Shenzhen and Paris                              |
+|     Travel distance - plane             |     9,908 km                                    |     Distance between Shenzhen and Paris                              |
 |     Travel distance - truck             |     1,000 km                                     |     Default inland distance                                          |
 |     Travel distance - boat              |     0 km                                         |                                                                      |
 
