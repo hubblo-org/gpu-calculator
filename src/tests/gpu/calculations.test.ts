@@ -16,7 +16,6 @@ import type {
   GraphicsCard,
   GraphicsCardImpactFactors,
   ImpactFactors,
-  UnorderedImpactFactors
 } from "$lib/types/gpu";
 import GpusImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 import Gpus from "../../data/gpu/gpus.json";
