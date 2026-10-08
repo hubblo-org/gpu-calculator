@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { TidyImpactFactor, TidyRatio } from "$lib/types/gpu";
   import { downloadToCSV, formatString } from "$lib/utils";
+  import { onMount } from "svelte";
 
   interface Props {
     data: TidyImpactFactor[] | TidyRatio[];
@@ -67,7 +68,7 @@
     }
   }
 
-  $effect(() => {
+  onMount(() => {
     appendCells();
   });
 </script>
@@ -83,7 +84,8 @@
         ></thead
       >
       <tbody>
-        {#each rows as row}<tr id="{row}-header"><th scope="row">{formatString(row)}</th></tr>{/each}
+        {#each rows as row}<tr id="{row}-header"><th scope="row">{formatString(row)}</th></tr
+          >{/each}
       </tbody>
     </table>
 

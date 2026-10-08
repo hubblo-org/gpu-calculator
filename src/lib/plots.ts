@@ -24,7 +24,12 @@ export function renderHorizontalBarPlot(
   lollipop: boolean
 ) {
   let div = document.querySelector(`#impact-factors-plot-${source}`);
-  div?.firstChild?.remove();
+  let previousLogo = div?.querySelector(".logo");
+  let previousPlot = div?.querySelector(".plot");
+  if (previousLogo && previousPlot) {
+    previousLogo!.remove();
+    previousPlot!.remove();
+  }
   if (div) {
     const lollipopMarks = [
       ruleX([0]),
