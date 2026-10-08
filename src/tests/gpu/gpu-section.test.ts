@@ -11,6 +11,7 @@ const card = new Card(defaultCard);
 
 const gpuSectionName = "Graphics card parameters";
 const graphicsCardParameters = [
+  "Total weight",
   "Casing weight",
   "Heatsink weight",
   "Graphics card surface",
@@ -77,7 +78,7 @@ describe("gpu section static elements suite", () => {
     });
 
     Object.entries(h100).forEach(([key, value]) => {
-      if (key == "name" || key == "totalWeight" || key == "impactFactorsSource") {
+      if (key == "name" || key == "impactFactorsSource") {
         return;
       }
       const formattedKey = key.split(/(?=[A-Z])/).join(" ");
@@ -112,7 +113,7 @@ describe("gpu section dynamic elements test suite", () => {
     await user.click(recalculateButton);
 
     Object.entries(l4).forEach(async ([key, value]) => {
-      if (key == "name" || key == "totalWeight") {
+      if (key == "name") {
         return;
       }
       const formattedKey = key.split(/(?=[A-Z])/).join(" ");

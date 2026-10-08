@@ -34,6 +34,12 @@
     </select>
     <div class="grid">
       <div class="field">
+        <label for="total-weight">Total weight (grams)</label>
+        <input
+          type="number"
+          id="total-weight"
+          bind:value={card.parameters!.totalWeight}
+        />
         <label for="casing-weight">Casing weight (grams)</label>
         <input
           type="number"
@@ -52,14 +58,14 @@
           id="graphics-card-surface"
           bind:value={card.parameters!.cardSurface}
         />
+      </div>
+      <div class="field">
         <label for="gpu-surface">GPU surface (mm²)</label>
         <input
           type="number"
           id="gpu-surface"
           bind:value={card.parameters!.gpuSurface}
         />
-      </div>
-      <div class="field">
         <label for="vram-size">Video RAM capacity (GB)</label>
         <input
           type="number"

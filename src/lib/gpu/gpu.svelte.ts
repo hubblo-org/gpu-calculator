@@ -9,7 +9,6 @@ import type {
 
 import { LifeCycleSteps, ImpactFactorsSource, ImpactCriterionAcronym } from "$lib/types/enums";
 import GraphicsCards from "../../data/gpu/gpus.json";
-import GraphicsCardsImpactFactors from "../../data/gpu/gpus_impact_factors.json";
 
 import { renderHorizontalBarPlot, renderStackedBarPlot } from "$lib/plots";
 import { isNotMipsOrDeee } from "$lib/utils";
