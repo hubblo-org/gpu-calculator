@@ -3,17 +3,13 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { formatString } from "../lib/utils";
 import AbsoluteValuesTables from "$lib/components/AbsoluteValuesTable.svelte";
 import Gpus from "../data/gpu/gpus.json";
-import GpusImpactFactors from "../data/gpu/gpus_impact_factors.json";
 import { Card } from "$lib/gpu/gpu.svelte";
-import type { TidyImpactFactor, TidyRatio } from "$lib/types/gpu";
+import type { TidyRatio } from "$lib/types/gpu";
 import userEvent from "@testing-library/user-event";
 
 const defaultCardName = "NVIDIA A100 PCIe 40GB";
 const defaultCard = Gpus.filter((gpu) => gpu.name === defaultCardName)[0];
-const defaultCardImpactFactors = GpusImpactFactors.filter(
-  (impacts) => impacts.graphics_card === defaultCardName
-)[0];
-const card = new Card(defaultCard, defaultCardImpactFactors);
+const card = new Card(defaultCard);
 
 describe("absolute values table test suite", () => {
   const criteria = [...new Set(card.tidyTotals!.map((total) => total.impactCriterion))];
